@@ -14,8 +14,8 @@ import {
   HeartIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import Button from "./button";
 import { GlobalContext } from "./context/globalContext";
+import { Button } from "@/components/ui/button";
 const products = [
   {
     name: "Actualitat",
