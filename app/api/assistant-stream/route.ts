@@ -1,7 +1,8 @@
 import { AssistantResponse } from "ai";
 import OpenAI from "openai";
 import clientPromise from "../mongodb";
-import { addNewRow, updateQuestionsCounter } from "@/app/helper/notion";
+// import { addNewRow, updateQuestionsCounter } from "@/app/helper/notion";
+import prisma from "../../../lib/prisma"
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -9,7 +10,7 @@ const openai = new OpenAI({
 export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 
-const databaseId = process.env.DATABASE_ID
+// const databaseId = process.env.DATABASE_ID
 
 export interface MessageDb {
   date: Date;
@@ -19,17 +20,7 @@ export interface MessageDb {
 
 const manageThreadId = async (input: { threadId: string | null }) => {
   if (!input.threadId) {
-    // const client = await clientPromise;
-
-    // const db = client.db();
-
     const threadId = (await openai.beta.threads.create({})).id;
-
-    // await db.collection("threads").insertOne({
-    //   date: new Date(),
-    //   threadId,
-    // });
-
     return {threadId, isNew: true};
   } else {
     return {threadId: input.threadId, isNew: false};
@@ -52,6 +43,8 @@ export async function POST(req: Request) {
     content: input.message,
   });
 
+  
+
   return AssistantResponse(
     { threadId, messageId: createdMessage.id },
     async ({ forwardStream, sendDataMessage }) => {
@@ -71,41 +64,39 @@ export async function POST(req: Request) {
         const threadMessages: any = await openai.beta.threads.messages.list(runResult.thread_id, {
           order: "desc",
         });
+        console.log({threadMessages: JSON.stringify(threadMessages, null, 2)})
         try {
-          if(isNew){
-            const pageId = await addNewRow(threadMessages?.data, databaseId);
-            const client = await clientPromise;
-            console.log({pageId,})
-            const db = client.db();
-            await db.collection("threads").insertOne({
-              date: new Date(),
-              threadId,
-              pageId
-            });
-          }else{
-            const client = await clientPromise;
-  
-            const db = client.db();
-            const dbThread = await db.collection("threads").findOne({
-              threadId,
-            });
-  
-            if (!dbThread) {
-              // return null;
-              throw new Error('Thread not found');
-            }
-          
-            if (!('pageId' in dbThread)) {
-              throw new Error('Thread data does not contain pageId');
-            }
-  
-            const pageId = dbThread.pageId;
+          if (threadMessages.data.length > 1) {
+            const lastQuestion = threadMessages.data[1]; // El segundo mensaje en la lista ordenada es el último mensaje del usuario
+            const lastResponse = threadMessages.data[0]; // El primer mensaje en la lista ordenada es el más reciente
 
-            console.log({pageId, dbThread})
-  
-            // // hacemos el update
-            await updateQuestionsCounter(pageId, threadMessages.data.length / 2, threadMessages?.data);
+            console.log(  {
+              role: lastQuestion.role,
+              message: lastQuestion.content[0].text.value,
+              threadId: runResult.thread_id,
+              createdAt: new Date(),
+            },)
+            const result = await prisma.message.createMany({
+              data: [
+                {
+                  role: lastQuestion.role,
+                  message: lastQuestion.content[0].text.value,
+                  threadId: runResult.thread_id,
+                  createdAt: new Date(),
+                },
+                {
+                  role: lastResponse.role,
+                  message: lastResponse.content[0].text.value,
+                  threadId: runResult.thread_id,
+                  createdAt: new Date(),
+                },
+              ],
+            });
+        
+            console.log({result})
+            // Aquí puedes realizar acciones adicionales con el último mensaje
           }
+      
         }catch(e){
           console.error(e)
         }

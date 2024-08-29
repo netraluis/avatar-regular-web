@@ -21,6 +21,8 @@ export default function ConversationRecipient() {
     append,
   } = useAssistant({ api: "/api/assistant-stream" });
 
+  console.log({error})
+
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault(); // Prevent the default action to avoid a new line
