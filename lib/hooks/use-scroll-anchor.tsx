@@ -37,7 +37,7 @@ export const useScrollAnchor = () => {
         const isAtBottom =
           target.scrollTop + target.clientHeight >=
           target.scrollHeight - offset;
-
+          
         setIsAtBottom(isAtBottom);
       };
 

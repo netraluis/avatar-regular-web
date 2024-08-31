@@ -1,18 +1,18 @@
-'use client';
-import { HandThumbUpIcon } from '@heroicons/react/24/outline';
-import Avatar from './avatar';
-import { useContext } from 'react';
+"use client";
+import { HandThumbUpIcon } from "@heroicons/react/24/outline";
+import Avatar from "./avatar";
+import { useContext } from "react";
 
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { PaperAirplaneIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
-import { ButtonScrollToBottom } from './button-scroll-to-bottom';
-import { FooterText } from './footer';
-import Textarea from 'react-textarea-autosize';
-import { useScrollAnchor } from '@/lib/hooks/use-scroll-anchor';
-import { EmptyScreen } from './empty-screen';
-import { cn } from '@/lib/utils';
-import { GlobalContext } from '@/app/component/context/globalContext';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { PaperAirplaneIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+import { ButtonScrollToBottom } from "./button-scroll-to-bottom";
+import { FooterText } from "./footer";
+import Textarea from "react-textarea-autosize";
+import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
+import { EmptyScreen } from "./empty-screen";
+import { cn } from "@/lib/utils";
+import { GlobalContext } from "./context/globalContext";
 
 export default function Welcome() {
   const { setState } = useContext(GlobalContext);
@@ -25,7 +25,7 @@ export default function Welcome() {
       className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]"
       ref={scrollRef}
     >
-      <div className={cn('pb-[200px] pt-4 md:pt-10')} ref={messagesRef}>
+      <div className={cn("pb-[200px] pt-4 md:pt-10")} ref={messagesRef}>
         <EmptyScreen>
           <Button
             onClick={() => {

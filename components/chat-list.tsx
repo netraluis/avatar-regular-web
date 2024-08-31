@@ -14,11 +14,9 @@ export function ChatList({ messages }: ChatList) {
     return null;
   }
 
-  console.log({ messages });
   return (
     <div className="relative mx-auto max-w-2xl px-4">
       {messages.map((message: any) => {
-        console.log({ message });
         return (
           <div className="my-4" key={message.id}>
             <Avatar name={message.role} />

@@ -74,24 +74,6 @@ export default function Header() {
     useContext(GlobalContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  function useViewportHeight() {
-    useEffect(() => {
-      function setViewportHeight() {
-        const viewportHeight = window.innerHeight;
-        document.documentElement.style.setProperty(
-          "--viewport-height",
-          `${viewportHeight}px`
-        );
-      }
-      setViewportHeight();
-
-      window.addEventListener("resize", setViewportHeight);
-
-      return () => window.removeEventListener("resize", setViewportHeight);
-    }, []);
-  }
-
-  useViewportHeight();
 
   const createNovaConversa = () => {
     setActualsThreadId([...actualsThreadId, actualThreadId]);
@@ -99,7 +81,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white mt-4">
+    <header className="bg-white pt-4 fixed top-0 z-10 bg-white w-full">
       <nav
         className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16"
         aria-label="Global"
