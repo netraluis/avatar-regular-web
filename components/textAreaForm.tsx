@@ -8,7 +8,11 @@ import {
   useState,
 } from "react";
 import { Button } from "@/components/ui/button";
-import { PaperAirplaneIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+import {
+  PaperAirplaneIcon,
+  ArrowPathIcon,
+  MicrophoneIcon,
+} from "@heroicons/react/24/outline";
 import { ButtonScrollToBottom } from "./button-scroll-to-bottom";
 import { FooterText } from "./footer";
 import Textarea from "react-textarea-autosize";
@@ -145,7 +149,12 @@ export const TextAreaForm = ({
                 onMouseUp={stopRecording}
                 onMouseLeave={stopRecording}
               >
-                {status === "awaiting_message" ? (
+                {!input && status === "awaiting_message" ? (
+                  <MicrophoneIcon
+                    className="ml-0.5 h-5 w-5"
+                    aria-hidden="true"
+                  />
+                ) : status === "awaiting_message" ? (
                   <PaperAirplaneIcon
                     className="ml-0.5 h-5 w-5"
                     aria-hidden="true"
@@ -157,11 +166,13 @@ export const TextAreaForm = ({
                   />
                 )}
                 <div className="hidden sm:block">
-                  {input
-                    ? status === "awaiting_message"
+                  {
+                    !input && status === "awaiting_message"
+                      ? "Gravar"
+                      : status === "awaiting_message"
                       ? "Enviar"
                       : "Generant resposta"
-                    : "Grabar la teva pregunta"}
+                  }
                 </div>
               </Button>
             </div>
