@@ -1,7 +1,8 @@
 import {
   ChangeEvent,
   KeyboardEvent,
-  useContext,
+  MouseEvent,
+  use,
   useEffect,
   useRef,
   useState,
@@ -11,6 +12,7 @@ import { PaperAirplaneIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import { ButtonScrollToBottom } from "./button-scroll-to-bottom";
 import { FooterText } from "./footer";
 import Textarea from "react-textarea-autosize";
+import OpenAI from "openai";
 
 interface TextAreaFormProps {
   handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -20,61 +22,111 @@ interface TextAreaFormProps {
   status: string;
 }
 
+const openai = new OpenAI({
+  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+  dangerouslyAllowBrowser: true,
+});
+
 export const TextAreaForm = ({
   handleInputChange,
   handleKeyDown,
   input,
   submitMessage,
   status,
-}: // isAtBottom,
-// scrollToBottom,
-any) => {
-  const [buttonWidth, setButtonWidth] = useState(0);
+}: TextAreaFormProps) => {
   const buttonRef = useRef(null);
   const textAreaRef = useRef(null);
+  const [recording, setRecording] = useState(false);
+  const audioChunks = useRef<Blob[]>([]);
+  const mediaRecorder = useRef<MediaRecorder | null>(null);
 
-  useEffect(() => {
-    if (buttonRef.current) {
-      // eslint-disable-next-line
-      const width = (buttonRef.current as any).offsetWidth;
-      setButtonWidth(width);
+  function startRecording() {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true })
+      .then((stream) => {
+        mediaRecorder.current = new MediaRecorder(stream);
+        mediaRecorder.current.ondataavailable = (event) => {
+          audioChunks.current.push(event.data);
+        };
+        mediaRecorder.current.onstop = () => {
+          const audioBlob = new Blob(audioChunks.current, {
+            type: "audio/wav",
+          });
+          audioChunks.current = [];
+          transcribeAudio(audioBlob);
+        };
+        mediaRecorder.current.start();
+        setRecording(true);
+      })
+      .catch((error) => {
+        console.error("Error accessing microphone:", error);
+      });
+  }
+
+  function stopRecording() {
+    if (mediaRecorder.current) {
+      mediaRecorder.current.stop();
+      console.log("Recording stopped, awaiting transcription...");
     }
-  }, [buttonRef]);
+  }
 
-  useEffect(() => {
-    if (textAreaRef.current && buttonWidth) {
-      // eslint-disable-next-line
-      (textAreaRef.current as any).style.paddingRight = `${buttonWidth + 10}px`; // add 10px for some extra space
+  async function transcribeAudio(audioBlob: Blob) {
+    try {
+      console.log(audioBlob.size, audioBlob.type);
+
+      const audioFile = new File([audioBlob], "recording.wav", {
+        type: "audio/wav",
+      });
+
+      const response = await openai.audio.transcriptions.create({
+        model: "whisper-1",
+        file: audioFile,
+        language: "ca",
+      });
+
+      const transcription = response.text;
+      console.log("Transcription received: ", transcription);
+      simulateInputChange(transcription);
+    } catch (error) {
+      console.error("Error transcribing audio:", error);
     }
-  }, [buttonWidth]);
+  }
+
+  function simulateInputChange(newInputValue: string) {
+    console.log("Simulating input change with value: ", newInputValue);
+    const syntheticEvent = {
+      target: {
+        value: newInputValue,
+      },
+    };
+
+    handleInputChange(syntheticEvent as ChangeEvent<HTMLTextAreaElement>);
+  }
 
   useEffect(() => {
-    // eslint-disable-next-line
-    const textArea = textAreaRef.current as any;
-    if (!textArea) return;
-
-    // Reset the height to shrink if text is deleted:
-    textArea.style.height = "auto";
-
-    textArea.style.height =
-      textArea.scrollHeight < 200 ? textArea.scrollHeight + "px" : "200px";
+    if (input && recording) {
+      console.log("Input value changed: ", input);
+      submitMessage();
+      setRecording(false);
+    }
   }, [input]);
 
   return (
     <div className="fixed inset-x-0 bottom-0 w-full from-muted/30 from-0% to-muted/30 to-50% duration-300 ease-in-out animate-in dark:from-background/10 dark:from-10% dark:to-background/80 peer-[[data-state=open]]:group-[]:lg:pl-[250px] peer-[[data-state=open]]:group-[]:xl:pl-[300px]">
-      {/* <ButtonScrollToBottom
-        isAtBottom={isAtBottom}
-        scrollToBottom={scrollToBottom}
-      /> */}
       <div className="mx-auto sm:max-w-2xl sm:px-4">
         <div className=" space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
-          <form className="relative rounded-xl shadow-sm">
+          <form
+            className="relative rounded-xl shadow-sm"
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitMessage();
+            }}
+          >
             <Textarea
               ref={textAreaRef}
               tabIndex={0}
               onKeyDown={handleKeyDown}
               placeholder="Escriu una pregunta..."
-              // className="block w-full rounded-xl border-0 py-6 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 resize-none"
               className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm"
               autoFocus
               spellCheck={false}
@@ -89,7 +141,9 @@ any) => {
               <Button
                 ref={buttonRef}
                 disabled={status !== "awaiting_message"}
-                onClick={submitMessage}
+                onMouseDown={startRecording}
+                onMouseUp={stopRecording}
+                onMouseLeave={stopRecording}
               >
                 {status === "awaiting_message" ? (
                   <PaperAirplaneIcon
@@ -103,9 +157,11 @@ any) => {
                   />
                 )}
                 <div className="hidden sm:block">
-                  {status === "awaiting_message"
-                    ? "Enviar"
-                    : "Generant resposta"}
+                  {input
+                    ? status === "awaiting_message"
+                      ? "Enviar"
+                      : "Generant resposta"
+                    : "Grabar la teva pregunta"}
                 </div>
               </Button>
             </div>

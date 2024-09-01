@@ -16,11 +16,6 @@ const openai = new OpenAI({
 
 export default function ConversationRecipient() {
   const { setActualThreadId } = useContext(GlobalContext);
-  const [recording, setRecording] = useState(false); // Track recording state
-  const audioChunks = useRef<Blob[]>([]);
-  const mediaRecorder = useRef<MediaRecorder | null>(null);
-  // eslint-disable-next-line
-  // const scrollRef = useRef<any>(null);
 
   const {
     status,
@@ -65,53 +60,7 @@ export default function ConversationRecipient() {
     }
   }, [threadId, setActualThreadId]);
 
-  function startRecording() {
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        mediaRecorder.current = new MediaRecorder(stream);
-        mediaRecorder.current.ondataavailable = (event) => {
-          audioChunks.current.push(event.data);
-        };
-        mediaRecorder.current.onstop = () => {
-          const audioBlob = new Blob(audioChunks.current, {
-            type: "audio/wav",
-          });
-          audioChunks.current = [];
-          transcribeAudio(audioBlob);
-        };
-        mediaRecorder.current.start();
-        setRecording(true);
-      })
-      .catch((error) => {
-        console.error("Error accessing microphone:", error);
-      });
-  }
-
-  function stopRecording() {
-    if (mediaRecorder.current) {
-      mediaRecorder.current.stop();
-      setRecording(false);
-    }
-  }
-
-  async function transcribeAudio(audioBlob: Blob) {
-    try {
-      // Convert Blob to File
-      const audioFile = new File([audioBlob], "recording.wav", {
-        type: "audio/wav",
-      });
-      const response = await openai.audio.transcriptions.create({
-        model: "whisper-1",
-        file: audioFile,
-      });
-      const transcription = response.text;
-      console.log("Transcription: ", transcription);
-      // setInput(transcription);
-    } catch (error) {
-      console.error("Error transcribing audio:", error);
-    }
-  }
+ 
 
   return (
     <div
@@ -132,8 +81,8 @@ export default function ConversationRecipient() {
         input={input}
         status={status}
         submitMessage={submitMessage}
-        isAtBottom={isAtBottom}
-        scrollToBottom={scrollToBottom}
+        // isAtBottom={isAtBottom}
+        // scrollToBottom={scrollToBottom}
       />
     </div>
   );
