@@ -110,7 +110,7 @@ export default function Header() {
           getSession(); // Forzar actualización manual después del cambio de auth
           router.push("/"); // Redirigir al home después del login
         }
-      }
+      },
     );
 
     // Limpia el listener al desmontar el componente
