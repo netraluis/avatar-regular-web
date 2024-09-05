@@ -21,39 +21,39 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 const products = [
   {
-    name: "Actualitat",
+    name: "Comú",
     description: "Get a better understanding of your traffic",
-    href: "https://andorraue.ad/actualitat/",
+    href: "https://www.andorralavella.ad/comu/inici",
     icon: ChartPieIcon,
   },
   {
-    name: "Publicacions",
+    name: "Turisme",
     description: "Speak directly to your customers",
-    href: "https://andorraue.ad/publicacions/",
+    href: "https://www.turismeandorralavella.com/",
     icon: CursorArrowRaysIcon,
   },
   {
-    name: "Qui som?",
+    name: "Esports",
     description: "Your customers’ data will be safe and secure",
-    href: "https://andorraue.ad/qui-som/",
+    href: "https://www.andorralavella.ad/esports/inici-esports",
     icon: FingerPrintIcon,
   },
   {
-    name: "Preguntes frequents",
+    name: "Esports",
     description: "Connect with third-party tools",
-    href: "https://andorraue.ad/preguntes-frecuents/",
+    href: "https://www.andorralavella.ad/esports/inici-esports",
     icon: SquaresPlusIcon,
   },
   {
-    name: "Sala de premsa",
+    name: "Cultura",
     description: "Build strategic funnels that will convert",
-    href: "https://www.govern.ad/mes-informacio/comunicats-de-premsa",
+    href: "https://www.andorralavella.ad/cultura/inici-cultura",
     icon: ArrowPathIcon,
   },
   {
-    name: "Ajuda",
+    name: "Notícies",
     description: "Your customers’ data will be safe and secure",
-    href: "mailto:andorraue@govern.ad",
+    href: "https://www.andorralavella.ad/comu/noticies",
     icon: CheckCircleIcon,
   },
 ];
@@ -61,15 +61,15 @@ const products = [
 const footer = [
   {
     description: "Política de privacitat",
-    href: "https://andorraue.ad/politica-de-cookies/",
+    href: "https://www.andorralavella.ad/comu/politica-de-privacitat",
   },
   {
     description: "Termes i condicions",
-    href: "https://andorraue.ad/politica-privacitat/",
+    href: "https://www.andorralavella.ad/comu/politica-de-privacitat",
   },
   {
     description: "Política de cookies",
-    href: "https://andorraue.ad/termes-i-condicions/",
+    href: "https://www.andorralavella.ad/comu/politica-de-privacitat",
   },
 ];
 export default function Header() {
@@ -110,7 +110,7 @@ export default function Header() {
           getSession(); // Forzar actualización manual después del cambio de auth
           router.push("/"); // Redirigir al home después del login
         }
-      },
+      }
     );
 
     // Limpia el listener al desmontar el componente
