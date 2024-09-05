@@ -11,7 +11,11 @@ export default function Avatar({ name }: any) {
         </div>
         <div className="ml-3">
           <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
-            {name === "assistant" ? "AI Andorra UE" : "Tu"}
+            {name === "assistant"
+              ? process.env.NEXT_PUBLIC_ASSISTANT_NAME
+                ? process.env.NEXT_PUBLIC_ASSISTANT_NAME
+                : "Assistant"
+              : "Tu"}
           </p>
         </div>
       </div>
