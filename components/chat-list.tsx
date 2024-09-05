@@ -1,4 +1,5 @@
 import Avatar from "./avatar";
+import MarkdownDisplay from "./MarkDownDisplay";
 
 export type UIState = {
   id: string;
@@ -20,7 +21,7 @@ export function ChatList({ messages }: ChatList) {
         return (
           <div className="my-4" key={message.id}>
             <Avatar name={message.role} />
-            {message.content}
+            <MarkdownDisplay markdownText={message.content} />
             {/* {index < messages.length - 1 && <Separator className="my-4" />} */}
           </div>
         );
