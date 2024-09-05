@@ -1,19 +1,11 @@
-import {
-  ChangeEvent,
-  KeyboardEvent,
-  MouseEvent,
-  use,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   PaperAirplaneIcon,
   ArrowPathIcon,
   MicrophoneIcon,
 } from "@heroicons/react/24/outline";
-import { ButtonScrollToBottom } from "./button-scroll-to-bottom";
+// import { ButtonScrollToBottom } from "./button-scroll-to-bottom";
 import { FooterText } from "./footer";
 import Textarea from "react-textarea-autosize";
 import OpenAI from "openai";

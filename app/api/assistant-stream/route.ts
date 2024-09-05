@@ -1,7 +1,5 @@
 import { AssistantResponse } from "ai";
 import OpenAI from "openai";
-import clientPromise from "../mongodb";
-// import { addNewRow, updateQuestionsCounter } from "@/app/helper/notion";
 import prisma from "../../../lib/prisma";
 
 const openai = new OpenAI({
@@ -9,8 +7,6 @@ const openai = new OpenAI({
 });
 export const maxDuration = 60;
 export const dynamic = "force-dynamic";
-
-// const databaseId = process.env.DATABASE_ID
 
 export interface MessageDb {
   date: Date;
@@ -35,7 +31,7 @@ export async function POST(req: Request) {
   } = await req.json();
 
   // Create a thread if needed and save it to the database
-  const { threadId, isNew } = await manageThreadId(input);
+  const { threadId } = await manageThreadId(input);
 
   // Add a message to the thread
   const createdMessage = await openai.beta.threads.messages.create(threadId, {
@@ -45,7 +41,7 @@ export async function POST(req: Request) {
 
   return AssistantResponse(
     { threadId, messageId: createdMessage.id },
-    async ({ forwardStream, sendDataMessage }) => {
+    async ({ forwardStream }) => {
       // Run the assistant on the thread
       const runStream = openai.beta.threads.runs.stream(threadId, {
         assistant_id:
@@ -56,7 +52,7 @@ export async function POST(req: Request) {
       });
 
       // forward run status would stream message deltas
-      let runResult = await forwardStream(runStream);
+      const runResult = await forwardStream(runStream);
       console.log({ runResult });
       if (
         runResult &&

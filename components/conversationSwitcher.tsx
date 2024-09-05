@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext } from "react";
 import StartConversation from "./startConversation";
 import Welcome from "./welcome";
 import { GlobalContext } from "./context/globalContext";

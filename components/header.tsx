@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState, useEffect, useContext } from "react";
+import { Fragment, useState, useContext } from "react";
 import { Dialog, Popover, Transition } from "@headlessui/react";
 import {
   XMarkIcon,

@@ -18,8 +18,10 @@ export const GlobalContext = createContext<GlobalContextProps>({
   state: 1,
   setState: () => {},
   actualsThreadId: [],
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setActualsThreadId: (thread: string[] | ((prev: string[]) => string[])) => {},
   actualThreadId: "",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setActualThreadId: (thread: string) => {},
 });
 

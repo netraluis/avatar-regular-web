@@ -1,18 +1,11 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect } from "react";
 import { useAssistant as useAssistant } from "ai/react";
 import { TextAreaForm } from "./textAreaForm";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { cn } from "@/lib/utils";
 import { ChatList } from "./chat-list";
-// import { EmptyScreen } from './empty-screen';
 
-import OpenAI from "openai";
 import { GlobalContext } from "./context/globalContext";
-
-const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
 
 export default function ConversationRecipient() {
   const { setActualThreadId } = useContext(GlobalContext);
@@ -33,8 +26,13 @@ export default function ConversationRecipient() {
     },
   });
 
-  const { messagesRef, scrollRef, visibilityRef, isAtBottom, scrollToBottom } =
-    useScrollAnchor();
+  console.log("error", error);
+  const {
+    messagesRef,
+    scrollRef,
+    visibilityRef,
+    // isAtBottom, scrollToBottom
+  } = useScrollAnchor();
 
   // eslint-disable-next-line
   const handleKeyDown = (event: any) => {
