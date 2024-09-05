@@ -11,8 +11,26 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { login } from "./actions";
+import { useContext, useState } from "react";
+import { useRouter } from "next/navigation";
+import { GlobalContext } from "../../components/context/globalContext";
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const { setUser } = useContext(GlobalContext);
+
+  const handleLogin = async (formData: FormData) => {
+    const result: any = await login(formData);
+
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      console.log({ result });
+      setUser(result);
+      router.push("/");
+    }
+  };
   return (
     <div className="mx-auto max-w-sm">
       <CardHeader>
@@ -22,7 +40,7 @@ export default function LoginPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="grid gap-4">
+        <form className="grid gap-4" action={handleLogin}>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -42,7 +60,7 @@ export default function LoginPage() {
             </div>
             <Input id="password" type="password" name="password" required />
           </div>
-          <Button className="w-full" formAction={login}>
+          <Button className="w-full" type="submit">
             Login
           </Button>
         </form>

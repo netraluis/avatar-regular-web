@@ -28,9 +28,12 @@ export default function Welcome() {
               setState(2);
             }}
           >
-            <div className="w-full h-px" ref={visibilityRef} />
-            Començar{" "}
-            <HandThumbUpIcon className="ml-0.5 h-5 w-5" aria-hidden="true" />
+            {/* <div className="w-full h-px" ref={visibilityRef} /> */}
+            <HandThumbUpIcon
+              className="ml-0.5 mr-1 h-5 w-5"
+              aria-hidden="true"
+            />{" "}
+            Començar
           </Button>
         </EmptyScreen>
       </div>

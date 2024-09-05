@@ -142,17 +142,17 @@ export const TextAreaForm = ({
               >
                 {loading ? (
                   <ArrowPathIcon
-                    className="ml-0.5 h-5 w-5 animate-spin"
+                    className="ml-0.5 h-5 w-5 animate-spin mr-1"
                     aria-hidden="true"
                   />
                 ) : recording ? (
                   <MicrophoneIcon
-                    className="ml-0.5 h-5 w-5"
+                    className="ml-0.5 h-5 w-5 mr-1"
                     aria-hidden="true"
                   />
                 ) : (
                   <PaperAirplaneIcon
-                    className="ml-0.5 h-5 w-5"
+                    className="ml-0.5 h-5 w-5 mr-1"
                     aria-hidden="true"
                   />
                 )}

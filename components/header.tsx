@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState, useContext } from "react";
+import { Fragment, useState, useContext, useEffect } from "react";
 import { Dialog, Popover, Transition } from "@headlessui/react";
 import {
   XMarkIcon,
@@ -17,6 +17,8 @@ import {
 import Image from "next/image";
 import { GlobalContext } from "./context/globalContext";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 const products = [
   {
     name: "Actualitat",
@@ -71,14 +73,51 @@ const footer = [
   },
 ];
 export default function Header() {
-  const { setActualsThreadId, actualThreadId, actualsThreadId, state } =
-    useContext(GlobalContext);
+  const {
+    setActualsThreadId,
+    actualThreadId,
+    actualsThreadId,
+    state,
+    setUser,
+    user,
+  } = useContext(GlobalContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const createNovaConversa = () => {
     setActualsThreadId([...actualsThreadId, actualThreadId]);
     setMobileMenuOpen(false);
   };
+  const supabase = createClient();
+  const router = useRouter();
+
+  // Verificar si el usuario tiene sesión
+  useEffect(() => {
+    const getSession = async () => {
+      const { data: sessionData, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error("Error fetching session:", error);
+      }
+      setUser(sessionData?.session?.user || null);
+    };
+
+    getSession();
+
+    // Listener para cambios de autenticación (ej: sign in/out)
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user || null);
+        if (session) {
+          getSession(); // Forzar actualización manual después del cambio de auth
+          router.push("/"); // Redirigir al home después del login
+        }
+      },
+    );
+
+    // Limpia el listener al desmontar el componente
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [router]);
 
   return (
     <header className="bg-white pt-4 fixed top-0 z-10 bg-white w-full">
@@ -100,12 +139,24 @@ export default function Header() {
             <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />
             <span className="sr-only">Open main menu</span>
           </button>
+          {user && (
+            <div className="p-3 rounded-full text-gray-700 hover:bg-gray-50">
+              <form action="/auth/signout" method="post">
+                <button className="button block text-gray-600" type="submit">
+                  <ArrowRightStartOnRectangleIcon
+                    className="h-6 w-6"
+                    aria-hidden="true"
+                  />
+                </button>
+              </form>
+            </div>
+          )}
         </div>
         <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
           {/* Elementos de navegación para desktop */}
           {state === 2 && (
             <Button onClick={() => createNovaConversa()}>
-              <ChatBubbleLeftIcon className="h-5 w-5" aria-hidden="true" />
+              <ChatBubbleLeftIcon className="h-5 w-5 mr-1" aria-hidden="true" />
               Nova conversa
             </Button>
           )}
@@ -167,16 +218,18 @@ export default function Header() {
               </Popover.Panel>
             </Transition>
           </Popover>
-          <div>
-            <form action="/auth/signout" method="post">
-              <button className="button block text-gray-600" type="submit">
-                <ArrowRightStartOnRectangleIcon
-                  className="h-6 w-6"
-                  aria-hidden="true"
-                />
-              </button>
-            </form>
-          </div>
+          {!!user && (
+            <div>
+              <form action="/auth/signout" method="post">
+                <button className="button block text-gray-600" type="submit">
+                  <ArrowRightStartOnRectangleIcon
+                    className="h-6 w-6"
+                    aria-hidden="true"
+                  />
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </nav>
       <Dialog
@@ -191,6 +244,7 @@ export default function Header() {
           <div className="flex items-center justify-between ">
             <a href="#" className="p-1.5">
               <h3 className="leading-6">MENU</h3>
+
               {/* <img className="h-8 w-auto" src="/logo.png" alt="logo" />
               <Image src="/logo.png" alt="logo" width={156.75} height={55.5} /> */}
             </a>
@@ -217,14 +271,7 @@ export default function Header() {
                     key={item.name}
                     className="w-full group flex items-center gap-x-6 rounded-lg px-4 py-2 text-lg leading-6 hover:bg-gray-50"
                   >
-                    {/* Comentado para simplificar
-                <div className="h-11 w-11 flex-none rounded-lg bg-gray-50 group-hover:bg-white flex items-center justify-center">
-                  <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
-                </div> */}
-                    <div className="flex-auto">
-                      {item.name}
-                      {/* <p className="mt-1 text-gray-600">{item.description}</p> */}
-                    </div>
+                    <div className="flex-auto">{item.name}</div>
                   </div>
                 </a>
               ))}
@@ -234,7 +281,10 @@ export default function Header() {
                 className="ml-2 mb-7"
                 onClick={() => createNovaConversa()}
               >
-                <ChatBubbleLeftIcon className="h-5 w-5" aria-hidden="true" />
+                <ChatBubbleLeftIcon
+                  className="h-5 w-5 mr-1"
+                  aria-hidden="true"
+                />
                 Nova conversa
               </Button>
             )}

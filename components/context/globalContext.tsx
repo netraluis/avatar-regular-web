@@ -12,6 +12,8 @@ interface GlobalContextProps {
   ) => void;
   actualThreadId: string;
   setActualThreadId: (thread: string) => void;
+  user: any;
+  setUser: (user: any) => void;
 }
 
 export const GlobalContext = createContext<GlobalContextProps>({
@@ -23,6 +25,8 @@ export const GlobalContext = createContext<GlobalContextProps>({
   actualThreadId: "",
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setActualThreadId: (thread: string) => {},
+  user: null,
+  setUser: () => {},
 });
 
 export const useGlobalContext = () => {
@@ -39,6 +43,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [state, setState] = useState<number>(1);
   const [actualsThreadId, setActualsThreadId] = useState<string[]>([""]);
   const [actualThreadId, setActualThreadId] = useState<string>("");
+  const [user, setUser] = useState<any>(null);
 
   const value = {
     state,
@@ -47,6 +52,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     setActualsThreadId,
     actualThreadId,
     setActualThreadId,
+    user,
+    setUser,
   };
 
   return (
