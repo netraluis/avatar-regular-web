@@ -60,17 +60,12 @@ export default function ConversationRecipient() {
     }
   }, [threadId, setActualThreadId]);
 
- 
-
   return (
     <div
       className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px] h-screen"
       ref={scrollRef}
     >
-      <div
-        className={cn("pb-[200px]  pt-[100px]")}
-        ref={messagesRef}
-      >
+      <div className={cn("pb-[200px]  pt-[100px]")} ref={messagesRef}>
         {messages.length ? <ChatList messages={messages} /> : <></>}
         <div className="w-full h-px" ref={visibilityRef} />
       </div>

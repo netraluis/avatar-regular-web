@@ -16,7 +16,7 @@ interface Message {
   content: Content[];
 }
 
-const chunksize = 1800
+const chunksize = 1800;
 
 function splitTextIntoChunks(text: string, chunkSize = chunksize) {
   const chunks: any = [];
@@ -29,27 +29,21 @@ function splitTextIntoChunks(text: string, chunkSize = chunksize) {
 const getTheLastQuestionAndAnswer = async (message: Message[]) => {
   const patron = /【[^】]*】/g;
 
-  const question = message[1].content[0].text.value.replace(
-    patron,
-    ""
-  );
-  const answer = message[0].content[0].text.value.replace(
-    patron,
-    ""
-  );
+  const question = message[1].content[0].text.value.replace(patron, "");
+  const answer = message[0].content[0].text.value.replace(patron, "");
 
-  let arrayQuestion = [question]
-  if(question.length >= chunksize){
-    arrayQuestion = splitTextIntoChunks(question)
+  let arrayQuestion = [question];
+  if (question.length >= chunksize) {
+    arrayQuestion = splitTextIntoChunks(question);
   }
 
-  let arrayAnswer = [answer]
-  if(answer.length >= chunksize){
-    arrayAnswer = splitTextIntoChunks(answer)
+  let arrayAnswer = [answer];
+  if (answer.length >= chunksize) {
+    arrayAnswer = splitTextIntoChunks(answer);
   }
 
   return { question: arrayQuestion, answer: arrayAnswer };
-}
+};
 
 export async function addNewRow(message: Message[], newDatabaseId: any) {
   const { question, answer } = await getTheLastQuestionAndAnswer(message);
@@ -84,12 +78,12 @@ export async function addNewRow(message: Message[], newDatabaseId: any) {
       block_id: newPage.id,
       children: [
         {
-          "paragraph": {
-            "rich_text": [
+          paragraph: {
+            rich_text: [
               {
-                "type": "text",
-                "text": {
-                  "content": question[i],
+                type: "text",
+                text: {
+                  content: question[i],
                 },
               },
             ],
@@ -104,12 +98,12 @@ export async function addNewRow(message: Message[], newDatabaseId: any) {
       block_id: newPage.id,
       children: [
         {
-          "paragraph": {
-            "rich_text": [
+          paragraph: {
+            rich_text: [
               {
-                "type": "text",
-                "text": {
-                  "content": answer[i],
+                type: "text",
+                text: {
+                  content: answer[i],
                 },
               },
             ],
@@ -122,16 +116,20 @@ export async function addNewRow(message: Message[], newDatabaseId: any) {
   return newPage.id;
 }
 
-export async function updateQuestionsCounter (pageId: string, questions: number, message: Message[]) {
+export async function updateQuestionsCounter(
+  pageId: string,
+  questions: number,
+  message: Message[],
+) {
   await notion.pages.update({
     page_id: pageId,
     properties: {
       Preguntes: {
         type: "number",
-        number: questions
-      }
-    }
-  })
+        number: questions,
+      },
+    },
+  });
 
   const { question, answer } = await getTheLastQuestionAndAnswer(message);
 
@@ -139,16 +137,16 @@ export async function updateQuestionsCounter (pageId: string, questions: number,
     block_id: pageId,
     children: [
       {
-        "heading_2": {
-          "rich_text": [
+        heading_2: {
+          rich_text: [
             {
-              "text": {
-                "content": `Pregunta: ${question[0]}`
-              }
-            }
-          ]
-        }
-      }
+              text: {
+                content: `Pregunta: ${question[0]}`,
+              },
+            },
+          ],
+        },
+      },
     ],
   });
 
@@ -157,12 +155,12 @@ export async function updateQuestionsCounter (pageId: string, questions: number,
       block_id: pageId,
       children: [
         {
-          "heading_2": {
-            "rich_text": [
+          heading_2: {
+            rich_text: [
               {
-                "type": "text",
-                "text": {
-                  "content": `${question[i]}`,
+                type: "text",
+                text: {
+                  content: `${question[i]}`,
                 },
               },
             ],
@@ -172,20 +170,20 @@ export async function updateQuestionsCounter (pageId: string, questions: number,
     });
   }
 
-    await notion.blocks.children.append({
+  await notion.blocks.children.append({
     block_id: pageId,
     children: [
       {
-        "paragraph": {
-          "rich_text": [
+        paragraph: {
+          rich_text: [
             {
-              "text": {
-                "content": `Resposta: ${answer[0]}`,
-              }
-            }
-          ]
-        }
-      }
+              text: {
+                content: `Resposta: ${answer[0]}`,
+              },
+            },
+          ],
+        },
+      },
     ],
   });
 
@@ -194,12 +192,12 @@ export async function updateQuestionsCounter (pageId: string, questions: number,
       block_id: pageId,
       children: [
         {
-          "paragraph": {
-            "rich_text": [
+          paragraph: {
+            rich_text: [
               {
-                "type": "text",
-                "text": {
-                  "content":`${answer[i]}`,
+                type: "text",
+                text: {
+                  content: `${answer[i]}`,
                 },
               },
             ],

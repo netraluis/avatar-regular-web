@@ -12,6 +12,7 @@ import {
   SquaresPlusIcon,
   ArrowPathIcon,
   HeartIcon,
+  ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { GlobalContext } from "./context/globalContext";
@@ -73,7 +74,6 @@ export default function Header() {
   const { setActualsThreadId, actualThreadId, actualsThreadId, state } =
     useContext(GlobalContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
 
   const createNovaConversa = () => {
     setActualsThreadId([...actualsThreadId, actualThreadId]);
@@ -167,6 +167,16 @@ export default function Header() {
               </Popover.Panel>
             </Transition>
           </Popover>
+          <div>
+            <form action="/auth/signout" method="post">
+              <button className="button block text-gray-600" type="submit">
+                <ArrowRightStartOnRectangleIcon
+                  className="h-6 w-6"
+                  aria-hidden="true"
+                />
+              </button>
+            </form>
+          </div>
         </div>
       </nav>
       <Dialog

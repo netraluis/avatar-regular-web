@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 
-interface IconArrowDownProps extends React.ComponentProps<'svg'> {
+interface IconArrowDownProps extends React.ComponentProps<"svg"> {
   className?: string;
 }
 
@@ -15,7 +15,7 @@ function IconArrowDown({ className, ...props }: IconArrowDownProps) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 256 256"
       fill="currentColor"
-      className={cn('size-4', className)}
+      className={cn("size-4", className)}
       {...props}
     >
       <path d="m205.66 149.66-72 72a8 8 0 0 1-11.32 0l-72-72a8 8 0 0 1 11.32-11.32L120 196.69V40a8 8 0 0 1 16 0v156.69l58.34-58.35a8 8 0 0 1 11.32 11.32Z" />
@@ -23,7 +23,7 @@ function IconArrowDown({ className, ...props }: IconArrowDownProps) {
   );
 }
 
-interface IconChatForProps extends React.ComponentProps<'svg'> {
+interface IconChatForProps extends React.ComponentProps<"svg"> {
   className?: string;
 }
 
@@ -39,7 +39,7 @@ function IconChatFor({ className, ...props }: IconChatForProps) {
       // xml:space="preserve"
       // xmlns:serif="http://www.serif.com/"
       // style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
-      className={cn('size-4', className)}
+      className={cn("size-4", className)}
       {...props}
     >
       <g transform="matrix(1,0,0,1,-2233.5,-1591.04)">
@@ -51,7 +51,7 @@ function IconChatFor({ className, ...props }: IconChatForProps) {
   );
 }
 
-interface OnlyIconChatForProps extends React.ComponentProps<'svg'> {
+interface OnlyIconChatForProps extends React.ComponentProps<"svg"> {
   className?: string;
 }
 
@@ -67,7 +67,7 @@ function OnlyIconChatFor({ className, ...props }: OnlyIconChatForProps) {
       // xml:space="preserve"
       // xmlns:serif="http://www.serif.com/"
       // style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
-      className={cn('size-4', className)}
+      className={cn("size-4", className)}
       {...props}
     >
       <g transform="matrix(1,0,0,1,-2233.5,-669.852)">

@@ -1,5 +1,5 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
 export function createClient() {
   const cookieStore = cookies();
@@ -18,7 +18,7 @@ export function createClient() {
               cookieStore.set(name, value, options),
             );
           } catch {
-            console.error('Error setting cookies');
+            console.error("Error setting cookies");
             // The `setAll` method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
             // user sessions.

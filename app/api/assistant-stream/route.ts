@@ -2,7 +2,7 @@ import { AssistantResponse } from "ai";
 import OpenAI from "openai";
 import clientPromise from "../mongodb";
 // import { addNewRow, updateQuestionsCounter } from "@/app/helper/notion";
-import prisma from "../../../lib/prisma"
+import prisma from "../../../lib/prisma";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -21,9 +21,9 @@ export interface MessageDb {
 const manageThreadId = async (input: { threadId: string | null }) => {
   if (!input.threadId) {
     const threadId = (await openai.beta.threads.create({})).id;
-    return {threadId, isNew: true};
+    return { threadId, isNew: true };
   } else {
-    return {threadId: input.threadId, isNew: false};
+    return { threadId: input.threadId, isNew: false };
   }
 };
 
@@ -35,15 +35,13 @@ export async function POST(req: Request) {
   } = await req.json();
 
   // Create a thread if needed and save it to the database
-  const {threadId, isNew} = await manageThreadId(input);
+  const { threadId, isNew } = await manageThreadId(input);
 
   // Add a message to the thread
   const createdMessage = await openai.beta.threads.messages.create(threadId, {
     role: "user",
     content: input.message,
   });
-
-  
 
   return AssistantResponse(
     { threadId, messageId: createdMessage.id },
@@ -59,23 +57,32 @@ export async function POST(req: Request) {
 
       // forward run status would stream message deltas
       let runResult = await forwardStream(runStream);
-      console.log({runResult})
-      if(runResult && runResult.status === "completed" && runResult.thread_id) {
-        const threadMessages: any = await openai.beta.threads.messages.list(runResult.thread_id, {
-          order: "desc",
+      console.log({ runResult });
+      if (
+        runResult &&
+        runResult.status === "completed" &&
+        runResult.thread_id
+      ) {
+        const threadMessages: any = await openai.beta.threads.messages.list(
+          runResult.thread_id,
+          {
+            order: "desc",
+          },
+        );
+        console.log({
+          threadMessages: JSON.stringify(threadMessages, null, 2),
         });
-        console.log({threadMessages: JSON.stringify(threadMessages, null, 2)})
         try {
           if (threadMessages.data.length > 1) {
             const lastQuestion = threadMessages.data[1]; // El segundo mensaje en la lista ordenada es el último mensaje del usuario
             const lastResponse = threadMessages.data[0]; // El primer mensaje en la lista ordenada es el más reciente
 
-            console.log(  {
+            console.log({
               role: lastQuestion.role,
               message: lastQuestion.content[0].text.value,
               threadId: runResult.thread_id,
               createdAt: new Date(),
-            },)
+            });
             const result = await prisma.message.createMany({
               data: [
                 {
@@ -92,16 +99,14 @@ export async function POST(req: Request) {
                 },
               ],
             });
-        
-            console.log({result})
+
+            console.log({ result });
             // Aquí puedes realizar acciones adicionales con el último mensaje
           }
-      
-        }catch(e){
-          console.error(e)
+        } catch (e) {
+          console.error(e);
         }
-   
       }
-    }
+    },
   );
 }

@@ -166,13 +166,11 @@ export const TextAreaForm = ({
                   />
                 )}
                 <div className="hidden sm:block">
-                  {
-                    !input && status === "awaiting_message"
-                      ? "Gravar"
-                      : status === "awaiting_message"
+                  {!input && status === "awaiting_message"
+                    ? "Gravar"
+                    : status === "awaiting_message"
                       ? "Enviar"
-                      : "Generant resposta"
-                  }
+                      : "Generant resposta"}
                 </div>
               </Button>
             </div>

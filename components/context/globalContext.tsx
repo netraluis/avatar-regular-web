@@ -8,7 +8,7 @@ interface GlobalContextProps {
   setState: (state: number) => void;
   actualsThreadId: string[];
   setActualsThreadId: (
-    thread: string[] | ((prev: string[]) => string[])
+    thread: string[] | ((prev: string[]) => string[]),
   ) => void;
   actualThreadId: string;
   setActualThreadId: (thread: string) => void;
@@ -27,7 +27,7 @@ export const useGlobalContext = () => {
   const context = useContext(GlobalContext);
   if (context === undefined) {
     throw new Error(
-      "useEstadoGlobal must be used within a EstadoGlobalProvider"
+      "useEstadoGlobal must be used within a EstadoGlobalProvider",
     );
   }
   return context;

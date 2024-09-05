@@ -1,14 +1,10 @@
 "use client";
 import { HandThumbUpIcon } from "@heroicons/react/24/outline";
-import Avatar from "./avatar";
 import { useContext } from "react";
 
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { PaperAirplaneIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import { ButtonScrollToBottom } from "./button-scroll-to-bottom";
 import { FooterText } from "./footer";
-import Textarea from "react-textarea-autosize";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { EmptyScreen } from "./empty-screen";
 import { cn } from "@/lib/utils";
@@ -33,7 +29,8 @@ export default function Welcome() {
             }}
           >
             <div className="w-full h-px" ref={visibilityRef} />
-            començar
+            Començar{" "}
+            <HandThumbUpIcon className="ml-0.5 h-5 w-5" aria-hidden="true" />
           </Button>
         </EmptyScreen>
       </div>

@@ -4,19 +4,27 @@ const openai = new OpenAI({
 });
 
 export async function POST(request: Request) {
-  const body = (await request.json());
+  const body = await request.json();
   const { question, threadId } = body;
   // const threadId = (await request.json()).threadId;
   // console.log({ question, threadId });
-  return await main({ question, threadId});
+  return await main({ question, threadId });
 }
 
-async function main({ question,threadId }: { question: string, threadId: string}) {
+async function main({
+  question,
+  threadId,
+}: {
+  question: string;
+  threadId: string;
+}) {
   try {
     const response = [];
     // Create a new thread if does not exist
     console.log({ threadId }, !!threadId);
-    const actualThread = threadId ? threadId : (await openai.beta.threads.create()).id;
+    const actualThread = threadId
+      ? threadId
+      : (await openai.beta.threads.create()).id;
 
     await openai.beta.threads.messages.create(actualThread, {
       role: "user",
