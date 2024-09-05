@@ -149,13 +149,13 @@ export const TextAreaForm = ({
                     aria-hidden="true"
                   />
                 )}
-                <div className="hidden sm:block">
+                {/* <div className="hidden sm:block">
                   {!input && status === "awaiting_message"
                     ? "Gravar"
                     : status === "awaiting_message"
                       ? "Enviar"
                       : "Generant resposta"}
-                </div>
+                </div> */}
               </Button>
             </div>
           </form>
