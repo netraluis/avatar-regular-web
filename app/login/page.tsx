@@ -40,6 +40,7 @@ export default function LoginPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {error && <p className="text-red-500">{error}</p>}
         <form className="grid gap-4" action={handleLogin}>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>

@@ -13,7 +13,7 @@ import { GlobalContext } from "./context/globalContext";
 export default function Welcome() {
   const { setState } = useContext(GlobalContext);
 
-  const { messagesRef, scrollRef, visibilityRef, isAtBottom, scrollToBottom } =
+  const { messagesRef, scrollRef, isAtBottom, scrollToBottom } =
     useScrollAnchor();
 
   return (
