@@ -16,7 +16,7 @@ export default function ConversationRecipient() {
     input,
     submitMessage,
     handleInputChange,
-    error,
+    // error,
     threadId,
     append,
   } = useAssistant({
@@ -26,7 +26,7 @@ export default function ConversationRecipient() {
     },
   });
 
-  console.log("error", error);
+  // console.log("error", error);
   const {
     messagesRef,
     scrollRef,
