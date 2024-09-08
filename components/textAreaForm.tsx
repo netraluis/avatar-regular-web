@@ -1,10 +1,4 @@
-import React, {
-  ChangeEvent,
-  KeyboardEvent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   PaperAirplaneIcon,
@@ -14,6 +8,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Textarea from "react-textarea-autosize";
+import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
 
 interface TextAreaFormProps {
   handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -34,9 +29,13 @@ export const TextAreaForm = ({
   const [recording, setRecording] = useState(false);
   const audioChunks = useRef<Blob[]>([]);
   const mediaRecorder = useRef<MediaRecorder | null>(null);
+  const [transcribing, setTranscribing] = useState(false);
+  const recorderControls = useVoiceVisualizer();
+  const { startRecording, stopRecording, clearCanvas } = recorderControls;
 
-  const startRecording = (e: any) => {
+  const startRecordingF = (e: any) => {
     e.preventDefault();
+    startRecording();
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -61,11 +60,14 @@ export const TextAreaForm = ({
       });
   };
 
-  const stopRecording = (e: any, toTranscribe: boolean) => {
+  const stopRecordingF = (e: any, toTranscribe: boolean) => {
     e.preventDefault();
     if (mediaRecorder.current) {
       if (!toTranscribe) {
         mediaRecorder.current.ondataavailable = null;
+        clearCanvas();
+      } else {
+        stopRecording();
       }
       mediaRecorder.current.stop();
       setRecording(false);
@@ -74,6 +76,7 @@ export const TextAreaForm = ({
 
   const transcribeAudio = async (audioBlob: Blob) => {
     try {
+      setTranscribing(true);
       const formData = new FormData();
       formData.append("audioFile", audioBlob);
       formData.append("language", "ca"); // Pass the language
@@ -91,6 +94,8 @@ export const TextAreaForm = ({
       simulateInputChange(data.transcription);
     } catch (error) {
       console.error("Error transcribing audio:", error);
+    } finally {
+      setTranscribing(false);
     }
   };
 
@@ -113,68 +118,95 @@ export const TextAreaForm = ({
       <div className="mx-auto sm:max-w-2xl sm:px-4">
         <div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
           <form className="relative rounded-xl shadow-sm">
-            <Textarea
-              ref={textAreaRef}
-              tabIndex={0}
-              onKeyDown={handleKeyDown}
-              placeholder="Escriu una pregunta..."
-              className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm"
-              autoFocus
-              spellCheck={false}
-              autoComplete="off"
-              autoCorrect="off"
-              name="message"
-              rows={1}
-              value={input}
-              onChange={handleInputChange}
-            />
-            <div className="absolute right-0 top-[13px] sm:right-4">
-              {!input && status === "awaiting_message" ? (
-                !recording ? (
-                  <Button onClick={(e) => startRecording(e)}>
-                    <MicrophoneIcon
-                      className="ml-0.5 h-5 w-5 mr-1"
-                      aria-hidden="true"
-                    />
-                  </Button>
-                ) : (
-                  <>
-                    <Button
-                      onClick={(event) => stopRecording(event, false)}
-                      className="mr-5"
-                    >
-                      <XMarkIcon
-                        className="ml-0.5 h-5 w-5 mr-1"
-                        aria-hidden="true"
-                      />
-                    </Button>
-                    <Button onClick={(event) => stopRecording(event, true)}>
-                      <CheckIcon
-                        className="ml-0.5 h-5 w-5 mr-1"
-                        aria-hidden="true"
-                      />
-                    </Button>
-                  </>
-                )
-              ) : (
+            {!recording ? (
+              <Textarea
+                ref={textAreaRef}
+                tabIndex={0}
+                onKeyDown={handleKeyDown}
+                placeholder="Escriu una pregunta..."
+                className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm "
+                autoFocus
+                spellCheck={false}
+                autoComplete="off"
+                autoCorrect="off"
+                name="message"
+                rows={1}
+                value={input}
+                onChange={handleInputChange}
+              />
+            ) : (
+              <div className="flex min-h-[60px] w-full resize-none bg-transparent px-4 py-[0.65rem] focus-within:outline-none sm:text-sm">
                 <Button
-                  disabled={status !== "awaiting_message"}
-                  onClick={sendMessage}
+                  className="mt-[3px]"
+                  onClick={(event) => stopRecordingF(event, false)}
                 >
-                  {status === "awaiting_message" ? (
-                    <PaperAirplaneIcon
-                      className="ml-0.5 h-5 w-5 mr-1"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <ArrowPathIcon
-                      className="ml-0.5 h-5 w-5 animate-spin mr-1"
-                      aria-hidden="true"
-                    />
-                  )}
+                  <XMarkIcon
+                    className="ml-0.5 h-5 w-5 mr-1"
+                    aria-hidden="true"
+                  />
                 </Button>
-              )}
-            </div>
+                <div className=" flex-1 mx-2 shrink">
+                  <VoiceVisualizer
+                    controls={recorderControls}
+                    height={"48px"}
+                    width={"100%"}
+                    mainBarColor="#0f172a"
+                    secondaryBarColor="#f1f5f9"
+                    speed={3}
+                    barWidth={5}
+                    gap={1}
+                    rounded={5}
+                    isControlPanelShown={false}
+                    isDownloadAudioButtonShown={false}
+                    fullscreen={true}
+                    onlyRecording={true}
+                    isDefaultUIShown={false}
+                  />
+                </div>
+
+                <Button
+                  className="mt-[3px]"
+                  onClick={(event) => stopRecordingF(event, true)}
+                >
+                  <CheckIcon
+                    className="ml-0.5 h-5 w-5 mr-1"
+                    aria-hidden="true"
+                  />
+                </Button>
+              </div>
+            )}
+
+            {!recording && (
+              <div className="absolute right-0 top-[13px] sm:right-4 ">
+                {!input && status === "awaiting_message" ? (
+                  !recording && (
+                    <Button onClick={(e) => startRecordingF(e)}>
+                      <MicrophoneIcon
+                        className={`ml-0.5 h-5 w-5 mr-1 ${transcribing ? "animate-spin" : ""}`}
+                        aria-hidden="true"
+                      />
+                    </Button>
+                  )
+                ) : (
+                  <Button
+                    disabled={status !== "awaiting_message"}
+                    onClick={sendMessage}
+                  >
+                    {status === "awaiting_message" ? (
+                      <PaperAirplaneIcon
+                        className="ml-0.5 h-5 w-5 mr-1"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <ArrowPathIcon
+                        className="ml-0.5 h-5 w-5 animate-spin mr-1"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </Button>
+                )}
+              </div>
+            )}
           </form>
         </div>
       </div>
