@@ -22,7 +22,6 @@ export function ChatList({ messages }: ChatList) {
           <div className="my-4" key={message.id}>
             <Avatar name={message.role} />
             <MarkdownDisplay markdownText={message.content} />
-            {/* {index < messages.length - 1 && <Separator className="my-4" />} */}
           </div>
         );
       })}
