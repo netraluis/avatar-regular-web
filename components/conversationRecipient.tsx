@@ -4,10 +4,22 @@ import { TextAreaForm } from "./textAreaForm";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { cn } from "@/lib/utils";
 import { ChatList } from "./chat-list";
+import { createClient } from "@/lib/supabase/client";
 
 import { GlobalContext } from "./context/globalContext";
 
 export default function ConversationRecipient() {
+  const sendMessageToChannel = async (message: string) => {
+    const supabase = createClient();
+
+    const channel = supabase.channel("avatar-communication");
+
+    await channel.send({
+      type: "broadcast",
+      event: "message",
+      payload: { content: message },
+    });
+  };
   const { setActualThreadId } = useContext(GlobalContext);
 
   const {
@@ -25,6 +37,10 @@ export default function ConversationRecipient() {
       assistantId: undefined,
     },
   });
+
+  useEffect(() => {
+    console.log("messages", messages, status);
+  }, [messages]);
 
   // console.log("error", error);
   const {

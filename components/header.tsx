@@ -108,9 +108,10 @@ export default function Header() {
         setUser(session?.user || null);
         if (session) {
           getSession(); // Forzar actualización manual después del cambio de auth
-          router.push("/"); // Redirigir al home después del login
+        } else {
+          router.push("/login");
         }
-      },
+      }
     );
 
     // Limpia el listener al desmontar el componente

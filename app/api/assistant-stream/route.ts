@@ -39,6 +39,21 @@ export async function POST(req: Request) {
     content: input.message,
   });
 
+  try {
+    const result = await prisma.message.createMany({
+      data: [
+        {
+          role: "user",
+          message: input.message,
+          threadId,
+          createdAt: new Date(),
+        },
+      ],
+    });
+  } catch (err) {
+    console.log(err);
+  }
+
   return AssistantResponse(
     { threadId, messageId: createdMessage.id },
     async ({ forwardStream }) => {
@@ -63,7 +78,7 @@ export async function POST(req: Request) {
           runResult.thread_id,
           {
             order: "desc",
-          },
+          }
         );
         console.log({
           threadMessages: JSON.stringify(threadMessages, null, 2),
@@ -82,12 +97,6 @@ export async function POST(req: Request) {
             const result = await prisma.message.createMany({
               data: [
                 {
-                  role: lastQuestion.role,
-                  message: lastQuestion.content[0].text.value,
-                  threadId: runResult.thread_id,
-                  createdAt: new Date(),
-                },
-                {
                   role: lastResponse.role,
                   message: lastResponse.content[0].text.value,
                   threadId: runResult.thread_id,
@@ -103,6 +112,6 @@ export async function POST(req: Request) {
           console.error(e);
         }
       }
-    },
+    }
   );
 }
