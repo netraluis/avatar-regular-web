@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Textarea from "react-textarea-autosize";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
+import { FooterText } from "./footer";
 
 interface TextAreaFormProps {
   handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -114,7 +115,7 @@ export const TextAreaForm = ({
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 w-full bg-muted/30 dark:bg-background/80 duration-300 ease-in-out animate-in">
+    <div className="fixed inset-x-0 bottom-0 w-full duration-300 ease-in-out animate-in">
       <div className="mx-auto sm:max-w-2xl sm:px-4">
         <div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
           <form className="relative rounded-xl shadow-sm">
@@ -208,6 +209,7 @@ export const TextAreaForm = ({
               </div>
             )}
           </form>
+          <FooterText className="hidden sm:block" />
         </div>
       </div>
     </div>
