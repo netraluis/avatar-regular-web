@@ -10,7 +10,8 @@ import { GlobalContext } from "./context/globalContext";
 
 export default function ConversationRecipient() {
   const supabase = createClient();
-  const { setActualThreadId, actualThreadId } = useContext(GlobalContext);
+  const { setActualThreadId, actualThreadId, setShowAnalizeInfo } =
+    useContext(GlobalContext);
 
   const {
     status,
@@ -79,6 +80,13 @@ export default function ConversationRecipient() {
       setActualThreadId(threadId);
     }
   }, [threadId, setActualThreadId]);
+
+  useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    const lastMessageRole = lastMessage?.role;
+    const showLoading = lastMessageRole === "user" && status === "in_progress";
+    setShowAnalizeInfo(showLoading);
+  }, [status, messages]);
 
   return (
     <div

@@ -14,6 +14,8 @@ interface GlobalContextProps {
   setActualThreadId: (thread: string) => void;
   user: any;
   setUser: (user: any) => void;
+  showAnalizeInfo: boolean;
+  setShowAnalizeInfo: (show: boolean) => void;
 }
 
 export const GlobalContext = createContext<GlobalContextProps>({
@@ -27,6 +29,8 @@ export const GlobalContext = createContext<GlobalContextProps>({
   setActualThreadId: (thread: string) => {},
   user: null,
   setUser: () => {},
+  showAnalizeInfo: false,
+  setShowAnalizeInfo: () => {},
 });
 
 export const useGlobalContext = () => {
@@ -44,6 +48,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [actualsThreadId, setActualsThreadId] = useState<string[]>([""]);
   const [actualThreadId, setActualThreadId] = useState<string>("");
   const [user, setUser] = useState<any>(null);
+  const [showAnalizeInfo, setShowAnalizeInfo] = useState(false);
 
   const value = {
     state,
@@ -54,6 +59,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     setActualThreadId,
     user,
     setUser,
+    showAnalizeInfo,
+    setShowAnalizeInfo,
   };
 
   return (
