@@ -46,8 +46,8 @@ export async function POST(req: Request) {
           role: "user",
           message: input.message,
           threadId,
-          domainId: 'andorraEU',
-          createdAt: new Date()
+          domainId: "andorraEU",
+          createdAt: new Date(),
         },
       ],
     });
@@ -94,8 +94,8 @@ export async function POST(req: Request) {
                   role: lastResponse.role,
                   message: lastResponse.content[0].text.value,
                   threadId: runResult.thread_id,
-                  domainId: 'andorraEU',
-                  createdAt: new Date()
+                  domainId: "andorraEU",
+                  createdAt: new Date(),
                 },
               ],
             });

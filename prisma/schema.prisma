@@ -25,6 +25,10 @@ model Domains {
   welcome                   String
   logo                      String
   assistantId               String
+  assistantName             String
+  menuHeader                Json
+  menuBody                  Json
+  menufooter                String
   createdAt                 DateTime   @default(now())
 }
 
