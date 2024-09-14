@@ -40,13 +40,14 @@ export async function POST(req: Request) {
   });
 
   try {
-    await prisma.message.createMany({
+    await prisma.messages.createMany({
       data: [
         {
           role: "user",
           message: input.message,
           threadId,
-          createdAt: new Date(),
+          domainId: 'andorraEU',
+          createdAt: new Date()
         },
       ],
     });
@@ -87,13 +88,14 @@ export async function POST(req: Request) {
           if (threadMessages.data.length > 1) {
             const lastResponse = threadMessages.data[0]; // El primer mensaje en la lista ordenada es el más reciente
 
-            const result = await prisma.message.createMany({
+            const result = await prisma.messages.createMany({
               data: [
                 {
                   role: lastResponse.role,
                   message: lastResponse.content[0].text.value,
                   threadId: runResult.thread_id,
-                  createdAt: new Date(),
+                  domainId: 'andorraEU',
+                  createdAt: new Date()
                 },
               ],
             });

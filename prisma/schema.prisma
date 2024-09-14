@@ -9,11 +9,22 @@ datasource db {
 }
 
 
-model Message {
+model Messages {
   id                        String     @id @default(cuid())
   role                      String
   message                   String
   threadId                  String
+  domainId                  String  
+  createdAt                 DateTime   @default(now())
+}
+
+model Domains {
+  id                        String     @id @default(cuid())
+  domain                    String
+  customDomain              String
+  welcome                   String
+  logo                      String
+  assistantId               String
   createdAt                 DateTime   @default(now())
 }
 
