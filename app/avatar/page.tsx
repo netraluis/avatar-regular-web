@@ -30,7 +30,7 @@ const useDatabaseSubscription = () => {
           if (payload.new.role === "assistant") {
             setSpeak(payload.new);
           }
-        }
+        },
       )
       .subscribe();
 

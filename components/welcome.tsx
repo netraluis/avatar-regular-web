@@ -7,7 +7,6 @@ import { ButtonScrollToBottom } from "./button-scroll-to-bottom";
 import { FooterText } from "./footer";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { EmptyScreen } from "./empty-screen";
-import { cn } from "@/lib/utils";
 import { GlobalContext } from "./context/globalContext";
 
 export default function Welcome() {
@@ -21,7 +20,7 @@ export default function Welcome() {
       className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]"
       ref={scrollRef}
     >
-      <div className={cn("pb-[200px] pt-4 md:pt-10")} ref={messagesRef}>
+      <div ref={messagesRef}>
         <EmptyScreen>
           <Button
             onClick={() => {
@@ -33,7 +32,7 @@ export default function Welcome() {
               className="ml-0.5 mr-1 h-5 w-5"
               aria-hidden="true"
             />{" "}
-            Començar
+            Entesos i començar
           </Button>
         </EmptyScreen>
       </div>

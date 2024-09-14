@@ -9,7 +9,6 @@ import { createClient } from "@/lib/supabase/client";
 import { GlobalContext } from "./context/globalContext";
 
 export default function ConversationRecipient() {
-  
   const supabase = createClient();
   const { setActualThreadId, actualThreadId } = useContext(GlobalContext);
 

@@ -111,7 +111,7 @@ export default function Header() {
         } else {
           router.push("/login");
         }
-      }
+      },
     );
 
     // Limpia el listener al desmontar el componente

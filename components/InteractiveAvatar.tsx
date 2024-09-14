@@ -49,19 +49,32 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
 
   // Simple function to log any messages we receive
   async function messageReceived(payload: any) {
-    console.log("Message received:",payload.payload.messages, payload.payload.messages.length, payload.payload.messages[payload.payload.messages.length -1]);
+    console.log(
+      "Message received:",
+      payload.payload.messages,
+      payload.payload.messages.length,
+      payload.payload.messages[payload.payload.messages.length - 1],
+    );
     if (!speak) return;
     if (!initialized || !avatar.current) return;
     await avatar.current.speak({
-      taskRequest: { text: payload.payload.messages[payload.payload.messages.length -1].content, sessionId: data?.sessionId },
+      taskRequest: {
+        text: payload.payload.messages[payload.payload.messages.length - 1]
+          .content,
+        sessionId: data?.sessionId,
+      },
     });
-    
+
     console.log(payload);
   }
 
   // Subscribe to the Channel
   channelAvatar
-    .on("broadcast", { event: "test" }, async (payload) => await messageReceived(payload))
+    .on(
+      "broadcast",
+      { event: "test" },
+      async (payload) => await messageReceived(payload),
+    )
     .subscribe();
 
   // useEffect(() => {
@@ -103,14 +116,14 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
             voice: { voiceId: voiceId },
           },
         },
-        setDebug
+        setDebug,
       );
       setData(res);
       setStream(avatar.current.mediaStream);
     } catch (error) {
       console.error("Error starting avatar session:", error);
       setDebug(
-        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`
+        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`,
       );
     }
     setIsLoadingSession(false);
@@ -120,7 +133,7 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
     const newToken = await fetchAccessToken();
     console.log("Updating Access Token:", newToken); // Log token for debugging
     avatar.current = new StreamingAvatarApi(
-      new Configuration({ accessToken: newToken })
+      new Configuration({ accessToken: newToken }),
     );
 
     const startTalkCallback = (e: any) => {
@@ -157,7 +170,7 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
     }
     await avatar.current.stopAvatar(
       { stopSessionRequest: { sessionId: data?.sessionId } },
-      setDebug
+      setDebug,
     );
     setStream(undefined);
   }
@@ -167,7 +180,7 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
       const newToken = await fetchAccessToken();
       console.log("Initializing with Access Token:", newToken); // Log token for debugging
       avatar.current = new StreamingAvatarApi(
-        new Configuration({ accessToken: newToken, jitterBuffer: 200 })
+        new Configuration({ accessToken: newToken, jitterBuffer: 200 }),
       );
       setInitialized(true); // Set initialized to true
     }

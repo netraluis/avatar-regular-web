@@ -78,7 +78,7 @@ export async function POST(req: Request) {
           runResult.thread_id,
           {
             order: "desc",
-          }
+          },
         );
         console.log({
           threadMessages: JSON.stringify(threadMessages, null, 2),
@@ -105,6 +105,6 @@ export async function POST(req: Request) {
           console.error(e);
         }
       }
-    }
+    },
   );
 }
