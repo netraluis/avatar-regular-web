@@ -5,7 +5,7 @@ import {
   ArrowPathIcon,
   MicrophoneIcon,
   CheckIcon,
-  TrashIcon
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 import Textarea from "react-textarea-autosize";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
@@ -182,10 +182,17 @@ export const TextAreaForm = ({
                 {!input && status === "awaiting_message" ? (
                   !recording && (
                     <Button onClick={(e) => startRecordingF(e)}>
-                      <MicrophoneIcon
-                        className={`ml-0.5 h-5 w-5 mr-1 ${transcribing ? "animate-spin" : ""}`}
-                        aria-hidden="true"
-                      />
+                      {!transcribing ? (
+                        <MicrophoneIcon
+                          className={"ml-0.5 h-5 w-5 mr-1"}
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <ArrowPathIcon
+                          className="ml-0.5 h-5 w-5 animate-spin mr-1"
+                          aria-hidden="true"
+                        />
+                      )}
                     </Button>
                   )
                 ) : (
