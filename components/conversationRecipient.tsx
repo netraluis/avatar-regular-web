@@ -4,11 +4,14 @@ import { TextAreaForm } from "./textAreaForm";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { cn } from "@/lib/utils";
 import { ChatList } from "./chat-list";
+import { createClient } from "@/lib/supabase/client";
 
 import { GlobalContext } from "./context/globalContext";
 
 export default function ConversationRecipient() {
-  const { setActualThreadId } = useContext(GlobalContext);
+  
+  const supabase = createClient();
+  const { setActualThreadId, actualThreadId } = useContext(GlobalContext);
 
   const {
     status,
@@ -23,8 +26,28 @@ export default function ConversationRecipient() {
     api: "/api/assistant-stream",
     body: {
       assistantId: undefined,
+      threadId: actualThreadId,
     },
   });
+
+  useEffect(() => {
+    console.log("messages", messages, status);
+    const channelAvatar = supabase.channel("avatar");
+
+    channelAvatar.subscribe((subStatus) => {
+      // Wait for successful connection
+      if (subStatus !== "SUBSCRIBED") {
+        return null;
+      }
+
+      // Send a message once the client is subscribed
+      channelAvatar.send({
+        type: "broadcast",
+        event: "test",
+        payload: { messages, status },
+      });
+    });
+  }, [messages]);
 
   // console.log("error", error);
   const {

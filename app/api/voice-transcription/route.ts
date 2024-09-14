@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     // Extraer los datos del cuerpo de la solicitud
     const formData = await req.formData();
     const audioFile = formData.get("audioFile") as File;
-    const language = (formData.get("language") as string) || "en";
+    const language = (formData.get("language") as string) || "ca";
 
     if (!audioFile) {
       return NextResponse.json(
