@@ -9,18 +9,9 @@ import { createClient } from "@/lib/supabase/client";
 import { GlobalContext } from "./context/globalContext";
 
 export default function ConversationRecipient() {
-  const sendMessageToChannel = async (message: string) => {
-    const supabase = createClient();
-
-    const channel = supabase.channel("avatar-communication");
-
-    await channel.send({
-      type: "broadcast",
-      event: "message",
-      payload: { content: message },
-    });
-  };
-  const { setActualThreadId } = useContext(GlobalContext);
+  
+  const supabase = createClient();
+  const { setActualThreadId, actualThreadId } = useContext(GlobalContext);
 
   const {
     status,
@@ -35,11 +26,27 @@ export default function ConversationRecipient() {
     api: "/api/assistant-stream",
     body: {
       assistantId: undefined,
+      threadId: actualThreadId,
     },
   });
 
   useEffect(() => {
     console.log("messages", messages, status);
+    const channelAvatar = supabase.channel("avatar");
+
+    channelAvatar.subscribe((subStatus) => {
+      // Wait for successful connection
+      if (subStatus !== "SUBSCRIBED") {
+        return null;
+      }
+
+      // Send a message once the client is subscribed
+      channelAvatar.send({
+        type: "broadcast",
+        event: "test",
+        payload: { messages, status },
+      });
+    });
   }, [messages]);
 
   // console.log("error", error);

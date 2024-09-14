@@ -1,13 +1,16 @@
+/* eslint-disable */
 import {
   Configuration,
   NewSessionData,
   StreamingAvatarApi,
 } from "@heygen/streaming-avatar";
 
-import { useChat } from "ai/react";
+import { useAssistant as useAssistant } from "ai/react";
 import OpenAI from "openai";
-import { use, useEffect, useRef, useState } from "react";
+import { use, useContext, useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
+import { GlobalContext } from "./context/globalContext";
+import { createClient } from "@/lib/supabase/client";
 
 interface InteractiveAvatarProps {
   speak: string; // Define speak as a string type
@@ -15,8 +18,6 @@ interface InteractiveAvatarProps {
 
 export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
   const [isLoadingSession, setIsLoadingSession] = useState(false);
-  const [isLoadingRepeat, setIsLoadingRepeat] = useState(false);
-  const [isLoadingChat, setIsLoadingChat] = useState(false);
   const [stream, setStream] = useState<MediaStream>();
   const [debug, setDebug] = useState<string>();
   // const [avatarId, setAvatarId] = useState<string>("");
@@ -24,61 +25,52 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
   const [data, setData] = useState<NewSessionData>();
   const [text, setText] = useState<string>("");
   const [initialized, setInitialized] = useState(false); // Track initialization
-  const [recording, setRecording] = useState(false); // Track recording state
   const mediaStream = useRef<HTMLVideoElement>(null);
   const avatar = useRef<StreamingAvatarApi | null>(null);
-  const mediaRecorder = useRef<MediaRecorder | null>(null);
-  const audioChunks = useRef<Blob[]>([]);
   const voiceId = "001cc6d54eae4ca2b5fb16ca8e8eb9bb";
   const avatarId = "Eric_public_pro2_20230608";
 
-  useEffect(() => {
-    console.log("Speak:", speak);
-    // Define an async function within the useEffect
-    const speakAsync = async () => {
-      if (!speak) return;
-      if (!initialized || !avatar.current) return;
+  const speakAsync = async () => {
+    if (!speak) return;
+    if (!initialized || !avatar.current) return;
 
-      try {
-        await avatar.current.speak({
-          taskRequest: { text: speak, sessionId: data?.sessionId },
-        });
-      } catch (e: any) {
-        setDebug(e.message);
-      }
-    };
+    try {
+      await avatar.current.speak({
+        taskRequest: { text: speak, sessionId: data?.sessionId },
+      });
+    } catch (e: any) {
+      setDebug(e.message);
+    }
+  };
 
-    // Call the async function
-    speakAsync();
-  }, [speak, initialized, avatar, data?.sessionId]);
+  const supabase = createClient();
 
-  // const { input, setInput, handleSubmit } = useChat({
-  //   onFinish: async (message) => {
-  //     console.log("ChatGPT Response:", message);
+  const channelAvatar = supabase.channel("avatar");
 
-  //     if (!initialized || !avatar.current) {
-  //       setDebug("Avatar API not initialized");
-  //       return;
-  //     }
+  // Simple function to log any messages we receive
+  async function messageReceived(payload: any) {
+    console.log("Message received:",payload.payload.messages, payload.payload.messages.length, payload.payload.messages[payload.payload.messages.length -1]);
+    if (!speak) return;
+    if (!initialized || !avatar.current) return;
+    await avatar.current.speak({
+      taskRequest: { text: payload.payload.messages[payload.payload.messages.length -1].content, sessionId: data?.sessionId },
+    });
+    
+    console.log(payload);
+  }
 
-  //     //send the ChatGPT response to the Interactive Avatar
-  //     await avatar.current
-  //       .speak({
-  //         taskRequest: { text: message.content, sessionId: data?.sessionId },
-  //       })
-  //       .catch((e) => {
-  //         setDebug(e.message);
-  //       });
-  //     setIsLoadingChat(false);
-  //   },
-  //   initialMessages: [
-  //     {
-  //       id: "1",
-  //       role: "system",
-  //       content: "You are a helpful assistant.",
-  //     },
-  //   ],
-  // });
+  // Subscribe to the Channel
+  channelAvatar
+    .on("broadcast", { event: "test" }, async (payload) => await messageReceived(payload))
+    .subscribe();
+
+  // useEffect(() => {
+  //   console.log("Speak:", speak);
+  //   // Define an async function within the useEffect
+
+  //   // Call the async function
+  //   speakAsync();
+  // }, [speak, initialized, avatar, data?.sessionId]);
 
   async function fetchAccessToken() {
     try {
@@ -170,20 +162,6 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
     setStream(undefined);
   }
 
-  async function handleSpeak() {
-    setIsLoadingRepeat(true);
-    if (!initialized || !avatar.current) {
-      setDebug("Avatar API not initialized");
-      return;
-    }
-    await avatar.current
-      .speak({ taskRequest: { text: text, sessionId: data?.sessionId } })
-      .catch((e) => {
-        setDebug(e.message);
-      });
-    setIsLoadingRepeat(false);
-  }
-
   useEffect(() => {
     async function init() {
       const newToken = await fetchAccessToken();
@@ -257,68 +235,7 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
             <div>Cargando...</div>
           )}
         </div>
-        {/* <Divider /> */}
-        {/* <CardFooter className="flex flex-col gap-3">
-          <InteractiveAvatarTextInput
-            label="Repeat"
-            placeholder="Type something for the avatar to repeat"
-            input={text}
-            onSubmit={handleSpeak}
-            setInput={setText}
-            disabled={!stream}
-            loading={isLoadingRepeat}
-          />
-          <InteractiveAvatarTextInput
-            label="Chat"
-            placeholder="Chat with the avatar (uses ChatGPT)"
-            input={input}
-            onSubmit={() => {
-              setIsLoadingChat(true);
-              if (!input) {
-                setDebug("Please enter text to send to ChatGPT");
-                return;
-              }
-              handleSubmit();
-            }}
-            setInput={setInput}
-            loading={isLoadingChat}
-            endContent={
-              <Tooltip
-                content={!recording ? "Start recording" : "Stop recording"}
-              >
-                <Button
-                  onClick={!recording ? startRecording : stopRecording}
-                  isDisabled={!stream}
-                  isIconOnly
-                  className={clsx(
-                    "mr-4 text-white",
-                    !recording
-                      ? "bg-gradient-to-tr from-indigo-500 to-indigo-300"
-                      : ""
-                  )}
-                  size="sm"
-                  variant="shadow"
-                >
-                  {!recording ? (
-                    <Microphone size={20} />
-                  ) : (
-                    <>
-                      <div className="absolute h-full w-full bg-gradient-to-tr from-indigo-500 to-indigo-300 animate-pulse -z-10"></div>
-                      <MicrophoneStage size={20} />
-                    </>
-                  )}
-                </Button>
-              </Tooltip>
-            }
-            disabled={!stream}
-          />
-        </CardFooter> */}
       </>
-      {/* <p className="font-mono text-right">
-        <span className="font-bold">Console:</span>
-        <br />
-        {debug}
-      </p> */}
     </>
   );
 }

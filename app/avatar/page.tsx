@@ -8,7 +8,7 @@ interface Message {
   message: string;
 }
 
-export const useDatabaseSubscription = () => {
+const useDatabaseSubscription = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [speak, setSpeak] = useState<Message>({ role: "", message: "" });
   const supabase = createClient();
@@ -25,7 +25,7 @@ export const useDatabaseSubscription = () => {
         },
         (payload: any) => {
           console.log(payload);
-          setMessages([...messages, payload.new]);
+          setMessages((prevMessages) => [...prevMessages, payload.new]);
           if (payload.new.role === "assistant") {
             setSpeak(payload.new);
           }
@@ -36,23 +36,28 @@ export const useDatabaseSubscription = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase, setMessages, messages]);
+  }, [supabase]);
 
   return { messages, speak };
 };
 
 export default function ChatComponent() {
   const { messages, speak } = useDatabaseSubscription();
-  console.log("aquiii", messages);
 
   return (
-    <div>
-      {messages.map((msg: any, index) => (
-        <div key={index} className="relative z-40 bg-slate-50">
-          <strong>{msg.role}:</strong> {msg.message}
+    <>
+      {true ? (
+        <>work in progress</>
+      ) : (
+        <div>
+          {messages.map((msg: any, index) => (
+            <div key={index} className="relative z-40 bg-slate-50">
+              <strong>{msg.role}:</strong> {msg.message}
+            </div>
+          ))}
+          <InteractiveAvatar speak={speak.message} />
         </div>
-      ))}
-      <InteractiveAvatar speak={speak.message} />
-    </div>
+      )}
+    </>
   );
 }
