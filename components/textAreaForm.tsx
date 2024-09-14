@@ -5,7 +5,7 @@ import {
   ArrowPathIcon,
   MicrophoneIcon,
   CheckIcon,
-  XMarkIcon,
+  TrashIcon
 } from "@heroicons/react/24/outline";
 import Textarea from "react-textarea-autosize";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
@@ -138,10 +138,10 @@ export const TextAreaForm = ({
             ) : (
               <div className="flex min-h-[60px] w-full resize-none bg-transparent px-4 py-[0.65rem] focus-within:outline-none sm:text-sm">
                 <Button
-                  className="mt-[3px]"
+                  className="mt-[3px] bg-background text-primary hover:bg-secondary hover:text-primary"
                   onClick={(event) => stopRecordingF(event, false)}
                 >
-                  <XMarkIcon
+                  <TrashIcon
                     className="ml-0.5 h-5 w-5 mr-1"
                     aria-hidden="true"
                   />
