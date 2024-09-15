@@ -20,7 +20,6 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
   const [isLoadingSession, setIsLoadingSession] = useState(false);
   const [stream, setStream] = useState<MediaStream>();
   const [debug, setDebug] = useState<string>();
-  // const [avatarId, setAvatarId] = useState<string>("");
   // const [voiceId, setVoiceId] = useState<string>("");
   const [data, setData] = useState<NewSessionData>();
   const [text, setText] = useState<string>("");
