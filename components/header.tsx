@@ -142,7 +142,7 @@ export default function Header() {
           </button>
           {user && (
             <div className="p-3 rounded-full text-gray-700 hover:bg-gray-50">
-              <form action="/auth/signout" method="post">
+              <form action="/api/auth/signout" method="post">
                 <button className="button block text-gray-600" type="submit">
                   <ArrowRightStartOnRectangleIcon
                     className="h-6 w-6"

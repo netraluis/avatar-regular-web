@@ -39,7 +39,6 @@ export const config = {
 };
 
 export default async function middleware(req: NextRequest) {
-  console.log("middleware");
   const url = req.nextUrl;
   if (pattern.test(url.toString())) {
     await updateSession(req);
@@ -50,8 +49,6 @@ export default async function middleware(req: NextRequest) {
     .get("host")!
     .replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
-  console.log("hostname0", hostname);
-
   // special case for Vercel preview deployment URLs
   if (
     hostname.includes("---") &&
@@ -61,8 +58,6 @@ export default async function middleware(req: NextRequest) {
       process.env.NEXT_PUBLIC_ROOT_DOMAIN
     }`;
   }
-
-  console.log("hostname1", hostname);
 
   const searchParams = req.nextUrl.searchParams.toString();
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
@@ -91,26 +86,15 @@ export default async function middleware(req: NextRequest) {
   // }
 
   // rewrite root application to `/home` folder
-  console.log("hostname2", hostname);
   if (
     hostname === "localhost:3000" ||
     hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
   ) {
-    // return NextResponse.rewrite(
-    //   new URL(`/home${path === "/" ? "" : path}`, req.url),
-    // );
-    return;
-  }
-
-  if (process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
-    let normalizedDomain = hostname.split(
-      `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`,
-    );
-    console.log("normalizedDomain", normalizedDomain);
-
-    // rewrite everything else to `/[domain]/[slug] dynamic route
     return NextResponse.rewrite(
-      new URL(`/${normalizedDomain[0]}${path}`, req.url),
+      new URL(`/andorra-unio-europea${path === "/" ? "" : path}`, req.url),
     );
   }
+
+  // rewrite everything else to `/[domain]/[slug] dynamic route
+  return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
 }

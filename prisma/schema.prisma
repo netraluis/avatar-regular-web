@@ -20,7 +20,8 @@ model Messages {
 
 model Domains {
   id                        String     @id @default(cuid())
-  domain                    String
+  name                      String
+  subDomain                 String
   customDomain              String
   welcome                   String
   logo                      String
