@@ -15,7 +15,7 @@ export function FooterText({ className, ...props }: FooterTextProps) {
       )}
       {...props}
     >
-      Totes les respostes en aquesta conversa estan generades mitjançant una
+      Totes les respostes d’aquesta conversa estan generades mitjançant una
       Intel·ligència Artificial (AI)
     </p>
   );
