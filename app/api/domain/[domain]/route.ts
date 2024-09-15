@@ -1,13 +1,13 @@
-import { getDomainData } from "../fetcher";
+import { getDomainData } from "../serverHelpers";
 
 export async function GET(
   req: Request,
   { params }: { params: { domain: string } },
 ) {
   try {
-    console.log("params", params);
-    const domain = params.domain;
-    await getDomainData(domain);
+    const domain = await getDomainData(params.domain);
+
+    return Response.json({ domain, status: 200 });
   } catch (error) {
     console.error("Error retrieving access token:", error);
 

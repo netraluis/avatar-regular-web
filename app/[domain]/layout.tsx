@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { notFound, redirect } from "next/navigation";
 // import { getDomainData } from "@/lib/fetchers";
 import { Metadata } from "next";
-import { getDomainData } from "@/app/api/domain/fetcher";
+import { getDomainData } from "@/app/api/domain/serverHelpers";
 import Image from "next/image";
 import "../globals.css";
 import { GlobalProvider } from "@/components/context/globalContext";
@@ -64,16 +64,7 @@ export default async function SiteLayout({
   children: ReactNode;
 }) {
   const domain = decodeURIComponent(params.domain);
-  console.log("params", params);
   const data = await getDomainData(domain);
-  // console.log("data", data);
-  // const data = {
-  //   name: "test",
-  //   description: "test",
-  //   image: "test",
-  //   logo: "test",
-  //   customDomain: "mycustomsite.com",
-  // };
 
   if (!data) {
     notFound();
@@ -92,7 +83,7 @@ export default async function SiteLayout({
     <html lang="en">
       <GlobalProvider>
         <body>
-          <Header />
+          <Header domain={domain} />
           {children}
         </body>
       </GlobalProvider>

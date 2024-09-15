@@ -91,7 +91,10 @@ export default async function middleware(req: NextRequest) {
     hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
   ) {
     return NextResponse.rewrite(
-      new URL(`/andorra-unio-europea${path === "/" ? "" : path}`, req.url),
+      new URL(
+        `/andorraue.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}${path === "/" ? "" : path}`,
+        req.url,
+      ),
     );
   }
 

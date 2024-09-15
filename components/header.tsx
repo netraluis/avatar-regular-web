@@ -1,78 +1,21 @@
 "use client";
-import { Fragment, useState, useContext, useEffect } from "react";
+import { Fragment, useState, useContext, useEffect, use } from "react";
 import { Dialog, Popover, Transition } from "@headlessui/react";
 import {
   XMarkIcon,
   Bars3CenterLeftIcon,
-  CheckCircleIcon,
   ChatBubbleLeftIcon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
-  ArrowPathIcon,
-  HeartIcon,
   ArrowRightStartOnRectangleIcon,
+  CameraIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { GlobalContext } from "./context/globalContext";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-const products = [
-  {
-    name: "Actualitat",
-    description: "Get a better understanding of your traffic",
-    href: "https://andorraue.ad/actualitat/",
-    icon: ChartPieIcon,
-  },
-  {
-    name: "Publicacions",
-    description: "Speak directly to your customers",
-    href: "https://andorraue.ad/publicacions/",
-    icon: CursorArrowRaysIcon,
-  },
-  {
-    name: "Qui som?",
-    description: "Your customers’ data will be safe and secure",
-    href: "https://andorraue.ad/qui-som/",
-    icon: FingerPrintIcon,
-  },
-  {
-    name: "Preguntes frequents",
-    description: "Connect with third-party tools",
-    href: "https://andorraue.ad/preguntes-frecuents/",
-    icon: SquaresPlusIcon,
-  },
-  {
-    name: "Sala de premsa",
-    description: "Build strategic funnels that will convert",
-    href: "https://www.govern.ad/mes-informacio/comunicats-de-premsa",
-    icon: ArrowPathIcon,
-  },
-  {
-    name: "Ajuda",
-    description: "Your customers’ data will be safe and secure",
-    href: "mailto:andorraue@govern.ad",
-    icon: CheckCircleIcon,
-  },
-];
+import { getDomain } from "@/app/api/domain/clientHelpers";
 
-const footer = [
-  {
-    description: "Política de privacitat",
-    href: "https://andorraue.ad/politica-de-cookies/",
-  },
-  {
-    description: "Termes i condicions",
-    href: "https://andorraue.ad/politica-privacitat/",
-  },
-  {
-    description: "Política de cookies",
-    href: "https://andorraue.ad/termes-i-condicions/",
-  },
-];
-export default function Header() {
+export default function Header({ domain }: { domain: string }) {
   const {
     setActualsThreadId,
     actualThreadId,
@@ -80,6 +23,8 @@ export default function Header() {
     state,
     setUser,
     user,
+    setDomainData,
+    domainData,
   } = useContext(GlobalContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -89,6 +34,16 @@ export default function Header() {
   };
   const supabase = createClient();
   const router = useRouter();
+
+  useEffect(() => {
+    const init = async () => {
+      const domainDataResult = await getDomain(domain);
+      if (domainDataResult) {
+        setDomainData(domainDataResult.domain);
+      }
+    };
+    init();
+  }, []);
 
   // Verificar si el usuario tiene sesión
   useEffect(() => {
@@ -128,7 +83,16 @@ export default function Header() {
       >
         <a href="#">
           <span className="sr-only">Your Company</span>
-          <Image src="/logo.png" alt="logo" width={209} height={74} />
+          {domainData?.logo ? (
+            <Image src={domainData?.logo} alt="logo" width={209} height={74} />
+          ) : (
+            <div className="w-[209px] h-[74px] flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">
+              <CameraIcon
+                className="ml-0.5 w-6 animate-pulse mr-1 text-slate-400"
+                aria-hidden="true"
+              />
+            </div>
+          )}
         </a>
         <div className="flex lg:hidden my-3">
           {/* Botón mejorado con mayor área táctil y color de fondo para mayor visibilidad */}
@@ -177,42 +141,45 @@ export default function Header() {
             >
               <Popover.Panel className="absolute -right-8 top-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
                 <div className="px-4 pt-5 pb-3">
-                  {products.map((item) => (
-                    <div
-                      key={item.name}
-                      className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-base leading-6 hover:bg-gray-50"
-                    >
-                      <div className="flex-auto">
-                        <a
-                          href={item.href}
-                          className="block font-semibold text-gray-900"
-                        >
-                          {item.name}
-                          <span className="absolute inset-0" />
-                        </a>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="mt-5">
-                    {footer.map((item) => (
-                      <a
-                        href={item.href}
-                        key={item.description}
-                        className="group relative flex items-center gap-x-4 rounded-lg px-4 py-2 text-xs leading-3 hover:bg-gray-50"
+                  {domainData?.menuHeader &&
+                    domainData?.menuHeader?.map((item) => (
+                      <div
+                        key={item.name}
+                        className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-base leading-6 hover:bg-gray-50"
                       >
                         <div className="flex-auto">
-                          <p className=" text-gray-600">{item.description}</p>
+                          <a
+                            href={item.href}
+                            className="block font-semibold text-gray-900"
+                          >
+                            {item.name}
+                            <span className="absolute inset-0" />
+                          </a>
                         </div>
-                      </a>
+                      </div>
                     ))}
+                  <div className="mt-5">
+                    {domainData?.menuBody &&
+                      domainData.menuBody.map((item) => (
+                        <a
+                          href={item.href}
+                          key={item.description}
+                          className="group relative flex items-center gap-x-4 rounded-lg px-4 py-2 text-xs leading-3 hover:bg-gray-50"
+                        >
+                          <div className="flex-auto">
+                            <p className=" text-gray-600">{item.description}</p>
+                          </div>
+                        </a>
+                      ))}
                   </div>
                   <div className="mt-5 pt-3 border-t-2 w-full">
                     <div className="flex justify-center">
-                      Fet amb{" "}
+                      {domainData?.menufooter}
+                      {/* Fet amb{" "}
                       <span>
                         <HeartIcon className="h-5 w-6" aria-hidden="true" />
                       </span>{" "}
-                      a Andorra i per andorra
+                      a Andorra i per andorra */}
                     </div>
                   </div>
                 </div>
@@ -262,20 +229,21 @@ export default function Header() {
           {/* Menú móvil con mejor accesibilidad y diseño */}
           <div className="flex-grow space-y-6">
             <div className="py-4 flex flex-col">
-              {products.map((item, index) => (
-                <a
-                  key={index}
-                  href={item.href}
-                  className="font-semibold text-gray-900"
-                >
-                  <div
-                    key={item.name}
-                    className="w-full group flex items-center gap-x-6 rounded-lg px-4 py-2 text-lg leading-6 hover:bg-gray-50"
+              {domainData?.menuHeader &&
+                domainData.menuHeader.map((item, index) => (
+                  <a
+                    key={index}
+                    href={item.href}
+                    className="font-semibold text-gray-900"
                   >
-                    <div className="flex-auto">{item.name}</div>
-                  </div>
-                </a>
-              ))}
+                    <div
+                      key={item.name}
+                      className="w-full group flex items-center gap-x-6 rounded-lg px-4 py-2 text-lg leading-6 hover:bg-gray-50"
+                    >
+                      <div className="flex-auto">{item.name}</div>
+                    </div>
+                  </a>
+                ))}
             </div>
             {state === 2 && (
               <Button
@@ -290,34 +258,23 @@ export default function Header() {
               </Button>
             )}
             <div className="mt-7 pt-6 ">
-              {footer.map((item) => (
-                <a
-                  href={item.href}
-                  key={item.description}
-                  className="group relative flex items-center gap-x-4 rounded-lg text-xs leading-4 hover:bg-gray-50 my-3"
-                >
-                  <div className="flex-auto">
-                    <p className="text-gray-600">{item.description}</p>
-                  </div>
-                </a>
-              ))}
+              {domainData?.menuBody &&
+                domainData.menuBody.map((item) => (
+                  <a
+                    href={item.href}
+                    key={item.description}
+                    className="group relative flex items-center gap-x-4 rounded-lg text-xs leading-4 hover:bg-gray-50 my-3"
+                  >
+                    <div className="flex-auto">
+                      <p className="text-gray-600">{item.description}</p>
+                    </div>
+                  </a>
+                ))}
             </div>
           </div>
 
           <div className="mt-auto pt-1 border-t-2 w-full">
-            {/* <p className="flex">
-              Fet amb amor per andorra{" "}
-              <span>
-                <HeartIcon className="h-5 w-6" aria-hidden="true" />
-              </span>
-            </p> */}
-            <div className="flex ">
-              Fet amb{" "}
-              <span>
-                <HeartIcon className="h-5 w-6" aria-hidden="true" />
-              </span>{" "}
-              a Andorra i per andorra
-            </div>
+            <div className="flex ">{domainData?.menufooter}</div>
           </div>
         </Dialog.Panel>
       </Dialog>

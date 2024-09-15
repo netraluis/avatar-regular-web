@@ -12,7 +12,7 @@ export default async function RootLayout({
     <html lang="en">
       <GlobalProvider>
         <body>
-          <Header />
+          <Header domain='andorraue.localhost:3000' />
           {children}
         </body>
       </GlobalProvider>

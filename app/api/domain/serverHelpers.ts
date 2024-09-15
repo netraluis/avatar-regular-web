@@ -1,30 +1,5 @@
-import { unstable_cache } from "next/cache";
 import prisma from "../../../lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-
-// export async function getDomainData(domain: string) {
-//     const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-//       ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
-//       : null;
-
-//     return await unstable_cache(
-//       async () => {
-//         return await db.query.sites.findFirst({
-//           where: subdomain
-//             ? eq(sites.subdomain, subdomain)
-//             : eq(sites.customDomain, domain),
-//           with: {
-//             user: true,
-//           },
-//         });
-//       },
-//       [`${domain}-metadata`],
-//       {
-//         revalidate: 900,
-//         tags: [`${domain}-metadata`],
-//       },
-//     )();
-//   }
 
 export const getPublicUrlImageimport = async (fileName: string) => {
   const supabase = createClient();

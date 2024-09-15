@@ -3,6 +3,32 @@ import React, { ReactNode, createContext, useContext, useState } from "react";
 
 export type History = { who: string; message: string };
 
+interface MenuHeader {
+  name: string;
+  description: string;
+  href: string;
+}
+
+interface MenuBody {
+  description: string;
+  href: string;
+}
+
+export type Domain = {
+  id: string;
+  name: string;
+  subDomain: string;
+  customDomain: string;
+  welcome: string;
+  logo: string;
+  assistantId: string;
+  assistantName: string;
+  menuHeader: MenuHeader[];
+  menuBody: MenuBody[];
+  menufooter: string;
+  createdAt: Date;
+};
+
 interface GlobalContextProps {
   state: number;
   setState: (state: number) => void;
@@ -16,6 +42,8 @@ interface GlobalContextProps {
   setUser: (user: any) => void;
   showAnalizeInfo: boolean;
   setShowAnalizeInfo: (show: boolean) => void;
+  domainData: Domain;
+  setDomainData: (data: any) => void;
 }
 
 export const GlobalContext = createContext<GlobalContextProps>({
@@ -31,6 +59,21 @@ export const GlobalContext = createContext<GlobalContextProps>({
   setUser: () => {},
   showAnalizeInfo: false,
   setShowAnalizeInfo: () => {},
+  domainData: {
+    id: "",
+    name: "",
+    subDomain: "",
+    customDomain: "",
+    welcome: "",
+    logo: "",
+    assistantId: "",
+    assistantName: "",
+    menuHeader: [],
+    menuBody: [],
+    menufooter: "",
+    createdAt: new Date(),
+  },
+  setDomainData: () => {},
 });
 
 export const useGlobalContext = () => {
@@ -49,6 +92,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [actualThreadId, setActualThreadId] = useState<string>("");
   const [user, setUser] = useState<any>(null);
   const [showAnalizeInfo, setShowAnalizeInfo] = useState(false);
+  const [domainData, setDomainData] = useState<any>(null);
 
   const value = {
     state,
@@ -61,6 +105,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     setUser,
     showAnalizeInfo,
     setShowAnalizeInfo,
+    domainData,
+    setDomainData,
   };
 
   return (
