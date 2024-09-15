@@ -1,11 +1,9 @@
 "use server";
-import Link from "next/link";
 import { ReactNode } from "react";
 import { notFound, redirect } from "next/navigation";
 // import { getDomainData } from "@/lib/fetchers";
 import { Metadata } from "next";
 import { getDomainData } from "@/app/api/domain/serverHelpers";
-import Image from "next/image";
 import "../globals.css";
 import { GlobalProvider } from "@/components/context/globalContext";
 import Header from "@/components/header";
