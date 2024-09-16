@@ -10,7 +10,7 @@ const getPublicUrlImageimport = async (fileName: string) => {
 };
 
 async function getDomainData(domain: string) {
-  console.log("Domain:", domain);
+  console.log("Domain:", domain, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
   const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
     ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
     : null;
