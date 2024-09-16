@@ -274,7 +274,13 @@ export default function Header({ domain }: { domain: string }) {
           </div>
 
           <div className="mt-auto pt-1 border-t-2 w-full">
-            <div className="flex ">{domainData?.menufooter}</div>
+            <div className="flex ">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: domainData?.menufooter || "",
+                }}
+              />
+            </div>
           </div>
         </Dialog.Panel>
       </Dialog>
