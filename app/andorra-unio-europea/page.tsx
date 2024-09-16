@@ -1,7 +1,7 @@
-"use client";
+"use server";
 
 import ConversationSwitcher from "@/components/conversationSwitcher";
 
-export default function Page() {
+export default async function Page() {
   return <ConversationSwitcher />;
 }

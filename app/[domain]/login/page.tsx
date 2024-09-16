@@ -13,7 +13,7 @@ import Link from "next/link";
 import { login } from "./actions";
 import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
-import { GlobalContext } from "../../components/context/globalContext";
+import { GlobalContext } from "@/components/context/globalContext";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,7 +26,6 @@ export default function LoginPage() {
     if (result?.error) {
       setError(result.error);
     } else {
-      console.log({ result });
       setUser(result);
       router.push("/");
     }
