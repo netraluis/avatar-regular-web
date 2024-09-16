@@ -1,11 +1,42 @@
 "use server";
+import prisma from "@/lib/prisma";
 import { ReactNode } from "react";
 import { notFound, redirect } from "next/navigation";
 import { Metadata } from "next";
 import "../globals.css";
 import { GlobalProvider } from "@/components/context/globalContext";
 import Header from "@/components/header";
-import { getDomainData } from "@/lib/domain/serverHelpers";
+// import { getPublicUrlImageimport } from "@/lib/domain/serverHelpers";
+// import { getDomainData } from "@/lib/domain/serverHelpers";
+
+ async function getDomainData(domain: string) {
+  console.log("Domain:", domain, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
+  const rootDomain =
+    `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` || ".localhost:3000";
+  const subdomain = domain.endsWith(rootDomain)
+    ? domain.replace(rootDomain, "")
+    : null;
+
+  console.log("Subdomain:", subdomain);
+
+  const subdomainInfo = await prisma.domains.findFirst({
+    where: subdomain
+      ? { subDomain: subdomain } // If subdomain is true, filter by subdomain
+      : { customDomain: domain }, // Otherwise, filter by customDomain
+  });
+
+  if (!subdomainInfo) {
+    return null;
+  }
+
+  // const logo = await getPublicUrlImageimport(`logos/${subdomainInfo.id}.png`);
+  // console.log("Logo:", logo);
+
+  return {
+    ...subdomainInfo,
+    // logo,
+  };
+}
 
 export async function generateMetadata({
   params,
