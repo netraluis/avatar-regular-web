@@ -1,4 +1,5 @@
 export const getDomain = async (domain: string) => {
+  console.log("Fetching domain data for:", domain);
   try {
     // const response = await fetch(`/api/domain/${domain}`, {
     //   method: "GET",
