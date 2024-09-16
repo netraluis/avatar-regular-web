@@ -1,42 +1,11 @@
 "use server";
-import prisma from "@/lib/prisma";
 import { ReactNode } from "react";
 import { notFound, redirect } from "next/navigation";
 import { Metadata } from "next";
 import "../globals.css";
 import { GlobalProvider } from "@/components/context/globalContext";
 import Header from "@/components/header";
-// import { getPublicUrlImageimport } from "@/lib/domain/serverHelpers";
-// import { getDomainData } from "@/lib/domain/serverHelpers";
-
-async function getDomainData(domain: string) {
-  console.log("Domain:", domain, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
-  const rootDomain =
-    `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` || ".localhost:3000";
-  const subdomain = domain.endsWith(rootDomain)
-    ? domain.replace(rootDomain, "")
-    : null;
-
-  console.log("Subdomain:", subdomain);
-
-  const subdomainInfo = await prisma.domains.findFirst({
-    where: subdomain
-      ? { subDomain: subdomain } // If subdomain is true, filter by subdomain
-      : { customDomain: domain }, // Otherwise, filter by customDomain
-  });
-
-  if (!subdomainInfo) {
-    return null;
-  }
-
-  // const logo = await getPublicUrlImageimport(`logos/${subdomainInfo.id}.png`);
-  // console.log("Logo:", logo);
-
-  return {
-    ...subdomainInfo,
-    // logo,
-  };
-}
+import { getDomainData } from "@/lib/domain/serverHelpers";
 
 export async function generateMetadata({
   params,
@@ -45,55 +14,10 @@ export async function generateMetadata({
 }): Promise<Metadata | null> {
   const domain = decodeURIComponent(params.domain);
   const data = await getDomainData(domain);
-  // console.log("generateMetadata", data);
 
-  // const response = await fetch(
-  //   `${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/domain/${domain}`,
-  //   {
-  //     method: "GET",
-  //   },
-  // );
-  // if (!response.ok) {
-  //   throw new Error(`Error fetching domain data: ${response.statusText}`);
-  // }
-  // const domainData = await response.json();
-  // console.log("getDat", domainData);
-  // const subdomainInfo = {
-  //   assistantId: "asst_lwr5WIVDFjoV8pL0CHic2BFd",
-  //   assistantName: "AI Andorra UE",
-  //   createdAt: "2024-09-15T07:40:15.585Z",
-  //   customDomain: "null",
-  //   id: "fm11ujxfx0000137h7qmc5f73",
-  //   logo: "https://sjgdbtgjgkkmztduxohh.supabase.co/storage/v1/object/public/images/logos/fm11ujxfx0000137h7qmc5f73.png",
-
-  //   menufooter: "Fet amb 🖤  a Andorra i per andorra",
-  //   name: "andorra UE",
-  //   subDomain: "andorraue",
-  //   welcome: "Benvingut a Andorra UE",
-  // };
-
-  // const data = subdomainInfo;
-  // const data = await getDomain(domain);
-
-  // const data = subdomainInfo;
-  // const data = {
-  //   name: "test",
-  //   description: "test",
-  //   image: "test",
-  //   logo: "test",
-  // };
   if (!data) {
     return null;
   }
-  // const {
-  //   name,
-  //   description,
-  //   logo,
-  // } = data as {
-  //   name: string;
-  //   description: string;
-  //   logo: string;
-  // };
 
   return {
     title: data.name,
@@ -101,9 +25,16 @@ export async function generateMetadata({
     openGraph: {
       title: data.name,
       description: data.welcome,
-      images: [data.logo ? data.logo : ""],
+      images: [data.logo],
     },
-    icons: [data.logo ? data.logo : ""],
+    icons: [data.logo],
+    twitter: {
+      card: "summary_large_image",
+      title: data.name,
+      description: data.welcome,
+      images: [data.logo],
+      creator: "netraluis and anton odena",
+    },
     metadataBase: new URL(`https://${domain}`),
     // Optional: Set canonical URL to custom domain if it exists
     // ...(params.domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) &&
@@ -124,25 +55,6 @@ export default async function SiteLayout({
 }) {
   const domain = decodeURIComponent(params.domain);
   const data = await getDomainData(domain);
-  // const data = await getDomain(domain)
-
-  // const subdomainInfo = {
-  //   assistantId: "asst_lwr5WIVDFjoV8pL0CHic2BFd",
-  //   assistantName: "AI Andorra UE",
-  //   createdAt: "2024-09-15T07:40:15.585Z",
-  //   customDomain: "null",
-  //   id: "fm11ujxfx0000137h7qmc5f73",
-  //   logo: "https://sjgdbtgjgkkmztduxohh.supabase.co/storage/v1/object/public/images/logos/fm11ujxfx0000137h7qmc5f73.png",
-
-  //   menufooter: "Fet amb 🖤  a Andorra i per andorra",
-  //   name: "andorra UE",
-  //   subDomain: "andorraue",
-  //   welcome: "Benvingut a Andorra UE",
-  // };
-
-  console.log({ data });
-
-  // const data = subdomainInfo;
 
   if (!data) {
     notFound();
