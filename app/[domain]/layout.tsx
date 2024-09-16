@@ -44,7 +44,7 @@ export async function generateMetadata({
   params: { domain: string };
 }): Promise<Metadata | null> {
   const domain = decodeURIComponent(params.domain);
-  // const data = await getDomainData(domain);
+  const data = await getDomainData(domain);
   // console.log("generateMetadata", data);
 
   // const response = await fetch(
@@ -58,21 +58,21 @@ export async function generateMetadata({
   // }
   // const domainData = await response.json();
   // console.log("getDat", domainData);
-  const subdomainInfo = {
-    assistantId: "asst_lwr5WIVDFjoV8pL0CHic2BFd",
-    assistantName: "AI Andorra UE",
-    createdAt: "2024-09-15T07:40:15.585Z",
-    customDomain: "null",
-    id: "fm11ujxfx0000137h7qmc5f73",
-    logo: "https://sjgdbtgjgkkmztduxohh.supabase.co/storage/v1/object/public/images/logos/fm11ujxfx0000137h7qmc5f73.png",
+  // const subdomainInfo = {
+  //   assistantId: "asst_lwr5WIVDFjoV8pL0CHic2BFd",
+  //   assistantName: "AI Andorra UE",
+  //   createdAt: "2024-09-15T07:40:15.585Z",
+  //   customDomain: "null",
+  //   id: "fm11ujxfx0000137h7qmc5f73",
+  //   logo: "https://sjgdbtgjgkkmztduxohh.supabase.co/storage/v1/object/public/images/logos/fm11ujxfx0000137h7qmc5f73.png",
 
-    menufooter: "Fet amb 🖤  a Andorra i per andorra",
-    name: "andorra UE",
-    subDomain: "andorraue",
-    welcome: "Benvingut a Andorra UE",
-  };
+  //   menufooter: "Fet amb 🖤  a Andorra i per andorra",
+  //   name: "andorra UE",
+  //   subDomain: "andorraue",
+  //   welcome: "Benvingut a Andorra UE",
+  // };
 
-  const data = subdomainInfo;
+  // const data = subdomainInfo;
   // const data = await getDomain(domain);
 
   // const data = subdomainInfo;
