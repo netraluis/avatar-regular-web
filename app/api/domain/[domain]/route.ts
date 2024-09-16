@@ -2,7 +2,7 @@ import { getDomainData } from "../../../../lib/serverHelpers";
 
 export async function GET(
   req: Request,
-  { params }: { params: { domain: string } },
+  { params }: { params: { domain: string } }
 ) {
   try {
     const domain = await getDomainData(params.domain);
@@ -11,7 +11,8 @@ export async function GET(
   } catch (error) {
     console.error("Error retrieving access token:", error);
 
-    return new Response("Failed to retrieve access token", {
+    return Response.json({
+      response: "Failed to retrieve access token",
       status: 500,
     });
   }
