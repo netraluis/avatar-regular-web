@@ -23,6 +23,7 @@ export async function generateMetadata({
   //   throw new Error(`Error fetching domain data: ${response.statusText}`);
   // }
   // const domainData = await response.json();
+  
   // console.log("getDat", domainData);
   const subdomainInfo = {
     assistantId: "asst_lwr5WIVDFjoV8pL0CHic2BFd",
