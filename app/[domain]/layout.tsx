@@ -64,11 +64,7 @@ export default async function SiteLayout({
   const domain = decodeURIComponent(params.domain);
   // const data = await getDomainData(domain);
 
-  // if (!data) {
-  //   notFound();
-  // }
-
-    const subdomainInfo = {
+  const subdomainInfo = {
     assistantId: "asst_lwr5WIVDFjoV8pL0CHic2BFd",
     assistantName: "AI Andorra UE",
     createdAt: "2024-09-15T07:40:15.585Z",
@@ -83,6 +79,10 @@ export default async function SiteLayout({
   };
 
   const data = subdomainInfo;
+
+  if (!data) {
+    notFound();
+  }
 
   // Optional: Redirect to custom domain if it exists
   if (
