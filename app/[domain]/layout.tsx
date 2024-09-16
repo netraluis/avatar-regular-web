@@ -62,11 +62,27 @@ export default async function SiteLayout({
   children: ReactNode;
 }) {
   const domain = decodeURIComponent(params.domain);
-  const data = await getDomainData(domain);
+  // const data = await getDomainData(domain);
 
-  if (!data) {
-    notFound();
-  }
+  // if (!data) {
+  //   notFound();
+  // }
+
+    const subdomainInfo = {
+    assistantId: "asst_lwr5WIVDFjoV8pL0CHic2BFd",
+    assistantName: "AI Andorra UE",
+    createdAt: "2024-09-15T07:40:15.585Z",
+    customDomain: "null",
+    id: "fm11ujxfx0000137h7qmc5f73",
+    logo: "https://sjgdbtgjgkkmztduxohh.supabase.co/storage/v1/object/public/images/logos/fm11ujxfx0000137h7qmc5f73.png",
+
+    menufooter: "Fet amb 🖤  a Andorra i per andorra",
+    name: "andorra UE",
+    subDomain: "andorraue",
+    welcome: "Benvingut a Andorra UE",
+  };
+
+  const data = subdomainInfo;
 
   // Optional: Redirect to custom domain if it exists
   if (
