@@ -39,6 +39,7 @@ export const config = {
 };
 
 export default async function middleware(req: NextRequest) {
+  console.log("Middleware: envs", process.env);
   const url = req.nextUrl;
   if (pattern.test(url.toString())) {
     await updateSession(req);
@@ -94,8 +95,8 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.rewrite(
       new URL(
         `/andorraue.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}${path === "/" ? "" : path}`,
-        req.url
-      )
+        req.url,
+      ),
     );
   }
 

@@ -62,7 +62,7 @@ export async function OPTIONS() {
 
 export async function GET(
   req: Request,
-  { params }: { params: { domain: string } }
+  { params }: { params: { domain: string } },
 ) {
   try {
     const domain = await getDomainData(params.domain);
@@ -74,7 +74,7 @@ export async function GET(
           "Access-Control-Allow-Origin": "*", // Enable CORS for all origins
           "Content-Type": "application/json",
         },
-      }
+      },
     );
   } catch (error) {
     console.error("Error retrieving access token:", error);
