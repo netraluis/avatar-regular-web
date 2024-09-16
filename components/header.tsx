@@ -13,7 +13,7 @@ import { GlobalContext } from "./context/globalContext";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { getDomain } from "@/lib/clientHelpers";
+import { getDomain } from "@/lib/domain/clientHelpers";
 
 export default function Header({ domain }: { domain: string }) {
   const {

@@ -1,4 +1,4 @@
-import { getDomainData } from "../../../../lib/serverHelpers";
+import { getDomainData } from "../../../../lib/domain/serverHelpers";
 
 export async function GET(
   req: Request,
