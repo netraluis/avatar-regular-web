@@ -1,24 +1,3 @@
-// import { type NextRequest } from "next/server";
-// import { updateSession } from "@/lib/supabase/middleware";
-
-// export async function middleware(request: NextRequest) {
-//   // update user's auth session
-//   return await updateSession(request);
-// }
-
-// export const config = {
-//   matcher: [
-//     /*
-//      * Match all request paths except for the ones starting with:
-//      * - _next/static (static files)
-//      * - _next/image (image optimization files)
-//      * - favicon.ico (favicon file)
-//      * Feel free to modify this pattern to include more paths.
-//      */
-//     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-//   ],
-// };
-
 import { NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
@@ -39,7 +18,6 @@ export const config = {
 };
 
 export default async function middleware(req: NextRequest) {
-  console.log("Middleware: envs", process.env);
   const url = req.nextUrl;
   if (pattern.test(url.toString())) {
     await updateSession(req);
@@ -87,7 +65,6 @@ export default async function middleware(req: NextRequest) {
   // }
 
   // rewrite root application to `/home` folder
-  console.log("Hostname:", hostname, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
   if (
     hostname === "localhost:3000" ||
     hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN

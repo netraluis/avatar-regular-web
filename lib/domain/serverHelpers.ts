@@ -25,9 +25,13 @@ export const getPublicLimitedUrlImageimport = async (fileName: string) => {
 
 export async function getDomainData(domain: string) {
   console.log("Domain:", domain);
-  const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-    ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || ""; // Define the root domain
+  const subdomain = domain.endsWith(rootDomain)
+    ? domain.replace(rootDomain, "")
     : null;
+  // const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
+  //   ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
+  //   : null;
 
   console.log("Subdomain:", subdomain);
 

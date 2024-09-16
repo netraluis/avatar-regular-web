@@ -10,7 +10,7 @@ import { GlobalContext } from "./context/globalContext";
 
 export default function ConversationRecipient() {
   const supabase = createClient();
-  const { setActualThreadId, actualThreadId, setShowAnalizeInfo } =
+  const { setActualThreadId, actualThreadId, setShowAnalizeInfo, domainData } =
     useContext(GlobalContext);
 
   const {
@@ -19,16 +19,18 @@ export default function ConversationRecipient() {
     input,
     submitMessage,
     handleInputChange,
-    // error,
+    error,
     threadId,
     append,
   } = useAssistant({
     api: "/api/assistant-stream",
     body: {
-      assistantId: undefined,
+      assistantId: domainData.assistantId,
       threadId: actualThreadId,
     },
   });
+
+  console.log({ error });
 
   useEffect(() => {
     console.log("messages", messages, status);
