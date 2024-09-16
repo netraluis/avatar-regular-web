@@ -9,7 +9,7 @@ import Header from "@/components/header";
 // import { getPublicUrlImageimport } from "@/lib/domain/serverHelpers";
 // import { getDomainData } from "@/lib/domain/serverHelpers";
 
- async function getDomainData(domain: string) {
+async function getDomainData(domain: string) {
   console.log("Domain:", domain, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
   const rootDomain =
     `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` || ".localhost:3000";
