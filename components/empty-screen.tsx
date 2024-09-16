@@ -10,9 +10,9 @@ export function EmptyScreen({ children }: { children: React.ReactNode }) {
         <div className=" mx-auto max-w-2xl px-4">
           <div className="flex flex-col gap-2 rounded-lg bg-background p-8 w-full ">
             <div className="ml-12 mt-3.5 flex mb-5 ">
-              <h1 className="text-3xl font-bold text-slate-900">
-                {domainData?.name}
-              </h1>
+              <div
+                dangerouslySetInnerHTML={{ __html: domainData?.welcome || "" }}
+              />
             </div>
           </div>
           <div className="px-8">{children}</div>
