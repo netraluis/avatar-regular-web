@@ -2,7 +2,7 @@ import { getDomainData } from "../../../../lib/domain/serverHelpers";
 
 export async function GET(
   req: Request,
-  { params }: { params: { domain: string } }
+  { params }: { params: { domain: string } },
 ) {
   try {
     const domain = await getDomainData(params.domain);
