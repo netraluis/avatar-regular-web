@@ -11,8 +11,9 @@ const getPublicUrlImageimport = async (fileName: string) => {
 
 async function getDomainData(domain: string) {
   console.log("Domain:", domain, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
-  const subdomain = domain.endsWith(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-    ? domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, "")
+  const rootDomain = ".netraluis.com";
+  const subdomain = domain.endsWith(rootDomain)
+    ? domain.replace(rootDomain, "")
     : null;
 
   console.log("Subdomain:", subdomain);
@@ -61,7 +62,7 @@ export async function OPTIONS() {
 
 export async function GET(
   req: Request,
-  { params }: { params: { domain: string } },
+  { params }: { params: { domain: string } }
 ) {
   try {
     const domain = await getDomainData(params.domain);
@@ -73,7 +74,7 @@ export async function GET(
           "Access-Control-Allow-Origin": "*", // Enable CORS for all origins
           "Content-Type": "application/json",
         },
-      },
+      }
     );
   } catch (error) {
     console.error("Error retrieving access token:", error);
