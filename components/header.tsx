@@ -49,10 +49,15 @@ export default function Header({ domain }: { domain: string }) {
   useEffect(() => {
     const getSession = async () => {
       const { data: sessionData, error } = await supabase.auth.getSession();
+      console.log("getSession", sessionData?.session?.user, error);
       if (error) {
         console.error("Error fetching session:", error);
+      } else if (sessionData?.session?.user) {
+        console.log("entro");
+        // router.push("/login");
+      } else {
+        setUser(sessionData?.session?.user || null);
       }
-      setUser(sessionData?.session?.user || null);
     };
 
     getSession();
@@ -76,7 +81,7 @@ export default function Header({ domain }: { domain: string }) {
   }, [router]);
 
   return (
-    <header className="bg-white pt-4 fixed top-0 z-10 bg-white w-full">
+    <div className="bg-white pt-4 fixed top-0 z-10 bg-white w-full">
       <nav
         className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16"
         aria-label="Global"
@@ -284,6 +289,6 @@ export default function Header({ domain }: { domain: string }) {
           </div>
         </Dialog.Panel>
       </Dialog>
-    </header>
+    </div>
   );
 }
