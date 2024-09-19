@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   PaperAirplaneIcon,
@@ -12,17 +12,9 @@ import Textarea from "react-textarea-autosize";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
 import { FooterText } from "./footer";
 
-import "audio-recorder-polyfill";
-
+// import "audio-recorder-polyfill";
 // window.MediaRecorder = window.MediaRecorder || AudioRecorderPolyfill;
-
-// interface TextAreaFormProps {
-//   handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-//   handleKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
-//   input: string;
-//   submitMessage: () => void;
-//   status: string;
-// }
+import { TextAreaFormProps } from "@/types/types";
 
 export const TextAreaForm = ({
   handleInputChange,
@@ -30,13 +22,7 @@ export const TextAreaForm = ({
   input,
   submitMessage,
   status,
-}: {
-  handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  handleKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
-  input: string;
-  submitMessage: () => void;
-  status: string;
-}) => {
+}: TextAreaFormProps) => {
   const textAreaRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const audioChunks = useRef<Blob[]>([]);
@@ -46,6 +32,12 @@ export const TextAreaForm = ({
   const { startRecording, stopRecording, clearCanvas } = recorderControls;
   const [audioURL, setAudioURL] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      require("audio-recorder-polyfill");
+    }
+  }, []);
 
   const startRecordingF = (e: any) => {
     e.preventDefault();
