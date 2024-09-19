@@ -1,3 +1,4 @@
+"use client";
 import React, { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,17 +11,18 @@ import {
 import Textarea from "react-textarea-autosize";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
 import { FooterText } from "./footer";
+
 import "audio-recorder-polyfill";
 
 // window.MediaRecorder = window.MediaRecorder || AudioRecorderPolyfill;
 
-interface TextAreaFormProps {
-  handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  handleKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
-  input: string;
-  submitMessage: () => void;
-  status: string;
-}
+// interface TextAreaFormProps {
+//   handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+//   handleKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
+//   input: string;
+//   submitMessage: () => void;
+//   status: string;
+// }
 
 export const TextAreaForm = ({
   handleInputChange,
@@ -28,7 +30,13 @@ export const TextAreaForm = ({
   input,
   submitMessage,
   status,
-}: TextAreaFormProps) => {
+}: {
+  handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  handleKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
+  input: string;
+  submitMessage: () => void;
+  status: string;
+}) => {
   const textAreaRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const audioChunks = useRef<Blob[]>([]);
