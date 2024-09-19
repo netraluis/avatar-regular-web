@@ -12,6 +12,7 @@ import Textarea from "react-textarea-autosize";
 import { FooterText } from "./footer";
 import { TextAreaFormProps } from "@/types/types";
 import Recorder from "recorder-js";
+import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
 
 // ** Step 1: Extend the Window interface **
 declare global {
@@ -30,8 +31,10 @@ export const TextAreaForm = ({
   const textAreaRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
-  const [audioURL, setAudioURL] = useState<string | null>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const recorderControls = useVoiceVisualizer();
+  const { startRecording, stopRecording, clearCanvas } = recorderControls;
+  // const [audioURL, setAudioURL] = useState<string | null>(null);
+  // const audioRef = useRef<HTMLAudioElement>(null);
 
   // Refs for Recorder.js
   const audioContext = useRef<AudioContext | null>(null);
@@ -39,6 +42,7 @@ export const TextAreaForm = ({
 
   const startRecordingF = async (e: any) => {
     e.preventDefault();
+    startRecording();
 
     // ** Step 2: Create the AudioContext correctly **
     const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -71,18 +75,22 @@ export const TextAreaForm = ({
       console.log("Tamaño del audioBlob:", blob.size);
 
       if (blob.size > 0) {
-        const url = URL.createObjectURL(blob);
-        setAudioURL(url);
+        // motivo principal es para testear el audio
+        // const url = URL.createObjectURL(blob);
+        // setAudioURL(url);
 
         // Opcional: Reproducir el audio automáticamente
-        if (audioRef.current) {
-          audioRef.current.src = url;
-          audioRef.current.play();
-        }
+        // if (audioRef.current) {
+        //   audioRef.current.src = url;
+        //   audioRef.current.play();
+        // }
 
         if (toTranscribe) {
+          stopRecording();
           // Proceder con la transcripción
           transcribeAudio(blob);
+        } else {
+          clearCanvas();
         }
       } else {
         console.error("El blob de audio está vacío.");
@@ -162,8 +170,22 @@ export const TextAreaForm = ({
                   />
                 </Button>
                 <div className="flex-1 mx-2 shrink">
-                  {/* Puedes agregar un indicador visual de grabación aquí */}
-                  <p>Grabando...</p>
+                  <VoiceVisualizer
+                    controls={recorderControls}
+                    height={"48px"}
+                    width={"100%"}
+                    mainBarColor="#0f172a"
+                    secondaryBarColor="#f1f5f9"
+                    speed={3}
+                    barWidth={5}
+                    gap={1}
+                    rounded={5}
+                    isControlPanelShown={false}
+                    isDownloadAudioButtonShown={false}
+                    fullscreen={true}
+                    onlyRecording={true}
+                    isDefaultUIShown={false}
+                  />
                 </div>
 
                 <Button
@@ -214,11 +236,14 @@ export const TextAreaForm = ({
                 )}
               </div>
             )}
+
+            {/* 
+            motivo principal es para testear el audio
             {audioURL && (
               <audio ref={audioRef} controls src={audioURL}>
                 Tu navegador no soporta el elemento de audio.
               </audio>
-            )}
+            )} */}
           </form>
           <FooterText className="hidden sm:block" />
         </div>
