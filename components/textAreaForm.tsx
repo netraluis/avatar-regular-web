@@ -33,6 +33,8 @@ export const TextAreaForm = ({
   const [transcribing, setTranscribing] = useState(false);
   const recorderControls = useVoiceVisualizer();
   const { startRecording, stopRecording, clearCanvas } = recorderControls;
+  const [audioURL, setAudioURL] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const startRecordingF = (e: any) => {
     e.preventDefault();
@@ -50,6 +52,17 @@ export const TextAreaForm = ({
           });
           audioChunks.current = [];
           if (audioBlob.size > 0) {
+            // Crear una URL para el blob y guardarla en el estado
+            const url = URL.createObjectURL(audioBlob);
+            setAudioURL(url);
+
+            // Opcional: Reproducir el audio automáticamente
+            if (audioRef.current) {
+              audioRef.current.src = url;
+              audioRef.current.play();
+            }
+
+            // Proceder con la transcripción
             transcribeAudio(audioBlob);
           }
         };
@@ -214,6 +227,11 @@ export const TextAreaForm = ({
                   </Button>
                 )}
               </div>
+            )}
+            {audioURL && (
+              <audio ref={audioRef} controls src={audioURL}>
+                Your browser does not support the audio element.
+              </audio>
             )}
           </form>
           <FooterText className="hidden sm:block" />
