@@ -10,6 +10,9 @@ import {
 import Textarea from "react-textarea-autosize";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
 import { FooterText } from "./footer";
+import "audio-recorder-polyfill";
+
+// window.MediaRecorder = window.MediaRecorder || AudioRecorderPolyfill;
 
 interface TextAreaFormProps {
   handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
