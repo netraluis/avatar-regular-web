@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   PaperAirplaneIcon,
@@ -9,12 +9,16 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import Textarea from "react-textarea-autosize";
-import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
 import { FooterText } from "./footer";
-
-// import "audio-recorder-polyfill";
-// window.MediaRecorder = window.MediaRecorder || AudioRecorderPolyfill;
 import { TextAreaFormProps } from "@/types/types";
+import Recorder from "recorder-js";
+
+// ** Step 1: Extend the Window interface **
+declare global {
+  interface Window {
+    webkitAudioContext: typeof AudioContext;
+  }
+}
 
 export const TextAreaForm = ({
   handleInputChange,
@@ -25,69 +29,64 @@ export const TextAreaForm = ({
 }: TextAreaFormProps) => {
   const textAreaRef = useRef(null);
   const [recording, setRecording] = useState(false);
-  const audioChunks = useRef<Blob[]>([]);
-  const mediaRecorder = useRef<MediaRecorder | null>(null);
   const [transcribing, setTranscribing] = useState(false);
-  const recorderControls = useVoiceVisualizer();
-  const { startRecording, stopRecording, clearCanvas } = recorderControls;
   const [audioURL, setAudioURL] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      require("audio-recorder-polyfill");
-    }
-  }, []);
+  // Refs for Recorder.js
+  const audioContext = useRef<AudioContext | null>(null);
+  const recorder = useRef<any>(null);
 
-  const startRecordingF = (e: any) => {
+  const startRecordingF = async (e: any) => {
     e.preventDefault();
-    startRecording();
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        mediaRecorder.current = new MediaRecorder(stream);
-        mediaRecorder.current.ondataavailable = (event) => {
-          audioChunks.current.push(event.data);
-        };
-        mediaRecorder.current.onstop = () => {
-          const audioBlob = new Blob(audioChunks.current, {
-            type: "audio/wav",
-          });
-          audioChunks.current = [];
-          if (audioBlob.size > 0) {
-            // Crear una URL para el blob y guardarla en el estado
-            const url = URL.createObjectURL(audioBlob);
-            setAudioURL(url);
 
-            // Opcional: Reproducir el audio automáticamente
-            if (audioRef.current) {
-              audioRef.current.src = url;
-              audioRef.current.play();
-            }
+    // ** Step 2: Create the AudioContext correctly **
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) {
+      console.error("Web Audio API is not supported in this browser");
+      return;
+    }
 
-            // Proceder con la transcripción
-            transcribeAudio(audioBlob);
-          }
-        };
-        mediaRecorder.current.start();
-        setRecording(true);
-      })
-      .catch((error) => {
-        console.error("Error accessing microphone:", error);
-      });
+    audioContext.current = new AudioContextClass();
+    recorder.current = new Recorder(audioContext.current, {});
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      recorder.current.init(stream);
+      recorder.current.start();
+      setRecording(true);
+    } catch (error: any) {
+      console.error("Error accessing microphone:", error);
+      alert("Error accessing microphone: " + error.message);
+    }
   };
 
-  const stopRecordingF = (e: any, toTranscribe: boolean) => {
+  const stopRecordingF = async (e: any, toTranscribe: boolean) => {
     e.preventDefault();
-    if (mediaRecorder.current) {
-      if (!toTranscribe) {
-        mediaRecorder.current.ondataavailable = null;
-        clearCanvas();
-      } else {
-        stopRecording();
-      }
-      mediaRecorder.current.stop();
+
+    if (recorder.current) {
+      const { blob } = await recorder.current.stop();
       setRecording(false);
+
+      console.log("Tamaño del audioBlob:", blob.size);
+
+      if (blob.size > 0) {
+        const url = URL.createObjectURL(blob);
+        setAudioURL(url);
+
+        // Opcional: Reproducir el audio automáticamente
+        if (audioRef.current) {
+          audioRef.current.src = url;
+          audioRef.current.play();
+        }
+
+        if (toTranscribe) {
+          // Proceder con la transcripción
+          transcribeAudio(blob);
+        }
+      } else {
+        console.error("El blob de audio está vacío.");
+      }
     }
   };
 
@@ -96,7 +95,7 @@ export const TextAreaForm = ({
       setTranscribing(true);
       const formData = new FormData();
       formData.append("audioFile", audioBlob);
-      formData.append("language", "ca"); // Pass the language
+      formData.append("language", "ca"); // Indica el idioma
 
       const response = await fetch("/api/voice-transcription", {
         method: "POST",
@@ -152,7 +151,7 @@ export const TextAreaForm = ({
                 onChange={handleInputChange}
               />
             ) : (
-              <div className="flex min-h-[60px] w-full resize-none bg-transparent px-4 py-[0.65rem] focus-within:outline-none sm:text-sm">
+              <div className="flex min-h-[60px] w-full bg-transparent px-4 py-[0.65rem] focus-within:outline-none sm:text-sm">
                 <Button
                   className="mt-[3px] bg-background text-primary hover:bg-secondary hover:text-primary"
                   onClick={(event) => stopRecordingF(event, false)}
@@ -162,23 +161,9 @@ export const TextAreaForm = ({
                     aria-hidden="true"
                   />
                 </Button>
-                <div className=" flex-1 mx-2 shrink">
-                  <VoiceVisualizer
-                    controls={recorderControls}
-                    height={"48px"}
-                    width={"100%"}
-                    mainBarColor="#0f172a"
-                    secondaryBarColor="#f1f5f9"
-                    speed={3}
-                    barWidth={5}
-                    gap={1}
-                    rounded={5}
-                    isControlPanelShown={false}
-                    isDownloadAudioButtonShown={false}
-                    fullscreen={true}
-                    onlyRecording={true}
-                    isDefaultUIShown={false}
-                  />
+                <div className="flex-1 mx-2 shrink">
+                  {/* Puedes agregar un indicador visual de grabación aquí */}
+                  <p>Grabando...</p>
                 </div>
 
                 <Button
@@ -196,21 +181,19 @@ export const TextAreaForm = ({
             {!recording && (
               <div className="absolute right-0 top-[13px] sm:right-4 ">
                 {!input && status === "awaiting_message" ? (
-                  !recording && (
-                    <Button onClick={(e) => startRecordingF(e)}>
-                      {!transcribing ? (
-                        <MicrophoneIcon
-                          className={"ml-0.5 h-5 w-5 mr-1"}
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <ArrowPathIcon
-                          className="ml-0.5 h-5 w-5 animate-spin mr-1"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </Button>
-                  )
+                  <Button onClick={(e) => startRecordingF(e)}>
+                    {!transcribing ? (
+                      <MicrophoneIcon
+                        className="ml-0.5 h-5 w-5 mr-1"
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <ArrowPathIcon
+                        className="ml-0.5 h-5 w-5 animate-spin mr-1"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </Button>
                 ) : (
                   <Button
                     disabled={status !== "awaiting_message"}
@@ -233,7 +216,7 @@ export const TextAreaForm = ({
             )}
             {audioURL && (
               <audio ref={audioRef} controls src={audioURL}>
-                Your browser does not support the audio element.
+                Tu navegador no soporta el elemento de audio.
               </audio>
             )}
           </form>
