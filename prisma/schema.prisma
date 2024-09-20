@@ -30,6 +30,8 @@ model Domains {
   menuHeader                Json
   menuBody                  Json
   menufooter                String
-  createdAt                 DateTime   @default(now())
+  avatarId                  String    @default("")
+  voiceAvatarId             String    @default("")
+  createdAt                 DateTime  @default(now())
 }
 

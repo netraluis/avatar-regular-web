@@ -29,6 +29,7 @@ export async function POST(req: Request) {
     threadId: string | null;
     message: string;
     assistantId: string;
+    domainId: string;
   } = await req.json();
 
   // Create a thread if needed and save it to the database
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
           role: "user",
           message: input.message,
           threadId,
-          domainId: "andorraEU",
+          domainId: input.domainId,
           createdAt: new Date(),
         },
       ],
@@ -95,7 +96,7 @@ export async function POST(req: Request) {
                   role: lastResponse.role,
                   message: lastResponse.content[0].text.value,
                   threadId: runResult.thread_id,
-                  domainId: "andorraEU",
+                  domainId: input.domainId,
                   createdAt: new Date(),
                 },
               ],

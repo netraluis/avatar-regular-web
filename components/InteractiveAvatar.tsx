@@ -17,19 +17,19 @@ interface InteractiveAvatarProps {
 }
 
 export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
+  const { domainData } = useContext(GlobalContext);
   const [isLoadingSession, setIsLoadingSession] = useState(false);
   const [stream, setStream] = useState<MediaStream>();
   const [debug, setDebug] = useState<string>();
-  // const [voiceId, setVoiceId] = useState<string>("");
   const [data, setData] = useState<NewSessionData>();
-  const [text, setText] = useState<string>("");
   const [initialized, setInitialized] = useState(false); // Track initialization
   const mediaStream = useRef<HTMLVideoElement>(null);
   const avatar = useRef<StreamingAvatarApi | null>(null);
-  const voiceId = "001cc6d54eae4ca2b5fb16ca8e8eb9bb";
-  const avatarId = "Eric_public_pro2_20230608";
+  const voiceId = domainData?.avatarVoiceId;
+  const avatarId = domainData?.avatarId;
 
   const speakAsync = async () => {
+    console.log("Speak:", speak);
     if (!speak) return;
     if (!initialized || !avatar.current) return;
 
@@ -68,21 +68,21 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
   }
 
   // Subscribe to the Channel
-  channelAvatar
-    .on(
-      "broadcast",
-      { event: "test" },
-      async (payload) => await messageReceived(payload),
-    )
-    .subscribe();
+  // channelAvatar
+  //   .on(
+  //     "broadcast",
+  //     { event: "test" },
+  //     async (payload) => await messageReceived(payload),
+  //   )
+  //   .subscribe();
 
-  // useEffect(() => {
-  //   console.log("Speak:", speak);
-  //   // Define an async function within the useEffect
+  useEffect(() => {
+    console.log("Speak:", speak);
+    // Define an async function within the useEffect
 
-  //   // Call the async function
-  //   speakAsync();
-  // }, [speak, initialized, avatar, data?.sessionId]);
+    // Call the async function
+    speakAsync();
+  }, [speak, initialized, avatar, data?.sessionId]);
 
   async function fetchAccessToken() {
     try {
@@ -203,7 +203,6 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
   return (
     <>
       <>
-        <h1>{speak}</h1>
         <div className="h-screen flex flex-col justify-center items-center">
           {stream ? (
             <div className="h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden">
@@ -246,6 +245,9 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
           ) : (
             <div>Cargando...</div>
           )}
+          <h1 className="absolute bottom-0 z-10 bg-slate-200/75 m-7 p-2 rounded-2xl">
+            {speak}
+          </h1>
         </div>
       </>
     </>

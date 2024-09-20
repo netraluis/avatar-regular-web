@@ -27,6 +27,7 @@ export default function ConversationRecipient() {
     body: {
       assistantId: domainData.assistantId,
       threadId: actualThreadId,
+      domainId: domainData.id,
     },
   });
 

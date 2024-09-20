@@ -25,10 +25,9 @@ const useDatabaseSubscription = () => {
           table: "Messages",
         },
         (payload: any) => {
-          console.log("eeeeee", payload);
+          console.log(payload);
           setMessages((prevMessages) => [...prevMessages, payload.new]);
           if (payload.new.role === "assistant") {
-            console.log("payload.new", payload.new);
             setSpeak(payload.new);
           }
         },
@@ -44,7 +43,7 @@ const useDatabaseSubscription = () => {
 };
 
 export default function ChatComponent() {
-  const { messages, speak } = useDatabaseSubscription();
+  const { speak } = useDatabaseSubscription();
 
   return (
     <>
@@ -52,11 +51,11 @@ export default function ChatComponent() {
         <>work in progress</>
       ) : (
         <div>
-          {messages.map((msg: any, index) => (
+          {/* {messages.map((msg: any, index) => (
             <div key={index} className="relative z-40 bg-slate-50">
               <strong>{msg.role}:</strong> {msg.message}
             </div>
-          ))}
+          ))} */}
           <InteractiveAvatar speak={speak.message} />
         </div>
       )}
