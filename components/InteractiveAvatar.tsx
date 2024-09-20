@@ -17,17 +17,16 @@ interface InteractiveAvatarProps {
 }
 
 export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
+  const { domainData } = useContext(GlobalContext);
   const [isLoadingSession, setIsLoadingSession] = useState(false);
   const [stream, setStream] = useState<MediaStream>();
   const [debug, setDebug] = useState<string>();
-  // const [voiceId, setVoiceId] = useState<string>("");
   const [data, setData] = useState<NewSessionData>();
-  const [text, setText] = useState<string>("");
   const [initialized, setInitialized] = useState(false); // Track initialization
   const mediaStream = useRef<HTMLVideoElement>(null);
   const avatar = useRef<StreamingAvatarApi | null>(null);
-  const voiceId = "001cc6d54eae4ca2b5fb16ca8e8eb9bb";
-  const avatarId = "Eric_public_pro2_20230608";
+  const voiceId = domainData?.avatarVoiceId;
+  const avatarId = domainData?.avatarId;
 
   const speakAsync = async () => {
     console.log("Speak:", speak);
