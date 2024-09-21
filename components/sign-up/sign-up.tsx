@@ -10,29 +10,27 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { login } from "./actions";
+import { signup } from "./actions"; // Asegúrate de tener una función de signup
 import { useContext, useState } from "react";
-import { useRouter } from "next/navigation";
 import { GlobalContext } from "@/components/context/globalContext";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
-export default function LoginPage() {
-  const router = useRouter();
+export default function Signup() {
   const [error, setError] = useState<string | null>(null);
   const { setUser } = useContext(GlobalContext);
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (formData: FormData) => {
+  const handleSignup = async (formData: FormData) => {
     setLoading(true);
     try {
-      const result: any = await login(formData);
+      const result: any = await signup(formData);
 
       if (result?.error) {
         setError(result.error);
-        return setLoading(false);
+        setLoading(false);
       } else {
         setUser(result);
-        router.push("/");
+        // router.push("/");
       }
     } catch (err) {
       setError("An unexpected error occurred.");
@@ -44,9 +42,9 @@ export default function LoginPage() {
     <div className="flex justify-center items-center min-h-screen">
       <div className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your details below to create a new account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -56,7 +54,7 @@ export default function LoginPage() {
             onSubmit={(e) => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget);
-              handleLogin(formData);
+              handleSignup(formData);
             }}
           >
             <div className="grid gap-2">
@@ -70,15 +68,7 @@ export default function LoginPage() {
               />
             </div>
             <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="#"
-                  className="ml-auto inline-block text-sm underline"
-                >
-                  Forgot your password?
-                </Link>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" name="password" required />
             </div>
             <Button className="w-full" type="submit" disabled={loading}>
@@ -88,9 +78,17 @@ export default function LoginPage() {
                   aria-hidden="true"
                 />
               )}
-              Login
+              Sign Up
             </Button>
           </form>
+          <div className="mt-4 text-center">
+            <p className="text-sm">
+              Already have an account?{" "}
+              <Link href="/login" className="text-blue-500 underline">
+                Login
+              </Link>
+            </p>
+          </div>
         </CardContent>
       </div>
     </div>

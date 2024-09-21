@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { GlobalContext } from "@/components/context/globalContext";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
-export default function LoginPage() {
+export default function Login() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const { setUser } = useContext(GlobalContext);
@@ -91,6 +91,14 @@ export default function LoginPage() {
               Login
             </Button>
           </form>
+          <div className="mt-4 text-center">
+            <p className="text-sm">
+              Don&apos;t have an account?{" "}
+              <Link href="/signup" className="text-blue-500 underline">
+                Sign up
+              </Link>
+            </p>
+          </div>
         </CardContent>
       </div>
     </div>

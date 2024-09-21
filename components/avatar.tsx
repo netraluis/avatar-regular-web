@@ -1,4 +1,8 @@
+import { useContext } from "react";
+import { GlobalContext } from "./context/globalContext";
+
 export default function Avatar({ name }: any) {
+  const { domainData } = useContext(GlobalContext);
   return (
     <a href="#" className="group block flex-shrink-0 m-2">
       <div className="flex items-center">
@@ -12,8 +16,8 @@ export default function Avatar({ name }: any) {
         <div className="ml-3">
           <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
             {name === "assistant"
-              ? process.env.NEXT_PUBLIC_ASSISTANT_NAME
-                ? process.env.NEXT_PUBLIC_ASSISTANT_NAME
+              ? domainData?.assistantName
+                ? domainData?.assistantName
                 : "Assistant"
               : "Tu"}
           </p>
