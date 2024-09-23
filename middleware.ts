@@ -54,6 +54,12 @@ export default async function middleware(req: NextRequest) {
     );
   }
 
+  if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+    return NextResponse.rewrite(
+      new URL(`/app${path === "/" ? "" : path}`, req.url),
+    );
+  }
+
   // rewrites for app pages
   // if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
   //   const session = await getToken({ req });
@@ -74,6 +80,7 @@ export default async function middleware(req: NextRequest) {
   //   );
   // }
 
+  console.log("hostname", hostname, path);
   // rewrite everything else to `/[domain]/[slug] dynamic route
   return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
 }
