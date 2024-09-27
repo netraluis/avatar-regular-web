@@ -27,7 +27,7 @@ export type Domain = {
   menuBody: MenuBody[];
   menufooter: string;
   avatarId: string;
-  avatarVoiceId: string;
+  voiceAvatarId: string;
   createdAt: Date;
 };
 
@@ -74,7 +74,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
     menuBody: [],
     menufooter: "",
     avatarId: "",
-    avatarVoiceId: "",
+    voiceAvatarId: "",
     createdAt: new Date(),
   },
   setDomainData: () => {},

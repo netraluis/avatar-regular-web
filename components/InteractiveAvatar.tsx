@@ -25,7 +25,8 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
   const [initialized, setInitialized] = useState(false); // Track initialization
   const mediaStream = useRef<HTMLVideoElement>(null);
   const avatar = useRef<StreamingAvatarApi | null>(null);
-  const voiceId = domainData?.avatarVoiceId;
+
+  const voiceId = domainData?.voiceAvatarId;
   const avatarId = domainData?.avatarId;
 
   const speakAsync = async () => {

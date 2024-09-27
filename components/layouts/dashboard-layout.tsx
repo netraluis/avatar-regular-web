@@ -69,10 +69,10 @@ export default function Dashboard({
     router.push("/team/");
   };
 
-  // const handleTeamSettingsRoute = (subMenu: string) => {
-  //   const newPath = `/team/setting?${subMenu}`;
-  //   router.push(newPath);
-  // };
+  const handleTeamSettingsRoute = (subMenu: string) => {
+    const newPath = `/team/${teamId}/settings/${subMenu}`;
+    router.push(newPath);
+  };
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
@@ -88,6 +88,7 @@ export default function Dashboard({
                     subject="team"
                     routerHandler={handleTeamRouteChange}
                     createNewTeamRoute={handleCreateNewTeamRoute}
+                    settingsRouteHandler={handleTeamSettingsRoute}
                   />
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -104,6 +105,7 @@ export default function Dashboard({
                         subject="assistant"
                         routerHandler={handleAssistantRouteChange}
                         createNewTeamRoute={handleCreateNewTeamRoute}
+                        settingsRouteHandler={handleTeamSettingsRoute}
                       />
                     </BreadcrumbLink>
                   </BreadcrumbItem>

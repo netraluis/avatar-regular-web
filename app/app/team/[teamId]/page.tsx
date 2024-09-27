@@ -1,10 +1,7 @@
 import DashboardHeader from "@/components/layouts/dashboard-layout";
 import { assistantsTeamSelected, teams } from "@/components/mockData";
 import Link from "next/link";
-import {
-  MoreHorizontal,
-  PlusCircle,
-} from "lucide-react";
+import { MoreHorizontal, PlusCircle } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 
@@ -50,7 +47,9 @@ export default function Dashboard({ params }: { params: { teamId: string } }) {
             <Card className="border-none bg-transparent shadow-none">
               <CardHeader>
                 <CardTitle>Assistant</CardTitle>
-                <CardDescription>Manage your team&lsquo;s assistant</CardDescription>
+                <CardDescription>
+                  Manage your team&lsquo;s assistant
+                </CardDescription>
               </CardHeader>
             </Card>
             <div className="ml-auto flex items-center gap-2">

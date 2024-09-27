@@ -59,12 +59,14 @@ export function Combobox({
   subject,
   routerHandler,
   createNewTeamRoute,
+  settingsRouteHandler,
 }: {
   options: Option[];
   optionSelected: Option;
   subject: string;
   routerHandler: (route: string) => void;
   createNewTeamRoute: () => void;
+  settingsRouteHandler: (route: string) => void;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -125,7 +127,7 @@ export function Combobox({
                   onSelect={(currentValue) => {
                     setOpen(false);
                     console.log({ currentValue });
-                    routerHandler(currentValue);
+                    settingsRouteHandler(currentValue);
                   }}
                 >
                   <div className="flex items-center">
