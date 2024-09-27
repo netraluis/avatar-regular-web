@@ -18,6 +18,7 @@ export async function generateMetadata({
   if (!data) {
     return null;
   }
+  console.log("dataLogo", data.logo); 
 
   return {
     title: data.name,
@@ -27,7 +28,10 @@ export async function generateMetadata({
       description: data.welcome,
       images: [data.logo],
     },
-    icons: [data.logo],
+    // icons: [data.logo],
+    icons: {
+      icon: [{ url: data.logo, type: 'image/png' }], // Añade el tipo de imagen
+    },
     twitter: {
       card: "summary_large_image",
       title: data.name,
