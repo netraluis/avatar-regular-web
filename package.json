@@ -48,6 +48,7 @@
     "react-voice-visualizer": "^2.0.2",
     "recorder-js": "^1.0.7",
     "remark-gfm": "^4.0.0",
+    "remove-markdown": "^0.5.5",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7"
   },

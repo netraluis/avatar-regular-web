@@ -11,6 +11,8 @@ import { use, useContext, useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { GlobalContext } from "./context/globalContext";
 import { createClient } from "@/lib/supabase/client";
+import MarkdownDisplay from "./MarkDownDisplay";
+import removeMarkdown from "remove-markdown";
 
 interface InteractiveAvatarProps {
   speak: string; // Define speak as a string type
@@ -33,10 +35,13 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
     console.log("Speak:", speak);
     if (!speak) return;
     if (!initialized || !avatar.current) return;
-
+    const patron = /【[^】]*】/g;
+    const speakPlain = removeMarkdown(speak).replace(patron, "");
+    // speakPlain = speakPlain;
+    console.log("speakPlain:", speakPlain);
     try {
       await avatar.current.speak({
-        taskRequest: { text: speak, sessionId: data?.sessionId },
+        taskRequest: { text: speakPlain, sessionId: data?.sessionId },
       });
     } catch (e: any) {
       setDebug(e.message);
@@ -113,7 +118,7 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
           newSessionRequest: {
             quality: "low",
             avatarName: avatarId,
-            voice: { voiceId: voiceId },
+            voice: { voiceId },
           },
         },
         setDebug,
@@ -247,7 +252,7 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
             <div>Cargando...</div>
           )}
           <h1 className="absolute bottom-0 z-10 bg-slate-200/75 m-7 p-2 rounded-2xl">
-            {speak}
+            <MarkdownDisplay markdownText={speak} />
           </h1>
         </div>
       </>
