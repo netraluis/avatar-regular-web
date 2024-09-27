@@ -32,6 +32,7 @@ model Domains {
   menufooter                String
   avatarId                  String    @default("")
   voiceAvatarId             String    @default("")
+  headerDisclaimer          Json?     
   createdAt                 DateTime  @default(now())
 }
 

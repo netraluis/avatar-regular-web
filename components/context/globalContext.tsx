@@ -14,6 +14,12 @@ interface MenuBody {
   href: string;
 }
 
+export interface HeaderDisclaimer {
+  buttonText: string;
+  title: string;
+  description: string;
+}
+
 export type Domain = {
   id: string;
   name: string;
@@ -28,6 +34,7 @@ export type Domain = {
   menufooter: string;
   avatarId: string;
   voiceAvatarId: string;
+  headerDisclaimer: HeaderDisclaimer | null;
   createdAt: Date;
 };
 
@@ -75,6 +82,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
     menufooter: "",
     avatarId: "",
     voiceAvatarId: "",
+    headerDisclaimer: null,
     createdAt: new Date(),
   },
   setDomainData: () => {},

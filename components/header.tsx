@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { getDomain } from "@/lib/domain/clientHelpers";
+import Disclaimer from "./disclaimer";
 
 export default function Header({ domain }: { domain: string }) {
   const {
@@ -49,11 +50,9 @@ export default function Header({ domain }: { domain: string }) {
   useEffect(() => {
     const getSession = async () => {
       const { data: sessionData, error } = await supabase.auth.getSession();
-      console.log("getSession", sessionData?.session?.user, error);
       if (error) {
         console.error("Error fetching session:", error);
       } else if (sessionData?.session?.user) {
-        console.log("entro");
         // router.push("/login");
       } else {
         setUser(sessionData?.session?.user || null);
@@ -100,6 +99,7 @@ export default function Header({ domain }: { domain: string }) {
           )}
         </a>
         <div className="flex lg:hidden my-3">
+          <Disclaimer data={domainData?.headerDisclaimer} />
           {/* Botón mejorado con mayor área táctil y color de fondo para mayor visibilidad */}
           <button
             type="button"
@@ -130,6 +130,7 @@ export default function Header({ domain }: { domain: string }) {
               Nova conversa
             </Button>
           )}
+          <Disclaimer data={domainData?.headerDisclaimer} />
           <Popover className="relative">
             <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-8 text-gray-900">
               <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />
