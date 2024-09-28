@@ -13,7 +13,7 @@ export async function generateMetadata({
   params: { domain: string };
 }): Promise<Metadata | null> {
   const domain = decodeURIComponent(params.domain);
-  const data = await getDomainData(domain);
+  const data = await getDomainData('andorraue.netraluis.com');
 
   if (!data) {
     return null;
