@@ -118,7 +118,7 @@ export default function Header({ domain }: { domain: string }) {
   }
 
   return (
-    <div className="bg-white/40 pt-4 fixed top-0 z-10 bg-white/40 w-full">
+    <div className="bg-white pt-4 fixed top-0 z-10 w-full">
       <nav
         className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16"
         aria-label="Global"
