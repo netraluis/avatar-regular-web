@@ -22,25 +22,18 @@ import {
 
 import { useRouter, useParams } from "next/navigation";
 import { Combobox } from "../combo-box";
-import { assistantsTeamSelected } from "../mockData";
+import { assistantsTeamSelected, teams } from "../mockData";
 
-export const description =
-  "An products dashboard with a sidebar navigation. The sidebar has icon navigation. The content area has a breadcrumb and search in the header. It displays a list of products in a table with actions.";
-
-export default function Dashboard({
-  children,
-  teams,
-  assistantSelected,
-  teamSelected,
-}: {
-  children: React.ReactNode;
-  teams: any;
-  teamSelected: any;
-  assistantId?: string;
-  assistantSelected?: any;
-}) {
+export default function Dashboard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { teamId } = useParams();
+  const { teamId, assistantId } = useParams();
+
+  console.log({ teamId, assistantId });
+
+  const teamSelected = teams.find((team) => team.id === teamId);
+  const assistantSelected = assistantsTeamSelected.find(
+    (assistant) => assistant.id === assistantId,
+  );
 
   const handleAssistantRouteChange = (assistantId: string) => {
     // Divide la ruta actual en segmentos
@@ -80,19 +73,21 @@ export default function Dashboard({
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
           <Breadcrumb className="hidden md:flex">
             <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Combobox
-                    options={teams}
-                    optionSelected={teamSelected}
-                    subject="team"
-                    routerHandler={handleTeamRouteChange}
-                    createNewTeamRoute={handleCreateNewTeamRoute}
-                    settingsRouteHandler={handleTeamSettingsRoute}
-                  />
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              {assistantSelected && (
+              {teamSelected && (
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Combobox
+                      options={teams}
+                      optionSelected={teamSelected}
+                      subject="team"
+                      routerHandler={handleTeamRouteChange}
+                      createNewTeamRoute={handleCreateNewTeamRoute}
+                      settingsRouteHandler={handleTeamSettingsRoute}
+                    />
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              )}
+              {assistantId && assistantSelected && (
                 <>
                   <BreadcrumbSeparator>
                     <Slash className="h-4 w-4 text-muted-foreground" />
