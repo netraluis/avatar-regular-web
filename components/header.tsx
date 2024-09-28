@@ -15,6 +15,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { getDomain } from "@/lib/domain/clientHelpers";
 import Disclaimer from "./disclaimer";
+import { usePathname } from "next/navigation";
 
 export default function Header({ domain }: { domain: string }) {
   const {
@@ -27,6 +28,9 @@ export default function Header({ domain }: { domain: string }) {
     setDomainData,
     domainData,
   } = useContext(GlobalContext);
+
+  const pathname = usePathname();
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const createNovaConversa = () => {
@@ -78,6 +82,40 @@ export default function Header({ domain }: { domain: string }) {
       authListener.subscription.unsubscribe();
     };
   }, [router]);
+
+  if (
+    pathname === "/login" ||
+    pathname === "/avatar" ||
+    pathname === "/signup"
+  ) {
+    return (
+      <div className="bg-transparent pt-4 fixed top-0 z-10 w-full">
+        <nav
+          className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16"
+          aria-label="Global"
+        >
+          <a href="#">
+            <span className="sr-only">Your Company</span>
+            {domainData?.logo ? (
+              <Image
+                src={domainData?.logo}
+                alt={domainData?.description}
+                width={209}
+                height={74}
+              />
+            ) : (
+              <div className="w-[209px] h-[74px] flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">
+                <CameraIcon
+                  className="ml-0.5 w-6 animate-pulse mr-1 text-slate-400"
+                  aria-hidden="true"
+                />
+              </div>
+            )}
+          </a>
+        </nav>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white/40 pt-4 fixed top-0 z-10 bg-white/40 w-full">
