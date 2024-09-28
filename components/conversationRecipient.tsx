@@ -31,10 +31,11 @@ export default function ConversationRecipient() {
     },
   });
 
-  console.log({ error });
+  if (error){
+    console.log({ error });
+  }
 
   useEffect(() => {
-    console.log("messages", messages, status);
     const channelAvatar = supabase.channel("avatar");
 
     channelAvatar.subscribe((subStatus) => {
@@ -52,7 +53,6 @@ export default function ConversationRecipient() {
     });
   }, [messages]);
 
-  // console.log("error", error);
   const {
     messagesRef,
     scrollRef,

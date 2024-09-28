@@ -30,13 +30,6 @@ export async function getDomainData(domain: string) {
     ? domain.replace(rootDomain, "")
     : null;
 
-  console.log({
-    NEXT_PUBLIC_ROOT_DOMAIN: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
-    subdomain,
-    domain,
-    rootDomain,
-  });
-
   const subdomainInfo = await prisma.domains.findFirst({
     where: subdomain
       ? { subDomain: subdomain } // If subdomain is true, filter by subdomain
