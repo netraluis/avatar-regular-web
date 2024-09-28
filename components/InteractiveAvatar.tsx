@@ -13,12 +13,51 @@ import { GlobalContext } from "./context/globalContext";
 import { createClient } from "@/lib/supabase/client";
 import MarkdownDisplay from "./MarkDownDisplay";
 import removeMarkdown from "remove-markdown";
+import { FooterText } from "./footer";
 
 interface InteractiveAvatarProps {
   speak: string; // Define speak as a string type
 }
 
-export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
+interface Message {
+  role: string;
+  message: string;
+}
+
+const useDatabaseSubscription = () => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [speak, setSpeak] = useState<Message>({ role: "", message: "" });
+  const supabase = createClient();
+
+  useEffect(() => {
+    const channel = supabase
+      .channel("avatar-communication")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "Messages",
+        },
+        (payload: any) => {
+          console.log(payload);
+          setMessages((prevMessages) => [...prevMessages, payload.new]);
+          if (payload.new.role === "assistant") {
+            setSpeak(payload.new);
+          }
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [supabase]);
+
+  return { messages, speak };
+};
+
+export default function InteractiveAvatar() {
   const { domainData } = useContext(GlobalContext);
   const [isLoadingSession, setIsLoadingSession] = useState(false);
   const [stream, setStream] = useState<MediaStream>();
@@ -31,12 +70,13 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
   const voiceId = domainData?.voiceAvatarId;
   const avatarId = domainData?.avatarId;
 
+  const { speak, messages } = useDatabaseSubscription();
+
   const speakAsync = async () => {
-    console.log("Speak:", speak);
     if (!speak) return;
     if (!initialized || !avatar.current) return;
     const patron = /【[^】]*】/g;
-    const speakPlain = removeMarkdown(speak).replace(patron, "");
+    const speakPlain = removeMarkdown(speak.message).replace(patron, "");
     // speakPlain = speakPlain;
     console.log("speakPlain:", speakPlain);
     try {
@@ -224,7 +264,7 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
               >
                 <track kind="captions" />
               </video>
-              <div className="flex flex-col gap-2 absolute bottom-3 right-3">
+              {/* <div className="flex flex-col gap-2 absolute bottom-3 right-3">
                 <Button
                   onClick={handleInterrupt}
                   className="bg-gradient-to-tr from-indigo-500 to-indigo-300 text-white rounded-lg"
@@ -237,7 +277,7 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
                 >
                   End session
                 </Button>
-              </div>
+              </div> */}
             </div>
           ) : !isLoadingSession ? (
             <div className="h-full justify-center items-center flex flex-col gap-8 w-[500px] self-center">
@@ -251,9 +291,39 @@ export default function InteractiveAvatar({ speak }: InteractiveAvatarProps) {
           ) : (
             <div>Cargando...</div>
           )}
-          <h1 className="absolute bottom-0 z-10 bg-slate-200/75 m-7 p-2 rounded-2xl">
-            <MarkdownDisplay markdownText={speak} />
-          </h1>
+          <div className="absolute bottom-0 z-10">
+            <div className="relative">
+              <div className="overflow-auto max-h-80 mb-3">
+                {messages.length > 2 && (
+                  <div className=" m-7">
+                    <div
+                      className={`${messages[messages.length - 2].role === "user" ? "justify-end" : "justify start"} flex`}
+                    >
+                      <div className="bg-slate-950/25 text-slate-50 rounded-2xl p-2 mb-2">
+                        <MarkdownDisplay
+                          markdownText={messages[messages.length - 2].message}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className={`${messages[messages.length - 1].role === "user" ? "justify-end" : "justify start"} flex`}
+                    >
+                      <div className="bg-slate-950/25 text-slate-50 rounded-2xl p-2 mt-2">
+                        <MarkdownDisplay
+                          markdownText={messages[messages.length - 1].message}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-b from-slate-950/25 to-transparent pointer-events-none"></div> */}
+            </div>
+            <div className="w-fit bg-slate-950/25 mx-auto space-y-4 border-none px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
+              <FooterText className="hidden sm:block text-slate-50 border-none" />
+            </div>
+          </div>
         </div>
       </>
     </>
