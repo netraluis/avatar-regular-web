@@ -45,6 +45,7 @@ export default async function middleware(req: NextRequest) {
   }`;
 
   // rewrite root application to `/home` folder
+  console.log("hostname aaaaa", hostname, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
   if (
     hostname === "localhost:3000" ||
     hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
