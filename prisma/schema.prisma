@@ -24,7 +24,9 @@ model Domains {
   subDomain                 String
   customDomain              String
   welcome                   String
-  logo                      String
+  logo                      String?
+  description               String?
+  symbol                    String?
   assistantId               String
   assistantName             String
   menuHeader                Json

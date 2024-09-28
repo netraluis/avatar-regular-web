@@ -88,7 +88,12 @@ export default function Header({ domain }: { domain: string }) {
         <a href="#">
           <span className="sr-only">Your Company</span>
           {domainData?.logo ? (
-            <Image src={domainData?.logo} alt="logo" width={209} height={74} />
+            <Image
+              src={domainData?.logo}
+              alt={domainData?.description}
+              width={209}
+              height={74}
+            />
           ) : (
             <div className="w-[209px] h-[74px] flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">
               <CameraIcon
