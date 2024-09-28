@@ -45,22 +45,22 @@ export default async function middleware(req: NextRequest) {
   }`;
 
   // rewrite root application to `/home` folder
-  console.log("hostname aaaaa", hostname, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
-  if (
-    hostname === "localhost:3000" ||
-    hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
-  ) {
-    console.log("entro!!!");
-    return NextResponse.rewrite(
-      new URL(`/andorra-unio-europea${path === "/" ? "" : path}`, req.url),
-    );
-  }
+  // console.log("hostname aaaaa", hostname, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
+  // if (
+  //   hostname === "localhost:3000" ||
+  //   hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
+  // ) {
+  //   console.log("entro!!!");
+  //   return NextResponse.rewrite(
+  //     new URL(`/andorra-unio-europea${path === "/" ? "" : path}`, req.url),
+  //   );
+  // }
 
-  if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-    return NextResponse.rewrite(
-      new URL(`/app${path === "/" ? "" : path}`, req.url),
-    );
-  }
+  // if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+  //   return NextResponse.rewrite(
+  //     new URL(`/app${path === "/" ? "" : path}`, req.url),
+  //   );
+  // }
 
   // rewrites for app pages
   // if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
