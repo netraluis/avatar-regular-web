@@ -18,24 +18,22 @@ export async function generateMetadata({
   if (!data) {
     return null;
   }
-  console.log("dataLogo", data.logo); 
 
   return {
-    title: data.name,
-    description: data.welcome,
+    title: `${data.name}`,
+    description: data.description || "",
     openGraph: {
       title: data.name,
-      description: data.welcome,
+      description: data.description || "",
       images: [data.logo],
     },
-    // icons: [data.logo],
     icons: {
-      icon: [{ url: data.logo, type: 'image/png' }], // Añade el tipo de imagen
+      icon: [{ url: data.symbol ? data.symbol : "/chatbotforSymbol.svg" }], // Añade el tipo de imagen
     },
     twitter: {
       card: "summary_large_image",
       title: data.name,
-      description: data.welcome,
+      description: data.description || "",
       images: [data.logo],
       creator: "netraluis and anton odena",
     },

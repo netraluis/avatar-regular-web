@@ -27,6 +27,7 @@ export type Domain = {
   customDomain: string;
   welcome: string;
   logo: string;
+  description: string;
   assistantId: string;
   assistantName: string;
   menuHeader: MenuHeader[];
@@ -75,6 +76,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
     customDomain: "",
     welcome: "",
     logo: "",
+    description: "",
     assistantId: "",
     assistantName: "",
     menuHeader: [],

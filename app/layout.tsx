@@ -1,19 +1,17 @@
 "use server";
 import "./globals.css";
 
-export async function generateMetadata(){
-
+export async function generateMetadata() {
   return {
-    title: 'titulo',
-    description: 'des',
+    title: "Chatbotfor",
+    description: "Creamos asistentes virtuales para tu negocio",
     openGraph: {
-      title: 'titulo',
-      description: 'welcome',
-      images: ['/chatbotforLogo.svg'],
+      title: "Chatbotfor",
+      description: "Creamos asistentes virtuales para tu negocio",
+      images: ["/chatbotforLogo.svg"],
     },
-    // icons: [data.logo],
     icons: {
-      icon: [{ url: '/chatbotforLogo.svg' }], // Añade el tipo de imagen
+      icon: [{ url: "/chatbotforSymbol.svg" }], // Añade el tipo de imagen
     },
   };
 }
