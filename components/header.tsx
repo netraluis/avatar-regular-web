@@ -119,8 +119,10 @@ export default function Header({ domain }: { domain: Domain }) {
         className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16"
         aria-label="Global"
       >
-        <div onClick={returnToInicial}
-        className="cursor-pointer transition-transform duration-300 hover:scale-105">
+        <div
+          onClick={returnToInicial}
+          className="cursor-pointer transition-transform duration-300 hover:scale-105"
+        >
           <span className="sr-only">Your Company</span>
           {domainData?.logo ? (
             <Image
