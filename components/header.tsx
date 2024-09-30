@@ -9,25 +9,27 @@ import {
   CameraIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { GlobalContext } from "./context/globalContext";
+import { Domain, GlobalContext } from "./context/globalContext";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
-import { getDomain } from "@/lib/domain/clientHelpers";
 import Disclaimer from "./disclaimer";
 import { usePathname } from "next/navigation";
 
-export default function Header({ domain }: { domain: string }) {
+export default function Header({ domain }: { domain: Domain }) {
   const {
     setActualsThreadId,
     actualThreadId,
     actualsThreadId,
     state,
+    setState,
     setUser,
     user,
     setDomainData,
     domainData,
   } = useContext(GlobalContext);
+
+  setDomainData(domain);
 
   const pathname = usePathname();
 
@@ -40,24 +42,12 @@ export default function Header({ domain }: { domain: string }) {
   const supabase = createClient();
   const router = useRouter();
 
-  useEffect(() => {
-    const init = async () => {
-      const domainDataResult = await getDomain(domain);
-      if (domainDataResult) {
-        setDomainData(domainDataResult.domain);
-      }
-    };
-    init();
-  }, []);
-
   // Verificar si el usuario tiene sesión
   useEffect(() => {
     const getSession = async () => {
       const { data: sessionData, error } = await supabase.auth.getSession();
       if (error) {
         console.error("Error fetching session:", error);
-      } else if (sessionData?.session?.user) {
-        // router.push("/login");
       } else {
         setUser(sessionData?.session?.user || null);
       }
@@ -83,6 +73,12 @@ export default function Header({ domain }: { domain: string }) {
     };
   }, [router]);
 
+  const returnToInicial = () => {
+    setActualsThreadId([""]);
+    setState(1);
+    router.push("/");
+  };
+
   if (
     pathname === "/login" ||
     pathname === "/avatar" ||
@@ -94,12 +90,12 @@ export default function Header({ domain }: { domain: string }) {
           className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16"
           aria-label="Global"
         >
-          <a href="#">
+          <div onClick={returnToInicial}>
             <span className="sr-only">Your Company</span>
             {domainData?.logo ? (
               <Image
                 src={domainData?.logo}
-                alt={domainData?.description}
+                alt={domainData?.description || ""}
                 width={209}
                 height={74}
               />
@@ -111,7 +107,7 @@ export default function Header({ domain }: { domain: string }) {
                 />
               </div>
             )}
-          </a>
+          </div>
         </nav>
       </div>
     );
@@ -123,12 +119,12 @@ export default function Header({ domain }: { domain: string }) {
         className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16"
         aria-label="Global"
       >
-        <a href="#">
+        <div onClick={returnToInicial}>
           <span className="sr-only">Your Company</span>
           {domainData?.logo ? (
             <Image
               src={domainData?.logo}
-              alt={domainData?.description}
+              alt={domainData?.description || ""}
               width={209}
               height={74}
             />
@@ -140,7 +136,7 @@ export default function Header({ domain }: { domain: string }) {
               />
             </div>
           )}
-        </a>
+        </div>
         <div className="flex lg:hidden my-3">
           <Disclaimer data={domainData?.headerDisclaimer} />
           {/* Botón mejorado con mayor área táctil y color de fondo para mayor visibilidad */}
@@ -259,12 +255,9 @@ export default function Header({ domain }: { domain: string }) {
         <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10 transition duration-300 ease-in-out transform flex flex-col">
           {/* Encabezado del menú móvil con mejor diseño */}
           <div className="flex items-center justify-between ">
-            <a href="#" className="p-1.5">
+            <div className="p-1.5">
               <h3 className="leading-6">MENU</h3>
-
-              {/* <img className="h-8 w-auto" src="/logo.png" alt="logo" />
-              <Image src="/logo.png" alt="logo" width={156.75} height={55.5} /> */}
-            </a>
+            </div>
 
             <button
               type="button"

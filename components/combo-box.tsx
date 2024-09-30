@@ -96,7 +96,6 @@ export function Combobox({
                   value={team.id}
                   onSelect={(currentValue) => {
                     setOpen(false);
-                    console.log({ currentValue });
                     routerHandler(currentValue);
                   }}
                 >
@@ -126,7 +125,6 @@ export function Combobox({
                   value={setting.id}
                   onSelect={(currentValue) => {
                     setOpen(false);
-                    console.log({ currentValue });
                     settingsRouteHandler(currentValue);
                   }}
                 >

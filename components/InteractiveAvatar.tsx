@@ -40,7 +40,6 @@ const useDatabaseSubscription = () => {
           table: "Messages",
         },
         (payload: any) => {
-          console.log(payload);
           setMessages((prevMessages) => [...prevMessages, payload.new]);
           if (payload.new.role === "assistant") {
             setSpeak(payload.new);

@@ -8,33 +8,78 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum UserStatus {
+  ACTIVE
+  DESACTIVE
+}
 
 model Messages {
-  id                        String     @id @default(cuid())
-  role                      String
-  message                   String
-  threadId                  String
-  domainId                  String  
-  createdAt                 DateTime   @default(now())
+  id          String   @id @default(cuid())
+  role        String
+  message     String
+  threadId    String
+  domainId    String  
+  createdAt   DateTime @default(now())
 }
 
 model Domains {
-  id                        String     @id @default(cuid())
-  name                      String
-  subDomain                 String
-  customDomain              String
-  welcome                   String
-  logo                      String?
-  description               String?
-  symbol                    String?
-  assistantId               String
-  assistantName             String
-  menuHeader                Json
-  menuBody                  Json
-  menufooter                String
-  avatarId                  String    @default("")
-  voiceAvatarId             String    @default("")
-  headerDisclaimer          Json?     
-  createdAt                 DateTime  @default(now())
+  id               String   @id @default(cuid())
+  name             String
+  subDomain        String
+  customDomain     String
+  welcome          String
+  logo             String?
+  description      String?
+  symbol           String?
+  assistantId      String
+  assistantName    String
+  menuHeader       Json
+  menuBody         Json
+  menufooter       String
+  avatarId         String   @default("")
+  voiceAvatarId    String   @default("")
+  headerDisclaimer Json?     
+  createdAt        DateTime @default(now())
 }
 
+model User {
+  id          String    @id @default(uuid())
+  email       String    // No uses @unique aquí porque vamos a crear una clave compuesta
+  teams       UserTeam[]  
+  status      UserStatus
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([email, status])  // Clave compuesta única en email y status
+}
+
+model Team {
+  id          String      @id @default(uuid())
+  name        String
+  users       UserTeam[]  // Relación muchos a muchos con User a través de la tabla de unión
+  assistants  Assistant[] // Relación uno a muchos con asistentes virtuales
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
+}
+
+model Assistant {
+  id          String   @id @default(uuid())
+  name        String   // Nombre del asistente virtual (IA)
+  teamId      String
+  team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+}
+
+model UserTeam {
+  userId      String 
+  teamId      String  
+
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team        Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@id([userId, teamId]) // Clave primaria compuesta
+}

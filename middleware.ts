@@ -44,45 +44,6 @@ export default async function middleware(req: NextRequest) {
     searchParams.length > 0 ? `?${searchParams}` : ""
   }`;
 
-  // rewrite root application to `/home` folder
-  // console.log("hostname aaaaa", hostname, process.env.NEXT_PUBLIC_ROOT_DOMAIN);
-  // if (
-  //   hostname === "localhost:3000" ||
-  //   hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
-  // ) {
-  //   console.log("entro!!!");
-  //   return NextResponse.rewrite(
-  //     new URL(`/andorra-unio-europea${path === "/" ? "" : path}`, req.url),
-  //   );
-  // }
-
-  // if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-  //   return NextResponse.rewrite(
-  //     new URL(`/app${path === "/" ? "" : path}`, req.url),
-  //   );
-  // }
-
-  // rewrites for app pages
-  // if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-  //   const session = await getToken({ req });
-  //   if (!session && path !== "/login") {
-  //     return NextResponse.redirect(new URL("/login", req.url));
-  //   } else if (session && path == "/login") {
-  //     return NextResponse.redirect(new URL("/", req.url));
-  //   }
-  //   return NextResponse.rewrite(
-  //     new URL(`/app${path === "/" ? "" : path}`, req.url),
-  //   );
-  // }
-
-  // special case for `vercel.pub` domain
-  // if (hostname === "vercel.pub") {
-  //   return NextResponse.redirect(
-  //     "https://vercel.com/blog/platforms-starter-kit",
-  //   );
-  // }
-
-  console.log("hostname", hostname, path);
   // rewrite everything else to `/[domain]/[slug] dynamic route
   return NextResponse.rewrite(new URL(`/${hostname}${path}`, req.url));
 }

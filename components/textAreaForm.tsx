@@ -72,8 +72,6 @@ export const TextAreaForm = ({
       const { blob } = await recorder.current.stop();
       setRecording(false);
 
-      console.log("Tamaño del audioBlob:", blob.size);
-
       if (blob.size > 0) {
         // motivo principal es para testear el audio
         // const url = URL.createObjectURL(blob);

@@ -1,3 +1,4 @@
+import { AppProvider } from "@/components/context/appContext";
 import DashboardHeader from "@/components/layouts/dashboard-layout";
 
 export default async function Layout({
@@ -5,5 +6,9 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <DashboardHeader>{children}</DashboardHeader>;
+  return (
+    <AppProvider>
+      <DashboardHeader>{children}</DashboardHeader>
+    </AppProvider>
+  );
 }

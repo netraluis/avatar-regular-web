@@ -71,7 +71,6 @@ export async function POST(req: Request) {
 
       // forward run status would stream message deltas
       const runResult = await forwardStream(runStream);
-      console.log({ runResult });
       if (
         runResult &&
         runResult.status === "completed" &&
@@ -83,14 +82,12 @@ export async function POST(req: Request) {
             order: "desc",
           },
         );
-        console.log({
-          threadMessages: JSON.stringify(threadMessages, null, 2),
-        });
+
         try {
           if (threadMessages.data.length > 1) {
             const lastResponse = threadMessages.data[0]; // El primer mensaje en la lista ordenada es el más reciente
 
-            const result = await prisma.messages.createMany({
+            await prisma.messages.createMany({
               data: [
                 {
                   role: lastResponse.role,
@@ -101,9 +98,6 @@ export async function POST(req: Request) {
                 },
               ],
             });
-
-            console.log({ result });
-            // Aquí puedes realizar acciones adicionales con el último mensaje
           }
         } catch (e) {
           console.error(e);
