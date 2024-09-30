@@ -1,7 +1,13 @@
+import {
+  Domain,
+  HeaderDisclaimer,
+  MenuBody,
+  MenuHeader,
+} from "@/components/context/globalContext";
 import prisma from "../prisma";
 import { createClient } from "@/lib/supabase/server";
 
-export const getPublicUrlImageimport = async (fileName: string) => {
+export const getPublicUrlImage = async (fileName: string) => {
   const supabase = createClient();
 
   const { data } = supabase.storage.from("images").getPublicUrl(fileName);
@@ -23,9 +29,9 @@ export const getPublicLimitedUrlImageimport = async (fileName: string) => {
   }
 };
 
-export async function getDomainData(domain: string) {
-  const rootDomain =
-    `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` || ".localhost:3000";
+export async function getDomainData(domain: string): Promise<Domain | null> {
+  const rootDomain = `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`;
+
   const subdomain = domain.endsWith(rootDomain)
     ? domain.replace(rootDomain, "")
     : null;
@@ -40,13 +46,19 @@ export async function getDomainData(domain: string) {
     return null;
   }
 
-  const logo = await getPublicUrlImageimport(`logos/${subdomainInfo.logo}`);
+  const logo = await getPublicUrlImage(`logos/${subdomainInfo.logo}`);
   const symbol = subdomainInfo.symbol
-    ? await getPublicUrlImageimport(`symbols/${subdomainInfo.symbol}`)
+    ? await getPublicUrlImage(`symbols/${subdomainInfo.symbol}`)
     : null;
+
+  console.log({ subdomainInfo });
 
   return {
     ...subdomainInfo,
+    menuHeader: subdomainInfo.menuHeader as unknown as MenuHeader[],
+    menuBody: subdomainInfo.menuBody as unknown as MenuBody[],
+    headerDisclaimer:
+      subdomainInfo.headerDisclaimer as unknown as HeaderDisclaimer,
     logo,
     symbol,
   };

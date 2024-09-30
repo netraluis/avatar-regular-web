@@ -73,7 +73,7 @@ export default async function SiteLayout({
 
   return (
     <GlobalProvider>
-      <Header domain={domain} />
+      <Header domain={data} />
       <div>{children}</div>
     </GlobalProvider>
   );

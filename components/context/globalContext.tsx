@@ -3,13 +3,13 @@ import React, { ReactNode, createContext, useContext, useState } from "react";
 
 export type History = { who: string; message: string };
 
-interface MenuHeader {
+export interface MenuHeader {
   name: string;
   description: string;
   href: string;
 }
 
-interface MenuBody {
+export interface MenuBody {
   description: string;
   href: string;
 }
@@ -27,7 +27,7 @@ export type Domain = {
   customDomain: string;
   welcome: string;
   logo: string;
-  description: string;
+  description: string | null;
   assistantId: string;
   assistantName: string;
   menuHeader: MenuHeader[];
@@ -36,6 +36,7 @@ export type Domain = {
   avatarId: string;
   voiceAvatarId: string;
   headerDisclaimer: HeaderDisclaimer | null;
+  symbol: string | null;
   createdAt: Date;
 };
 
@@ -76,7 +77,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
     customDomain: "",
     welcome: "",
     logo: "",
-    description: "",
+    description: null,
     assistantId: "",
     assistantName: "",
     menuHeader: [],
@@ -86,6 +87,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
     voiceAvatarId: "",
     headerDisclaimer: null,
     createdAt: new Date(),
+    symbol: null,
   },
   setDomainData: () => {},
 });
