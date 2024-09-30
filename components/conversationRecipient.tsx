@@ -31,7 +31,7 @@ export default function ConversationRecipient() {
     },
   });
 
-  if (error){
+  if (error) {
     console.log({ error });
   }
 

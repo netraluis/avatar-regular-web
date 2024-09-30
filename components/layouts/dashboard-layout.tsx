@@ -23,9 +23,11 @@ import {
 import { useRouter, useParams } from "next/navigation";
 import { Combobox } from "../combo-box";
 import { assistantsTeamSelected, teams } from "../mockData";
+// import { useAppContext } from "../context/appContext";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
+  // const { setTeam } = useAppContext();
   const { teamId, assistantId } = useParams();
 
   console.log({ teamId, assistantId });
@@ -36,19 +38,6 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   );
 
   const handleAssistantRouteChange = (assistantId: string) => {
-    // Divide la ruta actual en segmentos
-    // const segments = pathname.split("/");
-    // console.log({ segments });
-
-    // // Reemplaza el último segmento con el nuevo valor
-    // segments[segments.length - 1] = assistantId;
-
-    // // Une los segmentos para formar la nueva ruta
-    // const newPath = segments.join("/");
-
-    // console.log({ newPath });
-
-    // Navega a la nueva ruta
     router.push(`/team/${teamId}/assistant/${assistantId}`);
   };
 
