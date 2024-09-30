@@ -139,14 +139,14 @@ export const TextAreaForm = ({
     <div className="fixed inset-x-0 bottom-0 w-full duration-300 ease-in-out animate-in">
       <div className="mx-auto sm:max-w-2xl sm:px-4">
         <div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
-          <form className="relative rounded-xl shadow-sm">
+          <form className="relative rounded-xl shadow-sm flex items-center px-4 py-[1.3rem] min-h-[60px]">
             {!recording ? (
               <Textarea
                 ref={textAreaRef}
                 tabIndex={0}
                 onKeyDown={handleKeyDown}
                 placeholder="Escriu una pregunta..."
-                className="min-h-[60px] w-full resize-none bg-transparent px-4 py-[1.3rem] focus-within:outline-none sm:text-sm "
+                className="w-full resize-none bg-transparent focus-within:outline-none sm:text-sm "
                 autoFocus
                 spellCheck={false}
                 autoComplete="off"
@@ -157,9 +157,9 @@ export const TextAreaForm = ({
                 onChange={handleInputChange}
               />
             ) : (
-              <div className="flex min-h-[60px] w-full bg-transparent px-4 py-[0.65rem] focus-within:outline-none sm:text-sm">
+              <div className="flex w-full bg-transparent focus-within:outline-none sm:text-sm">
                 <Button
-                  className="mt-[3px] bg-background text-primary hover:bg-secondary hover:text-primary"
+                  className="bg-background text-primary hover:bg-secondary hover:text-primary"
                   onClick={(event) => stopRecordingF(event, false)}
                 >
                   <TrashIcon
@@ -167,10 +167,10 @@ export const TextAreaForm = ({
                     aria-hidden="true"
                   />
                 </Button>
-                <div className="flex-1 mx-2 shrink">
+                <div className="flex-1 shrink">
                   <VoiceVisualizer
                     controls={recorderControls}
-                    height={"48px"}
+                    height={"40"}
                     width={"100%"}
                     mainBarColor="#0f172a"
                     secondaryBarColor="#f1f5f9"
@@ -187,7 +187,7 @@ export const TextAreaForm = ({
                 </div>
 
                 <Button
-                  className="mt-[3px]"
+                  className="flex-shrink-0 self-end"
                   onClick={(event) => stopRecordingF(event, true)}
                 >
                   <CheckIcon
@@ -199,7 +199,7 @@ export const TextAreaForm = ({
             )}
 
             {!recording && (
-              <div className="absolute right-0 top-[13px] sm:right-4 ">
+              <div className="flex-shrink-0 self-end">
                 {!input && status === "awaiting_message" ? (
                   <Button onClick={(e) => startRecordingF(e)}>
                     {!transcribing ? (
