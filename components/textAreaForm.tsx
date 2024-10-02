@@ -151,7 +151,7 @@ export const TextAreaForm = ({
                 ref={textAreaRef}
                 tabIndex={0}
                 onKeyDown={handleKeyDown}
-                placeholder="Escriu una pregunta..."
+                placeholder="Envia la teva pregunta..."
                 className="w-full resize-none bg-transparent focus-within:outline-none sm:text-sm "
                 autoFocus
                 spellCheck={false}
