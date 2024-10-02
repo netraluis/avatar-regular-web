@@ -21,6 +21,12 @@ declare global {
   }
 }
 
+const iconText = {
+  sendMessage: "Enviar",
+  voiceRecordStop: "Parar micròfon",
+  voiceRecordStart: "Activar micròfon",
+};
+
 export const TextAreaForm = ({
   handleInputChange,
   handleKeyDown,
@@ -194,6 +200,7 @@ export const TextAreaForm = ({
                     className="ml-0.5 h-5 w-5 mr-1"
                     aria-hidden="true"
                   />
+                  {iconText.voiceRecordStop}
                 </Button>
               </div>
             )}
@@ -203,10 +210,13 @@ export const TextAreaForm = ({
                 {!input && status === "awaiting_message" ? (
                   <Button onClick={(e) => startRecordingF(e)}>
                     {!transcribing ? (
-                      <MicrophoneIcon
-                        className="ml-0.5 h-5 w-5 mr-1"
-                        aria-hidden="true"
-                      />
+                      <>
+                        <MicrophoneIcon
+                          className="ml-0.5 h-5 w-5 mr-1"
+                          aria-hidden="true"
+                        />
+                        {iconText.voiceRecordStart}
+                      </>
                     ) : (
                       <ArrowPathIcon
                         className="ml-0.5 h-5 w-5 animate-spin mr-1"
@@ -220,10 +230,13 @@ export const TextAreaForm = ({
                     onClick={sendMessage}
                   >
                     {status === "awaiting_message" ? (
-                      <PaperAirplaneIcon
-                        className="ml-0.5 h-5 w-5 mr-1"
-                        aria-hidden="true"
-                      />
+                      <>
+                        <PaperAirplaneIcon
+                          className="ml-0.5 h-5 w-5 mr-1"
+                          aria-hidden="true"
+                        />
+                        {iconText.sendMessage}
+                      </>
                     ) : (
                       <ArrowPathIcon
                         className="ml-0.5 h-5 w-5 animate-spin mr-1"

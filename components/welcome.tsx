@@ -8,9 +8,10 @@ import { FooterText } from "./footer";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { EmptyScreen } from "./empty-screen";
 import { GlobalContext } from "./context/globalContext";
+import { startConnection } from "@/lib/supabase/avatar-channel";
 
 export default function Welcome() {
-  const { setState } = useContext(GlobalContext);
+  const { setState, user } = useContext(GlobalContext);
 
   const { messagesRef, scrollRef, isAtBottom, scrollToBottom } =
     useScrollAnchor();
@@ -23,7 +24,8 @@ export default function Welcome() {
       <div ref={messagesRef}>
         <EmptyScreen>
           <Button
-            onClick={() => {
+            onClick={async () => {
+              await startConnection(user.id);
               setState(2);
             }}
           >
