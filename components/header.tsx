@@ -15,6 +15,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Disclaimer from "./disclaimer";
 import { usePathname } from "next/navigation";
+import { endSession, newConversation } from "@/lib/supabase/avatar-channel";
 
 export default function Header({ domain }: { domain: Domain }) {
   const {
@@ -29,13 +30,16 @@ export default function Header({ domain }: { domain: Domain }) {
     domainData,
   } = useContext(GlobalContext);
 
-  setDomainData(domain);
+  useEffect(() => {
+    setDomainData(domain);
+  }, [domain]);
 
   const pathname = usePathname();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const createNovaConversa = () => {
+    newConversation(user.id);
     setActualsThreadId([...actualsThreadId, actualThreadId]);
     setMobileMenuOpen(false);
   };
@@ -74,6 +78,7 @@ export default function Header({ domain }: { domain: Domain }) {
   }, [router]);
 
   const returnToInicial = () => {
+    endSession(user.id);
     setActualsThreadId([""]);
     setState(1);
     router.push("/");

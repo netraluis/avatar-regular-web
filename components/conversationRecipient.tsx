@@ -7,6 +7,7 @@ import { ChatList } from "./chat-list";
 import { createClient } from "@/lib/supabase/client";
 
 import { GlobalContext } from "./context/globalContext";
+import React from "react";
 
 export default function ConversationRecipient() {
   const supabase = createClient();
@@ -34,6 +35,8 @@ export default function ConversationRecipient() {
   if (error) {
     console.log({ error });
   }
+
+  // console.log({ messages });
 
   useEffect(() => {
     const channelAvatar = supabase.channel("avatar");

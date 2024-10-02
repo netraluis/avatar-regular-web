@@ -14,6 +14,8 @@ import { createClient } from "@/lib/supabase/client";
 import MarkdownDisplay from "./MarkDownDisplay";
 import removeMarkdown from "remove-markdown";
 import { FooterText } from "./footer";
+import React from "react";
+import VideoPlayer from "./video-player";
 
 interface InteractiveAvatarProps {
   speak: string; // Define speak as a string type
@@ -41,6 +43,7 @@ const useDatabaseSubscription = () => {
         },
         (payload: any) => {
           setMessages((prevMessages) => [...prevMessages, payload.new]);
+          console.log("New message:", payload.new);
           if (payload.new.role === "assistant") {
             setSpeak(payload.new);
           }
@@ -70,6 +73,7 @@ export default function InteractiveAvatar() {
   const avatarId = domainData?.avatarId;
 
   const { speak, messages } = useDatabaseSubscription();
+  const startSessionRef = useRef<HTMLButtonElement>(null);
 
   const speakAsync = async () => {
     if (!speak) return;
@@ -87,39 +91,35 @@ export default function InteractiveAvatar() {
     }
   };
 
-  const supabase = createClient();
+  useEffect(() => {
+    const supabase = createClient();
+    const channel = supabase.channel("avatar-channel");
 
-  const channelAvatar = supabase.channel("avatar");
-
-  // Simple function to log any messages we receive
-  async function messageReceived(payload: any) {
-    console.log(
-      "Message received:",
-      payload.payload.messages,
-      payload.payload.messages.length,
-      payload.payload.messages[payload.payload.messages.length - 1],
-    );
-    if (!speak) return;
-    if (!initialized || !avatar.current) return;
-    await avatar.current.speak({
-      taskRequest: {
-        text: payload.payload.messages[payload.payload.messages.length - 1]
-          .content,
-        sessionId: data?.sessionId,
-      },
+    // Escuchar el evento "mensaje_nuevo"
+    channel.on("broadcast", { event: "start-session" }, async (payload) => {
+      // if (startSessionRef?.current) {
+      //   startSessionRef.current.click(); // Simula el clic del botón
+      // }
+      console.log("Nuevo start-session:", payload.text);
     });
 
-    console.log(payload);
-  }
+    // Escuchar el evento "usuario_conectado"
+    channel.on("broadcast", { event: "end-session" }, async (payload) => {
+      await endSession();
 
-  // Subscribe to the Channel
-  // channelAvatar
-  //   .on(
-  //     "broadcast",
-  //     { event: "test" },
-  //     async (payload) => await messageReceived(payload),
-  //   )
-  //   .subscribe();
+      console.log("Usuario end-session:", payload.nombre);
+    });
+
+    channel.on("broadcast", { event: "new-conversation" }, (payload) => {
+      console.log("Usuario new-conversation:", payload.nombre);
+    });
+
+    channel.subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     console.log("Speak:", speak);
@@ -246,85 +246,93 @@ export default function InteractiveAvatar() {
   }, [mediaStream, stream]);
 
   return (
-    <>
-      <>
-        <div className="h-screen flex flex-col justify-center items-center">
-          {stream ? (
-            <div className="h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden">
-              <video
-                ref={mediaStream}
-                autoPlay
-                playsInline
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              >
-                <track kind="captions" />
-              </video>
-              {/* <div className="flex flex-col gap-2 absolute bottom-3 right-3">
-                <Button
-                  onClick={handleInterrupt}
-                  className="bg-gradient-to-tr from-indigo-500 to-indigo-300 text-white rounded-lg"
-                >
-                  Interrupt task
-                </Button>
-                <Button
-                  onClick={endSession}
-                  className="bg-gradient-to-tr from-indigo-500 to-indigo-300  text-white rounded-lg"
-                >
-                  End session
-                </Button>
-              </div> */}
-            </div>
-          ) : !isLoadingSession ? (
-            <div className="h-full justify-center items-center flex flex-col gap-8 w-[500px] self-center">
-              <Button
-                onClick={startSession}
-                className="bg-gradient-to-tr from-indigo-500 to-indigo-300 w-full text-white"
-              >
-                Start session
-              </Button>
-            </div>
-          ) : (
-            <div>Cargando...</div>
-          )}
-          <div className="absolute bottom-0 z-10">
-            <div className="relative">
-              <div className="overflow-auto max-h-80 mb-3">
-                {messages.length > 2 && (
-                  <div className=" m-7">
-                    <div
-                      className={`${messages[messages.length - 2].role === "user" ? "justify-end" : "justify start"} flex`}
-                    >
-                      <div className="bg-slate-950/25 text-slate-50 rounded-2xl p-2 mb-2">
-                        <MarkdownDisplay
-                          markdownText={messages[messages.length - 2].message}
-                        />
-                      </div>
-                    </div>
-                    <div
-                      className={`${messages[messages.length - 1].role === "user" ? "justify-end" : "justify start"} flex`}
-                    >
-                      <div className="bg-slate-950/25 text-slate-50 rounded-2xl p-2 mt-2">
-                        <MarkdownDisplay
-                          markdownText={messages[messages.length - 1].message}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-b from-slate-950/25 to-transparent pointer-events-none"></div> */}
-            </div>
-            <div className="w-fit bg-slate-950/25 mx-auto space-y-4 border-none px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
-              <FooterText className="hidden sm:block text-slate-50 border-none" />
-            </div>
+    <div className="h-screen flex flex-col justify-center items-center">
+      {stream ? (
+        <div className="h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden">
+          <video
+            ref={mediaStream}
+            autoPlay
+            playsInline
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          >
+            <track kind="captions" />
+          </video>
+          <div className="flex flex-col gap-2 absolute bottom-3 right-3">
+            <Button
+              onClick={handleInterrupt}
+              className="bg-gradient-to-tr from-indigo-500 to-indigo-300 text-white rounded-lg"
+            >
+              Interrupt task
+            </Button>
+            <Button
+              onClick={endSession}
+              className="bg-gradient-to-tr from-indigo-500 to-indigo-300  text-white rounded-lg"
+            >
+              End session
+            </Button>
           </div>
         </div>
-      </>
-    </>
+      ) : !isLoadingSession ? (
+        <div className="w-full relative">
+          <VideoPlayer
+            src="/avatar-waiting.mov"
+            fullScreen={true}
+            controls={false}
+            autoPlay={true}
+            loop={true}
+          />
+          <div className="absolute inset-0 flex justify-center items-end z-10">
+            <Button
+              ref={startSessionRef}
+              onClick={startSession}
+              className="bg-gradient-to-tr from-indigo-500 to-indigo-300 w-[200px] text-white mb-[80px]"
+            >
+              Start session
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div>Cargando...</div>
+      )}
+      <div className="absolute bottom-0 z-10">
+        <div className="relative">
+          <div className="overflow-auto max-h-80 mb-3">
+            <div className=" m-7">
+              {messages.length >= 2 && (
+                <div
+                  className={`${messages[messages.length - 2].role === "user" ? "justify-end" : "justify start"} flex`}
+                >
+                  <div className="bg-slate-950/25 text-slate-50 rounded-2xl p-2 mb-2">
+                    <MarkdownDisplay
+                      markdownText={messages[messages.length - 2].message}
+                    />
+                  </div>
+                </div>
+              )}
+              {messages.length >= 1 && (
+                <div
+                  className={`${messages[messages.length - 1].role === "user" ? "justify-end" : "justify start"} flex`}
+                >
+                  <div className="bg-slate-950/25 text-slate-50 rounded-2xl p-2 mt-2">
+                    <MarkdownDisplay
+                      markdownText={messages[messages.length - 1].message}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-b from-slate-950/25 to-transparent pointer-events-none"></div> */}
+        </div>
+        <div className="w-fit bg-slate-950/25 mx-auto space-y-4 border-none px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
+          <FooterText className="hidden sm:block text-slate-50 border-none" />
+        </div>
+      </div>
+    </div>
   );
 }
