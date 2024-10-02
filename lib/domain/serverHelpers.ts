@@ -51,8 +51,6 @@ export async function getDomainData(domain: string): Promise<Domain | null> {
     ? await getPublicUrlImage(`symbols/${subdomainInfo.symbol}`)
     : null;
 
-  console.log({ subdomainInfo });
-
   return {
     ...subdomainInfo,
     menuHeader: subdomainInfo.menuHeader as unknown as MenuHeader[],
