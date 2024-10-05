@@ -15,7 +15,9 @@ export async function POST(req: NextRequest) {
   }
 
   revalidatePath("/", "layout");
-  return NextResponse.redirect(new URL("/login", req.url), {
+
+  const subdomainUrl = new URL(`${process.env.PROTOCOL ? process.env.PROTOCOL : 'https://'}${req.headers.get("host")}/login`);
+  return NextResponse.redirect(new URL(subdomainUrl, req.url), {
     status: 302,
   });
 }

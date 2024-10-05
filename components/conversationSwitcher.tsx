@@ -5,7 +5,7 @@ import Welcome from "./welcome";
 import { GlobalContext } from "./context/globalContext";
 
 const ConversationSwitcher = () => {
-  const { state } = useContext(GlobalContext);
+const { state } = useContext(GlobalContext);
 
   switch (state) {
     case 2:

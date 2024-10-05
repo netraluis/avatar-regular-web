@@ -78,7 +78,6 @@ export default function Header({ domain }: { domain: Domain }) {
   }, [router]);
 
   const returnToInicial = () => {
-    endSession(user.id);
     setActualsThreadId([""]);
     setState(1);
     router.push("/");
@@ -241,7 +240,7 @@ export default function Header({ domain }: { domain: Domain }) {
           </Popover>
           {!!user && (
             <div>
-              <form action="/auth/signout" method="post">
+              <form action="/api/auth/signout" method="post">
                 <button className="button block text-gray-600" type="submit">
                   <ArrowRightStartOnRectangleIcon
                     className="h-6 w-6"
