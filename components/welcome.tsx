@@ -10,7 +10,7 @@ import { EmptyScreen } from "./empty-screen";
 import { GlobalContext } from "./context/globalContext";
 
 export default function Welcome() {
-  const { setState, user } = useContext(GlobalContext);
+  const { setState } = useContext(GlobalContext);
 
   const { messagesRef, scrollRef, isAtBottom, scrollToBottom } =
     useScrollAnchor();

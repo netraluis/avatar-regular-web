@@ -108,7 +108,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [actualThreadId, setActualThreadId] = useState<string>("");
   const [user, setUser] = useState<any>(null);
   const [showAnalizeInfo, setShowAnalizeInfo] = useState(false);
-  const [domainData, setDomainData] = useState<any>(null);
+  const [domainData, setDomainData] = useState<any>();
 
   const value = {
     state,

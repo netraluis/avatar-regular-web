@@ -16,48 +16,7 @@ import removeMarkdown from "remove-markdown";
 import { FooterText } from "./footer";
 import React from "react";
 import VideoPlayer from "./video-player";
-
-interface InteractiveAvatarProps {
-  speak: string; // Define speak as a string type
-}
-
-interface Message {
-  role: string;
-  message: string;
-}
-
-const useDatabaseSubscription = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [speak, setSpeak] = useState<Message>({ role: "", message: "" });
-  const supabase = createClient();
-
-  useEffect(() => {
-    const channel = supabase
-      .channel("avatar-communication")
-      .on(
-        "postgres_changes",
-        {
-          event: "INSERT",
-          schema: "public",
-          table: "Messages",
-        },
-        (payload: any) => {
-          setMessages((prevMessages) => [...prevMessages, payload.new]);
-          console.log("New message:", payload.new);
-          if (payload.new.role === "assistant") {
-            setSpeak(payload.new);
-          }
-        },
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase]);
-
-  return { messages, speak };
-};
+import { Message } from "ai/react";
 
 export default function InteractiveAvatar() {
   const { domainData } = useContext(GlobalContext);
@@ -68,18 +27,26 @@ export default function InteractiveAvatar() {
   const [initialized, setInitialized] = useState(false); // Track initialization
   const mediaStream = useRef<HTMLVideoElement>(null);
   const avatar = useRef<StreamingAvatarApi | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [speak, setSpeak] = useState<any>([]);
 
   const voiceId = domainData?.voiceAvatarId;
   const avatarId = domainData?.avatarId;
 
-  const { speak, messages } = useDatabaseSubscription();
   const startSessionRef = useRef<HTMLButtonElement>(null);
+  const endSessionRef = useRef<HTMLButtonElement>(null);
 
   const speakAsync = async () => {
+    console.log({ speak });
     if (!speak) return;
     if (!initialized || !avatar.current) return;
+    await avatar.current
+      .interrupt({ interruptRequest: { sessionId: data?.sessionId } })
+      .catch((e) => {
+        setDebug(e.message);
+      });
     const patron = /【[^】]*】/g;
-    const speakPlain = removeMarkdown(speak.message).replace(patron, "");
+    const speakPlain = removeMarkdown(speak.content).replace(patron, "");
     // speakPlain = speakPlain;
     console.log("speakPlain:", speakPlain);
     try {
@@ -92,32 +59,36 @@ export default function InteractiveAvatar() {
   };
 
   useEffect(() => {
-    const supabase = createClient();
-    const channel = supabase.channel("avatar-channel");
+    const handleStorageChange = (event: any) => {
+      if (event.key === "messages") {
+        const newValue = JSON.parse(event.newValue);
+        // Actualiza tu estado o contexto con el nuevo valor
+        setMessages(newValue);
+      }
+      if (event.key === "state") {
+        const state = JSON.parse(event.newValue);
+        if (state === 2) {
+          if (startSessionRef.current) {
+            startSessionRef.current.click();
+          }
+        }
+        if (state === 1) {
+          if (endSessionRef.current) {
+            endSessionRef.current.click();
+          }
+        }
+      }
 
-    // Escuchar el evento "mensaje_nuevo"
-    channel.on("broadcast", { event: "start-session" }, async (payload) => {
-      // if (startSessionRef?.current) {
-      //   startSessionRef.current.click(); // Simula el clic del botón
-      // }
-      console.log("Nuevo start-session:", payload.text);
-    });
+      if (event.key === "speak") {
+        const newValue = JSON.parse(event.newValue);
+        setSpeak(newValue);
+      }
+    };
 
-    // Escuchar el evento "usuario_conectado"
-    channel.on("broadcast", { event: "end-session" }, async (payload) => {
-      await endSession();
-
-      console.log("Usuario end-session:", payload.nombre);
-    });
-
-    channel.on("broadcast", { event: "new-conversation" }, (payload) => {
-      console.log("Usuario new-conversation:", payload.nombre);
-    });
-
-    channel.subscribe();
+    window.addEventListener("storage", handleStorageChange);
 
     return () => {
-      channel.unsubscribe();
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
 
@@ -160,14 +131,14 @@ export default function InteractiveAvatar() {
             voice: { voiceId },
           },
         },
-        setDebug,
+        setDebug
       );
       setData(res);
       setStream(avatar.current.mediaStream);
     } catch (error) {
       console.error("Error starting avatar session:", error);
       setDebug(
-        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`,
+        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`
       );
     }
     setIsLoadingSession(false);
@@ -177,7 +148,7 @@ export default function InteractiveAvatar() {
     const newToken = await fetchAccessToken();
     console.log("Updating Access Token:", newToken); // Log token for debugging
     avatar.current = new StreamingAvatarApi(
-      new Configuration({ accessToken: newToken }),
+      new Configuration({ accessToken: newToken })
     );
 
     const startTalkCallback = (e: any) => {
@@ -214,7 +185,7 @@ export default function InteractiveAvatar() {
     }
     await avatar.current.stopAvatar(
       { stopSessionRequest: { sessionId: data?.sessionId } },
-      setDebug,
+      setDebug
     );
     setStream(undefined);
   }
@@ -224,7 +195,7 @@ export default function InteractiveAvatar() {
       const newToken = await fetchAccessToken();
       console.log("Initializing with Access Token:", newToken); // Log token for debugging
       avatar.current = new StreamingAvatarApi(
-        new Configuration({ accessToken: newToken, jitterBuffer: 200 }),
+        new Configuration({ accessToken: newToken, jitterBuffer: 200 })
       );
       setInitialized(true); // Set initialized to true
     }
@@ -248,19 +219,21 @@ export default function InteractiveAvatar() {
   return (
     <div className="h-screen flex flex-col justify-center items-center">
       {stream ? (
-        <div className="h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden">
-          <video
-            ref={mediaStream}
-            autoPlay
-            playsInline
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          >
-            <track kind="captions" />
-          </video>
+        <>
+          <div className="h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden z-30">
+            <video
+              ref={mediaStream}
+              autoPlay
+              playsInline
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            >
+              <track kind="captions" />
+            </video>
+          </div>
           <div className="flex flex-col gap-2 absolute bottom-3 right-3">
             <Button
               onClick={handleInterrupt}
@@ -269,27 +242,29 @@ export default function InteractiveAvatar() {
               Interrupt task
             </Button>
             <Button
+              ref={endSessionRef}
               onClick={endSession}
               className="bg-gradient-to-tr from-indigo-500 to-indigo-300  text-white rounded-lg"
             >
               End session
             </Button>
           </div>
-        </div>
+        </>
       ) : !isLoadingSession ? (
         <div className="w-full relative">
-          <VideoPlayer
-            src="/avatar-waiting.mov"
-            fullScreen={true}
-            controls={false}
-            autoPlay={true}
-            loop={true}
-          />
+            <VideoPlayer
+              src="/avatar-waiting.mov"
+              fullScreen={true}
+              controls={false}
+              autoPlay={true}
+              loop={true}
+            />
+
           <div className="absolute inset-0 flex justify-center items-end z-10">
             <Button
               ref={startSessionRef}
               onClick={startSession}
-              className="bg-gradient-to-tr from-indigo-500 to-indigo-300 w-[200px] text-white mb-[80px]"
+              className="bg-transparent text-transparent"
             >
               Start session
             </Button>
@@ -298,7 +273,7 @@ export default function InteractiveAvatar() {
       ) : (
         <div>Cargando...</div>
       )}
-      <div className="absolute bottom-0 z-10">
+      <div className="absolute bottom-0 z-40">
         <div className="relative">
           <div className="overflow-auto max-h-80 mb-3">
             <div className=" m-7">
@@ -308,7 +283,7 @@ export default function InteractiveAvatar() {
                 >
                   <div className="bg-slate-950/25 text-slate-50 rounded-2xl p-2 mb-2">
                     <MarkdownDisplay
-                      markdownText={messages[messages.length - 2].message}
+                      markdownText={messages[messages.length - 2].content}
                     />
                   </div>
                 </div>
@@ -319,15 +294,13 @@ export default function InteractiveAvatar() {
                 >
                   <div className="bg-slate-950/25 text-slate-50 rounded-2xl p-2 mt-2">
                     <MarkdownDisplay
-                      markdownText={messages[messages.length - 1].message}
+                      markdownText={messages[messages.length - 1].content}
                     />
                   </div>
                 </div>
               )}
             </div>
           </div>
-
-          {/* <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-b from-slate-950/25 to-transparent pointer-events-none"></div> */}
         </div>
         <div className="w-fit bg-slate-950/25 mx-auto space-y-4 border-none px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
           <FooterText className="hidden sm:block text-slate-50 border-none" />

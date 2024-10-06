@@ -1,11 +1,16 @@
 "use client";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import StartConversation from "./startConversation";
 import Welcome from "./welcome";
 import { GlobalContext } from "./context/globalContext";
 
 const ConversationSwitcher = () => {
-const { state } = useContext(GlobalContext);
+  const { state } = useContext(GlobalContext);
+
+  useEffect(() => {
+    localStorage.setItem("state", JSON.stringify(state));
+    localStorage.setItem("messages", JSON.stringify([]));
+  }, [state]);
 
   switch (state) {
     case 2:

@@ -138,6 +138,7 @@ export const TextAreaForm = ({
 
   const sendMessage = (e: any) => {
     e.preventDefault();
+    if (status !== "awaiting_message") return;
     submitMessage();
   };
 
@@ -150,7 +151,10 @@ export const TextAreaForm = ({
               <Textarea
                 ref={textAreaRef}
                 tabIndex={0}
-                onKeyDown={handleKeyDown}
+                onKeyDown={(e: any) => {
+                  if (status !== "awaiting_message") return;
+                  handleKeyDown(e);
+                }}
                 placeholder="Envia la teva pregunta..."
                 className="w-full resize-none bg-transparent focus-within:outline-none sm:text-sm "
                 autoFocus

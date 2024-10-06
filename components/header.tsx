@@ -15,7 +15,6 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Disclaimer from "./disclaimer";
 import { usePathname } from "next/navigation";
-import { endSession, newConversation } from "@/lib/supabase/avatar-channel";
 
 export default function Header({ domain }: { domain: Domain }) {
   const {
@@ -39,9 +38,9 @@ export default function Header({ domain }: { domain: Domain }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const createNovaConversa = () => {
-    newConversation(user.id);
     setActualsThreadId([...actualsThreadId, actualThreadId]);
     setMobileMenuOpen(false);
+    localStorage.setItem("new-talk", JSON.stringify(actualThreadId));
   };
   const supabase = createClient();
   const router = useRouter();

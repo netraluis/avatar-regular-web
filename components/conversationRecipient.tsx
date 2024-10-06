@@ -1,18 +1,17 @@
 import { useContext, useEffect } from "react";
-import { useAssistant as useAssistant } from "ai/react";
+import { Message, useAssistant as useAssistant } from "ai/react";
 import { TextAreaForm } from "./textAreaForm";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { cn } from "@/lib/utils";
 import { ChatList } from "./chat-list";
-import { createClient } from "@/lib/supabase/client";
-
 import { GlobalContext } from "./context/globalContext";
 import React from "react";
 
 export default function ConversationRecipient() {
-  const supabase = createClient();
   const { setActualThreadId, actualThreadId, setShowAnalizeInfo, domainData } =
     useContext(GlobalContext);
+
+  const [messagesState, setMessagesState] = React.useState<Message[]>([]);
 
   const {
     status,
@@ -36,25 +35,58 @@ export default function ConversationRecipient() {
     console.log({ error });
   }
 
-  // console.log({ messages });
+  useEffect(() => {
+    try {
+      if (messages.length < 1) return;
+      const lastMessage = messages[messages.length - 1];
+      setMessagesState((prevMessages) => {
+        // Encontrar si el mensaje ya existe en la lista
+        const existingMessageIndex = prevMessages.findIndex(
+          (msg) => msg.id === lastMessage.id,
+        );
+
+        if (existingMessageIndex !== -1) {
+          // Sobrescribir el mensaje acumulado
+          const updatedMessages = [...prevMessages];
+          if (lastMessage.role === "user") {
+            updatedMessages[existingMessageIndex] = lastMessage;
+            return updatedMessages;
+          }
+          const accMessage =
+            updatedMessages[existingMessageIndex].content + lastMessage.content;
+          updatedMessages[existingMessageIndex] = {
+            ...lastMessage,
+            content: accMessage,
+          };
+          return updatedMessages;
+        } else {
+          // Si es un nuevo mensaje, añadirlo a la lista
+          // if(lastMessage.role === "user") return prevMessages
+          return [...prevMessages, lastMessage];
+        }
+      });
+    } catch (e) {
+      console.log({ e });
+    }
+
+    // Si el último mensaje existe y es del asistente, actualizar el contenido acumulado
+  }, [messages]);
 
   useEffect(() => {
-    const channelAvatar = supabase.channel("avatar");
-
-    channelAvatar.subscribe((subStatus) => {
-      // Wait for successful connection
-      if (subStatus !== "SUBSCRIBED") {
-        return null;
-      }
-
-      // Send a message once the client is subscribed
-      channelAvatar.send({
-        type: "broadcast",
-        event: "test",
-        payload: { messages, status },
-      });
-    });
+    localStorage.setItem("messages", JSON.stringify(messagesState));
   }, [messages]);
+
+  useEffect(() => {
+    if (
+      status === "awaiting_message" &&
+      messagesState[messagesState.length - 1]?.role === "assistant"
+    ) {
+      localStorage.setItem(
+        "speak",
+        JSON.stringify(messagesState[messagesState.length - 1]),
+      );
+    }
+  }, [messagesState, status]);
 
   const {
     messagesRef,
@@ -100,7 +132,7 @@ export default function ConversationRecipient() {
       ref={scrollRef}
     >
       <div className={cn("pb-[200px]  pt-[100px]")} ref={messagesRef}>
-        {messages.length ? <ChatList messages={messages} /> : <></>}
+        {messagesState.length ? <ChatList messages={messagesState} /> : <></>}
         <div className="w-full h-px" ref={visibilityRef} />
       </div>
 

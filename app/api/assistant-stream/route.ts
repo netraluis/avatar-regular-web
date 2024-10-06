@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   const { threadId } = await manageThreadId(input);
 
   // Add a message to the thread
-  const createdMessage = await openai.beta.threads.messages.create(threadId, {
+  await openai.beta.threads.messages.create(threadId, {
     role: "user",
     content: input.message,
   });
@@ -54,55 +54,93 @@ export async function POST(req: Request) {
       ],
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 
   return AssistantResponse(
-    { threadId, messageId: createdMessage.id },
-    async ({ forwardStream }) => {
-      // Run the assistant on the thread
-      const runStream = openai.beta.threads.runs.stream(threadId, {
-        assistant_id:
-          input.assistantId ??
-          (() => {
-            throw new Error("ASSISTANT_ID is not set");
-          })(),
-      });
+    { threadId, messageId: crypto.randomUUID() },
+    async ({ sendMessage }) => {
+      try {
+        // Run the assistant on the thread
+        const runStream: any = openai.beta.threads.runs.stream(threadId, {
+          assistant_id:
+            input.assistantId ??
+            (() => {
+              throw new Error("ASSISTANT_ID is not set");
+            })(),
+        });
 
-      // forward run status would stream message deltas
-      const runResult = await forwardStream(runStream);
-      if (
-        runResult &&
-        runResult.status === "completed" &&
-        runResult.thread_id
-      ) {
-        const threadMessages: any = await openai.beta.threads.messages.list(
-          runResult.thread_id,
-          {
-            order: "desc",
-          },
-        );
+        let accumulatedMessage = ""; // Variable para acumular los fragmentos de texto
+        for await (const chunk of runStream) {
+          const newContent = chunk.data?.delta?.content ?? ""; // Extrae el fragmento de texto
 
-        try {
-          if (threadMessages.data.length > 1) {
-            const lastResponse = threadMessages.data[0]; // El primer mensaje en la lista ordenada es el más reciente
+          if (newContent) {
+            // Opcional: puedes manipular o procesar el texto antes de enviarlo
+            const newMessage = newContent[0]?.text?.value ?? "";
+            // console.log("Nuevo fragmento recibido:", newMessage);
+            // [ { index: 0, type: 'text', text: { value: ' nou' } } ]
 
-            await prisma.messages.createMany({
-              data: [
-                {
-                  role: lastResponse.role,
-                  message: lastResponse.content[0].text.value,
-                  threadId: runResult.thread_id,
-                  domainId: input.domainId,
-                  createdAt: new Date(),
-                },
-              ],
+            accumulatedMessage += newMessage;
+
+            // // Enviar fragmento al cliente (asumiendo que `sendMessage` es parte del SDK)
+            sendMessage({
+              id: chunk.data.id,
+              role: "assistant",
+              content: [{ type: "text", text: { value: newMessage } }],
             });
           }
-        } catch (e) {
-          console.error(e);
         }
+
+        await prisma.messages.createMany({
+          data: [
+            {
+              role: "assistant",
+              message: accumulatedMessage,
+              threadId,
+              domainId: input.domainId,
+              createdAt: new Date(),
+            },
+          ],
+        });
+      } catch (e) {
+        console.error(e);
       }
+
+      // forward run status would stream message deltas
+      // const runResult = await forwardStream(runStream);
+      // console.log({runResult});
+      // if (
+      //   runResult &&
+      //   runResult.status === "completed" &&
+      //   runResult.thread_id
+      // ) {
+      //   const threadMessages: any = await openai.beta.threads.messages.list(
+      //     runResult.thread_id,
+      //     {
+      //       order: "desc",
+      //     },
+      //   );
+
+      //   try {
+      //     if (threadMessages.data.length > 1) {
+      //       const lastResponse = threadMessages.data[0]; // El primer mensaje en la lista ordenada es el más reciente
+
+      //       await prisma.messages.createMany({
+      //         data: [
+      //           {
+      //             role: lastResponse.role,
+      //             message: lastResponse.content[0].text.value,
+      //             threadId: runResult.thread_id,
+      //             domainId: input.domainId,
+      //             createdAt: new Date(),
+      //           },
+      //         ],
+      //       });
+      //     }
+      //   } catch (e) {
+      //     console.error(e);
+      //   }
+      // }
     },
   );
 }
