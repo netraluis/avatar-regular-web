@@ -131,14 +131,14 @@ export default function InteractiveAvatar() {
             voice: { voiceId },
           },
         },
-        setDebug
+        setDebug,
       );
       setData(res);
       setStream(avatar.current.mediaStream);
     } catch (error) {
       console.error("Error starting avatar session:", error);
       setDebug(
-        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`
+        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`,
       );
     }
     setIsLoadingSession(false);
@@ -148,7 +148,7 @@ export default function InteractiveAvatar() {
     const newToken = await fetchAccessToken();
     console.log("Updating Access Token:", newToken); // Log token for debugging
     avatar.current = new StreamingAvatarApi(
-      new Configuration({ accessToken: newToken })
+      new Configuration({ accessToken: newToken }),
     );
 
     const startTalkCallback = (e: any) => {
@@ -185,7 +185,7 @@ export default function InteractiveAvatar() {
     }
     await avatar.current.stopAvatar(
       { stopSessionRequest: { sessionId: data?.sessionId } },
-      setDebug
+      setDebug,
     );
     setStream(undefined);
   }
@@ -195,7 +195,7 @@ export default function InteractiveAvatar() {
       const newToken = await fetchAccessToken();
       console.log("Initializing with Access Token:", newToken); // Log token for debugging
       avatar.current = new StreamingAvatarApi(
-        new Configuration({ accessToken: newToken, jitterBuffer: 200 })
+        new Configuration({ accessToken: newToken, jitterBuffer: 200 }),
       );
       setInitialized(true); // Set initialized to true
     }
@@ -252,13 +252,13 @@ export default function InteractiveAvatar() {
         </>
       ) : !isLoadingSession ? (
         <div className="w-full relative">
-            <VideoPlayer
-              src="/avatar-waiting.mov"
-              fullScreen={true}
-              controls={false}
-              autoPlay={true}
-              loop={true}
-            />
+          <VideoPlayer
+            src="/avatar-waiting.mov"
+            fullScreen={true}
+            controls={false}
+            autoPlay={true}
+            loop={true}
+          />
 
           <div className="absolute inset-0 flex justify-center items-end z-10">
             <Button

@@ -86,7 +86,7 @@ export async function POST(req: Request) {
             sendMessage({
               id: chunk.data.id,
               role: "assistant",
-              content: [{ type: "text", text: { value: newMessage } }],
+              content: [{ type: "text", text: { value: accumulatedMessage } }],
             });
           }
         }

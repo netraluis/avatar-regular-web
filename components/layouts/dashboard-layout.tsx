@@ -23,11 +23,20 @@ import {
 import { useRouter, useParams } from "next/navigation";
 import { Combobox } from "../combo-box";
 import { assistantsTeamSelected, teams } from "../mockData";
+import React from "react";
+import { useAppContext } from "../context/appContext";
 // import { useAppContext } from "../context/appContext";
 
-export default function Dashboard({ children }: { children: React.ReactNode }) {
+export default function Dashboard({
+  children,
+  team,
+}: {
+  children: React.ReactNode;
+  team: any;
+}) {
   const router = useRouter();
-  // const { setTeam } = useAppContext();
+  const { setTeam } = useAppContext();
+  setTeam(team);
   const { teamId, assistantId } = useParams();
 
   console.log({ teamId, assistantId });
