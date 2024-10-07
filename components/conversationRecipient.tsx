@@ -133,6 +133,7 @@ export default function ConversationRecipient() {
     >
       <div className={cn("pb-[200px]  pt-[100px]")} ref={messagesRef}>
         {messagesState.length ? <ChatList messages={messagesState} /> : <></>}
+        {error && <div>Estem treballant en l’error… Disculpa les molèsties.</div>}
         <div className="w-full h-px" ref={visibilityRef} />
       </div>
 
