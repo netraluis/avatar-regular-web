@@ -29,12 +29,15 @@ export default function InteractiveAvatar() {
   const avatar = useRef<StreamingAvatarApi | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [speak, setSpeak] = useState<any>([]);
+  const [voiceId, setVoiceId] = useState<string>();
+  // const [avatarId, setAvatarId] = useState<string>();
 
-  const voiceId = domainData?.voiceAvatarId;
+  // const voiceId = domainData?.voiceAvatarId;
   const avatarId = domainData?.avatarId;
 
   const startSessionRef = useRef<HTMLButtonElement>(null);
   const endSessionRef = useRef<HTMLButtonElement>(null);
+  const interrumptRef = useRef<HTMLButtonElement>(null);
 
   const speakAsync = async () => {
     console.log({ speak });
@@ -62,17 +65,26 @@ export default function InteractiveAvatar() {
     const handleStorageChange = (event: any) => {
       if (event.key === "messages") {
         const newValue = JSON.parse(event.newValue);
+        if (newValue.length === 0) {
+          if (interrumptRef.current) {
+            interrumptRef.current.click();
+          }
+        }
         // Actualiza tu estado o contexto con el nuevo valor
         setMessages(newValue);
       }
       if (event.key === "state") {
+        console.log("State:", event.key, event.newValue);
         const state = JSON.parse(event.newValue);
-        if (state === 2) {
-          if (startSessionRef.current) {
-            startSessionRef.current.click();
-          }
+        if (state.position === 2) {
+          // if (startSessionRef.current) {
+          setVoiceId(state.voiceId);
+          // setAvatarId(state.avatarId);
+          // startSessionRef.current.click();
+          // }
         }
-        if (state === 1) {
+        if (state.position === 1) {
+          setVoiceId("");
           if (endSessionRef.current) {
             endSessionRef.current.click();
           }
@@ -91,6 +103,13 @@ export default function InteractiveAvatar() {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (!voiceId) return;
+    if (startSessionRef.current) {
+      startSessionRef.current.click();
+    }
+  }, [voiceId]);
 
   useEffect(() => {
     console.log("Speak:", speak);
@@ -236,6 +255,7 @@ export default function InteractiveAvatar() {
           </div>
           <div className="flex flex-col gap-2 absolute bottom-3 right-3">
             <Button
+              ref={interrumptRef}
               onClick={handleInterrupt}
               className="bg-gradient-to-tr from-indigo-500 to-indigo-300 text-white rounded-lg"
             >

@@ -39,8 +39,7 @@ export default function Dashboard({
   const { setTeams, setTeamSelected, setAssistantsByTeam, assistantsByTeam } =
     useAppContext();
   const [assistantSelected, setAssistantSelected] = React.useState(null);
-  const { data, fetchAssistantsByTeamId } =
-    useFetchAssistantsByTeamId();
+  const { data, fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
 
   useEffect(() => {
     if (teams) {

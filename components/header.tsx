@@ -78,7 +78,7 @@ export default function Header({ domain }: { domain: Domain }) {
 
   const returnToInicial = () => {
     setActualsThreadId([""]);
-    setState(1);
+    setState({ position: 1 });
     router.push("/");
   };
 
@@ -169,7 +169,7 @@ export default function Header({ domain }: { domain: Domain }) {
         </div>
         <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
           {/* Elementos de navegación para desktop */}
-          {state === 2 && (
+          {state.position === 2 && (
             <Button onClick={() => createNovaConversa()}>
               <ChatBubbleLeftIcon className="h-5 w-5 mr-1" aria-hidden="true" />
               Nova conversa
@@ -293,7 +293,7 @@ export default function Header({ domain }: { domain: Domain }) {
                   </a>
                 ))}
             </div>
-            {state === 2 && (
+            {state.position === 2 && (
               <Button
                 className="ml-2 mb-7"
                 onClick={() => createNovaConversa()}

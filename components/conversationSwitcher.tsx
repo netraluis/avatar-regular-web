@@ -12,7 +12,7 @@ const ConversationSwitcher = () => {
     localStorage.setItem("messages", JSON.stringify([]));
   }, [state]);
 
-  switch (state) {
+  switch (state.position) {
     case 2:
       return <StartConversation />;
       break;

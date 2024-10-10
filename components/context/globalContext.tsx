@@ -20,6 +20,14 @@ export interface HeaderDisclaimer {
   description: string;
 }
 
+export interface welcomeCard {
+  title: string;
+  description: string;
+  emoji: string;
+  voiceId: string;
+  avatarId: string;
+}
+
 export type Domain = {
   id: string;
   name: string;
@@ -38,11 +46,16 @@ export type Domain = {
   headerDisclaimer: HeaderDisclaimer | null;
   symbol: string | null;
   createdAt: Date;
+  welcomeCards: any[];
 };
 
 interface GlobalContextProps {
-  state: number;
-  setState: (state: number) => void;
+  state: { position: number; voiceId?: string; avatarId?: string };
+  setState: (input: {
+    position: number;
+    voiceId?: string;
+    avatarId?: string;
+  }) => void;
   actualsThreadId: string[];
   setActualsThreadId: (
     thread: string[] | ((prev: string[]) => string[]),
@@ -58,7 +71,7 @@ interface GlobalContextProps {
 }
 
 export const GlobalContext = createContext<GlobalContextProps>({
-  state: 1,
+  state: { position: 1 },
   setState: () => {},
   actualsThreadId: [],
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -88,6 +101,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
     headerDisclaimer: null,
     createdAt: new Date(),
     symbol: null,
+    welcomeCards: [],
   },
   setDomainData: () => {},
 });
@@ -103,7 +117,11 @@ export const useGlobalContext = () => {
 };
 
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
-  const [state, setState] = useState<number>(1);
+  const [state, setState] = useState<{
+    position: number;
+    voiceId?: string;
+    avatarId?: string;
+  }>({ position: 1 });
   const [actualsThreadId, setActualsThreadId] = useState<string[]>([""]);
   const [actualThreadId, setActualThreadId] = useState<string>("");
   const [user, setUser] = useState<any>(null);

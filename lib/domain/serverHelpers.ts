@@ -3,6 +3,7 @@ import {
   HeaderDisclaimer,
   MenuBody,
   MenuHeader,
+  welcomeCard,
 } from "@/components/context/globalContext";
 import prisma from "../prisma";
 import { createClient } from "@/lib/supabase/server";
@@ -59,5 +60,6 @@ export async function getDomainData(domain: string): Promise<Domain | null> {
       subdomainInfo.headerDisclaimer as unknown as HeaderDisclaimer,
     logo,
     symbol,
+    welcomeCards: subdomainInfo.welcomeCards as unknown as welcomeCard[],
   };
 }
