@@ -22,26 +22,31 @@ import {
 
 import { useRouter, useParams } from "next/navigation";
 import { Combobox } from "../combo-box";
-import { assistantsTeamSelected, teams } from "../mockData";
+import { assistantsTeamSelected } from "../mockData";
 import React from "react";
 import { useAppContext } from "../context/appContext";
-// import { useAppContext } from "../context/appContext";
 
 export default function Dashboard({
   children,
-  team,
+  teams,
 }: {
   children: React.ReactNode;
-  team: any;
+  teams: any;
 }) {
   const router = useRouter();
-  const { setTeam } = useAppContext();
-  setTeam(team);
+  const { setTeams, setTeamSelected } = useAppContext();
+  if (!teams) return <>no hay teams</>;
+  setTeams(teams);
   const { teamId, assistantId } = useParams();
 
-  console.log({ teamId, assistantId });
+  const teamSelected = teamId
+    ? teams.find((team: any) => {
+        return team.id === teamId;
+      })
+    : teams[0];
 
-  const teamSelected = teams.find((team) => team.id === teamId);
+  setTeamSelected(teamSelected);
+
   const assistantSelected = assistantsTeamSelected.find(
     (assistant) => assistant.id === assistantId,
   );

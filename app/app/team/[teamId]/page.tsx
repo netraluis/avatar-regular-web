@@ -1,4 +1,4 @@
-import { assistantsTeamSelected, teams } from "@/components/mockData";
+"use client";
 import Link from "next/link";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 
@@ -28,14 +28,59 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { useAppContext } from "@/components/context/appContext";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { Loader } from "@/components/loader";
 
-export async function generateStaticParams() {
-  return teams.map((team) => ({
-    teamId: team.id,
-  }));
-}
+// export async function generateStaticParams() {
+//   return teams.map((team) => ({
+//     teamId: team.id,
+//   }));
+// }
 
 export default function Dashboard() {
+  const { teamSelected, setAssistantsByTeam, assistantsByTeam } =
+    useAppContext();
+  const { teamId } = useParams();
+  const [tableLoading, setTableLoading] = useState(false);
+
+  useEffect(() => {
+    if (!teamSelected) return;
+
+    async function fetchAssistantsByTeamId(teamId: string) {
+      console.log("fetching assistants by team id:", teamId);
+      if (!teamId) return;
+      try {
+        setTableLoading(true);
+        const response = await fetch(
+          `/api/protected/team/${teamId}/assistants`,
+          {
+            method: "GET",
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setAssistantsByTeam(data);
+        return data;
+      } catch (error) {
+        console.error("Error fetching access token:", error);
+        return "";
+      } finally {
+        setTableLoading(false);
+      }
+    }
+
+    fetchAssistantsByTeamId(teamId as string);
+  }, [teamSelected]);
+
+  useEffect(() => {
+    console.log({ assistantsByTeam });
+  }, [assistantsByTeam]);
+
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <Tabs defaultValue="all">
@@ -57,68 +102,75 @@ export default function Dashboard() {
             </Button>
           </div>
         </div>
-        <TabsContent value="all">
-          <Card x-chunk="dashboard-06-chunk-0">
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>type</TableHead>
-                    <TableHead className="hidden md:table-cell">link</TableHead>
-                    <TableHead className="hidden md:table-cell">
-                      status
-                    </TableHead>
-                    <TableHead>
-                      <span className="sr-only">Actions</span>
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {assistantsTeamSelected.map((assistant) => (
-                    <TableRow key={assistant.id}>
-                      <TableCell className="font-medium">
-                        {assistant.name}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">GPT-4</Badge>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <Link href="/app/team/1/page/1">
-                          /app/team/1/page/1
-                        </Link>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        public
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              aria-haspopup="true"
-                              size="icon"
-                              variant="ghost"
-                            >
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Toggle menu</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Clone</DropdownMenuItem>
-                            <DropdownMenuItem>Favorite</DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
+        {tableLoading ? (
+          <Loader />
+        ) : (
+          <TabsContent value="all">
+            <Card x-chunk="dashboard-06-chunk-0">
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>type</TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        link
+                      </TableHead>
+                      <TableHead className="hidden md:table-cell">
+                        status
+                      </TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
+                  </TableHeader>
+                  <TableBody>
+                    {assistantsByTeam &&
+                      assistantsByTeam.map((assistant) => (
+                        <TableRow key={assistant.id}>
+                          <TableCell className="font-medium">
+                            {assistant.name}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="outline">GPT-4</Badge>
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            <Link href="/app/team/1/page/1">
+                              {teamSelected?.subDomain}/{assistant.name}
+                            </Link>
+                          </TableCell>
+                          <TableCell className="hidden md:table-cell">
+                            {assistant.status}
+                          </TableCell>
+                          <TableCell>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  aria-haspopup="true"
+                                  size="icon"
+                                  variant="ghost"
+                                >
+                                  <MoreHorizontal className="h-4 w-4" />
+                                  <span className="sr-only">Toggle menu</span>
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                                <DropdownMenuItem>Clone</DropdownMenuItem>
+                                <DropdownMenuItem>Favorite</DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        )}
       </Tabs>
     </main>
   );

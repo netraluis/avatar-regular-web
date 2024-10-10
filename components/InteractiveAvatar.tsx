@@ -253,7 +253,7 @@ export default function InteractiveAvatar() {
       ) : !isLoadingSession ? (
         <div className="w-full relative">
           <VideoPlayer
-            src="/avatar-waiting.mov"
+            src="/avatar-waiting.mp4"
             fullScreen={true}
             controls={false}
             autoPlay={true}

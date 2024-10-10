@@ -6,11 +6,23 @@ import { createContext, useContext, useState } from "react";
 type Team = {
   id: string;
   name: string;
+  subDomain: string;
+  customDomain: string;
+};
+
+type Assistant = {
+  id: string;
+  name: string;
+  status: string;
 };
 
 type AppContextType = {
-  team: Team | null;
-  setTeam: (teams: Team) => void;
+  teams: Team[] | null;
+  setTeams: (teams: Team[]) => void;
+  teamSelected: Team | null;
+  setTeamSelected: (team: Team) => void;
+  assistantsByTeam: Assistant[] | null;
+  setAssistantsByTeam: (assistants: Assistant[]) => void;
 };
 
 // Crear el contexto con un valor inicial vacío
@@ -18,10 +30,23 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // Proveedor de equipos que rodeará la aplicación
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  const [team, setTeam] = useState<Team | null>(null);
+  const [teams, setTeams] = useState<Team[] | null>(null);
+  const [teamSelected, setTeamSelected] = useState<Team | null>(null);
+  const [assistantsByTeam, setAssistantsByTeam] = useState<Assistant[] | null>(
+    null,
+  );
 
   return (
-    <AppContext.Provider value={{ team, setTeam }}>
+    <AppContext.Provider
+      value={{
+        teams,
+        setTeams,
+        teamSelected,
+        setTeamSelected,
+        assistantsByTeam,
+        setAssistantsByTeam,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

@@ -13,6 +13,11 @@ enum UserStatus {
   DESACTIVE
 }
 
+enum AsssitantStatus {
+  PUBLIC
+  PRIVATE
+}
+
 model Messages {
   id          String   @id @default(cuid())
   role        String
@@ -59,6 +64,8 @@ model Team {
   name        String
   users       UserTeam[]  // Relación muchos a muchos con User a través de la tabla de unión
   assistants  Assistant[] // Relación uno a muchos con asistentes virtuales
+  subDomain   String?
+  customDomain String?
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
@@ -68,10 +75,14 @@ model Assistant {
   id          String   @id @default(uuid())
   name        String   // Nombre del asistente virtual (IA)
   teamId      String
+  status      AsssitantStatus @default(PUBLIC)
+
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
+
+  @@unique([name, teamId])  // Clave compuesta única en email y status
 }
 
 model UserTeam {

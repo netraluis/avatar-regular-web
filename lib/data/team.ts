@@ -1,7 +1,24 @@
-import { teams } from "@/components/mockData";
+import prisma from "../prisma";
 
-export const getTeam = async (id?: string | undefined) => {
+export const getTeamsByUser = async (userId: string) => {
   //   const response = await fetch(`/api/teams/${id}`);
   //   return response.json();
-  return id ? teams.find((team) => team.id === id) : teams[0];
+  const subdomainInfo = await prisma.userTeam
+    .findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        team: {
+          select: {
+            id: true,
+            name: true,
+            subDomain: true,
+          },
+        },
+      },
+    })
+    .then((data) => data.map((team) => team.team));
+
+  return subdomainInfo;
 };
