@@ -8,8 +8,13 @@ import { GlobalContext } from "./context/globalContext";
 import React from "react";
 
 export default function ConversationRecipient() {
-  const { setActualThreadId, actualThreadId, setShowAnalizeInfo, domainData } =
-    useContext(GlobalContext);
+  const {
+    setActualThreadId,
+    actualThreadId,
+    setShowAnalizeInfo,
+    domainData,
+    state,
+  } = useContext(GlobalContext);
 
   const [messagesState, setMessagesState] = React.useState<Message[]>([]);
 
@@ -25,7 +30,9 @@ export default function ConversationRecipient() {
   } = useAssistant({
     api: "/api/assistant-stream",
     body: {
-      assistantId: domainData.assistantId,
+      assistantId: state.assistantId
+        ? state.assistantId
+        : domainData.assistantId,
       threadId: actualThreadId,
       domainId: domainData.id,
     },

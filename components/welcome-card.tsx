@@ -68,6 +68,7 @@ export default function Dashboard() {
               position: 2,
               voiceId: card.voiceId,
               avatarId: card.avatarId,
+              assistantId: card.assistantId,
             })
           }
         >

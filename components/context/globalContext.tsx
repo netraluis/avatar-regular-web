@@ -26,6 +26,7 @@ export interface welcomeCard {
   emoji: string;
   voiceId: string;
   avatarId: string;
+  assistantId: string;
 }
 
 export type Domain = {
@@ -50,11 +51,17 @@ export type Domain = {
 };
 
 interface GlobalContextProps {
-  state: { position: number; voiceId?: string; avatarId?: string };
+  state: {
+    position: number;
+    voiceId?: string;
+    avatarId?: string;
+    assistantId?: string;
+  };
   setState: (input: {
     position: number;
     voiceId?: string;
     avatarId?: string;
+    assistantId?: string;
   }) => void;
   actualsThreadId: string[];
   setActualsThreadId: (
@@ -121,6 +128,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     position: number;
     voiceId?: string;
     avatarId?: string;
+    assistantId?: string;
   }>({ position: 1 });
   const [actualsThreadId, setActualsThreadId] = useState<string[]>([""]);
   const [actualThreadId, setActualThreadId] = useState<string>("");
