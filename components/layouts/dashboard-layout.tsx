@@ -22,9 +22,11 @@ import {
 
 import { useRouter, useParams } from "next/navigation";
 import { Combobox } from "../combo-box";
-import { assistantsTeamSelected } from "../mockData";
-import React from "react";
-import { useAppContext } from "../context/appContext";
+import React, { useEffect } from "react";
+import {
+  useAppContext,
+  useFetchAssistantsByTeamId,
+} from "../context/appContext";
 
 export default function Dashboard({
   children,
@@ -34,9 +36,17 @@ export default function Dashboard({
   teams: any;
 }) {
   const router = useRouter();
-  const { setTeams, setTeamSelected } = useAppContext();
-  if (!teams) return <>no hay teams</>;
-  setTeams(teams);
+  const { setTeams, setTeamSelected, setAssistantsByTeam, assistantsByTeam } =
+    useAppContext();
+  const [assistantSelected, setAssistantSelected] = React.useState(null);
+  const { data, fetchAssistantsByTeamId } =
+    useFetchAssistantsByTeamId();
+
+  useEffect(() => {
+    if (teams) {
+      setTeams(teams);
+    }
+  }, [teams]);
   const { teamId, assistantId } = useParams();
 
   const teamSelected = teamId
@@ -45,11 +55,31 @@ export default function Dashboard({
       })
     : teams[0];
 
-  setTeamSelected(teamSelected);
+  useEffect(() => {
+    const teamSelected = teamId
+      ? teams.find((team: any) => {
+          return team.id === teamId;
+        })
+      : teams[0];
+    setTeamSelected(teamSelected);
+  }, [teamId]);
 
-  const assistantSelected = assistantsTeamSelected.find(
-    (assistant) => assistant.id === assistantId,
-  );
+  useEffect(() => {
+    const assistantSelected: any =
+      assistantsByTeam &&
+      assistantsByTeam.find((assistant) => assistant.id === assistantId);
+    if (assistantSelected) {
+      setAssistantSelected(assistantSelected);
+    }
+  }, [assistantsByTeam, assistantId]);
+
+  useEffect(() => {
+    fetchAssistantsByTeamId(teamId as string);
+  }, [teamId]);
+
+  useEffect(() => {
+    setAssistantsByTeam(data);
+  }, [data]);
 
   const handleAssistantRouteChange = (assistantId: string) => {
     router.push(`/team/${teamId}/assistant/${assistantId}`);
@@ -98,7 +128,7 @@ export default function Dashboard({
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
                       <Combobox
-                        options={assistantsTeamSelected}
+                        options={assistantsByTeam}
                         optionSelected={assistantSelected}
                         subject="assistant"
                         routerHandler={handleAssistantRouteChange}

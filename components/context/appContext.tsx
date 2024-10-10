@@ -21,7 +21,7 @@ type AppContextType = {
   setTeams: (teams: Team[]) => void;
   teamSelected: Team | null;
   setTeamSelected: (team: Team) => void;
-  assistantsByTeam: Assistant[] | null;
+  assistantsByTeam: Assistant[];
   setAssistantsByTeam: (assistants: Assistant[]) => void;
 };
 
@@ -32,9 +32,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [teams, setTeams] = useState<Team[] | null>(null);
   const [teamSelected, setTeamSelected] = useState<Team | null>(null);
-  const [assistantsByTeam, setAssistantsByTeam] = useState<Assistant[] | null>(
-    null,
-  );
+  const [assistantsByTeam, setAssistantsByTeam] = useState<Assistant[]>([]);
 
   return (
     <AppContext.Provider
@@ -59,4 +57,32 @@ export const useAppContext = () => {
     throw new Error("useTeams debe ser usado dentro de TeamsProvider");
   }
   return context;
+};
+
+export const useFetchAssistantsByTeamId = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
+  const [data, setData] = useState([]);
+
+  async function fetchAssistantsByTeamId(teamId: string) {
+    if (!teamId) return setError("No team id provided");
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/protected/team/${teamId}/assistants`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      setData(responseData);
+    } catch (error: any) {
+      setError({ error });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { loading, error, data, fetchAssistantsByTeamId };
 };

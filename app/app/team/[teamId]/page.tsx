@@ -28,8 +28,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import { useAppContext } from "@/components/context/appContext";
-import { useEffect, useState } from "react";
+import {
+  useAppContext,
+  useFetchAssistantsByTeamId,
+} from "@/components/context/appContext";
+import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Loader } from "@/components/loader";
 
@@ -43,39 +46,16 @@ export default function Dashboard() {
   const { teamSelected, setAssistantsByTeam, assistantsByTeam } =
     useAppContext();
   const { teamId } = useParams();
-  const [tableLoading, setTableLoading] = useState(false);
+  const { loading, data, fetchAssistantsByTeamId } =
+    useFetchAssistantsByTeamId();
 
   useEffect(() => {
-    if (!teamSelected) return;
-
-    async function fetchAssistantsByTeamId(teamId: string) {
-      console.log("fetching assistants by team id:", teamId);
-      if (!teamId) return;
-      try {
-        setTableLoading(true);
-        const response = await fetch(
-          `/api/protected/team/${teamId}/assistants`,
-          {
-            method: "GET",
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-        const data = await response.json();
-        setAssistantsByTeam(data);
-        return data;
-      } catch (error) {
-        console.error("Error fetching access token:", error);
-        return "";
-      } finally {
-        setTableLoading(false);
-      }
-    }
-
     fetchAssistantsByTeamId(teamId as string);
   }, [teamSelected]);
+
+  useEffect(() => {
+    setAssistantsByTeam(data);
+  }, [data]);
 
   useEffect(() => {
     console.log({ assistantsByTeam });
@@ -102,7 +82,7 @@ export default function Dashboard() {
             </Button>
           </div>
         </div>
-        {tableLoading ? (
+        {loading ? (
           <Loader />
         ) : (
           <TabsContent value="all">
@@ -155,7 +135,12 @@ export default function Dashboard() {
                                 </Button>
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                                <Link
+                                  href={`/team/${teamId}/assistant/${assistant.id}`}
+                                  passHref
+                                >
+                                  <DropdownMenuItem>Edit</DropdownMenuItem>
+                                </Link>
                                 <DropdownMenuItem>Clone</DropdownMenuItem>
                                 <DropdownMenuItem>Favorite</DropdownMenuItem>
                                 <DropdownMenuSeparator />
