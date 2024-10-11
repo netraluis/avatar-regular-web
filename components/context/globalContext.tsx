@@ -1,6 +1,5 @@
 "use client";
 import React, { ReactNode, createContext, useContext, useState } from "react";
-import { FooterText } from '../footer';
 
 export type History = { who: string; message: string };
 
@@ -49,7 +48,7 @@ export type Domain = {
   symbol: string | null;
   createdAt: Date;
   welcomeCards: any[];
-  footerText?: string
+  footerText?: string | null;
 };
 
 interface GlobalContextProps {

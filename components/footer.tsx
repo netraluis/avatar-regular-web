@@ -13,14 +13,14 @@ export function FooterText({ className, ...props }: FooterTextProps) {
     <p
       className={cn(
         "px-2 text-center text-xs leading-normal text-muted-foreground",
-        className
+        className,
       )}
       {...props}
     >
       {/* Totes les respostes dd&aposaquesta conversa estan generades mitjançant una
       Intel·ligència Artificial (AI) */}
       {domainData?.footerText ||
-        "Totes les respostes dd&aposaquesta conversa estan generades mitjançant una Intel·ligència Artificial (AI)"}
+        "Totes les respostes d'aquesta conversa estan generades mitjançant una Intel·ligència Artificial (AI)"}
     </p>
   );
 }
