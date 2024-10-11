@@ -11,7 +11,7 @@ export function FooterText({ className, ...props }: FooterTextProps) {
     <p
       className={cn(
         "px-2 text-center text-xs leading-normal text-muted-foreground",
-        className
+        className,
       )}
       {...props}
     >
@@ -19,7 +19,7 @@ export function FooterText({ className, ...props }: FooterTextProps) {
       Intel·ligència Artificial (AI) */}
       Genero respostes amb intel·ligència artificial i puc cometre errors. Si
       vols confirmar la informació, pots posar-te en contacte amb els tècnics de
-      la Secretaria d'Estat per a les Relacions amb la Unió Europea o bé
+      la Secretaria d&apos;Estat per a les Relacions amb la Unió Europea o bé
       contactar-nos andorraue@govern.ad, +376 875 700 o a través de WhatsApp:
       +376 637 400
     </p>
