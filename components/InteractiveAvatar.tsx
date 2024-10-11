@@ -90,6 +90,12 @@ export default function InteractiveAvatar() {
         const newValue = JSON.parse(event.newValue);
         setSpeak(newValue);
       }
+
+      if(event.key === "interrump"){
+        if (interrumptRef.current) {
+          interrumptRef.current.click();
+        }
+      }
     };
 
     window.addEventListener("storage", handleStorageChange);
@@ -167,10 +173,12 @@ export default function InteractiveAvatar() {
     );
 
     const startTalkCallback = (e: any) => {
+      localStorage.setItem("avatarTalking", JSON.stringify(true));
       console.log("Avatar started talking", e);
     };
 
     const stopTalkCallback = (e: any) => {
+      localStorage.setItem("avatarTalking", JSON.stringify(false));
       console.log("Avatar stopped talking", e);
     };
 
