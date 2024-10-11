@@ -82,13 +82,9 @@ export default function Header({ domain }: { domain: Domain }) {
     router.push("/");
   };
 
-  if (
-    pathname === "/login" ||
-    pathname === "/avatar" ||
-    pathname === "/signup"
-  ) {
+  if (pathname === "/login" || pathname === "/signup") {
     return (
-      <div className="bg-transparent pt-4 fixed top-0 z-10 w-full">
+      <div className="bg-transparent pt-4 fixed top-0 z-40 w-full">
         <nav
           className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16"
           aria-label="Global"
@@ -101,6 +97,36 @@ export default function Header({ domain }: { domain: Domain }) {
                 alt={domainData?.description || ""}
                 width={209}
                 height={74}
+              />
+            ) : (
+              <div className="w-[209px] h-[74px] flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">
+                <CameraIcon
+                  className="ml-0.5 w-6 animate-pulse mr-1 text-slate-400"
+                  aria-hidden="true"
+                />
+              </div>
+            )}
+          </div>
+        </nav>
+      </div>
+    );
+  }
+
+  if (pathname === "/avatar") {
+    return (
+      <div className="bg-transparent pt-4 fixed top-0 z-40 w-full">
+        <nav
+          className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-26"
+          aria-label="Global"
+        >
+          <div onClick={returnToInicial}>
+            <span className="sr-only">Your Company</span>
+            {domainData?.logo ? (
+              <Image
+                src="/cub_logo.png"
+                alt={domainData?.description || ""}
+                width={109}
+                height={44}
               />
             ) : (
               <div className="w-[209px] h-[74px] flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">
