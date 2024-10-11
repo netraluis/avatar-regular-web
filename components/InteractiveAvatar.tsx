@@ -4,13 +4,9 @@ import {
   NewSessionData,
   StreamingAvatarApi,
 } from "@heygen/streaming-avatar";
-
-import { useAssistant as useAssistant } from "ai/react";
-import OpenAI from "openai";
-import { use, useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { GlobalContext } from "./context/globalContext";
-import { createClient } from "@/lib/supabase/client";
 import MarkdownDisplay from "./MarkDownDisplay";
 import removeMarkdown from "remove-markdown";
 import { FooterText } from "./footer";
@@ -61,6 +57,7 @@ export default function InteractiveAvatar() {
     }
   };
 
+  // comunicate with the assistant
   useEffect(() => {
     const handleStorageChange = (event: any) => {
       if (event.key === "messages") {
@@ -102,6 +99,7 @@ export default function InteractiveAvatar() {
     };
   }, [domainData]);
 
+  //start session
   useEffect(() => {
     if (!voiceId || !avatarId) return;
     if (startSessionRef.current) {
@@ -109,13 +107,14 @@ export default function InteractiveAvatar() {
     }
   }, [voiceId, avatarId]);
 
+  //speak
   useEffect(() => {
     console.log("Speak:", speak);
     // Define an async function within the useEffect
 
     // Call the async function
     speakAsync();
-  }, [speak, initialized, avatar, data?.sessionId]);
+  }, [speak]);
 
   async function fetchAccessToken() {
     try {
@@ -139,7 +138,6 @@ export default function InteractiveAvatar() {
       return;
     }
     try {
-      console.log({ avatarId, voiceId });
       const res = await avatar.current.createStartAvatar(
         {
           newSessionRequest: {
@@ -148,17 +146,17 @@ export default function InteractiveAvatar() {
             voice: { voiceId },
           },
         },
-        setDebug,
+        setDebug
       );
       setData(res);
       setStream(avatar.current.mediaStream);
+      setIsLoadingSession(false);
     } catch (error) {
       console.error("Error starting avatar session:", error);
       setDebug(
-        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`,
+        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`
       );
     }
-    setIsLoadingSession(false);
   }
 
   async function updateToken() {
@@ -212,7 +210,7 @@ export default function InteractiveAvatar() {
       const newToken = await fetchAccessToken();
       console.log("Initializing with Access Token:", newToken); // Log token for debugging
       avatar.current = new StreamingAvatarApi(
-        new Configuration({ accessToken: newToken, jitterBuffer: 200 }),
+        new Configuration({ accessToken: newToken, jitterBuffer: 200 })
       );
       setInitialized(true); // Set initialized to true
     }
@@ -235,9 +233,9 @@ export default function InteractiveAvatar() {
 
   return (
     <div className="h-screen flex flex-col justify-center items-center">
-      {stream ? (
+      {stream || isLoadingSession ? (
         <>
-          <div className="h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden z-30">
+          <div className="h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden z-30 ">
             <video
               ref={mediaStream}
               autoPlay
@@ -251,6 +249,17 @@ export default function InteractiveAvatar() {
               <track kind="captions" />
             </video>
           </div>
+          
+            <div className="absolute h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden z-20 ">
+              <VideoPlayer
+                src="/avatar-loading.mp4"
+                fullScreen={true}
+                controls={false}
+                autoPlay={true}
+                loop={true}
+              />
+            </div>
+          
           <div className="flex flex-col gap-2 absolute bottom-3 right-3">
             <Button
               ref={interrumptRef}
@@ -268,7 +277,7 @@ export default function InteractiveAvatar() {
             </Button>
           </div>
         </>
-      ) : !isLoadingSession ? (
+      ) : (
         <div className="w-full relative">
           <VideoPlayer
             src="/avatar-waiting.mp4"
@@ -288,8 +297,6 @@ export default function InteractiveAvatar() {
             </Button>
           </div>
         </div>
-      ) : (
-        <div>Cargando...</div>
       )}
       <div className="absolute bottom-0 z-40">
         <div className="relative">
