@@ -91,7 +91,7 @@ export default function InteractiveAvatar() {
         setSpeak(newValue);
       }
 
-      if(event.key === "interrump"){
+      if (event.key === "interrump") {
         if (interrumptRef.current) {
           interrumptRef.current.click();
         }
@@ -152,7 +152,7 @@ export default function InteractiveAvatar() {
             voice: { voiceId },
           },
         },
-        setDebug
+        setDebug,
       );
       setData(res);
       setStream(avatar.current.mediaStream);
@@ -160,7 +160,7 @@ export default function InteractiveAvatar() {
     } catch (error) {
       console.error("Error starting avatar session:", error);
       setDebug(
-        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`
+        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`,
       );
     }
   }
@@ -218,7 +218,7 @@ export default function InteractiveAvatar() {
       const newToken = await fetchAccessToken();
       console.log("Initializing with Access Token:", newToken); // Log token for debugging
       avatar.current = new StreamingAvatarApi(
-        new Configuration({ accessToken: newToken, jitterBuffer: 200 })
+        new Configuration({ accessToken: newToken, jitterBuffer: 200 }),
       );
       setInitialized(true); // Set initialized to true
     }
@@ -257,17 +257,17 @@ export default function InteractiveAvatar() {
               <track kind="captions" />
             </video>
           </div>
-          
-            <div className="absolute h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden z-20 ">
-              <VideoPlayer
-                src="/avatar-loading.mp4"
-                fullScreen={true}
-                controls={false}
-                autoPlay={true}
-                loop={true}
-              />
-            </div>
-          
+
+          <div className="absolute h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden z-20 ">
+            <VideoPlayer
+              src="/avatar-loading.mp4"
+              fullScreen={true}
+              controls={false}
+              autoPlay={true}
+              loop={true}
+            />
+          </div>
+
           <div className="flex flex-col gap-2 absolute bottom-3 right-3">
             <Button
               ref={interrumptRef}

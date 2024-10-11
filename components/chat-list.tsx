@@ -24,7 +24,7 @@ export function ChatList({ messages }: ChatList) {
       if (event.key === "avatarTalking") {
         const newValue = JSON.parse(event.newValue);
         // Actualiza tu estado o contexto con el nuevo valor
-        setInterrumping(false)
+        setInterrumping(false);
         setInterrump(newValue);
       }
     };
@@ -77,7 +77,7 @@ export function ChatList({ messages }: ChatList) {
               setInterrumping(true);
               localStorage.setItem(
                 "interrump",
-                JSON.stringify(messages[messages.length - 1])
+                JSON.stringify(messages[messages.length - 1]),
               );
             }}
             disabled={interrumping}
