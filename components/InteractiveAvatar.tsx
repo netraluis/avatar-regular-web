@@ -30,10 +30,10 @@ export default function InteractiveAvatar() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [speak, setSpeak] = useState<any>([]);
   const [voiceId, setVoiceId] = useState<string>();
-  // const [avatarId, setAvatarId] = useState<string>();
+  const [avatarId, setAvatarId] = useState<string>();
 
   // const voiceId = domainData?.voiceAvatarId;
-  const avatarId = domainData?.avatarId;
+  // const avatarId = domainData?.avatarId;
 
   const startSessionRef = useRef<HTMLButtonElement>(null);
   const endSessionRef = useRef<HTMLButtonElement>(null);
@@ -77,11 +77,9 @@ export default function InteractiveAvatar() {
         console.log("State:", event.key, event.newValue);
         const state = JSON.parse(event.newValue);
         if (state.position === 2) {
-          // if (startSessionRef.current) {
-          setVoiceId(state.voiceId);
-          // setAvatarId(state.avatarId);
-          // startSessionRef.current.click();
-          // }
+          setVoiceId(state.voiceId || domainData?.voiceAvatarId);
+
+          setAvatarId(state.avatarId || domainData?.avatarId);
         }
         if (state.position === 1) {
           setVoiceId("");
@@ -102,14 +100,14 @@ export default function InteractiveAvatar() {
     return () => {
       window.removeEventListener("storage", handleStorageChange);
     };
-  }, []);
+  }, [domainData]);
 
   useEffect(() => {
-    if (!voiceId) return;
+    if (!voiceId || !avatarId) return;
     if (startSessionRef.current) {
       startSessionRef.current.click();
     }
-  }, [voiceId]);
+  }, [voiceId, avatarId]);
 
   useEffect(() => {
     console.log("Speak:", speak);
