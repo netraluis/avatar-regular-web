@@ -45,6 +45,7 @@ model Domains {
   voiceAvatarId    String   @default("")
   headerDisclaimer Json?
   welcomeCards     Json?     
+  footerText       String?
   createdAt        DateTime @default(now())
 }
 
