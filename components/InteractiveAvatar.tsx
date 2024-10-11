@@ -310,7 +310,7 @@ export default function InteractiveAvatar() {
         <div className="relative">
           <div className="overflow-auto max-h-80 mb-3">
             <div className=" m-7">
-              {messages.length >= 2 && (
+              {/* {messages.length >= 2 && (
                 <div
                   className={`${messages[messages.length - 2].role === "user" ? "justify-end" : "justify start"} flex`}
                 >
@@ -320,7 +320,7 @@ export default function InteractiveAvatar() {
                     />
                   </div>
                 </div>
-              )}
+              )} */}
               {messages.length >= 1 && (
                 <div
                   className={`${messages[messages.length - 1].role === "user" ? "justify-end" : "justify start"} flex`}
