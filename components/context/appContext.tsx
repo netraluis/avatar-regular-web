@@ -3,7 +3,7 @@
 
 import { createContext, useContext, useState } from "react";
 
-type Team = {
+export type Team = {
   id: string;
   name: string;
   subDomain: string;
@@ -17,7 +17,7 @@ type Assistant = {
 };
 
 type AppContextType = {
-  teams: Team[] | null;
+  teams: Team[];
   setTeams: (teams: Team[]) => void;
   teamSelected: Team | null;
   setTeamSelected: (team: Team | null) => void;
@@ -37,7 +37,7 @@ export const AppProvider = ({
   children: React.ReactNode;
   user: any;
 }) => {
-  const [teams, setTeams] = useState<Team[] | null>(null);
+  const [teams, setTeams] = useState<Team[]>([]);
   const [teamSelected, setTeamSelected] = useState<Team | null>(null);
   const [assistantsByTeam, setAssistantsByTeam] = useState<Assistant[]>([]);
 
@@ -70,7 +70,7 @@ export const useAppContext = () => {
 export const useFetchTeamsByUserId = () => {
   const [loadingTeamsByUserId, setLoadingTeamsByUserId] = useState(false);
   const [errorTeamsByUserId, setErrorTeamsByUserId] = useState<any>(null);
-  const [dataTeamsByUserId, setDataTeamsByUserId] = useState([]);
+  const [dataTeamsByUserId, setDataTeamsByUserId] = useState<Team[]>([]);
 
   async function fetchTeamsByUserId(userId: string) {
     if (!userId) return setErrorTeamsByUserId("No team id provided");
@@ -130,4 +130,43 @@ export const useFetchAssistantsByTeamId = () => {
   }
 
   return { loading, error, data, fetchAssistantsByTeamId };
+};
+
+export const useCreateTeam = () => {
+  const [loadingCreateTeam, setLoadingCreateTeam] = useState(false);
+  const [errorCreateTeam, setErrorCreateTeam] = useState<any>(null);
+  const [createTeamData, setCreateTeamData] = useState<Team | null>(null);
+
+  async function createTeam({
+    teamName,
+    userId,
+  }: {
+    teamName: string;
+    userId: string;
+  }) {
+    try {
+      setLoadingCreateTeam(true);
+      const response = await fetch(`/api/protected/team`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+        body: JSON.stringify({ teamName }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      console.log({ responseData });
+      setCreateTeamData(responseData);
+    } catch (error: any) {
+      setErrorCreateTeam({ error });
+    } finally {
+      setLoadingCreateTeam(false);
+    }
+  }
+
+  return { loadingCreateTeam, errorCreateTeam, createTeamData, createTeam };
 };

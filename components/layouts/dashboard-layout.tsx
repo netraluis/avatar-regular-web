@@ -39,6 +39,7 @@ export default function Dashboard({
   const router = useRouter();
   const {
     setTeams,
+    teams,
     setTeamSelected,
     teamSelected,
     setAssistantsByTeam,
@@ -61,21 +62,15 @@ export default function Dashboard({
 
   const { teamId, assistantId } = useParams();
 
-  // const teamSelected = teamId
-  //   ? teams.find((team: any) => {
-  //       return team.id === teamId;
-  //     })
-  //   : teams[0];
-
   useEffect(() => {
-    if (!dataTeamsByUserId || !teamId) return;
+    if (!teams || !teamId) return;
     const teamSelected = teamId
-      ? dataTeamsByUserId.find((team: any) => {
+      ? teams.find((team: any) => {
           return team.id === teamId;
         })
-      : dataTeamsByUserId[0];
+      : teams[0];
     setTeamSelected(teamSelected || null);
-  }, [teamId, dataTeamsByUserId]);
+  }, [teamId, teams]);
 
   useEffect(() => {
     const assistantSelected: any =
@@ -123,7 +118,7 @@ export default function Dashboard({
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Combobox
-                      options={dataTeamsByUserId}
+                      options={teams}
                       optionSelected={teamSelected}
                       subject="team"
                       routerHandler={handleTeamRouteChange}
