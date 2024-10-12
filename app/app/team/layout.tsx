@@ -1,29 +1,27 @@
 "use server";
 import { AppProvider } from "@/components/context/appContext";
 import DashboardHeader from "@/components/layouts/dashboard-layout";
-import { getTeamsByUser } from "@/lib/data/team";
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = createClient();
-  const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
-    redirect("/login");
-  }
-  if (!data?.user) return <div>not log in</div>;
+  const headersList = headers();
+  const userId = headersList.get("x-user-id");
 
-  const team = await getTeamsByUser(data?.user.id);
-  console.log({ team });
-  if (!team) return <div>no team</div>;
+  console.log({ userId });
+
+  if (!userId) return <div>not log in</div>;
+
+  // const team = await getTeamsByUser(data?.user.id);
+  // console.log({ team });
+  // if (!team) return <div>no team</div>;
 
   return (
-    <AppProvider>
-      <DashboardHeader teams={team}>{children}</DashboardHeader>
+    <AppProvider user={{ id: userId }}>
+      <DashboardHeader userId={userId}>{children}</DashboardHeader>
     </AppProvider>
   );
 }

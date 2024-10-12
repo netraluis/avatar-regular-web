@@ -56,5 +56,15 @@ export default async function middleware(req: NextRequest) {
   //   );
   // }
 
-  return NextResponse.rewrite(newUrl);
+  // return NextResponse.rewrite(newUrl);
+  // Si hay headers personalizados como 'x-user-id', debemos copiarlos a la nueva respuesta
+  const rewrittenResponse = NextResponse.rewrite(newUrl);
+
+  // Copiar los headers de la respuesta de sesión al nuevo objeto de respuesta
+  rewrittenResponse.headers.set(
+    "x-user-id",
+    response.headers.get("x-user-id") || "",
+  );
+
+  return rewrittenResponse;
 }

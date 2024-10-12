@@ -20,16 +20,23 @@ type AppContextType = {
   teams: Team[] | null;
   setTeams: (teams: Team[]) => void;
   teamSelected: Team | null;
-  setTeamSelected: (team: Team) => void;
+  setTeamSelected: (team: Team | null) => void;
   assistantsByTeam: Assistant[];
   setAssistantsByTeam: (assistants: Assistant[]) => void;
+  user: any;
 };
 
 // Crear el contexto con un valor inicial vacío
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // Proveedor de equipos que rodeará la aplicación
-export const AppProvider = ({ children }: { children: React.ReactNode }) => {
+export const AppProvider = ({
+  children,
+  user,
+}: {
+  children: React.ReactNode;
+  user: any;
+}) => {
   const [teams, setTeams] = useState<Team[] | null>(null);
   const [teamSelected, setTeamSelected] = useState<Team | null>(null);
   const [assistantsByTeam, setAssistantsByTeam] = useState<Assistant[]>([]);
@@ -37,6 +44,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AppContext.Provider
       value={{
+        user,
         teams,
         setTeams,
         teamSelected,
@@ -57,6 +65,43 @@ export const useAppContext = () => {
     throw new Error("useTeams debe ser usado dentro de TeamsProvider");
   }
   return context;
+};
+
+export const useFetchTeamsByUserId = () => {
+  const [loadingTeamsByUserId, setLoadingTeamsByUserId] = useState(false);
+  const [errorTeamsByUserId, setErrorTeamsByUserId] = useState<any>(null);
+  const [dataTeamsByUserId, setDataTeamsByUserId] = useState([]);
+
+  async function fetchTeamsByUserId(userId: string) {
+    if (!userId) return setErrorTeamsByUserId("No team id provided");
+    try {
+      setLoadingTeamsByUserId(true);
+      const response = await fetch(`/api/protected/team`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId, // Aquí enviamos el userId en los headers
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      setDataTeamsByUserId(responseData);
+    } catch (error: any) {
+      setErrorTeamsByUserId({ error });
+    } finally {
+      setLoadingTeamsByUserId(false);
+    }
+  }
+
+  return {
+    loadingTeamsByUserId,
+    errorTeamsByUserId,
+    dataTeamsByUserId,
+    fetchTeamsByUserId,
+  };
 };
 
 export const useFetchAssistantsByTeamId = () => {

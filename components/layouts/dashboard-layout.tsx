@@ -26,42 +26,56 @@ import React, { useEffect } from "react";
 import {
   useAppContext,
   useFetchAssistantsByTeamId,
+  useFetchTeamsByUserId,
 } from "../context/appContext";
 
 export default function Dashboard({
   children,
-  teams,
+  userId,
 }: {
   children: React.ReactNode;
-  teams: any;
+  userId: string;
 }) {
   const router = useRouter();
-  const { setTeams, setTeamSelected, setAssistantsByTeam, assistantsByTeam } =
-    useAppContext();
+  const {
+    setTeams,
+    setTeamSelected,
+    teamSelected,
+    setAssistantsByTeam,
+    assistantsByTeam,
+  } = useAppContext();
   const [assistantSelected, setAssistantSelected] = React.useState(null);
+
   const { data, fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
+  const { dataTeamsByUserId, fetchTeamsByUserId } = useFetchTeamsByUserId();
 
   useEffect(() => {
-    if (teams) {
-      setTeams(teams);
+    if (userId) {
+      fetchTeamsByUserId(userId);
     }
-  }, [teams]);
+  }, [userId]);
+
+  useEffect(() => {
+    setTeams(dataTeamsByUserId);
+  }, [dataTeamsByUserId]);
+
   const { teamId, assistantId } = useParams();
 
-  const teamSelected = teamId
-    ? teams.find((team: any) => {
-        return team.id === teamId;
-      })
-    : teams[0];
+  // const teamSelected = teamId
+  //   ? teams.find((team: any) => {
+  //       return team.id === teamId;
+  //     })
+  //   : teams[0];
 
   useEffect(() => {
+    if (!dataTeamsByUserId || !teamId) return;
     const teamSelected = teamId
-      ? teams.find((team: any) => {
+      ? dataTeamsByUserId.find((team: any) => {
           return team.id === teamId;
         })
-      : teams[0];
-    setTeamSelected(teamSelected);
-  }, [teamId]);
+      : dataTeamsByUserId[0];
+    setTeamSelected(teamSelected || null);
+  }, [teamId, dataTeamsByUserId]);
 
   useEffect(() => {
     const assistantSelected: any =
@@ -109,7 +123,7 @@ export default function Dashboard({
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Combobox
-                      options={teams}
+                      options={dataTeamsByUserId}
                       optionSelected={teamSelected}
                       subject="team"
                       routerHandler={handleTeamRouteChange}
