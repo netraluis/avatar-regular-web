@@ -37,6 +37,7 @@ export default function Dashboard({
 
   const {
     state: { teams, teamSelected, assistantsByTeam },
+    dispatch,
   } = useAppContext();
   const [assistantSelected, setAssistantSelected] = React.useState(null);
 
@@ -45,6 +46,10 @@ export default function Dashboard({
   useEffect(() => {
     if (userId) {
       fetchTeamsByUserId(userId);
+      dispatch({
+        type: "SET_USER",
+        payload: { id: userId },
+      });
     }
   }, [userId]);
 

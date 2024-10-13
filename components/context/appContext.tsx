@@ -40,7 +40,8 @@ type Action =
         teamSelected: Pick<Team, "id" | "name" | "subDomain"> | null;
       };
     }
-  | { type: "SET_TEAM_CREATION"; payload: { newTeam: Team } };
+  | { type: "SET_TEAM_CREATION"; payload: { newTeam: Team } }
+  | { type: "SET_USER"; payload: any };
 
 // Reducer que actualizará el estado basado en las acciones
 const appReducer = (state: AppState, action: Action): AppState => {
@@ -61,6 +62,8 @@ const appReducer = (state: AppState, action: Action): AppState => {
       };
     case "SET_TEAM_CREATION":
       return { ...state, teams: [...state.teams, action.payload.newTeam] };
+    case "SET_USER":
+      return { ...state, user: action.payload };
     default:
       return state;
   }
@@ -113,7 +116,7 @@ export const useFetchTeamsByUserId = () => {
   const [dataTeamsByUserId, setDataTeamsByUserId] = useState<Team[]>([]);
 
   async function fetchTeamsByUserId(userId: string) {
-    if (!userId) return setErrorTeamsByUserId("No team id provided");
+    if (!userId) return setErrorTeamsByUserId("No user id provided");
     try {
       setLoadingTeamsByUserId(true);
       const response = await fetch(`/api/protected/team`, {
@@ -128,7 +131,8 @@ export const useFetchTeamsByUserId = () => {
         throw new Error(`Error: ${response.statusText}`);
       }
       const responseData = await response.json();
-      const teamSelected = responseData[0];
+
+      const teamSelected = responseData.length > 0 ? responseData[0] : {};
       dispatch({
         type: "SET_TEAMS",
         payload: { teams: responseData, teamSelected },

@@ -36,7 +36,6 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    console.log({ body });
 
     if (!body.teamName) {
       return new NextResponse("team name is required", {
