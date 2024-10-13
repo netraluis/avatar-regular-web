@@ -1,3 +1,7 @@
-export default function Dashboard() {
-  return <h1>hola</h1>;
-}
+"use client";
+
+const RedirectComponent = () => {
+  return <div>Loading...</div>;
+};
+
+export default RedirectComponent;
