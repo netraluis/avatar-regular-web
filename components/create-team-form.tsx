@@ -15,10 +15,11 @@ import { useRouter } from "next/navigation";
 function CreateTeamForm() {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
-  const { user, setTeams, teams } = useAppContext();
+  const {
+    state: { user },
+  } = useAppContext();
 
-  const { loadingCreateTeam, createTeamData, createTeam } =
-    useCreateTeam();
+  const { loadingCreateTeam, createTeamData, createTeam } = useCreateTeam();
 
   const createHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,9 +31,7 @@ function CreateTeamForm() {
   };
 
   useEffect(() => {
-    console.log({ createTeamData });
     if (createTeamData) {
-      setTeams([...teams, createTeamData]);
       router.push(`/team/${createTeamData?.id}`);
     }
   }, [createTeamData]);

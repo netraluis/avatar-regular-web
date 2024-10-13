@@ -23,6 +23,32 @@ export const getTeamsByUser = async (userId: string) => {
   return subdomainInfo;
 };
 
+export const getTeamByTeamId = async (teamId: string, userId: string) => {
+  //   const response = await fetch(`/api/teams/${id}`);
+  //   return response.json();
+  const subdomainInfo = await prisma.team.findFirst({
+    where: {
+      id: teamId,
+      users: {
+        some: {
+          userId: userId, // Verificar que el usuario está relacionado con el equipo
+        },
+      },
+    },
+    // select: {
+    //   team: {
+    //     select: {
+    //       id: true,
+    //       name: true,
+    //       subDomain: true,
+    //     },
+    //   },
+    // },
+  });
+
+  return subdomainInfo;
+};
+
 export const createTeam = async ({
   team: { teamName },
   userId,

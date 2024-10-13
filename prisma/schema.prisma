@@ -66,11 +66,14 @@ model Team {
   name        String
   users       UserTeam[]  // Relación muchos a muchos con User a través de la tabla de unión
   assistants  Assistant[] // Relación uno a muchos con asistentes virtuales
-  subDomain   String?
+  subDomain   String
   customDomain String?
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
+
+  @@unique([subDomain]) 
+  @@unique([customDomain]) 
 }
 
 model Assistant {

@@ -9,8 +9,6 @@ export async function GET(
     // Extraer los parámetros de la ruta
     const { teamId } = params;
 
-    console.log("teamId sdasd", { teamId });
-
     if (!teamId) {
       return new NextResponse("teamId is required", {
         status: 400,

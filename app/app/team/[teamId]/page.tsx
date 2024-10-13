@@ -43,23 +43,15 @@ import { Loader } from "@/components/loader";
 // }
 
 export default function Dashboard() {
-  const { teamSelected, setAssistantsByTeam, assistantsByTeam } =
-    useAppContext();
+  const {
+    state: { teamSelected, assistantsByTeam, user },
+  } = useAppContext();
   const { teamId } = useParams();
-  const { loading, data, fetchAssistantsByTeamId } =
-    useFetchAssistantsByTeamId();
+  const { loading, fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
 
   useEffect(() => {
-    fetchAssistantsByTeamId(teamId as string);
-  }, [teamSelected]);
-
-  useEffect(() => {
-    setAssistantsByTeam(data);
-  }, [data]);
-
-  useEffect(() => {
-    console.log({ assistantsByTeam });
-  }, [assistantsByTeam]);
+    fetchAssistantsByTeamId(teamId as string, user.id);
+  }, []);
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">

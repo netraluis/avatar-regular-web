@@ -23,11 +23,8 @@ import {
 import { useRouter, useParams } from "next/navigation";
 import { Combobox } from "../combo-box";
 import React, { useEffect } from "react";
-import {
-  useAppContext,
-  useFetchAssistantsByTeamId,
-  useFetchTeamsByUserId,
-} from "../context/appContext";
+import { useAppContext, useFetchTeamsByUserId } from "../context/appContext";
+import { Option } from "@/types/types";
 
 export default function Dashboard({
   children,
@@ -37,18 +34,13 @@ export default function Dashboard({
   userId: string;
 }) {
   const router = useRouter();
+
   const {
-    setTeams,
-    teams,
-    setTeamSelected,
-    teamSelected,
-    setAssistantsByTeam,
-    assistantsByTeam,
+    state: { teams, teamSelected, assistantsByTeam },
   } = useAppContext();
   const [assistantSelected, setAssistantSelected] = React.useState(null);
 
-  const { data, fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
-  const { dataTeamsByUserId, fetchTeamsByUserId } = useFetchTeamsByUserId();
+  const { fetchTeamsByUserId } = useFetchTeamsByUserId();
 
   useEffect(() => {
     if (userId) {
@@ -56,21 +48,7 @@ export default function Dashboard({
     }
   }, [userId]);
 
-  useEffect(() => {
-    setTeams(dataTeamsByUserId);
-  }, [dataTeamsByUserId]);
-
   const { teamId, assistantId } = useParams();
-
-  useEffect(() => {
-    if (!teams || !teamId) return;
-    const teamSelected = teamId
-      ? teams.find((team: any) => {
-          return team.id === teamId;
-        })
-      : teams[0];
-    setTeamSelected(teamSelected || null);
-  }, [teamId, teams]);
 
   useEffect(() => {
     const assistantSelected: any =
@@ -81,26 +59,16 @@ export default function Dashboard({
     }
   }, [assistantsByTeam, assistantId]);
 
-  useEffect(() => {
-    fetchAssistantsByTeamId(teamId as string);
-  }, [teamId]);
-
-  useEffect(() => {
-    setAssistantsByTeam(data);
-  }, [data]);
-
   const handleAssistantRouteChange = (assistantId: string) => {
     router.push(`/team/${teamId}/assistant/${assistantId}`);
   };
 
   const handleTeamRouteChange = (teamId: string) => {
-    // const newPath = `${teamId}`;
     router.push(`/team/${teamId}`);
   };
 
   const handleCreateNewTeamRoute = () => {
-    console.log("hola");
-    router.push("/team/");
+    router.push("/team/new");
   };
 
   const handleTeamSettingsRoute = (subMenu: string) => {
@@ -118,8 +86,8 @@ export default function Dashboard({
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Combobox
-                      options={teams}
-                      optionSelected={teamSelected}
+                      options={teams as Option[]}
+                      optionSelected={teamSelected as Option}
                       subject="team"
                       routerHandler={handleTeamRouteChange}
                       createNewTeamRoute={handleCreateNewTeamRoute}
