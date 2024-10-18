@@ -1,6 +1,7 @@
 // context/AppContext.tsx
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 
+import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
 import { createContext, useContext, useReducer, useState } from "react";
 
 export type Team = {
@@ -14,6 +15,9 @@ type Assistant = {
   id: string;
   name: string;
   status: string;
+  model: string;
+  teamId: string;
+  openAIId: string;
 };
 
 type AppState = {
@@ -41,7 +45,8 @@ type Action =
       };
     }
   | { type: "SET_TEAM_CREATION"; payload: { newTeam: Team } }
-  | { type: "SET_USER"; payload: any };
+  | { type: "SET_USER"; payload: any }
+  | { type: "SET_ASSISTANT_CREATION"; payload: { newAssistant: Assistant } };
 
 // Reducer que actualizará el estado basado en las acciones
 const appReducer = (state: AppState, action: Action): AppState => {
@@ -64,6 +69,14 @@ const appReducer = (state: AppState, action: Action): AppState => {
       return { ...state, teams: [...state.teams, action.payload.newTeam] };
     case "SET_USER":
       return { ...state, user: action.payload };
+    case "SET_ASSISTANT_CREATION":
+      return {
+        ...state,
+        assistantsByTeam: [
+          ...state.assistantsByTeam,
+          action.payload.newAssistant,
+        ],
+      };
     default:
       return state;
   }
@@ -248,4 +261,60 @@ export const useCreateTeam = () => {
   }
 
   return { loadingCreateTeam, errorCreateTeam, createTeamData, createTeam };
+};
+
+export const useCreateAssistant = () => {
+  const { dispatch } = useAppContext();
+
+  const [loadingCreateAssistant, setLoadingCreateAssistant] = useState(false);
+  const [errorCreateAssistant, setErrorCreateAssistant] = useState<any>(null);
+  const [createAssistantData, setCreateAssistantData] =
+    useState<Assistant | null>(null);
+
+  async function createAssistant({
+    assistantCreateParams,
+    teamId,
+    userId,
+  }: {
+    assistantCreateParams: AssistantCreateParams;
+    teamId: string;
+    userId: string;
+  }) {
+    try {
+      setLoadingCreateAssistant(true);
+      const response = await fetch(`/api/protected/assistant`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+        body: JSON.stringify({
+          assistantCreateParams,
+          teamId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      console.log({ responseData });
+      dispatch({
+        type: "SET_ASSISTANT_CREATION",
+        payload: { newAssistant: responseData },
+      });
+      setCreateAssistantData(responseData);
+    } catch (error: any) {
+      setErrorCreateAssistant({ error });
+    } finally {
+      setLoadingCreateAssistant(false);
+    }
+  }
+
+  return {
+    loadingCreateAssistant,
+    errorCreateAssistant,
+    createAssistantData,
+    createAssistant,
+  };
 };

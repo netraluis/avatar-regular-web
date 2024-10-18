@@ -81,6 +81,7 @@ model Assistant {
   name        String   // Nombre del asistente virtual (IA)
   teamId      String
   status      AsssitantStatus @default(PUBLIC)
+  openAIId    String?
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
 

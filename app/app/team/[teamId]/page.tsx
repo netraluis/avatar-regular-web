@@ -33,7 +33,7 @@ import {
   useFetchAssistantsByTeamId,
 } from "@/components/context/appContext";
 import { useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { Loader } from "@/components/loader";
 
 // export async function generateStaticParams() {
@@ -43,6 +43,7 @@ import { Loader } from "@/components/loader";
 // }
 
 export default function Dashboard() {
+  const router = useRouter();
   const {
     state: { teamSelected, assistantsByTeam, user },
   } = useAppContext();
@@ -52,6 +53,10 @@ export default function Dashboard() {
   useEffect(() => {
     fetchAssistantsByTeamId(teamId as string, user.id);
   }, []);
+
+  const handleCreateNewAssistantRoute = () => {
+    router.push(`/team/${teamId}/assistant/new`);
+  };
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
@@ -66,7 +71,11 @@ export default function Dashboard() {
             </CardHeader>
           </Card>
           <div className="ml-auto flex items-center gap-2">
-            <Button size="sm" className="h-8 gap-1">
+            <Button
+              size="sm"
+              className="h-8 gap-1"
+              onClick={handleCreateNewAssistantRoute}
+            >
               <PlusCircle className="h-3.5 w-3.5" />
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                 Create Assistant
