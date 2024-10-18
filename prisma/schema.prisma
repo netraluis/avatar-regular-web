@@ -81,14 +81,15 @@ model Assistant {
   name        String   // Nombre del asistente virtual (IA)
   teamId      String
   status      AsssitantStatus @default(PUBLIC)
-  openAIId    String?
+  openAIId    String
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
 
-  @@unique([name, teamId])  // Clave compuesta única en email y status
+  @@unique([name, teamId])  // Clave compuesta única en name y para cada team
+  @@unique([openAIId])
 }
 
 model UserTeam {

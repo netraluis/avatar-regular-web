@@ -46,7 +46,8 @@ type Action =
     }
   | { type: "SET_TEAM_CREATION"; payload: { newTeam: Team } }
   | { type: "SET_USER"; payload: any }
-  | { type: "SET_ASSISTANT_CREATION"; payload: { newAssistant: Assistant } };
+  | { type: "SET_ASSISTANT_CREATION"; payload: { newAssistant: Assistant } }
+  | { type: "SET_ASSISTANT_DELETE"; payload: { assistantId: string } };
 
 // Reducer que actualizará el estado basado en las acciones
 const appReducer = (state: AppState, action: Action): AppState => {
@@ -76,6 +77,14 @@ const appReducer = (state: AppState, action: Action): AppState => {
           ...state.assistantsByTeam,
           action.payload.newAssistant,
         ],
+      };
+    case "SET_ASSISTANT_DELETE":
+      console.log("hola", state.assistantsByTeam, action.payload.assistantId);
+      return {
+        ...state,
+        assistantsByTeam: state.assistantsByTeam.filter(
+          (assistant) => assistant.openAIId !== action.payload.assistantId,
+        ),
       };
     default:
       return state;
@@ -316,5 +325,55 @@ export const useCreateAssistant = () => {
     errorCreateAssistant,
     createAssistantData,
     createAssistant,
+  };
+};
+
+export const useDeleteAssistant = () => {
+  const { dispatch } = useAppContext();
+
+  const [loadingDeleteAssistant, setLoadingDeleteAssistant] = useState(false);
+  const [errorDeleteAssistant, setErrorDeleteAssistant] = useState<any>(null);
+  const [deleteAssistantData, setDeleteAssistantData] =
+    useState<Assistant | null>(null);
+
+  async function deleteAssistant({
+    assistantId,
+    userId,
+  }: {
+    assistantId: string;
+    userId: string;
+  }) {
+    try {
+      setLoadingDeleteAssistant(true);
+      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      console.log({ responseData });
+      dispatch({
+        type: "SET_ASSISTANT_DELETE",
+        payload: { assistantId },
+      });
+      setDeleteAssistantData(responseData);
+    } catch (error: any) {
+      setErrorDeleteAssistant({ error });
+    } finally {
+      setLoadingDeleteAssistant(false);
+    }
+  }
+
+  return {
+    loadingDeleteAssistant,
+    errorDeleteAssistant,
+    deleteAssistantData,
+    deleteAssistant,
   };
 };

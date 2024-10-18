@@ -25,3 +25,9 @@ export const modifyAssistantById = async (
 ): Promise<OpenAI.Beta.Assistants.Assistant> => {
   return await openai.beta.assistants.update(assistantId, body);
 };
+
+export const deleteAssistantById = async (
+  assistantId: string,
+): Promise<OpenAI.Beta.Assistants.AssistantDeleted> => {
+  return await openai.beta.assistants.del(assistantId);
+};

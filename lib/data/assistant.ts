@@ -1,4 +1,4 @@
-import { createAssistant } from "../openAI/assistant";
+import { createAssistant, deleteAssistantById } from "../openAI/assistant";
 import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
 import prisma from "../prisma";
 
@@ -31,4 +31,14 @@ export const createAssistantByTeam = async (
   });
 
   return newAssistant;
+};
+
+export const deleteAssistant = async (assistantId: string) => {
+  await deleteAssistantById(assistantId);
+  const assistant = await prisma.assistant.delete({
+    where: {
+      openAIId: assistantId,
+    },
+  });
+  return assistant;
 };

@@ -30,6 +30,7 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
   useAppContext,
+  useDeleteAssistant,
   useFetchAssistantsByTeamId,
 } from "@/components/context/appContext";
 import { useEffect } from "react";
@@ -49,6 +50,7 @@ export default function Dashboard() {
   } = useAppContext();
   const { teamId } = useParams();
   const { loading, fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
+  const { deleteAssistant } = useDeleteAssistant();
 
   useEffect(() => {
     fetchAssistantsByTeamId(teamId as string, user.id);
@@ -56,6 +58,11 @@ export default function Dashboard() {
 
   const handleCreateNewAssistantRoute = () => {
     router.push(`/team/${teamId}/assistant/new`);
+  };
+
+  const handleDeleteAssistant = (assistantId: string) => {
+    console.log("delete", assistantId);
+    deleteAssistant({ assistantId, userId: user.id });
   };
 
   return (
@@ -142,10 +149,23 @@ export default function Dashboard() {
                                 >
                                   <DropdownMenuItem>Edit</DropdownMenuItem>
                                 </Link>
-                                <DropdownMenuItem>Clone</DropdownMenuItem>
+
+                                <DropdownMenuItem
+                                  onClick={() => {
+                                    console.log("Clone clicando");
+                                  }}
+                                >
+                                  Clone
+                                </DropdownMenuItem>
                                 <DropdownMenuItem>Favorite</DropdownMenuItem>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => {
+                                    handleDeleteAssistant(assistant.openAIId);
+                                  }}
+                                >
+                                  Delete
+                                </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
                           </TableCell>
