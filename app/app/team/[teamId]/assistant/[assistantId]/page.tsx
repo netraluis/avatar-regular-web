@@ -9,7 +9,7 @@ const RedirectComponent = () => {
   useEffect(() => {
     router.push(`${params.assistantId}/playground`);
   }, []);
-  
+
   return <div>Loading..</div>;
 };
 

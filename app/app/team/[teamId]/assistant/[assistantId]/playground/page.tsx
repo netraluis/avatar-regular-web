@@ -1,32 +1,31 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Textarea } from "@/components/ui/textarea"
-import { Mic } from "lucide-react"
-import { useParams } from "next/navigation"
+} from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
+import { Mic } from "lucide-react";
+import { useParams } from "next/navigation";
 import {
   useAppContext,
   useGetAssistant,
-} from "@/components/context/appContext"
-import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor"
-
+} from "@/components/context/appContext";
+import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 
 export default function Playground() {
-  const { state } = useAppContext()
-  const { assistantId } = useParams()
-  const [message, setMessage] = React.useState("")
+  const { state } = useAppContext();
+  const { assistantId } = useParams();
+  const [message, setMessage] = React.useState("");
   const [conversation, setConversation] = React.useState<string[]>([
     "Hi! What can I help you with?",
     "a",
@@ -39,59 +38,53 @@ export default function Playground() {
     // "a",
     // "a",
     // "a","a",
-    
-  ])
+  ]);
 
   const [assistantValues, setAssistantValues] = React.useState({
     model: "gpt-4",
     instructions: "",
     temperature: 0.5,
     top: 0.5,
-  })
+  });
 
-  const {
-    loadingGetAssistant,
-    errorGetAssistant,
-    getAssistantData,
-    getAssistant,
-  } = useGetAssistant()
+  const { getAssistantData, getAssistant } = useGetAssistant();
 
   React.useEffect(() => {
     if (assistantId) {
       getAssistant({
         assistantId: assistantId as string,
         userId: state.user.id,
-      })
+      });
     }
-  }, [])
+  }, []);
 
   React.useEffect(() => {
-    if (!getAssistantData) return
-    console.log({getAssistantData})
-    console.log(getAssistantData.created_at)
+    if (!getAssistantData) return;
+    console.log({ getAssistantData });
+    console.log(getAssistantData.created_at);
 
     setAssistantValues({
       model: getAssistantData.model || "gpt-4",
       instructions: getAssistantData.instructions || "",
       temperature: getAssistantData.temperature || 0.5,
       top: getAssistantData.top_p || 0.5,
-    })
-  }, [getAssistantData])
+    });
+  }, [getAssistantData]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      setConversation([...conversation, message])
-      setMessage("")
+      setConversation([...conversation, message]);
+      setMessage("");
     }
-  }
+  };
 
   const handleUpdate = async () => {
     try {
-      console.log("Updated assistant data", assistantValues)
+      console.log("Updated assistant data", assistantValues);
     } catch (error) {
-      console.error("An error occurred while updating the assistant", error)
+      console.error("An error occurred while updating the assistant", error);
     }
-  }
+  };
 
   const {
     messagesRef,
@@ -117,7 +110,9 @@ export default function Playground() {
               <Label htmlFor="model">Model</Label>
               <Select
                 defaultValue={assistantValues.model}
-                onValueChange={(value) => setAssistantValues(prev => ({ ...prev, model: value }))}
+                onValueChange={(value) =>
+                  setAssistantValues((prev) => ({ ...prev, model: value }))
+                }
               >
                 <SelectTrigger id="model">
                   <SelectValue placeholder="Select a model" />
@@ -135,34 +130,51 @@ export default function Playground() {
                 placeholder="Type your instructions here"
                 className="h-32"
                 value={assistantValues.instructions}
-                onChange={(e) => setAssistantValues(prev => ({ ...prev, instructions: e.target.value }))}
+                onChange={(e) =>
+                  setAssistantValues((prev) => ({
+                    ...prev,
+                    instructions: e.target.value,
+                  }))
+                }
               />
               <p className="text-xs text-gray-500 mt-1">
-                Customize your chatbot's personality and style with specific instructions.
+                Customize your chatbot personality and style with specific
+                instructions.
               </p>
             </div>
             <div>
-              <Label htmlFor="temperature">Temperature: {assistantValues.temperature.toFixed(2)}</Label>
+              <Label htmlFor="temperature">
+                Temperature: {assistantValues.temperature.toFixed(2)}
+              </Label>
               <Slider
-                className='mt-3'
+                className="mt-3"
                 id="temperature"
                 min={0}
                 max={2}
                 step={0.01}
                 value={[assistantValues.temperature]}
-                onValueChange={(value) => setAssistantValues(prev => ({ ...prev, temperature: value[0] }))}
+                onValueChange={(value) =>
+                  setAssistantValues((prev) => ({
+                    ...prev,
+                    temperature: value[0],
+                  }))
+                }
               />
             </div>
             <div>
-              <Label htmlFor="top-p">Top P: {assistantValues.top.toFixed(2)}</Label>
+              <Label htmlFor="top-p">
+                Top P: {assistantValues.top.toFixed(2)}
+              </Label>
               <Slider
-                className='mt-3'
+                className="mt-3"
                 id="top-p"
                 min={0}
                 max={1}
                 step={0.01}
                 value={[assistantValues.top]}
-                onValueChange={(value) => setAssistantValues(prev => ({ ...prev, top: value[0] }))}
+                onValueChange={(value) =>
+                  setAssistantValues((prev) => ({ ...prev, top: value[0] }))
+                }
               />
             </div>
           </form>
@@ -171,23 +183,23 @@ export default function Playground() {
           <CardHeader>
             <CardTitle>Output</CardTitle>
           </CardHeader>
-          <div className= 'md:h-96 overflow-y-auto 'ref={scrollRef}>
+          <div className="md:h-96 overflow-y-auto " ref={scrollRef}>
             <CardContent className=" space-y-4 " ref={messagesRef}>
-              {conversation && conversation.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`p-2 rounded-lg ${
-                    index % 2 === 0
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  }`}
-                >
-                  {msg}
-                </div>
-              ))}
+              {conversation &&
+                conversation.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`p-2 rounded-lg ${
+                      index % 2 === 0
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
+                    }`}
+                  >
+                    {msg}
+                  </div>
+                ))}
               <div className="w-full h-px" ref={visibilityRef} />
             </CardContent>
-
           </div>
           <div className="p-4 border-t flex items-center space-x-2">
             <Input
@@ -204,5 +216,5 @@ export default function Playground() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

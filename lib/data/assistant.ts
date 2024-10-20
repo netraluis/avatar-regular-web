@@ -50,4 +50,4 @@ export const getAssistant = async (assistantId: string) => {
     },
   });
   return assistant;
-}
+};

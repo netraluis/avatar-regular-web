@@ -3,7 +3,10 @@ import { getAssistantById } from "@/lib/openAI/assistant";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
-export async function GET(request: NextRequest, { params }: { params: { assistantId: string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { assistantId: string } },
+) {
   try {
     const userId = request.headers.get("x-user-id");
 
@@ -14,7 +17,9 @@ export async function GET(request: NextRequest, { params }: { params: { assistan
     }
     const localAssistant = await getAssistant(params.assistantId as string);
 
-    const assistant: OpenAI.Beta.Assistants.Assistant = await getAssistantById(localAssistant?.openAIId as string);
+    const assistant: OpenAI.Beta.Assistants.Assistant = await getAssistantById(
+      localAssistant?.openAIId as string,
+    );
 
     return new NextResponse(JSON.stringify(assistant), {
       status: 200,
