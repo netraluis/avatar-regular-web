@@ -1,5 +1,5 @@
 import { deleteAssistant, getAssistant } from "@/lib/data/assistant";
-import { getAssistantById } from "@/lib/openAI/assistant";
+import { getAssistantById, modifyAssistantById } from "@/lib/openAI/assistant";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -49,6 +49,38 @@ export async function DELETE(
     const teams = await deleteAssistant(params.assistantId);
 
     return new NextResponse(JSON.stringify(teams), {
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error retrieving user id:", error);
+
+    return new NextResponse("Failed retrieving user id", {
+      status: 500,
+    });
+  }
+}
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { assistantId: string } },
+) {
+  try {
+    const userId = request.headers.get("x-user-id");
+
+    if (!userId) {
+      return new NextResponse("user need to be log in", {
+        status: 400,
+      });
+    }
+
+    const body = await request.json();
+
+    const localAssistant = await getAssistant(params.assistantId as string);
+
+    const assistant: OpenAI.Beta.Assistants.Assistant =
+      await modifyAssistantById(localAssistant?.openAIId as string, body);
+
+    return new NextResponse(JSON.stringify(assistant), {
       status: 200,
     });
   } catch (error) {

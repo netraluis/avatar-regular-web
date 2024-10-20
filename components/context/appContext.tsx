@@ -2,7 +2,10 @@
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 
 import OpenAI from "openai";
-import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
+import {
+  AssistantCreateParams,
+  AssistantUpdateParams,
+} from "openai/resources/beta/assistants.mjs";
 import { createContext, useContext, useReducer, useState } from "react";
 
 export type Team = {
@@ -426,5 +429,59 @@ export const useGetAssistant = () => {
     errorGetAssistant,
     getAssistantData,
     getAssistant,
+  };
+};
+
+export const useUpdateAssistant = () => {
+  // const { dispatch } = useAppContext();
+
+  const [loadingUpdateAssistant, setLoadingUpdateAssistant] = useState(false);
+  const [errorUpdateAssistant, setErrorUpdateAssistant] = useState<any>(null);
+  const [updateAssistantData, setUpdateAssistantData] =
+    useState<OpenAI.Beta.Assistants.Assistant | null>(null);
+
+  async function updateAssistant({
+    assistantId,
+    userId,
+    assistantUpdateParams,
+  }: {
+    assistantId: string;
+    userId: string;
+    assistantUpdateParams: AssistantUpdateParams;
+  }) {
+    console.log({ assistantId, userId, assistantUpdateParams });
+    try {
+      setLoadingUpdateAssistant(true);
+      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+        body: JSON.stringify(assistantUpdateParams),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      // console.log({ responseData });
+      // dispatch({
+      //   type: "SET_ASSISTANT_DELETE",
+      //   payload: { assistantId },
+      // });
+      setUpdateAssistantData(responseData);
+    } catch (error: any) {
+      setErrorUpdateAssistant({ error });
+    } finally {
+      setLoadingUpdateAssistant(false);
+    }
+  }
+
+  return {
+    loadingUpdateAssistant,
+    errorUpdateAssistant,
+    updateAssistantData,
+    updateAssistant,
   };
 };

@@ -19,8 +19,10 @@ import { useParams } from "next/navigation";
 import {
   useAppContext,
   useGetAssistant,
+  useUpdateAssistant,
 } from "@/components/context/appContext";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
+import { ChatModel } from "@/types/types";
 
 export default function Playground() {
   const { state } = useAppContext();
@@ -44,10 +46,11 @@ export default function Playground() {
     model: "gpt-4",
     instructions: "",
     temperature: 0.5,
-    top: 0.5,
+    top_p: 0.5,
   });
 
   const { getAssistantData, getAssistant } = useGetAssistant();
+  const { updateAssistant } = useUpdateAssistant();
 
   React.useEffect(() => {
     if (assistantId) {
@@ -61,13 +64,12 @@ export default function Playground() {
   React.useEffect(() => {
     if (!getAssistantData) return;
     console.log({ getAssistantData });
-    console.log(getAssistantData.created_at);
 
     setAssistantValues({
       model: getAssistantData.model || "gpt-4",
       instructions: getAssistantData.instructions || "",
       temperature: getAssistantData.temperature || 0.5,
-      top: getAssistantData.top_p || 0.5,
+      top_p: getAssistantData.top_p || 0.5,
     });
   }, [getAssistantData]);
 
@@ -80,7 +82,11 @@ export default function Playground() {
 
   const handleUpdate = async () => {
     try {
-      console.log("Updated assistant data", assistantValues);
+      updateAssistant({
+        assistantId: assistantId as string,
+        userId: state.user.id,
+        assistantUpdateParams: assistantValues,
+      });
     } catch (error) {
       console.error("An error occurred while updating the assistant", error);
     }
@@ -110,6 +116,7 @@ export default function Playground() {
               <Label htmlFor="model">Model</Label>
               <Select
                 defaultValue={assistantValues.model}
+                value={assistantValues.model}
                 onValueChange={(value) =>
                   setAssistantValues((prev) => ({ ...prev, model: value }))
                 }
@@ -118,8 +125,11 @@ export default function Playground() {
                   <SelectValue placeholder="Select a model" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="gpt-3.5-turbo">gpt-3.5-turbo</SelectItem>
-                  <SelectItem value="gpt-4">GPT-4</SelectItem>
+                  {Object.values(ChatModel).map((model) => (
+                    <SelectItem key={model} value={model}>
+                      {model}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -163,7 +173,7 @@ export default function Playground() {
             </div>
             <div>
               <Label htmlFor="top-p">
-                Top P: {assistantValues.top.toFixed(2)}
+                Top P: {assistantValues.top_p.toFixed(2)}
               </Label>
               <Slider
                 className="mt-3"
@@ -171,9 +181,9 @@ export default function Playground() {
                 min={0}
                 max={1}
                 step={0.01}
-                value={[assistantValues.top]}
+                value={[assistantValues.top_p]}
                 onValueChange={(value) =>
-                  setAssistantValues((prev) => ({ ...prev, top: value[0] }))
+                  setAssistantValues((prev) => ({ ...prev, top_p: value[0] }))
                 }
               />
             </div>
