@@ -42,3 +42,12 @@ export const deleteAssistant = async (assistantId: string) => {
   });
   return assistant;
 };
+
+export const getAssistant = async (assistantId: string) => {
+  const assistant = await prisma.assistant.findUnique({
+    where: {
+      id: assistantId,
+    },
+  });
+  return assistant;
+}

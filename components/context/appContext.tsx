@@ -1,6 +1,7 @@
 // context/AppContext.tsx
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 
+import OpenAI from "openai";
 import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
 import { createContext, useContext, useReducer, useState } from "react";
 
@@ -79,7 +80,6 @@ const appReducer = (state: AppState, action: Action): AppState => {
         ],
       };
     case "SET_ASSISTANT_DELETE":
-      console.log("hola", state.assistantsByTeam, action.payload.assistantId);
       return {
         ...state,
         assistantsByTeam: state.assistantsByTeam.filter(
@@ -375,5 +375,56 @@ export const useDeleteAssistant = () => {
     errorDeleteAssistant,
     deleteAssistantData,
     deleteAssistant,
+  };
+};
+
+export const useGetAssistant = () => {
+  // const { dispatch } = useAppContext();
+
+  const [loadingGetAssistant, setLoadingGetAssistant] = useState(false);
+  const [errorGetAssistant, setErrorGetAssistant] = useState<any>(null);
+  const [getAssistantData, setGetAssistantData] =
+    useState<OpenAI.Beta.Assistants.Assistant | null>(null);
+
+  async function getAssistant({
+    assistantId,
+    userId,
+  }: {
+    assistantId: string;
+    userId: string;
+  }) {
+    console.log({ assistantId, userId });
+    try {
+      setLoadingGetAssistant(true);
+      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      // console.log({ responseData });
+      // dispatch({
+      //   type: "SET_ASSISTANT_DELETE",
+      //   payload: { assistantId },
+      // });
+      setGetAssistantData(responseData);
+    } catch (error: any) {
+      setErrorGetAssistant({ error });
+    } finally {
+      setLoadingGetAssistant(false);
+    }
+  }
+
+  return {
+    loadingGetAssistant,
+    errorGetAssistant,
+    getAssistantData,
+    getAssistant,
   };
 };

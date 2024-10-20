@@ -23,7 +23,7 @@ import {
 import { useRouter, useParams } from "next/navigation";
 import { Combobox } from "../combo-box";
 import React, { useEffect } from "react";
-import { useAppContext, useFetchTeamsByUserId } from "../context/appContext";
+import { useAppContext, useFetchAssistantsByTeamId, useFetchTeamsByUserId } from "../context/appContext";
 import { Option } from "@/types/types";
 
 export default function Dashboard({
@@ -36,12 +36,17 @@ export default function Dashboard({
   const router = useRouter();
 
   const {
-    state: { teams, teamSelected, assistantsByTeam },
+    state: { teams, teamSelected, assistantsByTeam, user },
     dispatch,
   } = useAppContext();
   const [assistantSelected, setAssistantSelected] = React.useState(null);
 
   const { fetchTeamsByUserId } = useFetchTeamsByUserId();
+  const { fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
+
+  useEffect(() => {
+    fetchAssistantsByTeamId(teamId as string, user.id);
+  }, []);
 
   useEffect(() => {
     if (userId) {
@@ -82,7 +87,7 @@ export default function Dashboard({
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+    <div className="flex min-h-screen w-full flex-col">
       <div className="flex flex-col sm:gap-4 sm:py-4">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
           <Breadcrumb className="hidden md:flex">

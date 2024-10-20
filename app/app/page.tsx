@@ -20,7 +20,6 @@ const RedirectComponent = () => {
   }, [user]);
 
   useEffect(() => {
-    console.log({ teamSelected });
     if (teamSelected?.id) {
       return router.push(`/team/${teamSelected.id}`);
     }
