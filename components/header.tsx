@@ -180,7 +180,7 @@ export default function Header({ domain }: { domain: Domain }) {
             <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />
             <span className="sr-only">Open main menu</span>
           </button>
-          {user && (
+          {/* {user && (
             <div className="p-3 rounded-full text-gray-700 hover:bg-gray-50">
               <form action="/api/auth/signout" method="post">
                 <button className="button block text-gray-600" type="submit">
@@ -191,7 +191,7 @@ export default function Header({ domain }: { domain: Domain }) {
                 </button>
               </form>
             </div>
-          )}
+          )} */}
         </div>
         <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
           {/* Elementos de navegación para desktop */}
@@ -235,6 +235,22 @@ export default function Header({ domain }: { domain: Domain }) {
                         </div>
                       </div>
                     ))}
+                  {user && (
+                    <div className="p-3 rounded-full text-gray-700 hover:bg-gray-50">
+                      <form action="/api/auth/signout" method="post">
+                        <button
+                          className="button block text-gray-600 flex"
+                          type="submit"
+                        >
+                          <ArrowRightStartOnRectangleIcon
+                            className="h-6 w-6"
+                            aria-hidden="true"
+                          />
+                          <div className="ml-2">Tancar sessió</div>
+                        </button>
+                      </form>
+                    </div>
+                  )}
                   <div className="mt-5">
                     {domainData?.menuBody &&
                       domainData.menuBody.map((item) => (
@@ -263,7 +279,7 @@ export default function Header({ domain }: { domain: Domain }) {
               </Popover.Panel>
             </Transition>
           </Popover>
-          {!!user && (
+          {/* {!!user && (
             <div>
               <form action="/api/auth/signout" method="post">
                 <button className="button block text-gray-600" type="submit">
@@ -274,7 +290,7 @@ export default function Header({ domain }: { domain: Domain }) {
                 </button>
               </form>
             </div>
-          )}
+          )} */}
         </div>
       </nav>
       <Dialog
@@ -319,6 +335,22 @@ export default function Header({ domain }: { domain: Domain }) {
                   </a>
                 ))}
             </div>
+            {!!user && (
+              <div>
+                <form action="/api/auth/signout" method="post">
+                  <button
+                    className="button block text-gray-600 flex"
+                    type="submit"
+                  >
+                    <ArrowRightStartOnRectangleIcon
+                      className="h-6 w-6"
+                      aria-hidden="true"
+                    />
+                    <div className="ml-2">Tancar sessió</div>
+                  </button>
+                </form>
+              </div>
+            )}
             {state.position === 2 && (
               <Button
                 className="ml-2 mb-7"
