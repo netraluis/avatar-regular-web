@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import Avatar from "./avatar";
 import MarkdownDisplay from "./MarkDownDisplay";
 import { GlobalContext } from "./context/globalContext";
@@ -12,10 +12,13 @@ export type UIState = {
 
 export interface ChatList {
   messages: any;
+  handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-export function ChatList({ messages }: ChatList) {
-  const { showAnalizeInfo } = useContext(GlobalContext);
+
+export function ChatList({ messages, handleInputChange }: ChatList) {
+  const { showAnalizeInfo, welcomeCard } =
+    useContext(GlobalContext);
   const [interrump, setInterrump] = useState(false);
   const [interrumping, setInterrumping] = useState(false);
 
@@ -35,20 +38,51 @@ export function ChatList({ messages }: ChatList) {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
-  if (!messages.length) {
-    return null;
-  }
+
+  const simulateInputChange = (newInputValue: string) => {
+    const syntheticEvent = {
+      target: {
+        value: newInputValue,
+      },
+    };
+    handleInputChange(syntheticEvent as ChangeEvent<HTMLTextAreaElement>);
+  };
 
   return (
     <div className="relative mx-auto max-w-2xl px-4">
-      {messages.map((message: any) => {
-        return (
-          <div className="my-4" key={message.id}>
-            <Avatar name={message.role} />
-            <MarkdownDisplay markdownText={message.content} />
+      {messages.length > 0 ? (
+        messages.map((message: any) => {
+          return (
+            <div className="my-4" key={message.id}>
+              <Avatar name={message.role} />
+              <MarkdownDisplay markdownText={message.content} />
+            </div>
+          );
+        })
+      ) : welcomeCard?.questions ? (
+        <div className="my-4">
+          <Avatar name="assistant" />
+          <MarkdownDisplay markdownText="Com et puc ajudar?" />
+          <div className="flex justify-center flex-wrap w-full mt-3">
+            {welcomeCard?.questions?.map((question, index) => (
+              <Button
+                variant="secondary"
+                size="sm"
+                key={index}
+                onClick={() => {
+                  console.log("question", question);
+                  simulateInputChange(question.value);
+                }}
+                className="m-2"
+              >
+                {question.label}
+              </Button>
+            ))}
           </div>
-        );
-      })}
+        </div>
+      ) : (
+        <></>
+      )}
 
       {showAnalizeInfo && (
         <div className="my-4">

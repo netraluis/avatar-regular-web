@@ -20,6 +20,11 @@ export interface HeaderDisclaimer {
   description: string;
 }
 
+export interface Question {
+  label: string;
+  value: string;
+}
+
 export interface welcomeCard {
   title: string;
   description: string;
@@ -27,6 +32,7 @@ export interface welcomeCard {
   voiceId: string;
   avatarId: string;
   assistantId: string;
+  questions?: Question[];
 }
 
 export interface WelcomeDesign {
@@ -53,7 +59,7 @@ export type Domain = {
   headerDisclaimer: HeaderDisclaimer | null;
   symbol: string | null;
   createdAt: Date;
-  welcomeCards: any[];
+  welcomeCards: welcomeCard[];
   footerText?: string | null;
 };
 
@@ -82,6 +88,8 @@ interface GlobalContextProps {
   setShowAnalizeInfo: (show: boolean) => void;
   domainData: Domain;
   setDomainData: (data: any) => void;
+  welcomeCard: welcomeCard | undefined;
+  setWelcomeCard: (card: welcomeCard) => void;
 }
 
 export const GlobalContext = createContext<GlobalContextProps>({
@@ -119,6 +127,8 @@ export const GlobalContext = createContext<GlobalContextProps>({
     welcomeDesign: undefined,
   },
   setDomainData: () => {},
+  welcomeCard: undefined,
+  setWelcomeCard: () => {},
 });
 
 export const useGlobalContext = () => {
@@ -143,6 +153,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<any>(null);
   const [showAnalizeInfo, setShowAnalizeInfo] = useState(false);
   const [domainData, setDomainData] = useState<any>();
+  const [welcomeCard, setWelcomeCard] = useState<welcomeCard | undefined>(
+    undefined,
+  );
 
   const value = {
     state,
@@ -157,6 +170,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     setShowAnalizeInfo,
     domainData,
     setDomainData,
+    welcomeCard,
+    setWelcomeCard,
   };
 
   return (

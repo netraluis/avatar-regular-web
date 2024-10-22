@@ -56,21 +56,22 @@ const CardComponent: React.FC<CardComponentProps> = ({
 
 // Componente principal que renderiza varias tarjetas
 export default function Dashboard() {
-  const { setState, domainData } = useContext(GlobalContext);
+  const { setState, domainData, setWelcomeCard } = useContext(GlobalContext);
 
   return (
     <div className="flex justify-center space-x-4 p-4">
       {domainData.welcomeCards.map((card, index) => (
         <div
           key={index}
-          onClick={() =>
+          onClick={() => {
             setState({
               position: 2,
               voiceId: card.voiceId,
               avatarId: card.avatarId,
               assistantId: card.assistantId,
-            })
-          }
+            });
+            setWelcomeCard(card);
+          }}
         >
           <CardComponent
             key={index}

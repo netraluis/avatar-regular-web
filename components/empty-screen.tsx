@@ -6,7 +6,6 @@ import { Avatar } from "@/components/ui/avatar";
 export function EmptyScreen({ children }: { children: React.ReactNode }) {
   const { domainData } = useContext(GlobalContext);
 
-  console.log(domainData?.welcomeDesign);
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       {domainData?.welcome ? (

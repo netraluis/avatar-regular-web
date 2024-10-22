@@ -130,7 +130,10 @@ export default function ConversationRecipient() {
       ref={scrollRef}
     >
       <div className={cn("pb-[200px]  pt-[100px]")} ref={messagesRef}>
-        {messagesState.length ? <ChatList messages={messagesState} /> : <></>}
+        <ChatList
+          messages={messagesState}
+          handleInputChange={handleInputChange}
+        />
         {error && (
           <div>Estem treballant en l’error… Disculpa les molèsties.</div>
         )}
