@@ -18,6 +18,7 @@ import { Mic } from "lucide-react";
 import { useParams } from "next/navigation";
 import {
   useAppContext,
+  useAssistant,
   useGetAssistant,
   useUpdateAssistant,
 } from "@/components/context/appContext";
@@ -28,6 +29,7 @@ export default function Playground() {
   const { state } = useAppContext();
   const { assistantId } = useParams();
   const [message, setMessage] = React.useState("");
+  const [threadId, setThreadId] = React.useState<string | undefined>();
   const [conversation, setConversation] = React.useState<string[]>([
     "Hi! What can I help you with?",
     "a",
@@ -76,6 +78,7 @@ export default function Playground() {
   const handleSendMessage = () => {
     if (message.trim()) {
       setConversation([...conversation, message]);
+      submitMessage(message);
       setMessage("");
     }
   };
@@ -92,12 +95,31 @@ export default function Playground() {
     }
   };
 
+  const { loading, error, data, submitMessage, internatlThreadId, messages } =
+    useAssistant({
+      threadId: threadId,
+      // message: 'ss',
+      assistantId: assistantId as string,
+      userId: state.user.id,
+    });
+
+  console.log("aqui", { loading, error, data, messages });
+
+  React.useEffect(() => {
+    console.log({ messages });
+  }, [messages]);
+
   const {
     messagesRef,
     scrollRef,
     visibilityRef,
+
     // isAtBottom, scrollToBottom
   } = useScrollAnchor();
+
+  React.useEffect(() => {
+    setThreadId(internatlThreadId);
+  }, [internatlThreadId]);
 
   return (
     <div className="container mx-auto p-4">
@@ -195,17 +217,17 @@ export default function Playground() {
           </CardHeader>
           <div className="md:h-96 overflow-y-auto " ref={scrollRef}>
             <CardContent className=" space-y-4 " ref={messagesRef}>
-              {conversation &&
-                conversation.map((msg, index) => (
+              {messages &&
+                messages.map((msg, index) => (
                   <div
                     key={index}
                     className={`p-2 rounded-lg ${
-                      index % 2 === 0
+                      msg.role === "user"
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted"
                     }`}
                   >
-                    {msg}
+                    {msg.message}
                   </div>
                 ))}
               <div className="w-full h-px" ref={visibilityRef} />
