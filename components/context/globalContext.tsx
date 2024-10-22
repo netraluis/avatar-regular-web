@@ -29,12 +29,18 @@ export interface welcomeCard {
   assistantId: string;
 }
 
+export interface WelcomeDesign {
+  data: string[];
+  type: string;
+}
+
 export type Domain = {
   id: string;
   name: string;
   subDomain: string;
   customDomain: string;
   welcome: string;
+  welcomeDesign?: WelcomeDesign;
   logo: string;
   description: string | null;
   assistantId: string;
@@ -110,6 +116,7 @@ export const GlobalContext = createContext<GlobalContextProps>({
     createdAt: new Date(),
     symbol: null,
     welcomeCards: [],
+    welcomeDesign: undefined,
   },
   setDomainData: () => {},
 });

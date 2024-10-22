@@ -4,6 +4,7 @@ import {
   MenuBody,
   MenuHeader,
   welcomeCard,
+  WelcomeDesign,
 } from "@/components/context/globalContext";
 import prisma from "../prisma";
 import { createClient } from "@/lib/supabase/server";
@@ -61,5 +62,6 @@ export async function getDomainData(domain: string): Promise<Domain | null> {
     logo,
     symbol,
     welcomeCards: subdomainInfo.welcomeCards as unknown as welcomeCard[],
+    welcomeDesign: subdomainInfo.welcomeDesign as unknown as WelcomeDesign,
   };
 }

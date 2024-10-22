@@ -46,6 +46,7 @@ model Domains {
   headerDisclaimer Json?
   welcomeCards     Json?     
   footerText       String?
+  welcomeDesign    Json?
   createdAt        DateTime @default(now())
 }
 
