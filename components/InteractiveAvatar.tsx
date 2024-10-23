@@ -58,6 +58,7 @@ export default function InteractiveAvatar() {
       setDebug(e.message);
     }
   };
+  
 
   // comunicate with the assistant
   useEffect(() => {
