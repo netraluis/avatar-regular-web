@@ -300,12 +300,14 @@ export default function InteractiveAvatar() {
                     markdownText={messages[messages.length - 1].content}
                   />
                 ) : (
-                  <Lottie
-                    className="justify-center"
-                    animationData={animationData}
-                    loop={true}
-                    style={{ width: "200px", height: "200px" }}
-                  />
+                  <div className="flex justify-center items-center w-full">
+                    <Lottie
+                      // className="justify-center"
+                      animationData={animationData}
+                      loop={true}
+                      style={{ width: "200px", height: "200px" }}
+                    />
+                  </div>
                 )}
               </div>
               {/* </div> */}
