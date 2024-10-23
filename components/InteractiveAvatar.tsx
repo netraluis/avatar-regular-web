@@ -156,7 +156,7 @@ export default function InteractiveAvatar() {
             voice: { voiceId },
           },
         },
-        setDebug
+        setDebug,
       );
       setData(res);
       setStream(avatar.current.mediaStream);
@@ -164,7 +164,7 @@ export default function InteractiveAvatar() {
     } catch (error) {
       console.error("Error starting avatar session:", error);
       setDebug(
-        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`
+        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`,
       );
     }
   }
@@ -173,7 +173,7 @@ export default function InteractiveAvatar() {
     const newToken = await fetchAccessToken();
     console.log("Updating Access Token:", newToken); // Log token for debugging
     avatar.current = new StreamingAvatarApi(
-      new Configuration({ accessToken: newToken })
+      new Configuration({ accessToken: newToken }),
     );
 
     const startTalkCallback = (e: any) => {
@@ -212,7 +212,7 @@ export default function InteractiveAvatar() {
     }
     await avatar.current.stopAvatar(
       { stopSessionRequest: { sessionId: data?.sessionId } },
-      setDebug
+      setDebug,
     );
     setStream(undefined);
   }
@@ -222,7 +222,7 @@ export default function InteractiveAvatar() {
       const newToken = await fetchAccessToken();
       console.log("Initializing with Access Token:", newToken); // Log token for debugging
       avatar.current = new StreamingAvatarApi(
-        new Configuration({ accessToken: newToken, jitterBuffer: 200 })
+        new Configuration({ accessToken: newToken, jitterBuffer: 200 }),
       );
       setInitialized(true); // Set initialized to true
     }
@@ -294,7 +294,7 @@ export default function InteractiveAvatar() {
             <div className="h-1/3 bg-white text-black rounded-none w-screen text-base overflow-y-auto">
               {/* <div className="overflow-auto rounded-none "> */}
               {/* Contenedor para los mensajes */}
-              <div className="flex-grow overflow-y-auto p-2 mt-2 rounded-none flex justify-center items-center">
+              <div className="flex-grow overflow-y-auto p-2 mt-2 rounded-none flex flex-col justify-center items-start">
                 {messages.length >= 1 ? (
                   <MarkdownDisplay
                     markdownText={messages[messages.length - 1].content}
