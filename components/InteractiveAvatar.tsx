@@ -13,6 +13,8 @@ import { FooterText } from "./footer";
 import React from "react";
 import VideoPlayer from "./video-player";
 import { Message } from "ai/react";
+import Lottie from "lottie-react";
+import animationData from "../public/charging-animation.json";
 
 export default function InteractiveAvatar() {
   const { domainData } = useContext(GlobalContext);
@@ -64,6 +66,7 @@ export default function InteractiveAvatar() {
         const newValue = JSON.parse(event.newValue);
         if (newValue.length === 0) {
           if (interrumptRef.current) {
+            console.log("Messages:", newValue.length);
             interrumptRef.current.click();
           }
         }
@@ -93,6 +96,7 @@ export default function InteractiveAvatar() {
 
       if (event.key === "interrump") {
         if (interrumptRef.current) {
+          console.log("interrump!!");
           interrumptRef.current.click();
         }
       }
@@ -152,7 +156,7 @@ export default function InteractiveAvatar() {
             voice: { voiceId },
           },
         },
-        setDebug,
+        setDebug
       );
       setData(res);
       setStream(avatar.current.mediaStream);
@@ -160,7 +164,7 @@ export default function InteractiveAvatar() {
     } catch (error) {
       console.error("Error starting avatar session:", error);
       setDebug(
-        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`,
+        `There was an error starting the session. ${voiceId ? "This custom voice ID may not be supported." : ""}`
       );
     }
   }
@@ -169,7 +173,7 @@ export default function InteractiveAvatar() {
     const newToken = await fetchAccessToken();
     console.log("Updating Access Token:", newToken); // Log token for debugging
     avatar.current = new StreamingAvatarApi(
-      new Configuration({ accessToken: newToken }),
+      new Configuration({ accessToken: newToken })
     );
 
     const startTalkCallback = (e: any) => {
@@ -208,7 +212,7 @@ export default function InteractiveAvatar() {
     }
     await avatar.current.stopAvatar(
       { stopSessionRequest: { sessionId: data?.sessionId } },
-      setDebug,
+      setDebug
     );
     setStream(undefined);
   }
@@ -218,7 +222,7 @@ export default function InteractiveAvatar() {
       const newToken = await fetchAccessToken();
       console.log("Initializing with Access Token:", newToken); // Log token for debugging
       avatar.current = new StreamingAvatarApi(
-        new Configuration({ accessToken: newToken, jitterBuffer: 200 }),
+        new Configuration({ accessToken: newToken, jitterBuffer: 200 })
       );
       setInitialized(true); // Set initialized to true
     }
@@ -239,33 +243,100 @@ export default function InteractiveAvatar() {
     }
   }, [mediaStream, stream]);
 
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  // Esta función se ejecuta cada vez que cambian los mensajes
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]); // Se ejecuta cada vez que cambian los mensajes
+
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const scrollAmount = 50; // Cantidad de píxeles que se desplazará cada vez
+    const intervalTime = 1000; // Intervalo en milisegundos (1000ms = 1 segundo)
+
+    // Crea el intervalo para mover el scroll
+    const intervalId = setInterval(() => {
+      if (messagesContainerRef.current) {
+        // Desplaza hacia abajo el contenedor la cantidad de píxeles indicada
+        messagesContainerRef.current.scrollBy({
+          top: scrollAmount,
+          behavior: "smooth",
+        });
+      }
+    }, intervalTime);
+
+    // Limpia el intervalo cuando el componente se desmonta
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <div className="h-screen flex flex-col justify-center items-center">
       {stream || isLoadingSession ? (
         <>
-          <div className="h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden z-30 ">
+          <div className="h-screen w-screen justify-center items-center flex flex-col rounded-lg overflow-hidden z-30 relative">
             <video
+              className="h-2/3"
               ref={mediaStream}
               autoPlay
               playsInline
               style={{
-                width: "100%",
-                height: "100%",
+                // width: "100%",
+                // height: "100%",
                 objectFit: "cover",
               }}
             >
               <track kind="captions" />
             </video>
+            <div className="h-1/3 bg-white text-black rounded-none w-screen text-base overflow-y-auto">
+              {/* <div className="overflow-auto rounded-none "> */}
+              {/* Contenedor para los mensajes */}
+              <div className="flex-grow overflow-y-auto p-2 mt-2 rounded-none flex justify-center items-center">
+                {messages.length >= 1 ? (
+                  <MarkdownDisplay
+                    markdownText={messages[messages.length - 1].content}
+                  />
+                ) : (
+                  <Lottie
+                    className="justify-center"
+                    animationData={animationData}
+                    loop={true}
+                    style={{ width: "200px", height: "200px" }}
+                  />
+                )}
+              </div>
+              {/* </div> */}
+              {/* <div className="w-fit bg-slate-950/25 mx-auto space-y-4 border-none px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4"> */}
+              {/* <FooterText className="hidden sm:block text-slate-50 border-none" /> */}
+              {/* </div> */}
+              {/* Footer fijo en la parte inferior */}
+              {/* Referencia para el scroll al final de los mensajes */}
+              <div ref={messagesEndRef} />
+            </div>
+
+            <div className="mt-auto bg-white w-screen z-30">
+              {/* <FooterText className="sm:block  border-none" /> */}
+              <p className="px-2 text-center text-xs leading-normal text-muted-foreground text-xl">
+                {/* Totes les respostes dd&aposaquesta conversa estan generades mitjançant una
+                Intel·ligència Artificial (AI) */}
+                {domainData?.footerText ||
+                  "Totes les respostes d'aquesta conversa estan generades mitjançant una Intel·ligència Artificial (AI)"}
+              </p>
+            </div>
           </div>
 
-          <div className="absolute h-screen w-screen justify-center items-center flex rounded-lg overflow-hidden z-20 ">
-            <VideoPlayer
+          <div className="absolute h-2/3 top-0 w-screen justify-center items-center flex rounded-lg overflow-hidden z-20 ">
+            <video
+              className="w-full h-full"
               src="/avatar-loading.mp4"
-              fullScreen={true}
-              controls={false}
-              autoPlay={true}
-              loop={true}
-            />
+              loop
+              muted
+              autoPlay
+              style={{ objectFit: "cover" }}
+            ></video>
           </div>
 
           <div className="flex flex-col gap-2 absolute bottom-3 right-3">
@@ -306,11 +377,11 @@ export default function InteractiveAvatar() {
           </div>
         </div>
       )}
-      <div className="absolute bottom-0 z-40">
+      {/* <div className="absolute bottom-0 z-40">
         <div className="relative">
           <div className="overflow-auto max-h-80 mb-3">
             <div className=" m-7">
-              {/* {messages.length >= 2 && (
+              {messages.length >= 2 && (
                 <div
                   className={`${messages[messages.length - 2].role === "user" ? "justify-end" : "justify start"} flex`}
                 >
@@ -320,7 +391,7 @@ export default function InteractiveAvatar() {
                     />
                   </div>
                 </div>
-              )} */}
+              )}
               {messages.length >= 1 && (
                 <div
                   className={`${messages[messages.length - 1].role === "user" ? "justify-end" : "justify start"} flex`}
@@ -338,7 +409,7 @@ export default function InteractiveAvatar() {
         <div className="w-fit bg-slate-950/25 mx-auto space-y-4 border-none px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
           <FooterText className="hidden sm:block text-slate-50 border-none" />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
