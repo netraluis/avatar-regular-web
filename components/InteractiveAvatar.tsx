@@ -310,7 +310,7 @@ export default function InteractiveAvatar() {
             >
               <track kind="captions" />
             </video>
-            <div className="h-1/3 bg-white text-black rounded-none w-screen text-base overflow-y-auto">
+            <div className="h-1/3 bg-white text-black rounded-none w-screen text-base overflow-y-auto scrollbar-hide">
               {/* <div className="overflow-auto rounded-none "> */}
               {/* Contenedor para los mensajes */}
               <div className="flex-grow overflow-y-auto p-2 mt-2 rounded-none flex flex-col justify-center items-start text-xl mx-12">

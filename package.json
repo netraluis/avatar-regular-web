@@ -57,6 +57,7 @@
     "remark-gfm": "^4.0.0",
     "remove-markdown": "^0.5.5",
     "tailwind-merge": "^2.5.2",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
