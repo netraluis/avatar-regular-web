@@ -58,7 +58,7 @@ export default function InteractiveAvatar() {
       setDebug(e.message);
     }
   };
-  
+
 
   // comunicate with the assistant
   useEffect(() => {
@@ -246,12 +246,30 @@ export default function InteractiveAvatar() {
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // Esta función se ejecuta cada vez que cambian los mensajes
+
+  const scrollSpeed = 5; // Número de píxeles por cada movimiento
+  const intervalTime = 2000; // Tiempo entre movimientos en milisegundos
+
   useEffect(() => {
+    let scrollInterval: NodeJS.Timeout;
+
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      // Calcular la diferencia entre la posición actual y la posición final del scroll
+      const container = messagesEndRef.current.parentNode as HTMLElement;
+      const maxScrollTop = container.scrollHeight - container.clientHeight;
+
+      scrollInterval = setInterval(() => {
+        if (container.scrollTop < maxScrollTop) {
+          container.scrollTop += scrollSpeed; // Mueve el scroll de a pocos píxeles
+        } else {
+          clearInterval(scrollInterval); // Detiene el intervalo cuando llega al final
+        }
+      }, intervalTime);
     }
-  }, [messages]); // Se ejecuta cada vez que cambian los mensajes
+
+    // Limpieza del intervalo cuando el componente se desmonte o cambie el efecto
+    return () => clearInterval(scrollInterval);
+  }, [speak]);
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -295,7 +313,7 @@ export default function InteractiveAvatar() {
             <div className="h-1/3 bg-white text-black rounded-none w-screen text-base overflow-y-auto">
               {/* <div className="overflow-auto rounded-none "> */}
               {/* Contenedor para los mensajes */}
-              <div className="flex-grow overflow-y-auto p-2 mt-2 rounded-none flex flex-col justify-center items-start">
+              <div className="flex-grow overflow-y-auto p-2 mt-2 rounded-none flex flex-col justify-center items-start text-xl mx-12">
                 {messages.length >= 1 ? (
                   <MarkdownDisplay
                     markdownText={messages[messages.length - 1].content}
@@ -322,7 +340,7 @@ export default function InteractiveAvatar() {
 
             <div className="mt-auto bg-white w-screen z-30">
               {/* <FooterText className="sm:block  border-none" /> */}
-              <p className="px-2 text-center text-xs leading-normal text-muted-foreground text-xl">
+              <p className="px-2 text-center leading-normal text-muted-foreground text-lg">
                 {/* Totes les respostes dd&aposaquesta conversa estan generades mitjançant una
                 Intel·ligència Artificial (AI) */}
                 {domainData?.footerText ||
