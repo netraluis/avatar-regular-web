@@ -58,7 +58,7 @@ export default function InteractiveAvatar() {
       setDebug(e.message);
     }
   };
-
+  
 
   // comunicate with the assistant
   useEffect(() => {
@@ -245,7 +245,6 @@ export default function InteractiveAvatar() {
   }, [mediaStream, stream]);
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
 
   const scrollSpeed = 5; // Número de píxeles por cada movimiento
   const intervalTime = 2000; // Tiempo entre movimientos en milisegundos

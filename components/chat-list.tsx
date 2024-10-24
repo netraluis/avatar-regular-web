@@ -16,8 +16,7 @@ export interface ChatList {
 }
 
 export function ChatList({ messages, handleInputChange }: ChatList) {
-  const { showAnalizeInfo, welcomeCard } =
-    useContext(GlobalContext);
+  const { showAnalizeInfo, welcomeCard } = useContext(GlobalContext);
   const [interrump, setInterrump] = useState(false);
   const [interrumping, setInterrumping] = useState(false);
 
