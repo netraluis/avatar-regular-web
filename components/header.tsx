@@ -143,7 +143,7 @@ export default function Header({ domain }: { domain: Domain }) {
   }
 
   return (
-    <div className="bg-white pt-4 fixed top-0 z-10 w-full">
+    <div className="pt-4 fixed top-0 z-10 w-full bg-white/95">
       <nav
         className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16"
         aria-label="Global"
@@ -196,7 +196,7 @@ export default function Header({ domain }: { domain: Domain }) {
         <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
           {/* Elementos de navegación para desktop */}
           {state.position === 2 && (
-            <Button onClick={() => createNovaConversa()}>
+            <Button size="lg" onClick={() => createNovaConversa()}>
               <ChatBubbleLeftIcon className="h-5 w-5 mr-1" aria-hidden="true" />
               Nova conversa
             </Button>
@@ -353,6 +353,7 @@ export default function Header({ domain }: { domain: Domain }) {
             )}
             {state.position === 2 && (
               <Button
+                size="lg"
                 className="ml-2 mb-7"
                 onClick={() => createNovaConversa()}
               >
