@@ -115,6 +115,8 @@ export default function InteractiveAvatar() {
     if (!voiceId || !avatarId) return;
     if (startSessionRef.current) {
       startSessionRef.current.click();
+      console.log("------- a cargar -------");
+      localStorage.setItem("avatar-charging", JSON.stringify(true));
     }
   }, [voiceId, avatarId]);
 
@@ -162,6 +164,7 @@ export default function InteractiveAvatar() {
       setData(res);
       setStream(avatar.current.mediaStream);
       setIsLoadingSession(false);
+      console.log("-------ya esta cargaddo -------");
     } catch (error) {
       console.error("Error starting avatar session:", error);
       setDebug(
@@ -240,6 +243,8 @@ export default function InteractiveAvatar() {
       mediaStream.current.onloadedmetadata = () => {
         mediaStream.current!.play();
         setDebug("Playing");
+        console.log("-------ya esta cargaddo damos al play -------");
+        localStorage.setItem("avatar-charging", JSON.stringify(false));
       };
     }
   }, [mediaStream, stream]);

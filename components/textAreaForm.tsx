@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   PaperAirplaneIcon,
@@ -41,6 +41,24 @@ export const TextAreaForm = ({
   const { startRecording, stopRecording, clearCanvas } = recorderControls;
   // const [audioURL, setAudioURL] = useState<string | null>(null);
   // const audioRef = useRef<HTMLAudioElement>(null);
+
+  const [isAvatarCharging, setIsAvatarCharging] = useState(false);
+
+  useEffect(() => {
+    const handleStorageChange = (event: any) => {
+      if (event.key === "avatar-charging") {
+        const newValue = JSON.parse(event.newValue);
+        setIsAvatarCharging(newValue);
+        // Actualiza tu estado o contexto con el nuevo valor
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   // Refs for Recorder.js
   const audioContext = useRef<AudioContext | null>(null);
@@ -138,7 +156,7 @@ export const TextAreaForm = ({
 
   const sendMessage = (e: any) => {
     e.preventDefault();
-    if (status !== "awaiting_message") return;
+    if (status !== "awaiting_message" || isAvatarCharging) return;
     submitMessage();
   };
 
@@ -230,7 +248,7 @@ export const TextAreaForm = ({
                   </Button>
                 ) : (
                   <Button
-                    disabled={status !== "awaiting_message"}
+                    disabled={status !== "awaiting_message" || isAvatarCharging}
                     onClick={sendMessage}
                   >
                     {status === "awaiting_message" ? (
