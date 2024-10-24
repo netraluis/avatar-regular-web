@@ -58,7 +58,6 @@ export default function InteractiveAvatar() {
       setDebug(e.message);
     }
   };
-  
 
   // comunicate with the assistant
   useEffect(() => {
@@ -344,7 +343,7 @@ export default function InteractiveAvatar() {
 
             <div className="mt-auto bg-white w-screen z-30">
               {/* <FooterText className="sm:block  border-none" /> */}
-              <p className="px-2 text-center leading-normal text-muted-foreground text-lg">
+              <p className="px-2 text-center leading-normal text-muted-foreground text-lg bg-slate-100 pt-1">
                 {/* Totes les respostes dd&aposaquesta conversa estan generades mitjançant una
                 Intel·ligència Artificial (AI) */}
                 {domainData?.footerText ||

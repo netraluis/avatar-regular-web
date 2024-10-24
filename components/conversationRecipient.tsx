@@ -141,6 +141,7 @@ export default function ConversationRecipient() {
       </div>
 
       <TextAreaForm
+        messages={messagesState}
         handleInputChange={handleInputChange}
         handleKeyDown={handleKeyDown}
         input={input}

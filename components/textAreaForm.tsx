@@ -1,5 +1,11 @@
 "use client";
-import React, { ChangeEvent, useRef, useState, useEffect } from "react";
+import React, {
+  ChangeEvent,
+  useRef,
+  useState,
+  useEffect,
+  useContext,
+} from "react";
 import { Button } from "@/components/ui/button";
 import {
   PaperAirplaneIcon,
@@ -13,6 +19,8 @@ import { FooterText } from "./footer";
 import { TextAreaFormProps } from "@/types/types";
 import Recorder from "recorder-js";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
+import Avatar from "./avatar";
+import { GlobalContext } from "./context/globalContext";
 
 // ** Step 1: Extend the Window interface **
 declare global {
@@ -33,7 +41,9 @@ export const TextAreaForm = ({
   input,
   submitMessage,
   status,
+  messages,
 }: TextAreaFormProps) => {
+  const { welcomeCard } = useContext(GlobalContext);
   const textAreaRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
@@ -163,8 +173,43 @@ export const TextAreaForm = ({
   return (
     <div className="fixed inset-x-0 bottom-0 w-full duration-300 ease-in-out animate-in">
       <div className="mx-auto sm:max-w-2xl sm:px-4">
+        {messages.length === 0 && (
+          <div className="my-4 ">
+            <div className="flex flex-col items-start space-x-2 relative my-4">
+              <Avatar name="assistant" />
+
+              <div className="bg-green-100 p-3 rounded-xl p-4 my-4">
+                <p className="text-base">
+                  <span>Tens alguna pregunta sobre l&apos;Acord d&apos;associació?</span>
+                </p>
+              </div>
+              <div className="bg-green-100 p-3 rounded-xl p-4">
+                <p className="text-base">
+                  <span>Et proposo alguns temes que et poden interessar</span>
+                </p>
+              </div>
+            </div>
+
+            <div className="flex justify-start flex-wrap w-full mt-3">
+              {welcomeCard?.questions?.map((question, index) => (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  key={index}
+                  onClick={() => {
+                    console.log("question", question);
+                    simulateInputChange(question.value);
+                  }}
+                  className="m-1"
+                >
+                  {question.label}
+                </Button>
+              ))}
+            </div>
+          </div>
+        )}
         <div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
-          <form className="relative rounded-xl shadow-sm flex items-center px-4 py-[1.3rem] min-h-[60px]">
+          <form className="relative rounded-xl shadow-sm flex items-center px-4 py-[1.3rem] min-h-[60px] bg-slate-100">
             {!recording ? (
               <Textarea
                 ref={textAreaRef}

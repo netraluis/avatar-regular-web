@@ -48,7 +48,7 @@ export function ChatList({ messages, handleInputChange }: ChatList) {
 
   return (
     <div className="relative mx-auto max-w-2xl px-4">
-      {messages.length > 0 ? (
+      {messages.length > 0 &&
         messages.map((message: any) => {
           return (
             <div className="my-4" key={message.id}>
@@ -56,9 +56,9 @@ export function ChatList({ messages, handleInputChange }: ChatList) {
               <MarkdownDisplay markdownText={message.content} />
             </div>
           );
-        })
-      ) : welcomeCard?.questions ? (
-        <div className="my-4">
+        })}
+      {/* {welcomeCard?.questions ? (
+        <div className="my-4 border border-red-500">
           <Avatar name="assistant" />
           <MarkdownDisplay markdownText="Com et puc ajudar?" />
           <div className="flex justify-center flex-wrap w-full mt-3">
@@ -80,7 +80,7 @@ export function ChatList({ messages, handleInputChange }: ChatList) {
         </div>
       ) : (
         <></>
-      )}
+      )} */}
 
       {showAnalizeInfo && (
         <div className="my-4">

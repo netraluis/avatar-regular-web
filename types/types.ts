@@ -6,6 +6,7 @@ export interface TextAreaFormProps {
   input: string;
   submitMessage: () => void;
   status: string;
+  messages: any;
 }
 
 export interface Option {
