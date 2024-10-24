@@ -157,7 +157,7 @@ export const TextAreaForm = ({
                 }}
                 placeholder="Envia la teva pregunta..."
                 className="w-full resize-none bg-transparent focus-within:outline-none sm:text-sm "
-                autoFocus
+                // autoFocus
                 spellCheck={false}
                 autoComplete="off"
                 autoCorrect="off"
