@@ -15,8 +15,8 @@ export interface ChatList {
   handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-export function ChatList({ messages, handleInputChange }: ChatList) {
-  const { showAnalizeInfo, welcomeCard } = useContext(GlobalContext);
+export function ChatList({ messages }: ChatList) {
+  const { showAnalizeInfo } = useContext(GlobalContext);
   const [interrump, setInterrump] = useState(false);
   const [interrumping, setInterrumping] = useState(false);
 
@@ -36,15 +36,6 @@ export function ChatList({ messages, handleInputChange }: ChatList) {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
-
-  const simulateInputChange = (newInputValue: string) => {
-    const syntheticEvent = {
-      target: {
-        value: newInputValue,
-      },
-    };
-    handleInputChange(syntheticEvent as ChangeEvent<HTMLTextAreaElement>);
-  };
 
   return (
     <div className="relative mx-auto max-w-2xl px-4">

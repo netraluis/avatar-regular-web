@@ -180,7 +180,9 @@ export const TextAreaForm = ({
 
               <div className="bg-green-100 p-3 rounded-xl p-4 my-4">
                 <p className="text-base">
-                  <span>Tens alguna pregunta sobre l&apos;Acord d&apos;associació?</span>
+                  <span>
+                    Tens alguna pregunta sobre l&apos;Acord d&apos;associació?
+                  </span>
                 </p>
               </div>
               <div className="bg-green-100 p-3 rounded-xl p-4">
