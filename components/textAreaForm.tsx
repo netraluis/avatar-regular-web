@@ -21,6 +21,8 @@ import Recorder from "recorder-js";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
 import Avatar from "./avatar";
 import { GlobalContext } from "./context/globalContext";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { useRouter } from "next/navigation";
 
 // ** Step 1: Extend the Window interface **
 declare global {
@@ -43,7 +45,8 @@ export const TextAreaForm = ({
   status,
   messages,
 }: TextAreaFormProps) => {
-  const { welcomeCard } = useContext(GlobalContext);
+  const { welcomeCard, setActualsThreadId, setState } =
+    useContext(GlobalContext);
   const textAreaRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
@@ -53,6 +56,11 @@ export const TextAreaForm = ({
   // const audioRef = useRef<HTMLAudioElement>(null);
 
   const [isAvatarCharging, setIsAvatarCharging] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [countdown, setCountdown] = useState(10);
+
+  const router = useRouter();
 
   useEffect(() => {
     const handleStorageChange = (event: any) => {
@@ -60,6 +68,9 @@ export const TextAreaForm = ({
         const newValue = JSON.parse(event.newValue);
         setIsAvatarCharging(newValue);
         // Actualiza tu estado o contexto con el nuevo valor
+      }
+      if (event.key === "timer") {
+        startTimer();
       }
     };
 
@@ -69,6 +80,32 @@ export const TextAreaForm = ({
       window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
+
+  const startTimer = () => {
+    console.log("llega el timer");
+    setIsOpen(true);
+
+    // Reiniciar la cuenta regresiva y configurar el temporizador
+    setCountdown(10);
+    timerRef.current = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev > 1) {
+          return prev - 1; // Reducir el contador en 1 cada segundo
+        } else {
+          clearInterval(timerRef.current!); // Detener el temporizador
+          closePopup(); // Ejecutar la acción final
+          setIsOpen(false);
+          return 0;
+        }
+      });
+    }, 1000);
+  };
+
+  const handleImHere = () => {
+    console.log("hola");
+    if (timerRef.current) clearInterval(timerRef.current);
+    setIsOpen(false);
+  };
 
   // Refs for Recorder.js
   const audioContext = useRef<AudioContext | null>(null);
@@ -168,6 +205,13 @@ export const TextAreaForm = ({
     e.preventDefault();
     if (status !== "awaiting_message" || isAvatarCharging) return;
     submitMessage();
+  };
+
+  const closePopup = () => {
+    setIsOpen(false);
+    setActualsThreadId([""]);
+    setState({ position: 1 });
+    router.push("/");
   };
 
   return (
@@ -326,6 +370,29 @@ export const TextAreaForm = ({
             )} */}
           </form>
           <FooterText className="hidden sm:block" />
+          <DialogPrimitive.Root open={isOpen} onOpenChange={() => {}}>
+            <DialogPrimitive.Portal>
+              <DialogPrimitive.Overlay className="fixed z-40 inset-0 bg-black/50" />
+              <DialogPrimitive.Content
+                className="fixed left-[50%] top-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg bg-white p-6 shadow-lg"
+                onPointerDownOutside={(e) => e.preventDefault()}
+              >
+                <h2 className="text-xl font-bold mb-2">Segueixes aquí?</h2>
+                <p className="text-base text-gray-500 mb-6">
+                  La conversa es tancarà en {countdown} segons; si tens alguna
+                  pregunta més, estic aquí per ajudar-te.
+                </p>
+                <div className="flex justify-end space-x-2">
+                  <Button
+                    onClick={handleImHere}
+                    className="bg-black hover:bg-gray-800 text-white"
+                  >
+                    Si, segueixo aquí
+                  </Button>
+                </div>
+              </DialogPrimitive.Content>
+            </DialogPrimitive.Portal>
+          </DialogPrimitive.Root>
         </div>
       </div>
     </div>

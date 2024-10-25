@@ -52,7 +52,6 @@ export default function InteractiveAvatar() {
     // speakPlain = speakPlain;
     console.log("speakPlain:", speakPlain);
     try {
-      setSpeaking(true);
       await avatar.current.speak({
         taskRequest: { text: speakPlain, sessionId: data?.sessionId },
       });
@@ -114,23 +113,6 @@ export default function InteractiveAvatar() {
     };
   }, [domainData]);
 
-  // useEffect(() => {
-  //   console.log('se ejecuta el listener', !speaking, isAvatarCharge)
-  //   if (!speaking && isAvatarCharge) {
-  //     console.log('reinicio y empiezo el timer')
-  //     // Reiniciar el temporizador
-  //     // if (timerRef.current) clearTimeout(timerRef.current);
-
-  //     // timerRef.current = setTimeout(() => {
-  //     //   console.log("Timer completado después de 5 segundos sin speaking ni interaccion");
-  //     //   // Ejecutar alguna acción cuando el timer se completa
-  //     // }, 5000); // Duración del timer en milisegundos (ejemplo: 5 segundos)
-  //   }else{
-  //     console.log('solo reinico el timer')
-  //     if (timerRef.current) clearTimeout(timerRef.current);
-  //   }
-  // }, [speaking, isAvatarCharge, handleStorageChangeEvent, speak]);
-
   useEffect(() => {
     console.log("Se ejecuta el listener", !speaking, isAvatarCharge);
 
@@ -140,14 +122,20 @@ export default function InteractiveAvatar() {
       // Reiniciar el temporizador si ya está en curso
       if (timerRef.current) clearTimeout(timerRef.current);
 
-      // Configurar el temporizador para 5 segundos
+      // Configurar el temporizador para 60 segundos
       timerRef.current = setTimeout(() => {
         console.log(
-          "Timer completado después de 5 segundos sin speaking ni interacción.",
+          "Timer completado después de 30 segundos sin speaking ni interacción.",
         );
         // Ejecuta aquí la acción que desees al completar el timer
         localStorage.setItem("timer", JSON.stringify(speak));
-      }, 5000); // 5000 ms = 5 segundos
+
+        setSpeak({
+          id: "msg_ngtKPL1dJhvxfEQbHjSdMlXK",
+          role: "assistant",
+          content: "Si tens algun dubte més estic aqui per ajudar-te",
+        });
+      }, 45000);
     } else {
       console.log("Solo reinicio el timer");
 
@@ -234,6 +222,7 @@ export default function InteractiveAvatar() {
     const startTalkCallback = (e: any) => {
       localStorage.setItem("avatarTalking", JSON.stringify(true));
       console.log("Avatar started talking", e);
+      setSpeaking(true);
     };
 
     const stopTalkCallback = (e: any) => {
