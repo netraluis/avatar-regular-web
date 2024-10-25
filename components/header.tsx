@@ -7,6 +7,7 @@ import {
   ChatBubbleLeftIcon,
   ArrowRightStartOnRectangleIcon,
   CameraIcon,
+  HomeIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { Domain, GlobalContext } from "./context/globalContext";
@@ -193,13 +194,22 @@ export default function Header({ domain }: { domain: Domain }) {
             </div>
           )} */}
         </div>
-        <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
+        <div className="hidden lg:flex lg:gap-x-4 lg:items-center">
           {/* Elementos de navegación para desktop */}
           {state.position === 2 && (
-            <Button size="lg" onClick={() => createNovaConversa()}>
-              <ChatBubbleLeftIcon className="h-5 w-5 mr-1" aria-hidden="true" />
-              Nova conversa
-            </Button>
+            <>
+              <Button variant="outline" size="lg" onClick={returnToInicial}>
+                <HomeIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+                Tornar a l&apos;inici
+              </Button>
+              <Button size="lg" onClick={() => createNovaConversa()}>
+                <ChatBubbleLeftIcon
+                  className="h-5 w-5 mr-1"
+                  aria-hidden="true"
+                />
+                Nova conversa
+              </Button>
+            </>
           )}
           <Disclaimer data={domainData?.headerDisclaimer} />
           <Popover className="relative">
@@ -352,17 +362,28 @@ export default function Header({ domain }: { domain: Domain }) {
               </div>
             )}
             {state.position === 2 && (
-              <Button
-                size="lg"
-                className="ml-2 mb-7"
-                onClick={() => createNovaConversa()}
-              >
-                <ChatBubbleLeftIcon
-                  className="h-5 w-5 mr-1"
-                  aria-hidden="true"
-                />
-                Nova conversa
-              </Button>
+              <>
+                <Button
+                  size="lg"
+                  className="ml-2 mb-7"
+                  onClick={() => createNovaConversa()}
+                >
+                  <ChatBubbleLeftIcon
+                    className="h-5 w-5 mr-1"
+                    aria-hidden="true"
+                  />
+                  Nova conversa
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="ml-2 mb-7"
+                  onClick={returnToInicial}
+                >
+                  <HomeIcon className="h-5 w-5 mr-1" aria-hidden="true" />
+                  Tornar a l&apos;inici
+                </Button>
+              </>
             )}
             <div className="mt-7 pt-6 ">
               {domainData?.menuBody &&

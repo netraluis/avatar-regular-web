@@ -29,16 +29,17 @@ export default function InteractiveAvatar() {
   const [speak, setSpeak] = useState<any>([]);
   const [voiceId, setVoiceId] = useState<string>();
   const [avatarId, setAvatarId] = useState<string>();
-
-  // const voiceId = domainData?.voiceAvatarId;
-  // const avatarId = domainData?.avatarId;
+  const [speaking, setSpeaking] = useState(false);
+  const [isAvatarCharge, setIsAvatarCharge] = useState(false);
+  const [handleStorageChangeEvent, setHandleStorageChangeEvent] =
+    useState<any>();
 
   const startSessionRef = useRef<HTMLButtonElement>(null);
   const endSessionRef = useRef<HTMLButtonElement>(null);
   const interrumptRef = useRef<HTMLButtonElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const speakAsync = async () => {
-    console.log({ speak });
     if (!speak) return;
     if (!initialized || !avatar.current) return;
     await avatar.current
@@ -51,9 +52,11 @@ export default function InteractiveAvatar() {
     // speakPlain = speakPlain;
     console.log("speakPlain:", speakPlain);
     try {
+      setSpeaking(true);
       await avatar.current.speak({
         taskRequest: { text: speakPlain, sessionId: data?.sessionId },
       });
+      console.log("speak done");
     } catch (e: any) {
       setDebug(e.message);
     }
@@ -100,6 +103,8 @@ export default function InteractiveAvatar() {
           interrumptRef.current.click();
         }
       }
+
+      setHandleStorageChangeEvent(event.key);
     };
 
     window.addEventListener("storage", handleStorageChange);
@@ -108,6 +113,53 @@ export default function InteractiveAvatar() {
       window.removeEventListener("storage", handleStorageChange);
     };
   }, [domainData]);
+
+  // useEffect(() => {
+  //   console.log('se ejecuta el listener', !speaking, isAvatarCharge)
+  //   if (!speaking && isAvatarCharge) {
+  //     console.log('reinicio y empiezo el timer')
+  //     // Reiniciar el temporizador
+  //     // if (timerRef.current) clearTimeout(timerRef.current);
+
+  //     // timerRef.current = setTimeout(() => {
+  //     //   console.log("Timer completado después de 5 segundos sin speaking ni interaccion");
+  //     //   // Ejecutar alguna acción cuando el timer se completa
+  //     // }, 5000); // Duración del timer en milisegundos (ejemplo: 5 segundos)
+  //   }else{
+  //     console.log('solo reinico el timer')
+  //     if (timerRef.current) clearTimeout(timerRef.current);
+  //   }
+  // }, [speaking, isAvatarCharge, handleStorageChangeEvent, speak]);
+
+  useEffect(() => {
+    console.log("Se ejecuta el listener", !speaking, isAvatarCharge);
+
+    if (!speaking && isAvatarCharge) {
+      console.log("Reinicio y empiezo el timer");
+
+      // Reiniciar el temporizador si ya está en curso
+      if (timerRef.current) clearTimeout(timerRef.current);
+
+      // Configurar el temporizador para 5 segundos
+      timerRef.current = setTimeout(() => {
+        console.log(
+          "Timer completado después de 5 segundos sin speaking ni interacción.",
+        );
+        // Ejecuta aquí la acción que desees al completar el timer
+        localStorage.setItem("timer", JSON.stringify(speak));
+      }, 5000); // 5000 ms = 5 segundos
+    } else {
+      console.log("Solo reinicio el timer");
+
+      // Cancelar el temporizador si no se cumple la condición
+      if (timerRef.current) clearTimeout(timerRef.current);
+    }
+
+    // Limpieza del temporizador al desmontar o cambiar la dependencia
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [speaking, isAvatarCharge, handleStorageChangeEvent, speak]);
 
   //start session
   useEffect(() => {
@@ -187,6 +239,7 @@ export default function InteractiveAvatar() {
     const stopTalkCallback = (e: any) => {
       localStorage.setItem("avatarTalking", JSON.stringify(false));
       console.log("Avatar stopped talking", e);
+      setSpeaking(false);
     };
 
     console.log("Adding event handlers:", avatar.current);
@@ -217,6 +270,7 @@ export default function InteractiveAvatar() {
       { stopSessionRequest: { sessionId: data?.sessionId } },
       setDebug,
     );
+    setIsAvatarCharge(false);
     setStream(undefined);
   }
 
@@ -243,6 +297,7 @@ export default function InteractiveAvatar() {
         mediaStream.current!.play();
         setDebug("Playing");
         console.log("-------ya esta cargaddo damos al play -------");
+        setIsAvatarCharge(true);
         localStorage.setItem("avatar-charging", JSON.stringify(false));
       };
     }

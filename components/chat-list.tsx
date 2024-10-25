@@ -28,6 +28,10 @@ export function ChatList({ messages }: ChatList) {
         setInterrumping(false);
         setInterrump(newValue);
       }
+      if (event.key === "timer") {
+        // Actualiza tu estado o contexto con el nuevo valor
+        console.log("llega el timer");
+      }
     };
 
     window.addEventListener("storage", handleStorageChange);
