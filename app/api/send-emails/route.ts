@@ -11,9 +11,9 @@ export async function POST(request: NextRequest) {
     //   });
     // }
 
-    const req = await request.json();
+    const {user, email_data} = await request.json();
 
-    console.log({ req});
+    console.log({user, email_data});
 
     // console.log({ body });
 
