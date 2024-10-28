@@ -46,5 +46,7 @@ export default async ({
           />
         ),
       });
+    default:
+      return 'no email sent';
   }
 };
