@@ -11,10 +11,6 @@ export default async function Layout({
   const headersList = headers();
   const userId = headersList.get("x-user-id");
 
-  console.log({ userId });
-
-  if (!userId) return <div>not log in</div>;
-
   // const team = await getTeamsByUser(data?.user.id);
   // console.log({ team });
   // if (!team) return <div>no team</div>;

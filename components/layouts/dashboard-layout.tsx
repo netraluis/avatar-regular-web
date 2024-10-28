@@ -35,7 +35,7 @@ export default function Dashboard({
   userId,
 }: {
   children: React.ReactNode;
-  userId: string;
+  userId: string | null;
 }) {
   const router = useRouter();
 
@@ -49,7 +49,9 @@ export default function Dashboard({
   const { fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
 
   useEffect(() => {
-    fetchAssistantsByTeamId(teamId as string, user.id);
+    if (user.id && teamId) {
+      fetchAssistantsByTeamId(teamId as string, user.id);
+    }
   }, []);
 
   useEffect(() => {
