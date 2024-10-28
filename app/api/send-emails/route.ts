@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 // import sendEmail from "@/lib/supabase/send-emails/index";
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // const userId = request.headers.get("x-user-id");
 
