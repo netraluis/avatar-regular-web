@@ -42,7 +42,7 @@ export default async ({
         subject: "Link de invitación",
         react: (
           <InviteTemplate
-            inviteUrl={`${process.env.PROTOCOL}app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/auth/confirm?token_hash=${token_hash}`}
+            inviteUrl={`app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/auth/confirm?token_hash=${token_hash}`}
           />
         ),
       });
