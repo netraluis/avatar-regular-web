@@ -11,16 +11,16 @@ export async function POST(request: NextRequest) {
     //   });
     // }
 
-    const { user, email_data } = await request.json();
+    // const { user, email_data } = await request.json();
 
-    console.log({ user, email_data });
+    // console.log({ user, email_data });
 
-    // const resEmail = await sendEmail({
-    //   user: user,
-    //   email_data: email_data,
-    // });
+    // // const resEmail = await sendEmail({
+    // //   user: user,
+    // //   email_data: email_data,
+    // // });
 
-    console.log("Email sent", 'sin email');
+    // console.log("Email sent", 'sin email');
 
     return new NextResponse(JSON.stringify({ body: "hola" }), {
       status: 200,
