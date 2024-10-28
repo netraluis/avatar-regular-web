@@ -27,13 +27,13 @@ export interface UserData {
 }
 
 export default async ({
-  email_data: { email_action_type, token_hash },
+  email_data: { email_action_type, token },
   user,
 }: {
   email_data: EmailData;
   user: UserData;
 }) => {
-  console.log({ email_action_type, token_hash, user });
+  console.log({ email_action_type, token, user });
   switch (email_action_type) {
     case "signup":
       return await resend.emails.send({
@@ -42,7 +42,7 @@ export default async ({
         subject: "Link de invitación",
         react: (
           <InviteTemplate
-            inviteUrl={`app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/auth/confirm?token_hash=${token_hash}&email=${user.email}&type=email`}
+            inviteUrl={`app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/auth/confirm?token=${token}&email=${user.email}&type=email`}
           />
         ),
       });

@@ -5,30 +5,29 @@ import { createClient } from "@/lib/supabase/server";
 // Creating a handler to a GET request to route /auth/confirm
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const token_hash = searchParams.get("token_hash");
+  const token = searchParams.get("token");
   const email = searchParams.get("email");
   const type = searchParams.get("type");
   const next = "/login";
 
-  console.log("antes", { token_hash, type });
+  console.log("antes", { token, type });
 
   // Create redirect link without the secret token
   const redirectTo = req.nextUrl.clone();
   redirectTo.pathname = next;
-  redirectTo.searchParams.delete("token_hash");
+  redirectTo.searchParams.delete("token");
   redirectTo.searchParams.delete("type");
   redirectTo.searchParams.delete("email");
 
-  console.log({ token_hash, type });
+  console.log({ token, type });
 
-  if (token_hash && type && email) {
-    console.log("verifying otp");
+  if (token && type && email) {
     const supabase = createClient();
 
     const { error, data } = await supabase.auth.verifyOtp({
-      email: email,
+      email,
       type: "email",
-      token: token_hash,
+      token,
     });
 
     console.log({ error, data });
