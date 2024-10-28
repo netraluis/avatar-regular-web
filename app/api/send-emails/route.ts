@@ -6,6 +6,8 @@ export async function POST(request: NextRequest) {
     // Extrae el secreto del encabezado de la solicitud
     const secret = request.headers.get("x-secret-key");
 
+    console.log(request.headers)
+
     // Verifica si el secreto coincide con el configurado en Supabase
     if (!secret || secret !== SUPABASE_HOOK_SECRET) {
       return new NextResponse("Unauthorized", {
