@@ -24,11 +24,14 @@ export async function POST(request: NextRequest) {
 
     // Procesa la solicitud después de la verificación del secreto
     console.log("Solicitud autorizada desde Supabase Hook");
+    const responseHeaders = new Headers();
+    responseHeaders.set("Content-Type", "application/json");
 
     return new NextResponse(
       JSON.stringify({ body: "Email hook recibido y autorizado" }),
       {
         status: 200,
+        headers: responseHeaders,
       }
     );
   } catch (error) {
