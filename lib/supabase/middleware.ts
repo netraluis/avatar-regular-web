@@ -42,7 +42,7 @@ export async function updateSession(request: NextRequest) {
     !request.nextUrl.pathname.startsWith("/login") &&
     !request.nextUrl.pathname.startsWith("/signup") &&
     !request.nextUrl.pathname.startsWith("/confirm") &&
-    !request.nextUrl.pathname.startsWith("/api/auth/") &&
+    !request.nextUrl.pathname.startsWith("/api/auth") &&
     !request.nextUrl.pathname.startsWith("/api/send-emails")
   ) {
     return NextResponse.redirect(new URL("/login", request.url));
