@@ -33,9 +33,9 @@ export async function POST(request: NextRequest) {
       status: 200,
     });
   } catch (error) {
-    console.error("Error creating team:", error);
+    console.error("Error getting token_hash:", error);
 
-    return new NextResponse("Failed creating team", {
+    return new NextResponse("Failed getting token_hash", {
       status: 500,
     });
   }
