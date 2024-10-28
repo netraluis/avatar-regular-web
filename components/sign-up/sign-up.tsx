@@ -22,18 +22,30 @@ export default function Signup() {
 
   const handleSignup = async (formData: FormData) => {
     setLoading(true);
+    setError(null);
     try {
-      const result: any = await signup(formData);
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }),
+      });
 
-      if (result?.error) {
-        setError(result.error);
-        setLoading(false);
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.error || "Signup failed.");
       } else {
         setUser(result);
-        // router.push("/");
+        // Aquí podrías redirigir al usuario, por ejemplo, usando router.push("/login")
       }
     } catch (err) {
       setError("An unexpected error occurred.");
+    } finally {
       setLoading(false);
     }
   };
