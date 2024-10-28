@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const token_hash = searchParams.get("token_hash");
+  const email = searchParams.get("email");
   const type = searchParams.get("type");
   const next = "/login";
 
@@ -16,25 +17,29 @@ export async function GET(req: NextRequest) {
   redirectTo.pathname = next;
   redirectTo.searchParams.delete("token_hash");
   redirectTo.searchParams.delete("type");
+  redirectTo.searchParams.delete("email");
 
   console.log({ token_hash, type });
+
+  if (!token_hash || !email || !type) {
+    redirectTo.searchParams.delete("next");
+    return NextResponse.redirect(redirectTo);
+  }
 
   if (token_hash && type) {
     console.log("verifying otp");
     const supabase = createClient();
 
     const { error } = await supabase.auth.verifyOtp({
+      email: email,
       type: "email",
-      token_hash,
+      token: token_hash,
     });
     if (!error) {
       redirectTo.searchParams.delete("next");
       return NextResponse.redirect(redirectTo);
     }
-    console.log({ error });
   }
-
-  console.log("todo bien");
 
   // return the user to an error page with some instructions
   redirectTo.pathname = "/error";
