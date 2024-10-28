@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 // import sendEmail from "@/lib/supabase/send-emails/index";
 
 export async function POST() {
