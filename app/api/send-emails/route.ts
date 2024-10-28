@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import sendEmail from "@/lib/supabase/send-emails/index";
+// import sendEmail from "@/lib/supabase/send-emails/index";
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,12 +15,12 @@ export async function POST(request: NextRequest) {
 
     console.log({ user, email_data });
 
-    const resEmail = await sendEmail({
-      user: user,
-      email_data: email_data,
-    });
+    // const resEmail = await sendEmail({
+    //   user: user,
+    //   email_data: email_data,
+    // });
 
-    console.log("Email sent", resEmail);
+    console.log("Email sent", 'sin email');
 
     return new NextResponse(JSON.stringify({ body: "hola" }), {
       status: 200,
