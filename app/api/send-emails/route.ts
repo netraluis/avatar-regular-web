@@ -11,9 +11,9 @@ export async function POST(request: NextRequest) {
     //   });
     // }
 
-    const { body } = await request.json();
+    const req = await request.json();
 
-    console.log({ body});
+    console.log({ req});
 
     // console.log({ body });
 
@@ -22,12 +22,12 @@ export async function POST(request: NextRequest) {
     //     body.assistantCreateParams,
     //   );
 
-    const resEmail = await sendEmail({
-      user: body.user,
-      email_data: body.email_data,
-    });
+    // const resEmail = await sendEmail({
+    //   user: body.user,
+    //   email_data: body.email_data,
+    // });
 
-    console.log("Email sent", resEmail);
+    // console.log("Email sent", resEmail);
 
     return new NextResponse(JSON.stringify({ body: "hola" }), {
       status: 200,
