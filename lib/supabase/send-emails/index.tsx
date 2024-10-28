@@ -35,7 +35,7 @@ export default async ({
 }) => {
   console.log({ email_action_type, token_hash, user });
   switch (email_action_type) {
-    case "invite":
+    case "signup":
       return await resend.emails.send({
         from: "you@chatbotfor.xyz",
         to: user?.email,

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import sendEmails from "@/lib/supabase/send-emails";
 
 export async function POST(request: NextRequest) {
   // const SUPABASE_HOOK_SECRET = process.env.SEND_EMAIL_HOOK_SECRET; // Asegúrate de que esto esté definido en tu .env
@@ -7,8 +8,8 @@ export async function POST(request: NextRequest) {
     // const secret = request.headers.get("x-secret-key");
 
     console.log(request.headers)
-    const data = await request.json();
-    console.log({data});
+    const {email_data, user} = await request.json();
+
 
     // Verifica si el secreto coincide con el configurado en Supabase
     // if (!secret || secret !== SUPABASE_HOOK_SECRET) {
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
 
     // Procesa la solicitud después de la verificación del secreto
     console.log("Solicitud autorizada desde Supabase Hook");
+    await sendEmails({email_data, user})
     const responseHeaders = new Headers();
     responseHeaders.set("Content-Type", "application/json");
 
