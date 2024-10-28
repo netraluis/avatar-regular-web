@@ -7,8 +7,8 @@ export async function POST(request: NextRequest) {
     // const secret = request.headers.get("x-secret-key");
 
     console.log(request.headers)
-    // const data = await request.json();
-    // console.log({data});
+    const data = await request.json();
+    console.log({data});
 
     // Verifica si el secreto coincide con el configurado en Supabase
     // if (!secret || secret !== SUPABASE_HOOK_SECRET) {
