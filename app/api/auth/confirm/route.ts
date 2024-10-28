@@ -21,20 +21,18 @@ export async function GET(req: NextRequest) {
 
   console.log({ token_hash, type });
 
-  if (!token_hash || !email || !type) {
-    redirectTo.searchParams.delete("next");
-    return NextResponse.redirect(redirectTo);
-  }
-
-  if (token_hash && type) {
+  if (token_hash && type && email) {
     console.log("verifying otp");
     const supabase = createClient();
 
-    const { error } = await supabase.auth.verifyOtp({
+    const { error, data } = await supabase.auth.verifyOtp({
       email: email,
       type: "email",
       token: token_hash,
     });
+
+    console.log({ error, data });
+
     if (!error) {
       redirectTo.searchParams.delete("next");
       return NextResponse.redirect(redirectTo);
