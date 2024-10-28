@@ -1,36 +1,31 @@
-import { NextResponse } from "next/server";
-// import sendEmail from "@/lib/supabase/send-emails/index";
-// import { Webhook } from "https://esm.sh/standardwebhooks@1.0.0";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST() {
-  
+export async function POST(request: NextRequest) {
+  const SUPABASE_HOOK_SECRET = process.env.SEND_EMAIL_HOOK_SECRET; // Asegúrate de que esto esté definido en tu .env
   try {
-    // const userId = request.headers.get("x-user-id");
+    // Extrae el secreto del encabezado de la solicitud
+    const secret = request.headers.get("x-secret-key");
 
-    // if (!userId) {
-    //   return new NextResponse("user need to be log in", {
-    //     status: 400,
-    //   });
-    // }
+    // Verifica si el secreto coincide con el configurado en Supabase
+    if (!secret || secret !== SUPABASE_HOOK_SECRET) {
+      return new NextResponse("Unauthorized", {
+        status: 401,
+      });
+    }
 
-    // const { user, email_data } = await request.json();
+    // Procesa la solicitud después de la verificación del secreto
+    console.log("Solicitud autorizada desde Supabase Hook");
 
-    // console.log({ user, email_data });
-
-    // // const resEmail = await sendEmail({
-    // //   user: user,
-    // //   email_data: email_data,
-    // // });
-
-    // console.log("Email sent", 'sin email');
-
-    return new NextResponse(JSON.stringify({ body: "hola" }), {
-      status: 200,
-    });
+    return new NextResponse(
+      JSON.stringify({ body: "Email hook recibido y autorizado" }),
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
-    console.error("Error getting token_hash:", error);
+    console.error("Error procesando el hook:", error);
 
-    return new NextResponse("Failed getting token_hash", {
+    return new NextResponse("Error procesando el hook", {
       status: 500,
     });
   }
