@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { signup } from "./actions"; // Asegúrate de tener una función de signup
 import { useContext, useState } from "react";
 import { GlobalContext } from "@/components/context/globalContext";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
