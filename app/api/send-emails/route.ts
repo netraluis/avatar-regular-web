@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
     const { body } = await request.json();
 
-    console.log({ body, user: body.user, email_data: body.email_data });
+    console.log({ body});
 
     // console.log({ body });
 
