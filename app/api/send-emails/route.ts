@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-// import sendEmail from "@/lib/supabase/send-emails/index";
+import sendEmail from "@/lib/supabase/send-emails/index";
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,23 +11,16 @@ export async function POST(request: NextRequest) {
     //   });
     // }
 
-    const {user, email_data} = await request.json();
+    const { user, email_data } = await request.json();
 
-    console.log({user, email_data});
+    console.log({ user, email_data });
 
-    // console.log({ body });
+    const resEmail = await sendEmail({
+      user: user,
+      email_data: email_data,
+    });
 
-    //   const newInternAssistant = await createAssistantByTeam(
-    //     teamId,
-    //     body.assistantCreateParams,
-    //   );
-
-    // const resEmail = await sendEmail({
-    //   user: body.user,
-    //   email_data: body.email_data,
-    // });
-
-    // console.log("Email sent", resEmail);
+    console.log("Email sent", resEmail);
 
     return new NextResponse(JSON.stringify({ body: "hola" }), {
       status: 200,

@@ -38,7 +38,8 @@ export default async function middleware(req: NextRequest) {
   }`;
 
   const newUrl =
-    hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` || hostname === process.env.NEXT_PUBLIC_VERCEL_URL
+    hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` ||
+    hostname === process.env.NEXT_PUBLIC_VERCEL_URL
       ? new URL(`/app${path}`, req.url)
       : new URL(`/${hostname}${path}`, req.url);
 
