@@ -28,16 +28,17 @@ export interface UserData {
 
 export default async ({
   email_data: { email_action_type, token_hash },
-  user: { email },
+  user,
 }: {
   email_data: EmailData;
   user: UserData;
 }) => {
+  console.log({ email_action_type, token_hash, user });
   switch (email_action_type) {
     case "invite":
       return await resend.emails.send({
         from: "you@chatbotfor.xyz",
-        to: email,
+        to: user?.email,
         subject: "Link de invitación",
         react: (
           <InviteTemplate
