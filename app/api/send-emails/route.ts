@@ -2,13 +2,13 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const userId = request.headers.get("x-user-id");
+    // const userId = request.headers.get("x-user-id");
 
-    if (!userId) {
-      return new NextResponse("user need to be log in", {
-        status: 400,
-      });
-    }
+    // if (!userId) {
+    //   return new NextResponse("user need to be log in", {
+    //     status: 400,
+    //   });
+    // }
 
     const body = await request.json();
 
