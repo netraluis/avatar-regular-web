@@ -7,9 +7,7 @@ export async function POST(request: NextRequest) {
     // Extrae el secreto del encabezado de la solicitud
     // const secret = request.headers.get("x-secret-key");
 
-    console.log(request.headers)
-    const {email_data, user} = await request.json();
-
+    const { email_data, user } = await request.json();
 
     // Verifica si el secreto coincide con el configurado en Supabase
     // if (!secret || secret !== SUPABASE_HOOK_SECRET) {
@@ -25,7 +23,7 @@ export async function POST(request: NextRequest) {
 
     // Procesa la solicitud después de la verificación del secreto
     console.log("Solicitud autorizada desde Supabase Hook");
-    await sendEmails({email_data, user})
+    await sendEmails({ email_data, user });
     const responseHeaders = new Headers();
     responseHeaders.set("Content-Type", "application/json");
 
@@ -34,7 +32,7 @@ export async function POST(request: NextRequest) {
       {
         status: 200,
         headers: responseHeaders,
-      }
+      },
     );
   } catch (error) {
     console.error("Error procesando el hook:", error);

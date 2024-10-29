@@ -1,12 +1,19 @@
 // context/AppContext.tsx
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 
+import { useRouter } from "next/navigation";
 import OpenAI from "openai";
 import {
   AssistantCreateParams,
   AssistantUpdateParams,
 } from "openai/resources/beta/assistants.mjs";
-import { createContext, useContext, useReducer, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 
 export type Team = {
   id?: string;
@@ -51,7 +58,8 @@ type Action =
   | { type: "SET_TEAM_CREATION"; payload: { newTeam: Team } }
   | { type: "SET_USER"; payload: any }
   | { type: "SET_ASSISTANT_CREATION"; payload: { newAssistant: Assistant } }
-  | { type: "SET_ASSISTANT_DELETE"; payload: { assistantId: string } };
+  | { type: "SET_ASSISTANT_DELETE"; payload: { assistantId: string } }
+  | { type: "SET_USER_LOGOUT" };
 
 // Reducer que actualizará el estado basado en las acciones
 const appReducer = (state: AppState, action: Action): AppState => {
@@ -89,6 +97,15 @@ const appReducer = (state: AppState, action: Action): AppState => {
           (assistant) => assistant.openAIId !== action.payload.assistantId,
         ),
       };
+    case "SET_USER_LOGOUT":
+      return {
+        ...state,
+        teams: [],
+        teamSelected: null,
+        assistantsByTeam: [],
+        user: null,
+      };
+
     default:
       return state;
   }
@@ -109,14 +126,24 @@ export const AppProvider = ({
   children: React.ReactNode;
   user: any;
 }) => {
+  const router = useRouter();
+
   const initialState: AppState = {
     teams: [],
     teamSelected: null,
     assistantsByTeam: [],
-    user,
+    user: { user: { id: user } },
   };
 
   const [state, dispatch] = useReducer(appReducer, initialState);
+
+  useEffect(() => {
+    if (state.user?.user?.id) {
+      return router.push("/team");
+    } else {
+      return router.push("/login");
+    }
+  }, [state.user?.user?.id]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
@@ -691,4 +718,80 @@ export const useAssistant = ({
     messages,
     status,
   };
+};
+
+export const useUserLogout = () => {
+  const { dispatch } = useAppContext();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
+
+  async function userLogout() {
+    console.log("intentando hacer logout");
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/auth/signout`, {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      dispatch({ type: "SET_USER_LOGOUT" });
+      setData(responseData);
+      return { data: responseData };
+    } catch (error: any) {
+      console.log({ error });
+      setError({ error });
+      return { error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { loading, error, data, userLogout };
+};
+
+export const useLoginUser = () => {
+  const { dispatch } = useAppContext();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
+  const [data, setData] = useState<any>(null);
+
+  async function loginUser({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      dispatch({ type: "SET_USER", payload: responseData });
+      setData(responseData);
+      return { data: responseData };
+    } catch (error: any) {
+      setError({ error });
+      return { error };
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { loading, error, data, loginUser };
 };

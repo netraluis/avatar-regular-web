@@ -6,14 +6,18 @@ export async function POST(request: NextRequest) {
 
   const { email, password } = await request.json();
 
-  const { error } = await supabase.auth.signUp({ email, password });
+  const { error, data } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
   if (error) {
     return new NextResponse(JSON.stringify({ error: error.message }), {
       status: 400,
     });
   }
-  return new NextResponse(JSON.stringify({ email }), {
+  console.log({ error, data });
+  return new NextResponse(JSON.stringify(data), {
     status: 200,
   });
 }

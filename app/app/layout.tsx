@@ -16,7 +16,7 @@ export default async function Layout({
   // if (!team) return <div>no team</div>;
 
   return (
-    <AppProvider user={{ id: userId }}>
+    <AppProvider user={userId}>
       <DashboardHeader userId={userId}>{children}</DashboardHeader>
     </AppProvider>
   );

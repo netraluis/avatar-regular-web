@@ -1,25 +1,39 @@
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
-import { type NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-  const supabase = createClient();
+export async function POST() {
+  try {
+    const supabase = createClient();
 
-  // Check if a user's logged in
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    // Check if a user's logged in
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  if (user) {
-    await supabase.auth.signOut();
+    if (user) {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        return new NextResponse(JSON.stringify({ error: error }), {
+          status: 400,
+        });
+      }
+    }
+
+    return new NextResponse(JSON.stringify({}), {
+      status: 200,
+    });
+  } catch (error: any) {
+    return new NextResponse(JSON.stringify({ error }), {
+      status: 500,
+    });
   }
 
-  revalidatePath("/", "layout");
+  // revalidatePath("/", "layout");
 
-  const subdomainUrl = new URL(
-    `${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${req.headers.get("host")}/login`,
-  );
-  return NextResponse.redirect(new URL(subdomainUrl, req.url), {
-    status: 302,
-  });
+  // const subdomainUrl = new URL(
+  //   `${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${req.headers.get("host")}/login`,
+  // );
+  // return NextResponse.redirect(new URL(subdomainUrl, req.url), {
+  //   status: 302,
+  // });
 }

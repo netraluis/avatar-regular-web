@@ -27,6 +27,7 @@ import {
   useAppContext,
   useFetchAssistantsByTeamId,
   useFetchTeamsByUserId,
+  useUserLogout,
 } from "../context/appContext";
 import { Option } from "@/types/types";
 
@@ -47,19 +48,26 @@ export default function Dashboard({
 
   const { fetchTeamsByUserId } = useFetchTeamsByUserId();
   const { fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
+  const { userLogout } = useUserLogout();
 
   useEffect(() => {
-    if (user.id && teamId) {
-      fetchAssistantsByTeamId(teamId as string, user.id);
+    if (user?.user?.id && teamId) {
+      fetchAssistantsByTeamId(teamId as string, user.user.id);
     }
   }, []);
+
+  useEffect(() => {
+    if (user?.user?.id) {
+      fetchTeamsByUserId(user.user.id);
+    }
+  }, [user?.user?.id]);
 
   useEffect(() => {
     if (userId) {
       fetchTeamsByUserId(userId);
       dispatch({
         type: "SET_USER",
-        payload: { id: userId },
+        payload: { user: { id: userId } },
       });
     }
   }, [userId]);
@@ -134,31 +142,40 @@ export default function Dashboard({
             </BreadcrumbList>
           </Breadcrumb>
           <div className="relative ml-auto flex-1 md:grow-0"></div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="overflow-hidden rounded-full"
-              >
-                <Image
-                  src="/avatar.png"
-                  width={36}
-                  height={36}
-                  alt="Avatar"
+          {user?.user?.id && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
                   className="overflow-hidden rounded-full"
-                />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                >
+                  <Image
+                    src="/avatar.png"
+                    width={36}
+                    height={36}
+                    alt="Avatar"
+                    className="overflow-hidden rounded-full"
+                  />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={async () => {
+                    await userLogout();
+                    router.push("/login");
+                  }}
+                >
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </header>
         {children}
       </div>

@@ -10,35 +10,11 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { login } from "./actions";
-import { useContext, useState } from "react";
-import { useRouter } from "next/navigation";
-import { GlobalContext } from "@/components/context/globalContext";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { useLoginUser } from "../context/appContext";
 
 export default function Login() {
-  const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const { setUser } = useContext(GlobalContext);
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = async (formData: FormData) => {
-    setLoading(true);
-    try {
-      const result: any = await login(formData);
-
-      if (result?.error) {
-        setError(result.error);
-        return setLoading(false);
-      } else {
-        setUser(result);
-        router.push("/");
-      }
-    } catch (err) {
-      setError("An unexpected error occurred.");
-      setLoading(false);
-    }
-  };
+  const { loginUser, error, loading } = useLoginUser();
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -56,7 +32,10 @@ export default function Login() {
             onSubmit={(e) => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget);
-              handleLogin(formData);
+              loginUser({
+                email: formData.get("email") as string,
+                password: formData.get("password") as string,
+              });
             }}
           >
             <div className="grid gap-2">

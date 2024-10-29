@@ -38,7 +38,7 @@ function CreateAssistantForm() {
       createAssistant({
         assistantCreateParams,
         teamId: teamId as string,
-        userId: user.id,
+        userId: user?.user?.id,
       });
     }
   };

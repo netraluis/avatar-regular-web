@@ -14,15 +14,15 @@ const RedirectComponent = () => {
   } = useAppContext();
 
   useEffect(() => {
-    if (user?.id) {
-      fetchTeamsByUserId(user?.id);
+    if (user?.user?.id) {
+      fetchTeamsByUserId(user.user.id);
     }
-  }, [user]);
+  }, [user.user.id]);
 
   useEffect(() => {
     if (teamSelected?.id) {
       return router.push(`/team/${teamSelected.id}`);
-    }else{
+    } else {
       return router.push(`/team/new`);
     }
   }, [teamSelected]);

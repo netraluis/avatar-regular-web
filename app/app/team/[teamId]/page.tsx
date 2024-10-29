@@ -53,7 +53,7 @@ export default function Dashboard() {
   const { deleteAssistant } = useDeleteAssistant();
 
   useEffect(() => {
-    fetchAssistantsByTeamId(teamId as string, user.id);
+    fetchAssistantsByTeamId(teamId as string, user?.user?.id);
   }, []);
 
   const handleCreateNewAssistantRoute = () => {

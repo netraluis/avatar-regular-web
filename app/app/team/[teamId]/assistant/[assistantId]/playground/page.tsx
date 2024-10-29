@@ -55,10 +55,10 @@ export default function Playground() {
   const { updateAssistant } = useUpdateAssistant();
 
   React.useEffect(() => {
-    if (assistantId) {
+    if (assistantId && state.user?.user?.id) {
       getAssistant({
         assistantId: assistantId as string,
-        userId: state.user.id,
+        userId: state.user.user.id,
       });
     }
   }, []);
@@ -85,23 +85,22 @@ export default function Playground() {
 
   const handleUpdate = async () => {
     try {
-      updateAssistant({
-        assistantId: assistantId as string,
-        userId: state.user.id,
-        assistantUpdateParams: assistantValues,
-      });
+      if (assistantValues && assistantId && state.user?.user?.id)
+        updateAssistant({
+          assistantId: assistantId as string,
+          userId: state.user.user.id,
+          assistantUpdateParams: assistantValues,
+        });
     } catch (error) {
       console.error("An error occurred while updating the assistant", error);
     }
   };
 
-  const { loading, error, data, submitMessage, internatlThreadId, messages } =
-    useAssistant({
-      threadId: threadId,
-      // message: 'ss',
-      assistantId: assistantId as string,
-      userId: state.user.id,
-    });
+  const { submitMessage, internatlThreadId, messages } = useAssistant({
+    threadId: threadId,
+    assistantId: assistantId as string,
+    userId: state.user?.user?.id,
+  });
 
   const {
     messagesRef,
