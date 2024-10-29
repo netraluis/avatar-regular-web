@@ -26,7 +26,7 @@ function CreateTeamForm() {
     if (formRef.current) {
       const formData = new FormData(formRef.current);
       const teamName = formData.get("name") as string;
-      createTeam({ teamName, userId: user.id });
+      createTeam({ teamName, userId: user.user.id });
     }
   };
 
