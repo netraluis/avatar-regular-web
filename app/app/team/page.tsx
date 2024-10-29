@@ -23,7 +23,7 @@ const RedirectComponent = () => {
     if (teamSelected?.id) {
       return router.push(`/team/${teamSelected.id}`);
     }
-    if (teamSelected && !teamSelected.id) {
+    if (!teamSelected || !teamSelected.id) {
       return router.push(`/team/new`);
     }
   }, [teamSelected]);
