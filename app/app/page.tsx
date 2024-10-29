@@ -22,8 +22,7 @@ const RedirectComponent = () => {
   useEffect(() => {
     if (teamSelected?.id) {
       return router.push(`/team/${teamSelected.id}`);
-    }
-    if (teamSelected && !teamSelected.id) {
+    }else{
       return router.push(`/team/new`);
     }
   }, [teamSelected]);

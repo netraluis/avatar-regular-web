@@ -103,12 +103,6 @@ export default function Playground() {
       userId: state.user.id,
     });
 
-  console.log("aqui", { loading, error, data, messages });
-
-  React.useEffect(() => {
-    console.log({ messages });
-  }, [messages]);
-
   const {
     messagesRef,
     scrollRef,
