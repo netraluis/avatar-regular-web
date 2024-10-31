@@ -61,11 +61,16 @@ export default function Component() {
     setIsDragging(false);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
+  const handleDrop = useCallback(async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
     // Handle the dropped files
     const files = Array.from(e.dataTransfer.files);
+    await uploadFileVectorStore({
+      fileInput: files as unknown as FileList,
+      assistantId: params.assistantId as string,
+    });
+    setIsModalOpen(false);
   }, []);
 
   const handleClick = () => {
@@ -190,12 +195,13 @@ export default function Component() {
                       className="hidden"
                       multiple
                       accept=".pdf,.doc,.docx,.txt"
-                      onChange={(e) =>
-                        uploadFileVectorStore({
+                      onChange={async(e) => {
+                        await uploadFileVectorStore({
                           fileInput: e.target.files,
                           assistantId: params.assistantId as string,
-                        })
-                      }
+                        });
+                        setIsModalOpen(false);
+                      }}
                     />
                   </label>
                 </p>
