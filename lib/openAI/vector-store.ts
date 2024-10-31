@@ -15,7 +15,7 @@ export const createVectorStore = async ({
 };
 
 export const getVectorStoreFiles = async (
-  vectorStoreId: string
+  vectorStoreId: string,
 ): Promise<OpenAI.Beta.VectorStores.Files.VectorStoreFilesPage> => {
   return await openai.beta.vectorStores.files.list(vectorStoreId);
 };

@@ -14,14 +14,15 @@ const navItems = [
 
 function Header() {
   const pathname = usePathname();
-  const comparatePathName = pathname.split("/").slice(-1)[0];
+  const comparatePathName = pathname.split("/").slice(1)[4];
+  const absolutePath = pathname.split("/").slice(1, 5).join("/");
 
   return (
     <nav className="flex space-x-4 border-b pb-2 mb-4">
       {navItems.map((item) => (
         <Link
           key={item.name}
-          href={item.href}
+          href={`/${absolutePath}/${item.href}`}
           className={`text-sm font-medium transition-colors hover:text-primary ${
             comparatePathName === item.href
               ? "text-primary border-b-2 border-primary"

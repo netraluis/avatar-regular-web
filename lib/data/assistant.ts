@@ -14,7 +14,7 @@ export const getAssistantsByTeam = async (teamId: string) => {
 
 export const createAssistantByTeam = async (
   teamId: string,
-  assistantCreateParams: AssistantCreateParams
+  assistantCreateParams: AssistantCreateParams,
 ) => {
   if (!assistantCreateParams.name) {
     throw new Error("name is required");

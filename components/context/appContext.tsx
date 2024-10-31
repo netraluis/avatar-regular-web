@@ -95,7 +95,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
       return {
         ...state,
         assistantsByTeam: state.assistantsByTeam.filter(
-          (assistant) => assistant.openAIId !== action.payload.assistantId
+          (assistant) => assistant.openAIId !== action.payload.assistantId,
         ),
       };
     case "SET_USER_LOGOUT":
@@ -234,7 +234,7 @@ export const useFetchAssistantsByTeamId = () => {
             "Content-Type": "application/json",
             "x-user-id": userId, // Aquí enviamos el userId en los headers
           },
-        }
+        },
       );
 
       if (!teamSelectedResponse.ok) {
@@ -515,7 +515,7 @@ export const useAssistant = ({
     { role: string; message: string; id: string }[]
   >([]);
   const [internatlThreadId, setInternalThreadId] = useState<string | undefined>(
-    undefined
+    undefined,
   );
 
   const [status, setStatus] = useState<string>("");
@@ -574,7 +574,7 @@ export const useAssistant = ({
 
                   setMessages((prevMessages) => {
                     const existingMessageIndex = prevMessages.findIndex(
-                      (msg) => msg.id === id
+                      (msg) => msg.id === id,
                     );
 
                     if (existingMessageIndex !== -1) {
@@ -657,7 +657,7 @@ export const useAssistant = ({
 
                   setMessages((prevMessages) => {
                     const existingMessageIndex = prevMessages.findIndex(
-                      (msg) => msg.id === id
+                      (msg) => msg.id === id,
                     );
 
                     if (existingMessageIndex !== -1) {
@@ -816,7 +816,7 @@ export const useFileVectorStoreAssistant = () => {
 
       const response = await fetch(
         "/api/protected/vector-store-assistant",
-        requestOptions
+        requestOptions,
       );
 
       if (!response.ok) {
@@ -840,7 +840,7 @@ export const useFileVectorStoreAssistant = () => {
         `/api/protected/vector-store-assistant/${assistantId}`,
         {
           method: "GET",
-        }
+        },
       );
 
       if (!response.ok) {

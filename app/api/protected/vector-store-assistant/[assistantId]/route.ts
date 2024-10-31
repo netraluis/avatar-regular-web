@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { assistantId: string } }
+  { params }: { params: { assistantId: string } },
 ) {
   const assistant = await getAssistant(params.assistantId);
   if (!assistant) {
