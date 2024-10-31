@@ -1,6 +1,7 @@
 import { createAssistant, deleteAssistantById } from "../openAI/assistant";
 import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
 import prisma from "../prisma";
+import { createVectorStore } from "../openAI/vector-store";
 
 export const getAssistantsByTeam = async (teamId: string) => {
   const teamInfo = await prisma.assistant.findMany({
@@ -13,7 +14,7 @@ export const getAssistantsByTeam = async (teamId: string) => {
 
 export const createAssistantByTeam = async (
   teamId: string,
-  assistantCreateParams: AssistantCreateParams,
+  assistantCreateParams: AssistantCreateParams
 ) => {
   if (!assistantCreateParams.name) {
     throw new Error("name is required");
@@ -22,11 +23,17 @@ export const createAssistantByTeam = async (
     name: assistantCreateParams.name,
     model: assistantCreateParams.model,
   });
+
+  const newVectorStore = await createVectorStore({
+    name: newAssistantOpenAi.id,
+  });
+
   const newAssistant = await prisma.assistant.create({
     data: {
       name: assistantCreateParams.name,
       teamId: teamId,
       openAIId: newAssistantOpenAi.id,
+      openAIVectorStoreId: newVectorStore.id,
     },
   });
 
@@ -44,10 +51,9 @@ export const deleteAssistant = async (assistantId: string) => {
 };
 
 export const getAssistant = async (assistantId: string) => {
-  const assistant = await prisma.assistant.findUnique({
+  return await prisma.assistant.findUnique({
     where: {
       id: assistantId,
     },
   });
-  return assistant;
 };

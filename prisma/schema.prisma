@@ -83,6 +83,7 @@ model Assistant {
   teamId      String
   status      AsssitantStatus @default(PUBLIC)
   openAIId    String
+  openAIVectorStoreId String
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
 

@@ -55,3 +55,16 @@ export enum ChatModel {
   GPT4 = "gpt-4",
   DAVINCI = "davinci",
 }
+
+export interface VectorStoreFile {
+  id: string;
+  filename: string;
+  bytes: number;
+  status: string;
+  isCharging: boolean;
+}
+
+export interface SuccessfullResponse<T> {
+  status: number;
+  data: T;
+}

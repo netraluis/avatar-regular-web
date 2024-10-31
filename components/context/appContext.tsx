@@ -1,6 +1,7 @@
 // context/AppContext.tsx
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 
+import { VectorStoreFile, SuccessfullResponse } from "@/types/types";
 import { useRouter } from "next/navigation";
 import OpenAI from "openai";
 import {
@@ -94,7 +95,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
       return {
         ...state,
         assistantsByTeam: state.assistantsByTeam.filter(
-          (assistant) => assistant.openAIId !== action.payload.assistantId,
+          (assistant) => assistant.openAIId !== action.payload.assistantId
         ),
       };
     case "SET_USER_LOGOUT":
@@ -233,7 +234,7 @@ export const useFetchAssistantsByTeamId = () => {
             "Content-Type": "application/json",
             "x-user-id": userId, // Aquí enviamos el userId en los headers
           },
-        },
+        }
       );
 
       if (!teamSelectedResponse.ok) {
@@ -337,7 +338,6 @@ export const useCreateAssistant = () => {
         throw new Error(`Error: ${response.statusText}`);
       }
       const responseData = await response.json();
-      console.log({ responseData });
       dispatch({
         type: "SET_ASSISTANT_CREATION",
         payload: { newAssistant: responseData },
@@ -387,7 +387,6 @@ export const useDeleteAssistant = () => {
         throw new Error(`Error: ${response.statusText}`);
       }
       const responseData = await response.json();
-      console.log({ responseData });
       dispatch({
         type: "SET_ASSISTANT_DELETE",
         payload: { assistantId },
@@ -409,8 +408,6 @@ export const useDeleteAssistant = () => {
 };
 
 export const useGetAssistant = () => {
-  // const { dispatch } = useAppContext();
-
   const [loadingGetAssistant, setLoadingGetAssistant] = useState(false);
   const [errorGetAssistant, setErrorGetAssistant] = useState<any>(null);
   const [getAssistantData, setGetAssistantData] =
@@ -423,7 +420,6 @@ export const useGetAssistant = () => {
     assistantId: string;
     userId: string;
   }) {
-    console.log({ assistantId, userId });
     try {
       setLoadingGetAssistant(true);
       const response = await fetch(`/api/protected/assistant/${assistantId}`, {
@@ -438,11 +434,7 @@ export const useGetAssistant = () => {
         throw new Error(`Error: ${response.statusText}`);
       }
       const responseData = await response.json();
-      // console.log({ responseData });
-      // dispatch({
-      //   type: "SET_ASSISTANT_DELETE",
-      //   payload: { assistantId },
-      // });
+
       setGetAssistantData(responseData);
     } catch (error: any) {
       setErrorGetAssistant({ error });
@@ -476,7 +468,6 @@ export const useUpdateAssistant = () => {
     userId: string;
     assistantUpdateParams: AssistantUpdateParams;
   }) {
-    console.log({ assistantId, userId, assistantUpdateParams });
     try {
       setLoadingUpdateAssistant(true);
       const response = await fetch(`/api/protected/assistant/${assistantId}`, {
@@ -492,11 +483,6 @@ export const useUpdateAssistant = () => {
         throw new Error(`Error: ${response.statusText}`);
       }
       const responseData = await response.json();
-      // console.log({ responseData });
-      // dispatch({
-      //   type: "SET_ASSISTANT_DELETE",
-      //   payload: { assistantId },
-      // });
       setUpdateAssistantData(responseData);
     } catch (error: any) {
       setErrorUpdateAssistant({ error });
@@ -529,7 +515,7 @@ export const useAssistant = ({
     { role: string; message: string; id: string }[]
   >([]);
   const [internatlThreadId, setInternalThreadId] = useState<string | undefined>(
-    undefined,
+    undefined
   );
 
   const [status, setStatus] = useState<string>("");
@@ -588,7 +574,7 @@ export const useAssistant = ({
 
                   setMessages((prevMessages) => {
                     const existingMessageIndex = prevMessages.findIndex(
-                      (msg) => msg.id === id,
+                      (msg) => msg.id === id
                     );
 
                     if (existingMessageIndex !== -1) {
@@ -671,7 +657,7 @@ export const useAssistant = ({
 
                   setMessages((prevMessages) => {
                     const existingMessageIndex = prevMessages.findIndex(
-                      (msg) => msg.id === id,
+                      (msg) => msg.id === id
                     );
 
                     if (existingMessageIndex !== -1) {
@@ -728,7 +714,6 @@ export const useUserLogout = () => {
   const [data, setData] = useState<any>(null);
 
   async function userLogout() {
-    console.log("intentando hacer logout");
     try {
       setLoading(true);
       const response = await fetch(`/api/auth/signout`, {
@@ -743,7 +728,6 @@ export const useUserLogout = () => {
       setData(responseData);
       return { data: responseData };
     } catch (error: any) {
-      console.log({ error });
       setError({ error });
       return { error };
     } finally {
@@ -794,4 +778,138 @@ export const useLoginUser = () => {
   }
 
   return { loading, error, data, loginUser };
+};
+
+export const useFileVectorStoreAssistant = () => {
+  const [upLoadFileloading, setUpLoadFileloading] = useState(false);
+  const [upLoadFileError, setUpLoadFileError] = useState<any>(null);
+  const [upLoadFiledata, setUpLoadFiledata] = useState<any>(null);
+
+  const [getFileloading, setGetFileloading] = useState(false);
+  const [getFileError, setGetFileError] = useState<any>(null);
+  const [getFileData, setGetFiledata] = useState<
+    SuccessfullResponse<VectorStoreFile[]>
+  >({ status: 200, data: [] });
+
+  const [fileData, setFileData] = useState<VectorStoreFile[]>([]);
+
+  async function uploadFileVectorStore({
+    fileInput,
+    assistantId,
+  }: {
+    fileInput: FileList | null;
+    assistantId: string;
+  }) {
+    if (!fileInput || fileInput.length === 0) return;
+    try {
+      setUpLoadFileloading(true);
+
+      const formData = new FormData();
+      Array.from(fileInput).forEach((file) => {
+        formData.append("files", file); // Usa el mismo nombre "files" para todos los archivos
+      });
+
+      formData.append("assistantId", assistantId);
+      formData.append("purpose", "assistants");
+
+      const requestOptions = { method: "POST", body: formData };
+
+      const response = await fetch(
+        "/api/protected/vector-store-assistant",
+        requestOptions
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      setUpLoadFileError(null);
+      setUpLoadFiledata(responseData);
+      return setFileData((prev) => [...prev, ...responseData.data]);
+    } catch (error: any) {
+      return setUpLoadFileError({ error });
+    } finally {
+      setUpLoadFileloading(false);
+    }
+  }
+
+  async function getFileVectorStore({ assistantId }: { assistantId: string }) {
+    try {
+      setGetFileloading(true);
+      const response = await fetch(
+        `/api/protected/vector-store-assistant/${assistantId}`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData: SuccessfullResponse<VectorStoreFile[]> =
+        await response.json();
+      setGetFiledata(responseData);
+      return setFileData(responseData.data);
+    } catch (error: any) {
+      return setGetFileError({ error });
+    } finally {
+      setGetFileloading(false);
+    }
+  }
+
+  async function deleteFileVectorStore({ fileId }: { fileId: string }) {
+    try {
+      setFileData((pre) => {
+        const res = pre.map((file) => {
+          if (file.id === fileId) {
+            return { ...file, isCharging: true };
+          }
+          return file;
+        });
+        return res;
+      });
+      const response = await fetch(`/api/protected/file/${fileId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      return setFileData((pre) => pre.filter((file) => file.id !== fileId));
+    } catch (error: any) {
+      return setFileData((pre) => {
+        const res = pre.map((file) => {
+          if (file.id === fileId) {
+            return { ...file, isCharging: false, status: "error" };
+          }
+          return file;
+        });
+        return res;
+      });
+    } finally {
+      setFileData((pre) => {
+        const res = pre.map((file) => {
+          if (file.id === fileId) {
+            return { ...file, isCharging: false };
+          }
+          return file;
+        });
+        return res;
+      });
+    }
+  }
+
+  return {
+    upLoadFileloading,
+    upLoadFileError,
+    upLoadFiledata,
+    uploadFileVectorStore,
+    getFileloading,
+    getFileError,
+    getFileData,
+    getFileVectorStore,
+    deleteFileVectorStore,
+    fileData,
+  };
 };
