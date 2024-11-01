@@ -28,16 +28,17 @@ export async function POST(request: NextRequest) {
       }),
     });
 
+    const data = await response.json();
     // Verifica si la respuesta es JSON antes de parsearla
-    const contentType = response.headers.get("content-type");
-    let data;
-    if (contentType && contentType.includes("application/json")) {
-      data = await response.json();
-    } else {
-      const text = await response.text();
-      console.error("Respuesta de Notion no es JSON:", text);
-      return NextResponse.json({ error: text }, { status: response.status });
-    }
+    // const contentType = response.headers.get("content-type");
+    // let data;
+    // if (contentType && contentType.includes("application/json")) {
+    //   data = await response.json();
+    // } else {
+    //   const text = await response.text();
+    //   console.error("Respuesta de Notion no es JSON:", text);
+    //   return NextResponse.json({ error: text }, { status: response.status });
+    // }
 
     // Verifica si se obtuvo el access_token
     if (!data.access_token) {
