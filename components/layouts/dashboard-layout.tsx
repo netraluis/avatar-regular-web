@@ -31,11 +31,7 @@ import {
 } from "../context/appContext";
 import { Option } from "@/types/types";
 
-export default function Dashboard({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+export default function Dashboard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const {
