@@ -51,6 +51,24 @@ export async function POST(request: NextRequest) {
     console.log("data access_token back", data);
     const accessToken = data.access_token;
 
+    const searchResponse = await fetch("https://api.notion.com/v1/search", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Notion-Version": "2021-08-16", // Asegúrate de usar la versión adecuada de la API
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        filter: {
+          value: "page",
+          property: "object",
+        },
+      }),
+    });
+
+    const searchData = await searchResponse.json();
+    console.log("Páginas autorizadas:", searchData);
+
     // Retorna el token de acceso como JSON
     return NextResponse.json({ access_token: accessToken });
   } catch (error) {
