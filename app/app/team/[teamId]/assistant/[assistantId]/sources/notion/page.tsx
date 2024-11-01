@@ -59,7 +59,7 @@ export default function Component() {
             body: JSON.stringify({ accessToken }),
           });
 
-          console.log({ pages });
+          console.log({ pages: await pages.json() });
         } catch (e) {
           console.log("error", e);
         }
