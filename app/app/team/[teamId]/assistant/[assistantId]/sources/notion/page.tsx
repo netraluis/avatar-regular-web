@@ -19,7 +19,6 @@ import { Loader } from "@/components/loader";
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
 
-
   useEffect(() => {
     // Listener para el mensaje de autenticación completada
     const handleAuthMessage = async (event: MessageEvent) => {
@@ -51,26 +50,16 @@ export default function Component() {
           const accessToken = data.access_token;
           console.log("access token", accessToken);
 
-          // const searchResponse = await fetch(
-          //   "https://api.notion.com/v1/search",
-          //   {
-          //     method: "POST",
-          //     headers: {
-          //       Authorization: `Bearer ${accessToken}`,
-          //       "Notion-Version": "2021-08-16", // Asegúrate de usar la versión adecuada de la API
-          //       "Content-Type": "application/json",
-          //     },
-          //     body: JSON.stringify({
-          //       filter: {
-          //         value: "page",
-          //         property: "object",
-          //       },
-          //     }),
-          //   }
-          // );
+          const pages = await fetch(`/api/notion/oauth/token`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              // "x-user-id": userId,
+            },
+            body: JSON.stringify({ accessToken }),
+          });
 
-          // const searchData = await searchResponse.json();
-          // console.log("Páginas autorizadas:", searchData);
+          console.log({ pages });
         } catch (e) {
           console.log("error", e);
         }
