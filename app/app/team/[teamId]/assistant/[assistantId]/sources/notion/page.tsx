@@ -50,7 +50,7 @@ export default function Component() {
           const accessToken = data.access_token;
           console.log("access token", accessToken);
 
-          const pages = await fetch(`/api/notion/oauth/token`, {
+          const pages = await fetch(`/api/notion/search`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
