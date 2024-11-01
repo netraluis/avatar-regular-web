@@ -18,7 +18,7 @@ import { Loader } from "@/components/loader";
 
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
-  const redirectUri = "https://app.netraluis.com/notion";
+
 
   useEffect(() => {
     // Listener para el mensaje de autenticación completada
@@ -32,52 +32,45 @@ export default function Component() {
 
         // Aquí puedes hacer una llamada a tu backend para intercambiar el código por un token
 
-        const encoded = btoa(
-          `${process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID}:${process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET}`
-        );
+        // const encoded = btoa(
+        //   `${process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID}:${process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET}`
+        // );
 
         try {
-          const response = await fetch(
-            "https://api.notion.com/v1/oauth/token",
-            {
-              method: "POST",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Basic ${encoded}`,
-              },
-              body: JSON.stringify({
-                grant_type: "authorization_code",
-                code: event.data.code,
-                redirect_uri: redirectUri,
-              }),
-            }
-          );
+          const response = await fetch(`/api/notion/oauth/toke`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              // "x-user-id": userId,
+            },
+            body: JSON.stringify({ code: event.data.code }),
+          });
 
           const data = await response.json();
-          console.log("data access_token", data);
+          console.log("data access_token front", data);
           const accessToken = data.access_token;
+          console.log("access token", accessToken);
 
-          const searchResponse = await fetch(
-            "https://api.notion.com/v1/search",
-            {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Notion-Version": "2021-08-16", // Asegúrate de usar la versión adecuada de la API
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                filter: {
-                  value: "page",
-                  property: "object",
-                },
-              }),
-            }
-          );
+          // const searchResponse = await fetch(
+          //   "https://api.notion.com/v1/search",
+          //   {
+          //     method: "POST",
+          //     headers: {
+          //       Authorization: `Bearer ${accessToken}`,
+          //       "Notion-Version": "2021-08-16", // Asegúrate de usar la versión adecuada de la API
+          //       "Content-Type": "application/json",
+          //     },
+          //     body: JSON.stringify({
+          //       filter: {
+          //         value: "page",
+          //         property: "object",
+          //       },
+          //     }),
+          //   }
+          // );
 
-          const searchData = await searchResponse.json();
-          console.log("Páginas autorizadas:", searchData);
+          // const searchData = await searchResponse.json();
+          // console.log("Páginas autorizadas:", searchData);
         } catch (e) {
           console.log("error", e);
         }
