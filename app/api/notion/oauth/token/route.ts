@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: `Basic ${encodedCredentials}`,
+        "Notion-Version": "2022-06-28",
       },
       body: JSON.stringify({
         grant_type: "authorization_code",
