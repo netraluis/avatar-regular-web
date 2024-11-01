@@ -6,6 +6,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { accessToken } = body;
 
+    console.log("access token", accessToken);
+
     // Verifica si se obtuvo el access_token
     if (!accessToken) {
       return NextResponse.json("no access token", { status: 400 });
