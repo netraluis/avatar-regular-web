@@ -140,7 +140,7 @@ export const AppProvider = ({
 
   useEffect(() => {
     if (state.user?.user?.id) {
-      return router.push("/team");
+      // return router.push("/team");
     } else {
       return router.push("/login");
     }

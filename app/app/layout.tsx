@@ -17,7 +17,7 @@ export default async function Layout({
 
   return (
     <AppProvider user={userId}>
-      <DashboardHeader userId={userId}>{children}</DashboardHeader>
+      <DashboardHeader>{children}</DashboardHeader>
     </AppProvider>
   );
 }

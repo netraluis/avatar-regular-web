@@ -32,20 +32,18 @@ import {
 import { Option } from "@/types/types";
 
 export default function Dashboard({
-  children,
-  userId,
+  children
 }: {
   children: React.ReactNode;
-  userId: string | null;
 }) {
   const router = useRouter();
 
   const {
     state: { teams, teamSelected, assistantsByTeam, user },
-    dispatch,
   } = useAppContext();
-  const [assistantSelected, setAssistantSelected] = React.useState(null);
+  const { teamId, assistantId } = useParams();
 
+  const [assistantSelected, setAssistantSelected] = React.useState(null);
   const { fetchTeamsByUserId } = useFetchTeamsByUserId();
   const { fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
   const { userLogout } = useUserLogout();
@@ -62,17 +60,15 @@ export default function Dashboard({
     }
   }, [user?.user?.id]);
 
-  useEffect(() => {
-    if (userId) {
-      fetchTeamsByUserId(userId);
-      dispatch({
-        type: "SET_USER",
-        payload: { user: { id: userId } },
-      });
-    }
-  }, [userId]);
-
-  const { teamId, assistantId } = useParams();
+  // useEffect(() => {
+  //   if (userId) {
+  //     fetchTeamsByUserId(userId);
+  //     dispatch({
+  //       type: "SET_USER",
+  //       payload: { user: { id: userId } },
+  //     });
+  //   }
+  // }, [userId]);
 
   useEffect(() => {
     const assistantSelected: any =
