@@ -24,6 +24,8 @@ export default function Component() {
     const handleAuthMessage = (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return; // Seguridad: verificar el origen
 
+      console.log({ event });
+
       if (event.data.type === "NOTION_AUTH_SUCCESS") {
         console.log("Autenticación completada con código:", event.data.code);
 
