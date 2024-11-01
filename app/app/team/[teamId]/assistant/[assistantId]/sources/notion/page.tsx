@@ -37,7 +37,7 @@ export default function Component() {
         // );
 
         try {
-          const response = await fetch(`/api/notion/oauth/toke`, {
+          const response = await fetch(`/api/notion/oauth/token`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
