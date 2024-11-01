@@ -32,9 +32,9 @@ export default function Component() {
 
         // Aquí puedes hacer una llamada a tu backend para intercambiar el código por un token
 
-        const encoded = Buffer.from(
+        const encoded = btoa(
           `${process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID}:${process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET}`
-        ).toString("base64");
+        );
 
         try {
           const response = await fetch(
