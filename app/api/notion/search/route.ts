@@ -20,12 +20,12 @@ export async function POST(request: NextRequest) {
         "Notion-Version": "2021-08-16", // Asegúrate de usar la versión adecuada de la API
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        filter: {
-          value: "page",
-          property: "object",
-        },
-      }),
+      //   body: JSON.stringify({
+      //     filter: {
+      //       value: "page",
+      //       property: "object",
+      //     },
+      //   }),
     });
 
     const searchData = await searchResponse.json();
