@@ -18,10 +18,11 @@ import { Loader } from "@/components/loader";
 
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
+  const redirectUri = "https://app.netraluis.com/notion";
 
   useEffect(() => {
     // Listener para el mensaje de autenticación completada
-    const handleAuthMessage = (event: MessageEvent) => {
+    const handleAuthMessage = async (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return; // Seguridad: verificar el origen
 
       console.log({ event });
@@ -30,6 +31,45 @@ export default function Component() {
         console.log("Autenticación completada con código:", event.data.code);
 
         // Aquí puedes hacer una llamada a tu backend para intercambiar el código por un token
+
+        const encoded = Buffer.from(
+          `${process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID}:${process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET}`
+        ).toString("base64");
+
+        const response = await fetch("https://api.notion.com/v1/oauth/token", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Basic ${encoded}`,
+          },
+          body: JSON.stringify({
+            grant_type: "authorization_code",
+            code: event.data.code,
+            redirect_uri: redirectUri,
+          }),
+        });
+
+        const data = await response.json();
+        const accessToken = data.access_token;
+
+        const searchResponse = await fetch("https://api.notion.com/v1/search", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Notion-Version": "2021-08-16", // Asegúrate de usar la versión adecuada de la API
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            filter: {
+              value: "page",
+              property: "object",
+            },
+          }),
+        });
+
+        const searchData = await searchResponse.json();
+        console.log("Páginas autorizadas:", searchData.results);
 
         if (popup && !popup.closed) {
           popup.close(); // Cierra la ventana emergente
