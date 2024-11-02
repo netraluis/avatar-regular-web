@@ -35,6 +35,26 @@ export async function POST(request: NextRequest) {
     const searchData = await searchResponse.json();
     console.log("Páginas autorizadas:", searchData);
 
+    const pageIds = searchData.results.map((page: any) => page.id);
+    // Solicita detalles de cada página usando el ID
+    const pageDetails = await Promise.all(
+      pageIds.map(async (pageId: any) => {
+        const pageResponse = await fetch(
+          `https://api.notion.com/v1/pages/${pageId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "Notion-Version": "2022-06-28",
+            },
+          }
+        );
+        return pageResponse.json();
+      })
+    );
+
+    console.log("Detalles completos de las páginas:", pageDetails);
+
     // Retorna el token de acceso como JSON
     return NextResponse.json({ status: 200, data: searchData });
   } catch (error: any) {
