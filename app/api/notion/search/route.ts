@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     console.log("Detalles completos de las páginas:", pageDetails);
 
     // Retorna el token de acceso como JSON
-    return NextResponse.json({ status: 200, data: searchData });
+    return NextResponse.json({ status: 200, data: pageDetails });
   } catch (error: any) {
     console.error("Error obteniendo el token de acceso de Notion", error);
     return NextResponse.json({ status: 500, message: error.message });
