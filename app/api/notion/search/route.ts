@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       },
       body: JSON.stringify({
         filter: {
-          value: "page",
+          // value: "page",
           property: "object",
         },
         sort: {
