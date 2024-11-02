@@ -13,7 +13,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
 });
 
-// Convierte un Web API ReadableStream a Node.js Readable
+// Convert a Web API ReadableStream to Node.js Readable
 function webToNodeReadable(webStream: ReadableStream): Readable {
   const reader = webStream.getReader();
   return new Readable({
@@ -53,20 +53,15 @@ export async function POST(req: NextRequest) {
 
     const uploadResults = [];
 
-    // Define el directorio absoluto de carga de archivos
-    const uploadDir = path.join(process.cwd(), "public", "file");
-
-    // Verifica si el directorio existe, si no, lo crea
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true }); // Crea el directorio y sus padres si es necesario
-    }
+    // Define the temporary directory for file uploads
+    const uploadDir = "/tmp";
 
     for (const file of files) {
       const filePath = path.join(uploadDir, file.name);
       const nodeStream = webToNodeReadable(file.stream());
       await pump(nodeStream, fs.createWriteStream(filePath));
 
-      // Subir cada archivo a OpenAI
+      // Upload each file to OpenAI
       const uploadedFile = await openai.files.create({
         file: fs.createReadStream(filePath),
         purpose: purpose,
@@ -76,7 +71,7 @@ export async function POST(req: NextRequest) {
         file_id: uploadedFile.id,
       });
 
-      // Elimina el archivo temporal
+      // Delete the temporary file after upload
       await fs.promises.unlink(filePath);
 
       uploadResults.push(uploadedFile);
