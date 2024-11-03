@@ -12,9 +12,12 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useLoginUser } from "../context/appContext";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const { loginUser, error, loading } = useLoginUser();
+
+  const router = useRouter();
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -29,13 +32,16 @@ export default function Login() {
           {error && <p className="text-red-500">{error}</p>}
           <form
             className="grid gap-4"
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
               const formData = new FormData(e.currentTarget);
-              loginUser({
+              const loginUserResponse = await loginUser({
                 email: formData.get("email") as string,
                 password: formData.get("password") as string,
               });
+              if (loginUserResponse.data.user.id) {
+                return router.push("/team");
+              }
             }}
           >
             <div className="grid gap-2">
