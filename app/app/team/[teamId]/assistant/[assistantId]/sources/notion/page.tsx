@@ -79,7 +79,7 @@ export default function Component() {
   }, [popup]);
 
   const {
-    getFileVectorStore,
+    // getFileVectorStore,
     getFileloading,
     getFileError,
     deleteFileVectorStore,
@@ -88,13 +88,13 @@ export default function Component() {
 
   const params = useParams();
 
-  const fetchData = async () => {
-    await getFileVectorStore({ assistantId: params.assistantId as string });
-  };
+  // const fetchData = async () => {
+  //   await getFileVectorStore({ assistantId: params.assistantId as string });
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, [params.assistantId]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [params.assistantId]);
 
   const handleDelete = async (fileId: string) => {
     await deleteFileVectorStore({ fileId });
