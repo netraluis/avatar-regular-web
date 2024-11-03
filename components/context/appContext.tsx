@@ -191,6 +191,7 @@ export const useFetchTeamsByUserId = () => {
         payload: { teams: responseData, teamSelected },
       });
       setDataTeamsByUserId(responseData);
+      return { teams: responseData, teamSelected }
     } catch (error: any) {
       setErrorTeamsByUserId({ error });
     } finally {

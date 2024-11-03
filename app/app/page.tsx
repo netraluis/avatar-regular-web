@@ -10,22 +10,28 @@ const RedirectComponent = () => {
   const router = useRouter();
   const { fetchTeamsByUserId } = useFetchTeamsByUserId();
   const {
-    state: { teamSelected, user },
+    state: { user },
   } = useAppContext();
 
   useEffect(() => {
-    if (user?.user?.id) {
-      fetchTeamsByUserId(user.user.id);
-    }
-  }, [user.user.id]);
-
-  useEffect(() => {
-    if (teamSelected?.id) {
-      return router.push(`/team/${teamSelected.id}`);
-    } else {
-      return router.push(`/team/new`);
-    }
-  }, [teamSelected]);
+    const fetchData = async () => {
+      try {
+        if (user?.user?.id) {          
+          const response = await fetchTeamsByUserId(user?.user?.id);
+    
+          if (response?.teamSelected?.id) {
+            router.push(`/team/${response.teamSelected.id}`);
+          } else {
+            router.push(`/team/new`);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching teams:', error);
+      }
+    };
+  
+    fetchData();
+  }, [user?.user?.id]);
 
   return <div>Loading...</div>;
 };
