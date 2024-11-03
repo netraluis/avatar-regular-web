@@ -43,13 +43,14 @@ export async function POST(req: NextRequest) {
     }
 
     const assistant = await getAssistant(assistantId);
+    
     if (!assistant) {
       return NextResponse.json({
         status: 400,
         message: "Assistant not found",
       });
     }
-    const { openAIVectorStoreId } = assistant;
+    const { openAIVectorStoreFileId } = assistant;
 
     const uploadResults = [];
 
@@ -67,7 +68,7 @@ export async function POST(req: NextRequest) {
         purpose: purpose,
       });
 
-      await openai.beta.vectorStores.files.create(openAIVectorStoreId, {
+      await openai.beta.vectorStores.files.create(openAIVectorStoreFileId, {
         file_id: uploadedFile.id,
       });
 

@@ -24,8 +24,12 @@ export const createAssistantByTeam = async (
     model: assistantCreateParams.model,
   });
 
-  const newVectorStore = await createVectorStore({
-    name: newAssistantOpenAi.id,
+  const newVectorStoreFile = await createVectorStore({
+    name: `file-${newAssistantOpenAi.id}`,
+  });
+
+  const newVectorStoreNotion = await createVectorStore({
+    name: `notion-${newAssistantOpenAi.id}`,
   });
 
   const newAssistant = await prisma.assistant.create({
@@ -33,7 +37,8 @@ export const createAssistantByTeam = async (
       name: assistantCreateParams.name,
       teamId: teamId,
       openAIId: newAssistantOpenAi.id,
-      openAIVectorStoreId: newVectorStore.id,
+      openAIVectorStoreFileId: newVectorStoreFile.id,
+      openAIVectorStoreNotionId: newVectorStoreNotion.id,
     },
   });
 

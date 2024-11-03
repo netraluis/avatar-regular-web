@@ -1,7 +1,11 @@
 // context/AppContext.tsx
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 
-import { VectorStoreFile, SuccessfullResponse } from "@/types/types";
+import {
+  VectorStoreFile,
+  SuccessfullResponse,
+  VectorStoreTypeEnum,
+} from "@/types/types";
 import { useRouter } from "next/navigation";
 import OpenAI from "openai";
 import {
@@ -191,7 +195,7 @@ export const useFetchTeamsByUserId = () => {
         payload: { teams: responseData, teamSelected },
       });
       setDataTeamsByUserId(responseData);
-      return { teams: responseData, teamSelected }
+      return { teams: responseData, teamSelected };
     } catch (error: any) {
       setErrorTeamsByUserId({ error });
     } finally {
@@ -243,6 +247,8 @@ export const useFetchAssistantsByTeamId = () => {
       }
 
       const teamSelected = await teamSelectedResponse.json();
+
+      console.log("teamSelected", teamSelected);
 
       dispatch({
         type: "SET_ASSISTANTS",
@@ -797,9 +803,11 @@ export const useFileVectorStoreAssistant = () => {
   async function uploadFileVectorStore({
     fileInput,
     assistantId,
+    vectorStoreType,
   }: {
     fileInput: FileList | null;
     assistantId: string;
+    vectorStoreType: VectorStoreTypeEnum;
   }) {
     if (!fileInput || fileInput.length === 0) return;
     try {
@@ -816,7 +824,7 @@ export const useFileVectorStoreAssistant = () => {
       const requestOptions = { method: "POST", body: formData };
 
       const response = await fetch(
-        "/api/protected/vector-store-assistant",
+        `/api/protected/vector-store-assistant/${vectorStoreType}`,
         requestOptions,
       );
 
@@ -834,11 +842,17 @@ export const useFileVectorStoreAssistant = () => {
     }
   }
 
-  async function getFileVectorStore({ assistantId }: { assistantId: string }) {
+  async function getFileVectorStore({
+    assistantId,
+    vectorStoreType,
+  }: {
+    assistantId: string;
+    vectorStoreType: VectorStoreTypeEnum;
+  }) {
     try {
       setGetFileloading(true);
       const response = await fetch(
-        `/api/protected/vector-store-assistant/${assistantId}`,
+        `/api/protected/vector-store-assistant/${vectorStoreType}/${assistantId}`,
         {
           method: "GET",
         },

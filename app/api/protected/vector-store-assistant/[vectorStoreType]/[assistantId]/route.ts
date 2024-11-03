@@ -1,12 +1,18 @@
 import { getAssistant } from "@/lib/data/assistant";
 import { getFile } from "@/lib/openAI/file";
 import { getVectorStoreFiles } from "@/lib/openAI/vector-store";
-import { VectorStoreFile, SuccessfullResponse } from "@/types/types";
+import {
+  VectorStoreFile,
+  SuccessfullResponse,
+  VectorStoreTypeEnum,
+} from "@/types/types";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { assistantId: string } },
+  {
+    params,
+  }: { params: { assistantId: string; vectorStoreType: VectorStoreTypeEnum } },
 ) {
   const assistant = await getAssistant(params.assistantId);
   if (!assistant) {
@@ -15,10 +21,24 @@ export async function GET(
       message: "Assistant not found",
     });
   }
-  const { openAIVectorStoreId } = assistant;
+
+  let vectorStoreId;
+  switch (params.vectorStoreType) {
+    case VectorStoreTypeEnum.FILE:
+      vectorStoreId = assistant.openAIVectorStoreFileId;
+      break;
+    case VectorStoreTypeEnum.NOTION:
+      vectorStoreId = assistant.openAIVectorStoreNotionId;
+      break;
+    default:
+      return NextResponse.json({
+        status: 400,
+        message: "Invalid vector store type",
+      });
+  }
 
   try {
-    const files = await getVectorStoreFiles(openAIVectorStoreId);
+    const files = await getVectorStoreFiles(vectorStoreId);
     const filesResponse: VectorStoreFile[] = [];
     for (const vectorFile of files.data) {
       const id = vectorFile.id;

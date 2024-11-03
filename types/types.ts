@@ -68,3 +68,8 @@ export interface SuccessfullResponse<T> {
   status: number;
   data: T;
 }
+
+export enum VectorStoreTypeEnum {
+  FILE = "file",
+  NOTION = "notion",
+}

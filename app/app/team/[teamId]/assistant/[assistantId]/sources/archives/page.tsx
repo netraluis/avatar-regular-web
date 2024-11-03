@@ -23,6 +23,7 @@ import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import { useFileVectorStoreAssistant } from "@/components/context/appContext";
 import { Loader } from "@/components/loader";
+import { VectorStoreTypeEnum } from "@/types/types";
 
 export default function Component() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,7 +43,10 @@ export default function Component() {
   const params = useParams();
 
   const fetchData = async () => {
-    await getFileVectorStore({ assistantId: params.assistantId as string });
+    await getFileVectorStore({
+      assistantId: params.assistantId as string,
+      vectorStoreType: VectorStoreTypeEnum.FILE,
+    });
   };
 
   useEffect(() => {
@@ -69,6 +73,7 @@ export default function Component() {
     await uploadFileVectorStore({
       fileInput: files as unknown as FileList,
       assistantId: params.assistantId as string,
+      vectorStoreType: VectorStoreTypeEnum.FILE,
     });
     setIsModalOpen(false);
   }, []);
@@ -199,6 +204,7 @@ export default function Component() {
                         await uploadFileVectorStore({
                           fileInput: e.target.files,
                           assistantId: params.assistantId as string,
+                          vectorStoreType: VectorStoreTypeEnum.FILE,
                         });
                         setIsModalOpen(false);
                       }}

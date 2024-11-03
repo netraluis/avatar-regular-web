@@ -47,10 +47,10 @@ export async function POST(request: NextRequest) {
               Authorization: `Bearer ${accessToken}`,
               "Notion-Version": "2022-06-28",
             },
-          }
+          },
         );
         return pageResponse.json();
-      })
+      }),
     );
 
     console.log("Detalles completos de las páginas:", pageDetails);
