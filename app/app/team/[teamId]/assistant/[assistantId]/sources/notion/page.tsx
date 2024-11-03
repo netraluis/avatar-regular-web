@@ -12,7 +12,7 @@ import {
 import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
 import { useFileVectorStoreAssistant } from "@/components/context/appContext";
 import { Loader } from "@/components/loader";
 
@@ -86,7 +86,7 @@ export default function Component() {
     fileData,
   } = useFileVectorStoreAssistant();
 
-  const params = useParams();
+  // const params = useParams();
 
   // const fetchData = async () => {
   //   await getFileVectorStore({ assistantId: params.assistantId as string });
