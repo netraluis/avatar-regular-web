@@ -85,6 +85,7 @@ model Assistant {
   openAIId                  String
   openAIVectorStoreFileId   String
   openAIVectorStoreNotionId String
+  notionAccessToken         String?
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
 

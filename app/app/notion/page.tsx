@@ -9,9 +9,16 @@ function NotionCallback() {
 
   useEffect(() => {
     const code = searchParams.get("code");
+    const error = searchParams.get("error");
+    console.log({ code, error });
 
     if (code) {
       window.opener?.postMessage({ type: "NOTION_AUTH_SUCCESS", code }, "*");
+      window.close();
+    }
+
+    if (error) {
+      window.opener?.postMessage({ type: "NOTION_AUTH_ERROR", error }, "*");
       window.close();
     }
   }, [searchParams]);
@@ -22,7 +29,7 @@ function NotionCallback() {
 // Exporta la página usando Suspense directamente
 export default function Page() {
   return (
-    <Suspense fallback={<p>Cargando...</p>}>
+    <Suspense fallback={<p>Procesando autenticación...</p>}>
       <NotionCallback />
     </Suspense>
   );

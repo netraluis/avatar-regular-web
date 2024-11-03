@@ -15,9 +15,16 @@ import { useEffect, useState } from "react";
 // import { useParams } from "next/navigation";
 import { useFileVectorStoreAssistant } from "@/components/context/appContext";
 import { Loader } from "@/components/loader";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
+  const [isModalOpenNotionAuth, setIsModalOpenNotionAuth] = useState(false);
 
   useEffect(() => {
     // Listener para el mensaje de autenticación completada
@@ -115,6 +122,7 @@ export default function Component() {
         clearInterval(popupInterval);
         alert("Autenticación completada o ventana cerrada.");
         // Aquí puedes actualizar el estado de autenticación si es necesario
+        setIsModalOpenNotionAuth(false); // Cierra el modal
       }
     }, 500);
   };
@@ -136,7 +144,7 @@ export default function Component() {
               className="max-w-sm"
             />
 
-            <Button onClick={openNotionAuthPopup}>
+            <Button onClick={() => setIsModalOpenNotionAuth(true)}>
               {/* <a
                 target="_blank"
                 rel="noopener noreferrer"
@@ -210,6 +218,67 @@ export default function Component() {
           </Table>
         </div>
       </div>
+      {/* <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Upload Files</DialogTitle>
+          </DialogHeader>
+          {upLoadFileError && <>{upLoadFileError.message}</>}
+          {upLoadFileloading ? (
+            <Loader />
+          ) : (
+            <div
+              className={cn(
+                "mt-4 border-2 border-dashed rounded-lg p-8 text-center",
+                isDragging ? "border-primary bg-primary/10" : "border-gray-200",
+              )}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={handleClick}
+            >
+              <div className="flex flex-col items-center gap-2">
+                <Upload className="h-8 w-8 text-gray-400" />
+                <p className="text-sm text-gray-600">
+                  Drag and drop your files here, or{" "}
+                  <label className="text-primary hover:underline cursor-pointer">
+                    browse
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      className="hidden"
+                      multiple
+                      accept=".pdf,.doc,.docx,.txt"
+                      onChange={async (e) => {
+                        await uploadFileVectorStore({
+                          fileInput: e.target.files,
+                          assistantId: params.assistantId as string,
+                          vectorStoreType: VectorStoreTypeEnum.FILE,
+                        });
+                        setIsModalOpen(false);
+                      }}
+                    />
+                  </label>
+                </p>
+                <p className="text-xs text-gray-400">
+                  Supported files: PDF, DOC, DOCX, TXT
+                </p>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog> */}
+      <Dialog
+        open={isModalOpenNotionAuth}
+        onOpenChange={setIsModalOpenNotionAuth}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Como hacer la integración</DialogTitle>
+          </DialogHeader>
+          <Button onClick={openNotionAuthPopup}>Empezar el proceso</Button>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     }
 
     const assistant = await getAssistant(assistantId);
-    
+
     if (!assistant) {
       return NextResponse.json({
         status: 400,

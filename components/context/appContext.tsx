@@ -248,8 +248,6 @@ export const useFetchAssistantsByTeamId = () => {
 
       const teamSelected = await teamSelectedResponse.json();
 
-      console.log("teamSelected", teamSelected);
-
       dispatch({
         type: "SET_ASSISTANTS",
         payload: { assistants: responseData, teamSelected },
