@@ -29,7 +29,7 @@ import {
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
   const [isModalOpenNotionAuth, setIsModalOpenNotionAuth] = useState(false);
-  const [isModalAddNotionUrl, setIsModalAddNotionUrl] = useState(false);
+  // const [isModalAddNotionUrl, setIsModalAddNotionUrl] = useState(false);
   const [isAddingUrl, setIsAddingUrl] = useState(false);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState("");
@@ -67,7 +67,7 @@ export default function Component() {
               }),
             });
 
-            
+
             // const data = await response.json();
           } catch (e: any) {
             setErrorCode(e.message);
