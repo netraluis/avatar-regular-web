@@ -25,6 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { VectorStoreTypeEnum } from "@/types/types";
 
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
@@ -33,6 +34,8 @@ export default function Component() {
   const [isAddingUrl, setIsAddingUrl] = useState(false);
   const [errorCode, setErrorCode] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState("");
+  const [invalidUrl, setInvalidUrl] = useState(false);
+  const [gettingNotion, setGettingNotion] = useState(false);
   const { getAssistant, loadingGetAssistant, getAssistantData } =
     useGetAssistant();
   const {
@@ -45,14 +48,6 @@ export default function Component() {
       if (event.origin !== window.location.origin) return; // Seguridad: verificar el origen
 
       if (event.data.type === "NOTION_AUTH_SUCCESS") {
-        console.log("Autenticación completada con código:", event.data.code);
-
-        // Aquí puedes hacer una llamada a tu backend para intercambiar el código por un token
-
-        // const encoded = btoa(
-        //   `${process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID}:${process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET}`
-        // );
-
         if (!getAssistantData?.notionAccessToken) {
           try {
             await fetch(`/api/notion/oauth/token`, {
@@ -66,7 +61,6 @@ export default function Component() {
                 assistantId: params.assistantId as string,
               }),
             });
-
 
             // const data = await response.json();
           } catch (e: any) {
@@ -90,7 +84,10 @@ export default function Component() {
   }, [popup]);
 
   const {
-    // getFileVectorStore,
+    upLoadFileloading,
+    upLoadFileError,
+    uploadFileVectorStore,
+    getFileVectorStore,
     getFileloading,
     getFileError,
     deleteFileVectorStore,
@@ -103,6 +100,10 @@ export default function Component() {
     await getAssistant({
       assistantId: params.assistantId as string,
       userId: user?.user?.id,
+    });
+    await getFileVectorStore({
+      assistantId: params.assistantId as string,
+      vectorStoreType: VectorStoreTypeEnum.NOTION,
     });
   };
 
@@ -149,16 +150,20 @@ export default function Component() {
   }
 
   const getDatabaseJson = async (databaseId: string) => {
-    console.log({ getAssistantData });
     try {
-      return await fetch(`/api/notion/database/${databaseId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          // "x-user-id": userId,
-          "x-acccess-token": getAssistantData?.notionAccessToken as string,
+      const databaseResponse = await fetch(
+        `/api/notion/database/${databaseId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // "x-user-id": userId,
+            "x-acccess-token": getAssistantData?.notionAccessToken as string,
+          },
         },
-      });
+      );
+
+      return await databaseResponse.json();
     } catch (e: any) {
       console.log("error getting database json", e);
       return e;
@@ -166,9 +171,8 @@ export default function Component() {
   };
 
   const getPageJson = async (pageId: string) => {
-    console.log({ getAssistantData });
     try {
-      return await fetch(`/api/notion/database/${pageId}`, {
+      const databaseResponse = await fetch(`/api/notion/page/${pageId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -176,25 +180,51 @@ export default function Component() {
           "x-acccess-token": getAssistantData?.notionAccessToken as string,
         },
       });
+      return await databaseResponse.json();
     } catch (e: any) {
       console.log("error getting database json", e);
       return e;
     }
   };
 
-  const getPageId = async (url: string) => {
+  const getNotionInfo = async (url: string) => {
+    setGettingNotion(true);
     const notionId = extractNotionId(url);
-    if (notionId?.type === "database") {
-      const databaseJson = await getDatabaseJson(notionId.id);
-      console.log("Database Json:", databaseJson);
+    if (!notionId) {
+      setInvalidUrl(true);
+      setGettingNotion(false);
+      return;
+    } else {
+      setInvalidUrl(false);
+    }
+    let dataJson;
+
+    switch (notionId?.type) {
+      case "database":
+        dataJson = await getDatabaseJson(notionId.id);
+        break;
+      case "page":
+        dataJson = await getPageJson(notionId.id);
+        break;
+      default:
+        setInvalidUrl(true);
+        break;
     }
 
-    if (notionId?.type === "page") {
-      const pageJson = await getPageJson(notionId.id);
-      console.log("Database Json:", pageJson);
-    }
+    const jsonBlob = new Blob([JSON.stringify(dataJson, null, 2)], {
+      type: "application/json",
+    });
+    const file = new File([jsonBlob], `${notionId.id}.json`, {
+      type: "application/json",
+    });
+    setGettingNotion(false);
+    await uploadFileVectorStore({
+      fileInput: [file] as unknown as FileList,
+      assistantId: params.assistantId as string,
+      vectorStoreType: VectorStoreTypeEnum.NOTION,
+    });
 
-    console.log("Notion ID:", notionId);
+    setInputValue("");
   };
 
   return (
@@ -252,31 +282,6 @@ export default function Component() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {isAddingUrl && (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center">
-                    <div className="flex justify-between items-center mb-4">
-                      <Input
-                        type="text"
-                        placeholder="Añadir url de Notion..."
-                        className="max-w-sm"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          setInputValue(e.target.value)
-                        }
-                      />
-
-                      <Button
-                        size="icon"
-                        disabled={loadingGetAssistant}
-                        onClick={() => getPageId(inputValue)}
-                      >
-                        <Plus />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )}
-
               {getFileError && <>{getFileError.message}</>}
               {getFileloading ? (
                 <TableRow>
@@ -324,60 +329,52 @@ export default function Component() {
                   </TableRow>
                 ))
               )}
+              {isAddingUrl && (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center">
+                    <div className="flex justify-between items-center mb-4">
+                      <Input
+                        type="text"
+                        placeholder="Añadir url de Notion..."
+                        className="max-w-sm"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setInputValue(e.target.value)
+                        }
+                      />
+                      {invalidUrl && <>No se encontron un id valido</>}
+                      {upLoadFileError && <>Error al subir el archivo</>}
+                      {gettingNotion && <>Obteniendo la info de notion...</>}
+                      {upLoadFileloading && <>Enseñando a tu IA..</>}
+                      <Button
+                        size="icon"
+                        disabled={
+                          loadingGetAssistant ||
+                          gettingNotion ||
+                          upLoadFileloading
+                        }
+                        onClick={() => getNotionInfo(inputValue)}
+                      >
+                        {!loadingGetAssistant &&
+                        !gettingNotion &&
+                        !upLoadFileloading ? (
+                          <Plus />
+                        ) : (
+                          <RefreshCcw className="animate-spin" />
+                        )}
+                      </Button>
+                    </div>
+                    {/* {jsonData && (
+                        <pre className="mt-4 p-4 bg-gray-100 rounded border border-gray-300 whitespace-pre-wrap">
+                          {JSON.stringify(jsonData, null, 2)}
+                        </pre>
+                      )} */}
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </div>
       </div>
-      {/* <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Upload Files</DialogTitle>
-          </DialogHeader>
-          {upLoadFileError && <>{upLoadFileError.message}</>}
-          {upLoadFileloading ? (
-            <Loader />
-          ) : (
-            <div
-              className={cn(
-                "mt-4 border-2 border-dashed rounded-lg p-8 text-center",
-                isDragging ? "border-primary bg-primary/10" : "border-gray-200",
-              )}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-              onClick={handleClick}
-            >
-              <div className="flex flex-col items-center gap-2">
-                <Upload className="h-8 w-8 text-gray-400" />
-                <p className="text-sm text-gray-600">
-                  Drag and drop your files here, or{" "}
-                  <label className="text-primary hover:underline cursor-pointer">
-                    browse
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      className="hidden"
-                      multiple
-                      accept=".pdf,.doc,.docx,.txt"
-                      onChange={async (e) => {
-                        await uploadFileVectorStore({
-                          fileInput: e.target.files,
-                          assistantId: params.assistantId as string,
-                          vectorStoreType: VectorStoreTypeEnum.FILE,
-                        });
-                        setIsModalOpen(false);
-                      }}
-                    />
-                  </label>
-                </p>
-                <p className="text-xs text-gray-400">
-                  Supported files: PDF, DOC, DOCX, TXT
-                </p>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog> */}
       <Dialog
         open={isModalOpenNotionAuth}
         onOpenChange={setIsModalOpenNotionAuth}

@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     if (!data.access_token) {
       return NextResponse.json(
         { error: "No se pudo obtener el token de acceso", details: data },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     console.error("Error obteniendo el token de acceso de Notion", error);
     return NextResponse.json(
       { error: "Failed to fetch access token", details: error },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

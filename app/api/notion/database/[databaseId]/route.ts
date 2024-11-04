@@ -13,8 +13,6 @@ export async function GET(
       });
     }
 
-    console.log({ accessToken, databaseId: params.databaseId });
-
     const databaseResponse = await fetch(
       `https://api.notion.com/v1/databases/${params.databaseId}/query`,
       {
@@ -26,7 +24,9 @@ export async function GET(
       },
     );
 
-    return new NextResponse(JSON.stringify(databaseResponse), {
+    const data = await databaseResponse.json();
+
+    return new NextResponse(JSON.stringify(data), {
       status: 200,
     });
   } catch (error) {

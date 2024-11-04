@@ -13,10 +13,8 @@ export async function GET(
       });
     }
 
-    console.log({ accessToken, databaseId: params.pageId });
-
     const databaseResponse = await fetch(
-      `hhttps://api.notion.com/v1/blocks/${params.pageId}/children`,
+      `https://api.notion.com/v1/blocks/${params.pageId}/children`,
       {
         method: "GET",
         headers: {
@@ -26,7 +24,9 @@ export async function GET(
       },
     );
 
-    return new NextResponse(JSON.stringify(databaseResponse), {
+    const data = await databaseResponse.json();
+
+    return new NextResponse(JSON.stringify(data), {
       status: 200,
     });
   } catch (error) {

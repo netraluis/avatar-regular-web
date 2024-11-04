@@ -6,6 +6,7 @@ import { promisify } from "util";
 import OpenAI from "openai";
 import { getAssistant } from "@/lib/data/assistant";
 import { FilePurpose } from "openai/resources/files.mjs";
+import { VectorStoreTypeEnum } from "@/types/types";
 
 const pump = promisify(pipeline);
 
@@ -28,7 +29,12 @@ function webToNodeReadable(webStream: ReadableStream): Readable {
   });
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  {
+    params,
+  }: { params: { assistantId: string; vectorStoreType: VectorStoreTypeEnum } },
+) {
   try {
     const formData = await req.formData();
     const files = formData.getAll("files") as File[];
@@ -50,7 +56,21 @@ export async function POST(req: NextRequest) {
         message: "Assistant not found",
       });
     }
-    const { openAIVectorStoreFileId } = assistant;
+
+    let vectorStoreId;
+    switch (params.vectorStoreType) {
+      case VectorStoreTypeEnum.FILE:
+        vectorStoreId = assistant.openAIVectorStoreFileId;
+        break;
+      case VectorStoreTypeEnum.NOTION:
+        vectorStoreId = assistant.openAIVectorStoreNotionId;
+        break;
+      default:
+        return NextResponse.json({
+          status: 400,
+          message: "Invalid vector store type",
+        });
+    }
 
     const uploadResults = [];
 
@@ -68,7 +88,7 @@ export async function POST(req: NextRequest) {
         purpose: purpose,
       });
 
-      await openai.beta.vectorStores.files.create(openAIVectorStoreFileId, {
+      await openai.beta.vectorStores.files.create(vectorStoreId, {
         file_id: uploadedFile.id,
       });
 
