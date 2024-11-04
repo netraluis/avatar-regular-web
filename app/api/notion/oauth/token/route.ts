@@ -36,22 +36,28 @@ export async function POST(request: NextRequest) {
     if (!data.access_token) {
       return NextResponse.json(
         { error: "No se pudo obtener el token de acceso", details: data },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
     const accessToken = data.access_token;
 
-    console.log('hago un update de updateAssistant',{ updateAssistant });
+    console.log("hago un update de updateAssistant", assistantId, {
+      notionAccessToken: accessToken,
+    });
 
-    await updateAssistant(assistantId, { notionAccessToken: accessToken });
+    const updateResponse = await updateAssistant(assistantId, {
+      notionAccessToken: accessToken,
+    });
+
+    console.log("updateResponse", { updateResponse });
 
     return NextResponse.json({ status: 200, access_token: accessToken });
   } catch (error) {
     console.error("Error obteniendo el token de acceso de Notion", error);
     return NextResponse.json(
       { error: "Failed to fetch access token", details: error },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
