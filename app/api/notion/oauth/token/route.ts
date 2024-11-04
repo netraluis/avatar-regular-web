@@ -1,3 +1,4 @@
+import { updateAssistant } from "@/lib/data/assistant";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -11,7 +12,7 @@ export async function POST(request: NextRequest) {
 
     // Obtén el código de la solicitud
     const body = await request.json();
-    const { code } = body;
+    const { code, assistantId } = body;
 
     // Solicitud a la API de Notion para obtener el access_token
     const response = await fetch("https://api.notion.com/v1/oauth/token", {
@@ -30,16 +31,6 @@ export async function POST(request: NextRequest) {
     });
 
     const data = await response.json();
-    // Verifica si la respuesta es JSON antes de parsearla
-    // const contentType = response.headers.get("content-type");
-    // let data;
-    // if (contentType && contentType.includes("application/json")) {
-    //   data = await response.json();
-    // } else {
-    //   const text = await response.text();
-    //   console.error("Respuesta de Notion no es JSON:", text);
-    //   return NextResponse.json({ error: text }, { status: response.status });
-    // }
 
     // Verifica si se obtuvo el access_token
     if (!data.access_token) {
@@ -49,29 +40,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("data access_token back", data);
     const accessToken = data.access_token;
 
-    // const searchResponse = await fetch("https://api.notion.com/v1/search", {
-    //   method: "POST",
-    //   headers: {
-    //     Authorization: `Bearer ${accessToken}`,
-    //     "Notion-Version": "2021-08-16", // Asegúrate de usar la versión adecuada de la API
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     filter: {
-    //       value: "page",
-    //       property: "object",
-    //     },
-    //   }),
-    // });
+    console.log('hago un update de updateAssistant',{ updateAssistant });
 
-    // const searchData = await searchResponse.json();
-    // console.log("Páginas autorizadas:", searchData);
+    await updateAssistant(assistantId, { notionAccessToken: accessToken });
 
-    // Retorna el token de acceso como JSON
-    return NextResponse.json({ access_token: accessToken });
+    return NextResponse.json({ status: 200, access_token: accessToken });
   } catch (error) {
     console.error("Error obteniendo el token de acceso de Notion", error);
     return NextResponse.json(

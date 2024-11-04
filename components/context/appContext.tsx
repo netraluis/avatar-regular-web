@@ -20,20 +20,13 @@ import {
   useState,
 } from "react";
 
+import { Assistant } from "@prisma/client";
+
 export type Team = {
   id?: string;
   name: string;
   subDomain: string;
   customDomain?: string;
-};
-
-type Assistant = {
-  id: string;
-  name: string;
-  status: string;
-  model: string;
-  teamId: string;
-  openAIId: string;
 };
 
 type AppState = {
@@ -415,8 +408,9 @@ export const useDeleteAssistant = () => {
 export const useGetAssistant = () => {
   const [loadingGetAssistant, setLoadingGetAssistant] = useState(false);
   const [errorGetAssistant, setErrorGetAssistant] = useState<any>(null);
-  const [getAssistantData, setGetAssistantData] =
-    useState<OpenAI.Beta.Assistants.Assistant | null>(null);
+  const [getAssistantData, setGetAssistantData] = useState<
+    (OpenAI.Beta.Assistants.Assistant & Assistant) | null
+  >(null);
 
   async function getAssistant({
     assistantId,
@@ -441,6 +435,7 @@ export const useGetAssistant = () => {
       const responseData = await response.json();
 
       setGetAssistantData(responseData);
+      return responseData;
     } catch (error: any) {
       setErrorGetAssistant({ error });
     } finally {

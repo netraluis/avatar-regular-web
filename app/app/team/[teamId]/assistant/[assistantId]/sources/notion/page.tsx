@@ -9,11 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Trash2 } from "lucide-react";
+import { Trash2, RefreshCcw, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 
-// import { useParams } from "next/navigation";
-import { useFileVectorStoreAssistant } from "@/components/context/appContext";
+import { useParams } from "next/navigation";
+import {
+  useAppContext,
+  useFileVectorStoreAssistant,
+  useGetAssistant,
+} from "@/components/context/appContext";
 import { Loader } from "@/components/loader";
 import {
   Dialog,
@@ -25,13 +29,20 @@ import {
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
   const [isModalOpenNotionAuth, setIsModalOpenNotionAuth] = useState(false);
+  const [isModalAddNotionUrl, setIsModalAddNotionUrl] = useState(false);
+  const [isAddingUrl, setIsAddingUrl] = useState(false);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState("");
+  const { getAssistant, loadingGetAssistant, getAssistantData } =
+    useGetAssistant();
+  const {
+    state: { user },
+  } = useAppContext();
 
   useEffect(() => {
     // Listener para el mensaje de autenticación completada
     const handleAuthMessage = async (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return; // Seguridad: verificar el origen
-
-      console.log({ event });
 
       if (event.data.type === "NOTION_AUTH_SUCCESS") {
         console.log("Autenticación completada con código:", event.data.code);
@@ -42,39 +53,32 @@ export default function Component() {
         //   `${process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID}:${process.env.NEXT_PUBLIC_OAUTH_CLIENT_SECRET}`
         // );
 
-        try {
-          const response = await fetch(`/api/notion/oauth/token`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              // "x-user-id": userId,
-            },
-            body: JSON.stringify({ code: event.data.code }),
-          });
+        if (!getAssistantData?.notionAccessToken) {
+          try {
+            await fetch(`/api/notion/oauth/token`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                // "x-user-id": userId,
+              },
+              body: JSON.stringify({
+                code: event.data.code,
+                assistantId: params.assistantId as string,
+              }),
+            });
 
-          const data = await response.json();
-          console.log("data access_token front", data);
-          const accessToken = data.access_token;
-          console.log("access token", accessToken);
-
-          const pages = await fetch(`/api/notion/search`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              // "x-user-id": userId,
-            },
-            body: JSON.stringify({ accessToken }),
-          });
-
-          console.log({ pages: await pages.json() });
-        } catch (e) {
-          console.log("error", e);
+            
+            // const data = await response.json();
+          } catch (e: any) {
+            setErrorCode(e.message);
+          }
         }
-
-        if (popup && !popup.closed) {
-          popup.close(); // Cierra la ventana emergente
-          setPopup(null); // Limpia la referencia
-        }
+      } else {
+        console.log("Error de autenticación:", event.data.error);
+      }
+      if (popup && !popup.closed) {
+        popup.close(); // Cierra la ventana emergente
+        setPopup(null); // Limpia la referencia
       }
     };
 
@@ -93,15 +97,18 @@ export default function Component() {
     fileData,
   } = useFileVectorStoreAssistant();
 
-  // const params = useParams();
+  const params = useParams();
 
-  // const fetchData = async () => {
-  //   await getFileVectorStore({ assistantId: params.assistantId as string });
-  // };
+  const fetchData = async () => {
+    await getAssistant({
+      assistantId: params.assistantId as string,
+      userId: user?.user?.id,
+    });
+  };
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, [params.assistantId]);
+  useEffect(() => {
+    fetchData();
+  }, [params.assistantId]);
 
   const handleDelete = async (fileId: string) => {
     await deleteFileVectorStore({ fileId });
@@ -127,6 +134,69 @@ export default function Component() {
     }, 500);
   };
 
+  function extractNotionId(url: string) {
+    // Expresión regular para capturar 32 caracteres hexadecimales (UUID) al final de la URL antes de un posible ?v=
+    const match = url.match(/([a-f0-9]{32})(\?v=[a-f0-9]{32})?$/i);
+
+    // Si se encuentra una coincidencia, verificamos si es una base de datos
+    if (match) {
+      const notionId = match[1];
+      const isDatabase = Boolean(match[2]); // Si ?v= está presente, es una base de datos
+      return { id: notionId, type: isDatabase ? "database" : "page" };
+    }
+
+    return null; // No se encontró un ID válido
+  }
+
+  const getDatabaseJson = async (databaseId: string) => {
+    console.log({ getAssistantData });
+    try {
+      return await fetch(`/api/notion/database/${databaseId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // "x-user-id": userId,
+          "x-acccess-token": getAssistantData?.notionAccessToken as string,
+        },
+      });
+    } catch (e: any) {
+      console.log("error getting database json", e);
+      return e;
+    }
+  };
+
+  const getPageJson = async (pageId: string) => {
+    console.log({ getAssistantData });
+    try {
+      return await fetch(`/api/notion/database/${pageId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // "x-user-id": userId,
+          "x-acccess-token": getAssistantData?.notionAccessToken as string,
+        },
+      });
+    } catch (e: any) {
+      console.log("error getting database json", e);
+      return e;
+    }
+  };
+
+  const getPageId = async (url: string) => {
+    const notionId = extractNotionId(url);
+    if (notionId?.type === "database") {
+      const databaseJson = await getDatabaseJson(notionId.id);
+      console.log("Database Json:", databaseJson);
+    }
+
+    if (notionId?.type === "page") {
+      const pageJson = await getPageJson(notionId.id);
+      console.log("Database Json:", pageJson);
+    }
+
+    console.log("Notion ID:", notionId);
+  };
+
   return (
     <>
       <div className="flex-1 p-8">
@@ -144,16 +214,31 @@ export default function Component() {
               className="max-w-sm"
             />
 
-            <Button onClick={() => setIsModalOpenNotionAuth(true)}>
-              {/* <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={process.env.NEXT_PUBLIC_NOTION_AUTH_URL}
-              > */}
-              Conecta con Notion
-              {/* </a> */}
+            <Button
+              disabled={loadingGetAssistant}
+              onClick={() => setIsModalOpenNotionAuth(true)}
+            >
+              {!loadingGetAssistant ? (
+                getAssistantData?.notionAccessToken ? (
+                  "Cambiar permisos Notion"
+                ) : (
+                  "Conecta con Notion"
+                )
+              ) : (
+                <RefreshCcw className="animate-spin" />
+              )}
             </Button>
           </div>
+          <div className="flex justify-end items-end mb-4">
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setIsAddingUrl(!isAddingUrl)}
+            >
+              {!isAddingUrl ? <Plus /> : <Minus />}
+            </Button>
+          </div>
+          {errorCode && <>{errorCode}</>}
           <Table>
             <TableHeader>
               <TableRow>
@@ -167,6 +252,31 @@ export default function Component() {
               </TableRow>
             </TableHeader>
             <TableBody>
+              {isAddingUrl && (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center">
+                    <div className="flex justify-between items-center mb-4">
+                      <Input
+                        type="text"
+                        placeholder="Añadir url de Notion..."
+                        className="max-w-sm"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          setInputValue(e.target.value)
+                        }
+                      />
+
+                      <Button
+                        size="icon"
+                        disabled={loadingGetAssistant}
+                        onClick={() => getPageId(inputValue)}
+                      >
+                        <Plus />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              )}
+
               {getFileError && <>{getFileError.message}</>}
               {getFileloading ? (
                 <TableRow>

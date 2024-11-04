@@ -2,6 +2,7 @@ import { createAssistant, deleteAssistantById } from "../openAI/assistant";
 import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
 import prisma from "../prisma";
 import { createVectorStore } from "../openAI/vector-store";
+import { Prisma, Assistant } from "@prisma/client";
 
 export const getAssistantsByTeam = async (teamId: string) => {
   const teamInfo = await prisma.assistant.findMany({
@@ -55,10 +56,24 @@ export const deleteAssistant = async (assistantId: string) => {
   return assistant;
 };
 
-export const getAssistant = async (assistantId: string) => {
+export const getAssistant = async (
+  assistantId: string,
+): Promise<Assistant | null> => {
   return await prisma.assistant.findUnique({
     where: {
       id: assistantId,
     },
+  });
+};
+
+export const updateAssistant = async (
+  assistantId: string,
+  data: Prisma.AssistantUpdateInput,
+) => {
+  return await prisma.assistant.update({
+    where: {
+      id: assistantId,
+    },
+    data,
   });
 };

@@ -1,5 +1,6 @@
 import { deleteAssistant, getAssistant } from "@/lib/data/assistant";
 import { getAssistantById, modifyAssistantById } from "@/lib/openAI/assistant";
+import { Assistant } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -15,13 +16,28 @@ export async function GET(
         status: 400,
       });
     }
-    const localAssistant = await getAssistant(params.assistantId as string);
+    const localAssistant: Assistant | null = await getAssistant(
+      params.assistantId as string,
+    );
+    if (!localAssistant) {
+      return new NextResponse("Assistant not found", {
+        status: 404,
+      });
+    }
 
     const assistant: OpenAI.Beta.Assistants.Assistant = await getAssistantById(
       localAssistant?.openAIId as string,
     );
 
-    return new NextResponse(JSON.stringify(assistant), {
+    if (!assistant) {
+      return new NextResponse("Assistant not found", {
+        status: 404,
+      });
+    }
+
+    const response = { ...localAssistant, ...assistant };
+
+    return new NextResponse(JSON.stringify(response), {
       status: 200,
     });
   } catch (error) {
@@ -75,7 +91,14 @@ export async function PATCH(
 
     const body = await request.json();
 
-    const localAssistant = await getAssistant(params.assistantId as string);
+    const localAssistant: Assistant | null = await getAssistant(
+      params.assistantId as string,
+    );
+    if (!localAssistant) {
+      return new NextResponse("Assistant not found", {
+        status: 404,
+      });
+    }
 
     const assistant: OpenAI.Beta.Assistants.Assistant =
       await modifyAssistantById(localAssistant?.openAIId as string, body);
