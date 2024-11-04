@@ -16,7 +16,7 @@ export async function GET(
     console.log({ accessToken, databaseId: params.databaseId });
 
     const databaseResponse = await fetch(
-      `hhttps://api.notion.com/v1/databases/${params.databaseId}/query`,
+      `https://api.notion.com/v1/databases/${params.databaseId}/query`,
       {
         method: "POST",
         headers: {
@@ -30,7 +30,7 @@ export async function GET(
       status: 200,
     });
   } catch (error) {
-    console.error("Error retrieving user id:", error);
+    console.error("Error retrieving database id:", error);
 
     return new NextResponse("Failed retrieving user id", {
       status: 500,
