@@ -16,10 +16,11 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { Mic } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useAppContext, useAssistant } from "@/components/context/appContext";
+import { useAppContext } from "@/components/context/appContext";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { ChatModel } from "@/types/types";
 import {
+  useAssistant,
   useGetAssistant,
   useUpdateAssistant,
 } from "@/components/context/useAppContext/assistant";
