@@ -11,8 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { useLoginUser } from "../context/appContext";
 import { useRouter } from "next/navigation";
+import { useLoginUser } from "../context/useAppContext/user";
 
 export default function Login() {
   const { loginUser, error, loading } = useLoginUser();
