@@ -25,11 +25,11 @@ import { Combobox } from "../combo-box";
 import React, { useEffect } from "react";
 import {
   useAppContext,
-  useFetchAssistantsByTeamId,
   useUserLogout,
 } from "../context/appContext";
 import { Option } from "@/types/types";
 import { useFetchTeamsByUserId } from "../context/useAppContext/team";
+import { useFetchAssistantsByTeamId } from "../context/useAppContext/assistant";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
