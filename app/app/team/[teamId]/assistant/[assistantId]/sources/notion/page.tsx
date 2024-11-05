@@ -13,10 +13,7 @@ import { Trash2, RefreshCcw, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useParams } from "next/navigation";
-import {
-  useAppContext,
-  useFileVectorStoreAssistant,
-} from "@/components/context/appContext";
+import { useAppContext } from "@/components/context/appContext";
 import { Loader } from "@/components/loader";
 import {
   Dialog,
@@ -26,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { FileType } from "@prisma/client";
 import { useGetAssistant } from "@/components/context/useAppContext/assistant";
+import { useFileVectorStoreAssistant } from "@/components/context/useAppContext/file";
 
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
