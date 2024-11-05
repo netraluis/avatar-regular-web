@@ -8,11 +8,12 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { useAppContext, useCreateAssistant } from "./context/appContext";
+import { useAppContext } from "./context/appContext";
 import { useEffect, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
 import { ChatModel } from "@/types/types";
+import { useCreateAssistant } from "./context/useAppContext/assistant";
 
 function CreateAssistantForm() {
   const router = useRouter();

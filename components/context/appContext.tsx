@@ -154,62 +154,6 @@ export const useAppContext = () => {
   return context;
 };
 
-
-export const useCreateAssistant = () => {
-  const { dispatch } = useAppContext();
-
-  const [loadingCreateAssistant, setLoadingCreateAssistant] = useState(false);
-  const [errorCreateAssistant, setErrorCreateAssistant] = useState<any>(null);
-  const [createAssistantData, setCreateAssistantData] =
-    useState<Assistant | null>(null);
-
-  async function createAssistant({
-    assistantCreateParams,
-    teamId,
-    userId,
-  }: {
-    assistantCreateParams: AssistantCreateParams;
-    teamId: string;
-    userId: string;
-  }) {
-    try {
-      setLoadingCreateAssistant(true);
-      const response = await fetch(`/api/protected/assistant`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-user-id": userId,
-        },
-        body: JSON.stringify({
-          assistantCreateParams,
-          teamId,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-      const responseData = await response.json();
-      dispatch({
-        type: "SET_ASSISTANT_CREATION",
-        payload: { newAssistant: responseData },
-      });
-      setCreateAssistantData(responseData);
-    } catch (error: any) {
-      setErrorCreateAssistant({ error });
-    } finally {
-      setLoadingCreateAssistant(false);
-    }
-  }
-
-  return {
-    loadingCreateAssistant,
-    errorCreateAssistant,
-    createAssistantData,
-    createAssistant,
-  };
-};
-
 export const useDeleteAssistant = () => {
   const { dispatch } = useAppContext();
 
