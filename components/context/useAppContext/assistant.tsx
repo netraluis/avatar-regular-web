@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useAppContext } from "../appContext";
 import { Assistant } from "@prisma/client";
-import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
+import {
+  AssistantCreateParams,
+  AssistantUpdateParams,
+} from "openai/resources/beta/assistants.mjs";
 import OpenAI from "openai";
 
 export const useFetchAssistantsByTeamId = () => {
@@ -204,5 +207,51 @@ export const useGetAssistant = () => {
     errorGetAssistant,
     getAssistantData,
     getAssistant,
+  };
+};
+
+export const useUpdateAssistant = () => {
+  const [loadingUpdateAssistant, setLoadingUpdateAssistant] = useState(false);
+  const [errorUpdateAssistant, setErrorUpdateAssistant] = useState<any>(null);
+  const [updateAssistantData, setUpdateAssistantData] =
+    useState<OpenAI.Beta.Assistants.Assistant | null>(null);
+
+  async function updateAssistant({
+    assistantId,
+    userId,
+    assistantUpdateParams,
+  }: {
+    assistantId: string;
+    userId: string;
+    assistantUpdateParams: AssistantUpdateParams;
+  }) {
+    try {
+      setLoadingUpdateAssistant(true);
+      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+        body: JSON.stringify(assistantUpdateParams),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      setUpdateAssistantData(responseData);
+    } catch (error: any) {
+      setErrorUpdateAssistant({ error });
+    } finally {
+      setLoadingUpdateAssistant(false);
+    }
+  }
+
+  return {
+    loadingUpdateAssistant,
+    errorUpdateAssistant,
+    updateAssistantData,
+    updateAssistant,
   };
 };
