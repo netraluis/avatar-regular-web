@@ -1,17 +1,14 @@
-// context/AppContext.tsx
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 
-import { VectorStoreFile, SuccessfullResponse } from "@/types/types";
 import { useRouter } from "next/navigation";
 import {
   createContext,
   useContext,
   useEffect,
   useReducer,
-  useState,
 } from "react";
 
-import { Assistant, FileType, Team } from "@prisma/client";
+import { Assistant, Team } from "@prisma/client";
 
 // export type Team = {
 //   id?: string;
