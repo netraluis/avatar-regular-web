@@ -802,6 +802,17 @@ export const useFileVectorStoreAssistant = () => {
     try {
       setUpLoadFileloading(true);
 
+      const upLoadingFile: any[] = [
+        ...Array.from(fileInput).map((file) => {
+          return {
+            filename: file.name,
+            isCharging: true,
+            status: "loading",
+          };
+        }),
+      ]
+
+      setFileData((prev) => [...prev, ...upLoadingFile]);
       const formData = new FormData();
       Array.from(fileInput).forEach((file) => {
         formData.append("files", file); // Usa el mismo nombre "files" para todos los archivos
@@ -824,7 +835,11 @@ export const useFileVectorStoreAssistant = () => {
       setUpLoadFileError(null);
       setUpLoadFiledata(responseData);
       console.log({ responseData });
-      return setFileData((prev) => [...prev, ...responseData.data]);
+      setFileData((prev) => prev.filter((file) => !file.isCharging));
+      return setFileData((prev) => [
+        ...prev.filter((file) => !file.isCharging), 
+        ...responseData.data, 
+      ]);
     } catch (error: any) {
       return setUpLoadFileError({ error });
     } finally {
@@ -864,7 +879,6 @@ export const useFileVectorStoreAssistant = () => {
   }
 
   async function deleteFileVectorStore({ fileId }: { fileId: string }) {
-    console.log("DELETE", { fileId });
     try {
       setFileData((pre) => {
         const res = pre.map((file) => {

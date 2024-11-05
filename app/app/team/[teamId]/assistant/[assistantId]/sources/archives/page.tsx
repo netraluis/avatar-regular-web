@@ -202,12 +202,13 @@ export default function Component() {
                       multiple
                       accept=".pdf,.doc,.docx,.txt"
                       onChange={async (e) => {
+                        setIsModalOpen(false);
                         await uploadFileVectorStore({
                           fileInput: e.target.files,
                           assistantId: params.assistantId as string,
                           fileType: FileType.FILE,
                         });
-                        setIsModalOpen(false);
+                        
                       }}
                     />
                   </label>
