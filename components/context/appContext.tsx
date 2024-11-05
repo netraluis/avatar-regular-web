@@ -154,55 +154,6 @@ export const useAppContext = () => {
   return context;
 };
 
-export const useDeleteAssistant = () => {
-  const { dispatch } = useAppContext();
-
-  const [loadingDeleteAssistant, setLoadingDeleteAssistant] = useState(false);
-  const [errorDeleteAssistant, setErrorDeleteAssistant] = useState<any>(null);
-  const [deleteAssistantData, setDeleteAssistantData] =
-    useState<Assistant | null>(null);
-
-  async function deleteAssistant({
-    assistantId,
-    userId,
-  }: {
-    assistantId: string;
-    userId: string;
-  }) {
-    try {
-      setLoadingDeleteAssistant(true);
-      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "x-user-id": userId,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-      const responseData = await response.json();
-      dispatch({
-        type: "SET_ASSISTANT_DELETE",
-        payload: { assistantId },
-      });
-      setDeleteAssistantData(responseData);
-    } catch (error: any) {
-      setErrorDeleteAssistant({ error });
-    } finally {
-      setLoadingDeleteAssistant(false);
-    }
-  }
-
-  return {
-    loadingDeleteAssistant,
-    errorDeleteAssistant,
-    deleteAssistantData,
-    deleteAssistant,
-  };
-};
-
 export const useGetAssistant = () => {
   const [loadingGetAssistant, setLoadingGetAssistant] = useState(false);
   const [errorGetAssistant, setErrorGetAssistant] = useState<any>(null);
@@ -612,7 +563,7 @@ export const useFileVectorStoreAssistant = () => {
             status: "loading",
           };
         }),
-      ]
+      ];
 
       setFileData((prev) => [...prev, ...upLoadingFile]);
       const formData = new FormData();
@@ -639,8 +590,8 @@ export const useFileVectorStoreAssistant = () => {
       console.log({ responseData });
       setFileData((prev) => prev.filter((file) => !file.isCharging));
       return setFileData((prev) => [
-        ...prev.filter((file) => !file.isCharging), 
-        ...responseData.data, 
+        ...prev.filter((file) => !file.isCharging),
+        ...responseData.data,
       ]);
     } catch (error: any) {
       return setUpLoadFileError({ error });

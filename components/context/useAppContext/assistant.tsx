@@ -31,7 +31,7 @@ export const useFetchAssistantsByTeamId = () => {
             "Content-Type": "application/json",
             "x-user-id": userId, // Aquí enviamos el userId en los headers
           },
-        }
+        },
       );
 
       if (!teamSelectedResponse.ok) {
@@ -108,5 +108,54 @@ export const useCreateAssistant = () => {
     errorCreateAssistant,
     createAssistantData,
     createAssistant,
+  };
+};
+
+export const useDeleteAssistant = () => {
+  const { dispatch } = useAppContext();
+
+  const [loadingDeleteAssistant, setLoadingDeleteAssistant] = useState(false);
+  const [errorDeleteAssistant, setErrorDeleteAssistant] = useState<any>(null);
+  const [deleteAssistantData, setDeleteAssistantData] =
+    useState<Assistant | null>(null);
+
+  async function deleteAssistant({
+    assistantId,
+    userId,
+  }: {
+    assistantId: string;
+    userId: string;
+  }) {
+    try {
+      setLoadingDeleteAssistant(true);
+      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      dispatch({
+        type: "SET_ASSISTANT_DELETE",
+        payload: { assistantId },
+      });
+      setDeleteAssistantData(responseData);
+    } catch (error: any) {
+      setErrorDeleteAssistant({ error });
+    } finally {
+      setLoadingDeleteAssistant(false);
+    }
+  }
+
+  return {
+    loadingDeleteAssistant,
+    errorDeleteAssistant,
+    deleteAssistantData,
+    deleteAssistant,
   };
 };

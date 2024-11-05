@@ -28,14 +28,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import {
-  useAppContext,
-  useDeleteAssistant
-} from "@/components/context/appContext";
+import { useAppContext } from "@/components/context/appContext";
 import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Loader } from "@/components/loader";
-import { useFetchAssistantsByTeamId } from "@/components/context/useAppContext/assistant";
+import {
+  useDeleteAssistant,
+  useFetchAssistantsByTeamId,
+} from "@/components/context/useAppContext/assistant";
 
 // export async function generateStaticParams() {
 //   return teams.map((team) => ({

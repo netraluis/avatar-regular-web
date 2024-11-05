@@ -208,7 +208,6 @@ export default function Component() {
                           assistantId: params.assistantId as string,
                           fileType: FileType.FILE,
                         });
-                        
                       }}
                     />
                   </label>

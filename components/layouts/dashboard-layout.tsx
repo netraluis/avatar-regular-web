@@ -23,10 +23,7 @@ import {
 import { useRouter, useParams } from "next/navigation";
 import { Combobox } from "../combo-box";
 import React, { useEffect } from "react";
-import {
-  useAppContext,
-  useUserLogout,
-} from "../context/appContext";
+import { useAppContext, useUserLogout } from "../context/appContext";
 import { Option } from "@/types/types";
 import { useFetchTeamsByUserId } from "../context/useAppContext/team";
 import { useFetchAssistantsByTeamId } from "../context/useAppContext/assistant";

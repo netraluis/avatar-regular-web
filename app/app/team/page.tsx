@@ -1,9 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  useAppContext,
-} from "@/components/context/appContext";
+import { useAppContext } from "@/components/context/appContext";
 import { useFetchTeamsByUserId } from "@/components/context/useAppContext/team";
 
 const RedirectComponent = () => {
