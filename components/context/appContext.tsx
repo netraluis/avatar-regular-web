@@ -154,55 +154,7 @@ export const useAppContext = () => {
   return context;
 };
 
-export const useGetAssistant = () => {
-  const [loadingGetAssistant, setLoadingGetAssistant] = useState(false);
-  const [errorGetAssistant, setErrorGetAssistant] = useState<any>(null);
-  const [getAssistantData, setGetAssistantData] = useState<
-    (OpenAI.Beta.Assistants.Assistant & Assistant) | null
-  >(null);
-
-  async function getAssistant({
-    assistantId,
-    userId,
-  }: {
-    assistantId: string;
-    userId: string;
-  }) {
-    try {
-      setLoadingGetAssistant(true);
-      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-user-id": userId,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-      const responseData = await response.json();
-
-      setGetAssistantData(responseData);
-      return responseData;
-    } catch (error: any) {
-      setErrorGetAssistant({ error });
-    } finally {
-      setLoadingGetAssistant(false);
-    }
-  }
-
-  return {
-    loadingGetAssistant,
-    errorGetAssistant,
-    getAssistantData,
-    getAssistant,
-  };
-};
-
 export const useUpdateAssistant = () => {
-  // const { dispatch } = useAppContext();
-
   const [loadingUpdateAssistant, setLoadingUpdateAssistant] = useState(false);
   const [errorUpdateAssistant, setErrorUpdateAssistant] = useState<any>(null);
   const [updateAssistantData, setUpdateAssistantData] =

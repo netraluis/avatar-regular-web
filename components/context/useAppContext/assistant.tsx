@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAppContext } from "../appContext";
 import { Assistant } from "@prisma/client";
 import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
+import OpenAI from "openai";
 
 export const useFetchAssistantsByTeamId = () => {
   const { dispatch } = useAppContext();
@@ -157,5 +158,51 @@ export const useDeleteAssistant = () => {
     errorDeleteAssistant,
     deleteAssistantData,
     deleteAssistant,
+  };
+};
+
+export const useGetAssistant = () => {
+  const [loadingGetAssistant, setLoadingGetAssistant] = useState(false);
+  const [errorGetAssistant, setErrorGetAssistant] = useState<any>(null);
+  const [getAssistantData, setGetAssistantData] = useState<
+    (OpenAI.Beta.Assistants.Assistant & Assistant) | null
+  >(null);
+
+  async function getAssistant({
+    assistantId,
+    userId,
+  }: {
+    assistantId: string;
+    userId: string;
+  }) {
+    try {
+      setLoadingGetAssistant(true);
+      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+
+      setGetAssistantData(responseData);
+      return responseData;
+    } catch (error: any) {
+      setErrorGetAssistant({ error });
+    } finally {
+      setLoadingGetAssistant(false);
+    }
+  }
+
+  return {
+    loadingGetAssistant,
+    errorGetAssistant,
+    getAssistantData,
+    getAssistant,
   };
 };

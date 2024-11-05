@@ -19,11 +19,11 @@ import { useParams } from "next/navigation";
 import {
   useAppContext,
   useAssistant,
-  useGetAssistant,
   useUpdateAssistant,
 } from "@/components/context/appContext";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { ChatModel } from "@/types/types";
+import { useGetAssistant } from "@/components/context/useAppContext/assistant";
 
 export default function Playground() {
   const { state } = useAppContext();

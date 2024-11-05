@@ -16,7 +16,6 @@ import { useParams } from "next/navigation";
 import {
   useAppContext,
   useFileVectorStoreAssistant,
-  useGetAssistant,
 } from "@/components/context/appContext";
 import { Loader } from "@/components/loader";
 import {
@@ -26,6 +25,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { FileType } from "@prisma/client";
+import { useGetAssistant } from "@/components/context/useAppContext/assistant";
 
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
