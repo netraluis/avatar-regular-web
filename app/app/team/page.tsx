@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   useAppContext,
-  useFetchTeamsByUserId,
 } from "@/components/context/appContext";
+import { useFetchTeamsByUserId } from "@/components/context/useAppContext/team";
 
 const RedirectComponent = () => {
   const router = useRouter();

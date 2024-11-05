@@ -26,10 +26,10 @@ import React, { useEffect } from "react";
 import {
   useAppContext,
   useFetchAssistantsByTeamId,
-  useFetchTeamsByUserId,
   useUserLogout,
 } from "../context/appContext";
 import { Option } from "@/types/types";
+import { useFetchTeamsByUserId } from "../context/useAppContext/team";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
