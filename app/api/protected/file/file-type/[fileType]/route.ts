@@ -6,7 +6,8 @@ import { promisify } from "util";
 import OpenAI from "openai";
 import { getAssistant } from "@/lib/data/assistant";
 import { FilePurpose } from "openai/resources/files.mjs";
-import { VectorStoreTypeEnum } from "@/types/types";
+import { FileType, Prisma } from "@prisma/client";
+import { createFile } from "@/lib/data/file";
 
 const pump = promisify(pipeline);
 
@@ -31,15 +32,20 @@ function webToNodeReadable(webStream: ReadableStream): Readable {
 
 export async function POST(
   req: NextRequest,
-  {
-    params,
-  }: { params: { assistantId: string; vectorStoreType: VectorStoreTypeEnum } },
+  { params }: { params: { assistantId: string; fileType: string } },
 ) {
   try {
     const formData = await req.formData();
     const files = formData.getAll("files") as File[];
     const assistantId = formData.get("assistantId") as string;
     const purpose = formData.get("purpose") as FilePurpose;
+
+    if (!Object.values(FileType).includes(params.fileType as FileType)) {
+      return NextResponse.json({
+        status: 400,
+        message: "Invalid file type",
+      });
+    }
 
     if (files.length === 0) {
       return NextResponse.json({
@@ -57,21 +63,6 @@ export async function POST(
       });
     }
 
-    let vectorStoreId;
-    switch (params.vectorStoreType) {
-      case VectorStoreTypeEnum.FILE:
-        vectorStoreId = assistant.openAIVectorStoreFileId;
-        break;
-      case VectorStoreTypeEnum.NOTION:
-        vectorStoreId = assistant.openAIVectorStoreNotionId;
-        break;
-      default:
-        return NextResponse.json({
-          status: 400,
-          message: "Invalid vector store type",
-        });
-    }
-
     const uploadResults = [];
 
     // Define the temporary directory for file uploads
@@ -83,19 +74,35 @@ export async function POST(
       await pump(nodeStream, fs.createWriteStream(filePath));
 
       // Upload each file to OpenAI
-      const uploadedFile = await openai.files.create({
+      const uploadedFile: OpenAI.Files.FileObject = await openai.files.create({
         file: fs.createReadStream(filePath),
         purpose: purpose,
       });
 
-      await openai.beta.vectorStores.files.create(vectorStoreId, {
-        file_id: uploadedFile.id,
-      });
+      await openai.beta.vectorStores.files.create(
+        assistant.openAIVectorStoreFileId,
+        {
+          file_id: uploadedFile.id,
+        },
+      );
 
       // Delete the temporary file after upload
       await fs.promises.unlink(filePath);
 
-      uploadResults.push(uploadedFile);
+      const createdFile: Prisma.FileCreateInput = {
+        openAIVectorStoreId: assistant.openAIVectorStoreFileId,
+        openAiFileId: uploadedFile.id,
+        type: params.fileType as FileType,
+        filename: uploadedFile.filename,
+        bytes: uploadedFile.bytes,
+        assistant: {
+          connect: { id: assistantId }, // Conecta el `File` al `Assistant` existente
+        },
+      };
+
+      await createFile(createdFile);
+
+      uploadResults.push(createdFile);
     }
 
     return NextResponse.json({ status: 200, data: uploadResults });

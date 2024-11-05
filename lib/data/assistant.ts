@@ -1,4 +1,8 @@
-import { createAssistant, deleteAssistantById } from "../openAI/assistant";
+import {
+  createAssistant,
+  deleteAssistantById,
+  modifyAssistantById,
+} from "../openAI/assistant";
 import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
 import prisma from "../prisma";
 import { createVectorStore } from "../openAI/vector-store";
@@ -26,11 +30,7 @@ export const createAssistantByTeam = async (
   });
 
   const newVectorStoreFile = await createVectorStore({
-    name: `file-${newAssistantOpenAi.id}`,
-  });
-
-  const newVectorStoreNotion = await createVectorStore({
-    name: `notion-${newAssistantOpenAi.id}`,
+    name: newAssistantOpenAi.id,
   });
 
   const newAssistant = await prisma.assistant.create({
@@ -39,20 +39,32 @@ export const createAssistantByTeam = async (
       teamId: teamId,
       openAIId: newAssistantOpenAi.id,
       openAIVectorStoreFileId: newVectorStoreFile.id,
-      openAIVectorStoreNotionId: newVectorStoreNotion.id,
     },
   });
 
-  return newAssistant;
+  const newFileAssistant = await modifyAssistantById(newAssistant.openAIId, {
+    tools: [
+      {
+        type: "file_search",
+      },
+    ],
+    tool_resources: {
+      file_search: {
+        vector_store_ids: [newVectorStoreFile.id],
+      },
+    },
+  });
+
+  return { ...newFileAssistant, ...newAssistant };
 };
 
 export const deleteAssistant = async (assistantId: string) => {
-  await deleteAssistantById(assistantId);
   const assistant = await prisma.assistant.delete({
     where: {
-      openAIId: assistantId,
+      id: assistantId,
     },
   });
+  await deleteAssistantById(assistant.openAIId);
   return assistant;
 };
 

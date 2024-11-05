@@ -30,19 +30,6 @@ export default function Playground() {
   const { assistantId } = useParams();
   const [message, setMessage] = React.useState("");
   const [threadId, setThreadId] = React.useState<string | undefined>();
-  const [conversation, setConversation] = React.useState<string[]>([
-    "Hi! What can I help you with?",
-    "a",
-    "a",
-    "a",
-    "a",
-    // "a",
-    // "a",
-    // "a",
-    // "a",
-    // "a",
-    // "a","a",
-  ]);
 
   const [assistantValues, setAssistantValues] = React.useState({
     model: "gpt-4",
@@ -77,7 +64,6 @@ export default function Playground() {
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      setConversation([...conversation, message]);
       submitMessage(message);
       setMessage("");
     }

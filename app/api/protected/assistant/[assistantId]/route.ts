@@ -1,5 +1,9 @@
 import { deleteAssistant, getAssistant } from "@/lib/data/assistant";
+import { getFiles } from "@/lib/data/file";
 import { getAssistantById, modifyAssistantById } from "@/lib/openAI/assistant";
+import { deleteFile } from "@/lib/openAI/file";
+import { deleteFile as deleteFileLocally } from "@/lib/data/file";
+import { deleteVectorStoreFile } from "@/lib/openAI/vector-store";
 import { Assistant } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
@@ -16,6 +20,7 @@ export async function GET(
         status: 400,
       });
     }
+    console.log("params.assistantId", params.assistantId);
     const localAssistant: Assistant | null = await getAssistant(
       params.assistantId as string,
     );
@@ -62,9 +67,22 @@ export async function DELETE(
       });
     }
 
-    const teams = await deleteAssistant(params.assistantId);
+    const filesFromAssistant = await getFiles({
+      assistantId: params.assistantId,
+    });
 
-    return new NextResponse(JSON.stringify(teams), {
+    for (const file of filesFromAssistant) {
+      await deleteFile({ fileId: file.openAiFileId });
+      await deleteFileLocally({ openAiFileId: file.openAiFileId });
+    }
+
+    const deletedAssistant = await deleteAssistant(params.assistantId);
+
+    const { openAIVectorStoreFileId } = deletedAssistant;
+
+    await deleteVectorStoreFile(openAIVectorStoreFileId);
+
+    return new NextResponse(JSON.stringify(deletedAssistant), {
       status: 200,
     });
   } catch (error) {

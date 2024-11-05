@@ -25,7 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { VectorStoreTypeEnum } from "@/types/types";
+import { FileType } from "@prisma/client";
 
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
@@ -103,7 +103,7 @@ export default function Component() {
     });
     await getFileVectorStore({
       assistantId: params.assistantId as string,
-      vectorStoreType: VectorStoreTypeEnum.NOTION,
+      fileType: FileType.NOTION,
     });
   };
 
@@ -221,7 +221,7 @@ export default function Component() {
     await uploadFileVectorStore({
       fileInput: [file] as unknown as FileList,
       assistantId: params.assistantId as string,
-      vectorStoreType: VectorStoreTypeEnum.NOTION,
+      fileType: FileType.NOTION,
     });
 
     setInputValue("");

@@ -1,4 +1,5 @@
-import React, { ChangeEvent, KeyboardEvent } from "react";
+import { ChangeEvent, KeyboardEvent } from "react";
+import { File } from "@prisma/client";
 
 export interface TextAreaFormProps {
   handleInputChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
@@ -56,20 +57,9 @@ export enum ChatModel {
   DAVINCI = "davinci",
 }
 
-export interface VectorStoreFile {
-  id: string;
-  filename: string;
-  bytes: number;
-  status: string;
-  isCharging: boolean;
-}
+export type VectorStoreFile = File & { isCharging: boolean };
 
 export interface SuccessfullResponse<T> {
   status: number;
   data: T;
-}
-
-export enum VectorStoreTypeEnum {
-  FILE = "file",
-  NOTION = "notion",
 }

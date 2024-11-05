@@ -23,7 +23,8 @@ import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import { useFileVectorStoreAssistant } from "@/components/context/appContext";
 import { Loader } from "@/components/loader";
-import { VectorStoreTypeEnum } from "@/types/types";
+import { FileType } from "@prisma/client";
+import { VectorStoreFile } from "@/types/types";
 
 export default function Component() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +46,7 @@ export default function Component() {
   const fetchData = async () => {
     await getFileVectorStore({
       assistantId: params.assistantId as string,
-      vectorStoreType: VectorStoreTypeEnum.FILE,
+      fileType: FileType.FILE,
     });
   };
 
@@ -73,7 +74,7 @@ export default function Component() {
     await uploadFileVectorStore({
       fileInput: files as unknown as FileList,
       assistantId: params.assistantId as string,
-      vectorStoreType: VectorStoreTypeEnum.FILE,
+      fileType: FileType.FILE,
     });
     setIsModalOpen(false);
   }, []);
@@ -127,7 +128,7 @@ export default function Component() {
                 </TableRow>
               ) : (
                 fileData &&
-                fileData.map((file: any, index: number) => (
+                fileData.map((file: VectorStoreFile, index: number) => (
                   <TableRow
                     key={index}
                     className={
@@ -141,9 +142,9 @@ export default function Component() {
                     <TableCell>{file.bytes}</TableCell>
                     <TableCell>
                       <span
-                        className={`px-2 py-1 ${file.status === "processed" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"} rounded-full text-xs`}
+                        className={`px-2 py-1 ${file.filename === "processed" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"} rounded-full text-xs`}
                       >
-                        {file.status}
+                        {file.filename}
                       </span>
                     </TableCell>
                     {
@@ -204,7 +205,7 @@ export default function Component() {
                         await uploadFileVectorStore({
                           fileInput: e.target.files,
                           assistantId: params.assistantId as string,
-                          vectorStoreType: VectorStoreTypeEnum.FILE,
+                          fileType: FileType.FILE,
                         });
                         setIsModalOpen(false);
                       }}

@@ -1,4 +1,5 @@
 import { deleteFile } from "@/lib/openAI/file";
+import { deleteFile as deleteFileLocally } from "@/lib/data/file";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(
@@ -13,7 +14,8 @@ export async function DELETE(
   }
 
   try {
-    const files = await deleteFile({ fileId: params.fileId });
+    const { openAiFileId } = await deleteFileLocally({ id: params.fileId });
+    const files = await deleteFile({ fileId: openAiFileId });
 
     return NextResponse.json({ status: 200, fileId: files.id });
   } catch (e: any) {

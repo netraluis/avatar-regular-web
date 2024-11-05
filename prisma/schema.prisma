@@ -18,6 +18,11 @@ enum AsssitantStatus {
   PRIVATE
 }
 
+enum FileType {
+  FILE
+  NOTION
+}
+
 model Messages {
   id          String   @id @default(cuid())
   role        String
@@ -84,10 +89,10 @@ model Assistant {
   status                    AsssitantStatus @default(PUBLIC)
   openAIId                  String
   openAIVectorStoreFileId   String
-  openAIVectorStoreNotionId String
   notionAccessToken         String?
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  files       File[] 
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
@@ -104,4 +109,18 @@ model UserTeam {
   team        Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
   @@id([userId, teamId]) // Clave primaria compuesta
+}
+
+model File {
+  id                  String      @id @default(uuid())
+  openAIVectorStoreId String
+  openAiFileId        String
+  assistantId         String
+  type                FileType
+  filename            String
+  bytes               Int
+
+  assistant           Assistant   @relation(fields: [assistantId], references: [id])
+
+  @@unique([openAiFileId])
 }

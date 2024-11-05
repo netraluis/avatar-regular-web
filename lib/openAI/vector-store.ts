@@ -19,3 +19,7 @@ export const getVectorStoreFiles = async (
 ): Promise<OpenAI.Beta.VectorStores.Files.VectorStoreFilesPage> => {
   return await openai.beta.vectorStores.files.list(vectorStoreId);
 };
+
+export const deleteVectorStoreFile = async (vectorStoreId: string) => {
+  return await openai.beta.vectorStores.del(vectorStoreId);
+};

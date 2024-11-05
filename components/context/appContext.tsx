@@ -1,11 +1,7 @@
 // context/AppContext.tsx
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 
-import {
-  VectorStoreFile,
-  SuccessfullResponse,
-  VectorStoreTypeEnum,
-} from "@/types/types";
+import { VectorStoreFile, SuccessfullResponse } from "@/types/types";
 import { useRouter } from "next/navigation";
 import OpenAI from "openai";
 import {
@@ -20,7 +16,7 @@ import {
   useState,
 } from "react";
 
-import { Assistant } from "@prisma/client";
+import { Assistant, FileType } from "@prisma/client";
 
 export type Team = {
   id?: string;
@@ -92,7 +88,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
       return {
         ...state,
         assistantsByTeam: state.assistantsByTeam.filter(
-          (assistant) => assistant.openAIId !== action.payload.assistantId,
+          (assistant) => assistant.id !== action.payload.assistantId,
         ),
       };
     case "SET_USER_LOGOUT":
@@ -796,11 +792,11 @@ export const useFileVectorStoreAssistant = () => {
   async function uploadFileVectorStore({
     fileInput,
     assistantId,
-    vectorStoreType,
+    fileType,
   }: {
     fileInput: FileList | null;
     assistantId: string;
-    vectorStoreType: VectorStoreTypeEnum;
+    fileType: FileType;
   }) {
     if (!fileInput || fileInput.length === 0) return;
     try {
@@ -817,7 +813,7 @@ export const useFileVectorStoreAssistant = () => {
       const requestOptions = { method: "POST", body: formData };
 
       const response = await fetch(
-        `/api/protected/vector-store-assistant/${vectorStoreType}`,
+        `/api/protected/file/file-type/${fileType}`,
         requestOptions,
       );
 
@@ -827,6 +823,7 @@ export const useFileVectorStoreAssistant = () => {
       const responseData = await response.json();
       setUpLoadFileError(null);
       setUpLoadFiledata(responseData);
+      console.log({ responseData });
       return setFileData((prev) => [...prev, ...responseData.data]);
     } catch (error: any) {
       return setUpLoadFileError({ error });
@@ -837,15 +834,15 @@ export const useFileVectorStoreAssistant = () => {
 
   async function getFileVectorStore({
     assistantId,
-    vectorStoreType,
+    fileType,
   }: {
     assistantId: string;
-    vectorStoreType: VectorStoreTypeEnum;
+    fileType: FileType;
   }) {
     try {
       setGetFileloading(true);
       const response = await fetch(
-        `/api/protected/vector-store-assistant/${vectorStoreType}/${assistantId}`,
+        `/api/protected/file/file-type/${fileType}/${assistantId}`,
         {
           method: "GET",
         },
@@ -857,6 +854,7 @@ export const useFileVectorStoreAssistant = () => {
       const responseData: SuccessfullResponse<VectorStoreFile[]> =
         await response.json();
       setGetFiledata(responseData);
+      console.log("GET", { responseData });
       return setFileData(responseData.data);
     } catch (error: any) {
       return setGetFileError({ error });
@@ -866,6 +864,7 @@ export const useFileVectorStoreAssistant = () => {
   }
 
   async function deleteFileVectorStore({ fileId }: { fileId: string }) {
+    console.log("DELETE", { fileId });
     try {
       setFileData((pre) => {
         const res = pre.map((file) => {

@@ -61,7 +61,7 @@ export default function Dashboard() {
   };
 
   const handleDeleteAssistant = (assistantId: string) => {
-    deleteAssistant({ assistantId, userId: user.id });
+    deleteAssistant({ assistantId, userId: user.user.id });
   };
 
   useEffect(() => {
@@ -166,7 +166,7 @@ export default function Dashboard() {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                   onClick={() => {
-                                    handleDeleteAssistant(assistant.openAIId);
+                                    handleDeleteAssistant(assistant.id);
                                   }}
                                 >
                                   Delete
