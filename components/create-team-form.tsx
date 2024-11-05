@@ -8,9 +8,10 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { useAppContext, useCreateTeam } from "./context/appContext";
+import { useAppContext } from "./context/appContext";
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useCreateTeam } from "./context/useAppContext/team";
 
 function CreateTeamForm() {
   const router = useRouter();
