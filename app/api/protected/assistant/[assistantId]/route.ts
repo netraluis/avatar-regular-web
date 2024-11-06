@@ -72,8 +72,8 @@ export async function DELETE(
     });
 
     for (const file of filesFromAssistant) {
-      await deleteFile({ fileId: file.openAiFileId });
-      await deleteFileLocally({ openAiFileId: file.openAiFileId });
+      await deleteFile({ fileId: file.openAIFileId });
+      await deleteFileLocally({ openAIFileId: file.openAIFileId });
     }
 
     const deletedAssistant = await deleteAssistant(params.assistantId);

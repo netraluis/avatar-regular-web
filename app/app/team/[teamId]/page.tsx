@@ -129,7 +129,9 @@ export default function Dashboard() {
                           </TableCell>
                           <TableCell className="hidden md:table-cell">
                             <Link href="/app/team/1/page/1">
-                              {teamSelected?.subDomain}/{assistant.name}
+                              {teamSelected?.subDomain}.
+                              {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/
+                              {assistant.url}
                             </Link>
                           </TableCell>
                           <TableCell className="hidden md:table-cell">

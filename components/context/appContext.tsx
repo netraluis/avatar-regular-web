@@ -1,12 +1,7 @@
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 
 import { useRouter } from "next/navigation";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-} from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 import { Assistant, Team } from "@prisma/client";
 

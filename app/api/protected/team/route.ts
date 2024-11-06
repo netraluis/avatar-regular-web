@@ -36,15 +36,16 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+    console.log("body", body);
 
-    if (!body.teamName) {
+    if (!body.name) {
       return new NextResponse("team name is required", {
         status: 400,
       });
     }
 
     const teamResult = await createTeam({
-      team: { teamName: body.teamName },
+      data: body,
       userId,
     });
 

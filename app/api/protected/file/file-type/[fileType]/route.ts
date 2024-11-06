@@ -91,7 +91,7 @@ export async function POST(
 
       const createdFile: Prisma.FileCreateInput = {
         openAIVectorStoreId: assistant.openAIVectorStoreFileId,
-        openAiFileId: uploadedFile.id,
+        openAIFileId: uploadedFile.id,
         type: params.fileType as FileType,
         filename: uploadedFile.filename,
         bytes: uploadedFile.bytes,

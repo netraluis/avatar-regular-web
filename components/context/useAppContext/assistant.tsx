@@ -71,10 +71,12 @@ export const useCreateAssistant = () => {
   async function createAssistant({
     assistantCreateParams,
     teamId,
+    url,
     userId,
   }: {
     assistantCreateParams: AssistantCreateParams;
     teamId: string;
+    url: string;
     userId: string;
   }) {
     try {
@@ -88,6 +90,7 @@ export const useCreateAssistant = () => {
         body: JSON.stringify({
           assistantCreateParams,
           teamId,
+          url,
         }),
       });
 

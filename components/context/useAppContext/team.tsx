@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAppContext } from "../appContext";
-import { Team } from "@prisma/client";
+import { Prisma, Team } from "@prisma/client";
 
 export const useFetchTeamsByUserId = () => {
   const { dispatch } = useAppContext();
@@ -56,10 +56,10 @@ export const useCreateTeam = () => {
   const [createTeamData, setCreateTeamData] = useState<Team | null>(null);
 
   async function createTeam({
-    teamName,
+    data,
     userId,
   }: {
-    teamName: string;
+    data: Prisma.TeamCreateInput;
     userId: string;
   }) {
     try {
@@ -70,7 +70,7 @@ export const useCreateTeam = () => {
           "Content-Type": "application/json",
           "x-user-id": userId,
         },
-        body: JSON.stringify({ teamName }),
+        body: JSON.stringify(data),
       });
 
       if (!response.ok) {

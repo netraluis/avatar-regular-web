@@ -44,11 +44,30 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    const { teamId } = body;
+    const { teamId, assistantCreateParams, url } = body;
+
+    if (!teamId) {
+      return new NextResponse("team id is required", {
+        status: 400,
+      });
+    }
+
+    if (!assistantCreateParams) {
+      return new NextResponse("assistant create input is required", {
+        status: 400,
+      });
+    }
+
+    if (!url) {
+      return new NextResponse("url input is required", {
+        status: 400,
+      });
+    }
 
     const newInternAssistant = await createAssistantByTeam(
       teamId,
-      body.assistantCreateParams,
+      url,
+      assistantCreateParams,
     );
 
     return new NextResponse(JSON.stringify(newInternAssistant), {

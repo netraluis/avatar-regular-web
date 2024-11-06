@@ -9,13 +9,18 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { useAppContext } from "./context/appContext";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCreateTeam } from "./context/useAppContext/team";
+import slugify from "slugify";
+import { LanguageType } from "@prisma/client";
 
 function CreateTeamForm() {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
+  const [teamName, setTeamName] = useState("");
+  const [subdomain, setSubdomain] = useState("");
+
   const {
     state: { user },
   } = useAppContext();
@@ -25,9 +30,16 @@ function CreateTeamForm() {
   const createHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formRef.current) {
-      const formData = new FormData(formRef.current);
-      const teamName = formData.get("name") as string;
-      createTeam({ teamName, userId: user.user.id });
+      // const formData = new FormData(formRef.current);
+      // const teamName = formData.get("name") as string;
+      createTeam({
+        data: {
+          name: teamName,
+          subDomain: subdomain,
+          defaultLanguage: LanguageType.ES,
+        },
+        userId: user.user.id,
+      });
     }
   };
 
@@ -36,6 +48,16 @@ function CreateTeamForm() {
       router.push(`/team/${createTeamData?.id}`);
     }
   }, [createTeamData]);
+
+  // Función para actualizar el subdominio cada vez que se cambia el nombre
+  const handleTeamNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const name = e.target.value;
+    setTeamName(name);
+
+    // Convertimos el nombre en un slug para el subdominio
+    const slug = slugify(name, { lower: true, strict: true });
+    setSubdomain(slug);
+  };
 
   return (
     <div className="flex items-center justify-center ">
@@ -55,7 +77,28 @@ function CreateTeamForm() {
               >
                 Name
               </label>
-              <Input id="name" name="name" placeholder="Acme" />
+              <Input
+                id="name"
+                name="name"
+                placeholder="Acme"
+                value={teamName}
+                onChange={handleTeamNameChange} // Actualiza el estado al cambiar
+              />
+            </div>
+            <div className="space-y-2">
+              <label
+                htmlFor="subdomain"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Subdomain
+              </label>
+              <Input
+                id="subdomain"
+                name="subdomain"
+                placeholder="acme"
+                value={subdomain}
+                disabled // Desactivado porque es solo para visualización
+              />
             </div>
             <Button
               type="submit"

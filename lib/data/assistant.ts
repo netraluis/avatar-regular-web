@@ -6,7 +6,7 @@ import {
 import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
 import prisma from "../prisma";
 import { createVectorStore } from "../openAI/vector-store";
-import { Prisma, Assistant } from "@prisma/client";
+import { Prisma, Assistant, LanguageType } from "@prisma/client";
 
 export const getAssistantsByTeam = async (teamId: string) => {
   const teamInfo = await prisma.assistant.findMany({
@@ -19,8 +19,10 @@ export const getAssistantsByTeam = async (teamId: string) => {
 
 export const createAssistantByTeam = async (
   teamId: string,
+  url: string,
   assistantCreateParams: AssistantCreateParams,
 ) => {
+  console.log({ assistantCreateParams, url, teamId });
   if (!assistantCreateParams.name) {
     throw new Error("name is required");
   }
@@ -39,6 +41,8 @@ export const createAssistantByTeam = async (
       teamId: teamId,
       openAIId: newAssistantOpenAi.id,
       openAIVectorStoreFileId: newVectorStoreFile.id,
+      language: LanguageType.ES, // default to 'en' if not provided
+      url: url,
     },
   });
 

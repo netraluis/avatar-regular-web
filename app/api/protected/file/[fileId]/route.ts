@@ -14,8 +14,8 @@ export async function DELETE(
   }
 
   try {
-    const { openAiFileId } = await deleteFileLocally({ id: params.fileId });
-    const files = await deleteFile({ fileId: openAiFileId });
+    const { openAIFileId } = await deleteFileLocally({ id: params.fileId });
+    const files = await deleteFile({ fileId: openAIFileId });
 
     return NextResponse.json({ status: 200, fileId: files.id });
   } catch (e: any) {

@@ -1,4 +1,5 @@
 import prisma from "../prisma";
+import { Prisma } from "@prisma/client";
 
 export const getTeamsByUser = async (userId: string) => {
   //   const response = await fetch(`/api/teams/${id}`);
@@ -50,21 +51,18 @@ export const getTeamByTeamId = async (teamId: string, userId: string) => {
 };
 
 export const createTeam = async ({
-  team: { teamName },
+  data,
   userId,
 }: {
-  team: { teamName: string };
+  data: Prisma.TeamCreateInput;
   userId: string;
 }) => {
   try {
     // Iniciar la transacción
-    return await prisma.$transaction(async (tx) => {
+    return await prisma.$transaction(async (tx: any) => {
       // Crear un nuevo equipo
       const newTeam = await tx.team.create({
-        data: {
-          name: teamName,
-          subDomain: teamName, // Puedes ajustar subDomain si lo necesitas
-        },
+        data,
       });
 
       // Relacionar al usuario con el equipo en la tabla intermedia

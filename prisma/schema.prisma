@@ -90,7 +90,7 @@ model Team {
   name        String
   users       UserTeam[]  // Relación muchos a muchos con User a través de la tabla de unión
   assistants  Assistant[] // Relación uno a muchos con asistentes virtuales
-  subDomain   String
+  subDomain   String       @unique(map: "Unique_SubDomain_Field")
   customDomain String?
   welcome     Welcome?  
   logoUrl     String?
@@ -160,11 +160,12 @@ model Assistant {
   openAIVectorStoreFileId   String
   notionAccessToken         String?
   language                  LanguageType
-  avatarId                  String 
+  avatarId                  String?
+  url                       String    @unique 
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   files       File[]
-  avatar      Avatar   @relation(fields: [avatarId], references: [id], onDelete: Cascade)
+  avatar      Avatar?   @relation(fields: [avatarId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
@@ -193,7 +194,7 @@ model UserTeam {
 model File {
   id                  String      @id @default(uuid())
   openAIVectorStoreId String
-  openAiFileId        String
+  openAIFileId        String
   assistantId         String
   type                FileType
   filename            String
@@ -201,5 +202,5 @@ model File {
 
   assistant           Assistant   @relation(fields: [assistantId], references: [id])
 
-  @@unique([openAiFileId])
+  @@unique([openAIFileId])
 }
