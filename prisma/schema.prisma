@@ -13,7 +13,7 @@ enum UserStatus {
   DESACTIVE
 }
 
-enum AsssitantStatus {
+enum AssitantStatus {
   PUBLIC
   PRIVATE
 }
@@ -21,6 +21,24 @@ enum AsssitantStatus {
 enum FileType {
   FILE
   NOTION
+}
+
+enum WelcomeType {
+  PLAIN
+  GLOVE
+}
+
+enum MenuHeaderType {
+  HEADER
+  BODY
+  FOOTER
+}
+
+enum LanguageType {
+  EN
+  ES
+  FR
+  CA
 }
 
 model Messages {
@@ -74,6 +92,12 @@ model Team {
   assistants  Assistant[] // Relación uno a muchos con asistentes virtuales
   subDomain   String
   customDomain String?
+  welcome     Welcome?  
+  logoUrl     String?
+  symbolUrl   String?
+  menuHeader      MenuHeader?
+  headerButton    HeaderButton[]
+  defaultLanguage LanguageType
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
@@ -82,23 +106,78 @@ model Team {
   @@unique([customDomain]) 
 }
 
+model HeaderButton {
+  id          String      @id @default(uuid())
+  buttonText  String
+  title       String
+  buttonType  String
+  textHref    TextHref[]
+  language    LanguageType
+  teamId      String
+  team        Team?       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+model MenuHeader {
+  id          String      @id @default(uuid())
+  type        MenuHeaderType
+  textHref    TextHref[]
+  language    LanguageType
+  teamId      String      @unique
+  team        Team?       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+model TextHref {
+  id              String      @id @default(uuid())
+  text            String
+  href            String
+  numberOrder     Int
+  menuHeaderId    String?     
+  headerButtonId  String?    
+
+  menuHeader        MenuHeader?   @relation(fields: [menuHeaderId], references: [id], onDelete: Cascade)
+  headerButton      HeaderButton? @relation(fields: [headerButtonId], references: [id], onDelete: Cascade) 
+}
+
+
+model Welcome {
+  id          String      @id @default(uuid())
+  domainId    String
+  text        String[]
+  type        WelcomeType
+  description String
+  language    LanguageType
+  teamId      String      @unique
+
+  team        Team        @relation(fields: [teamId], references: [id], onDelete: Cascade) 
+}
+
 model Assistant {
   id                        String   @id @default(uuid())
   name                      String   // Nombre del asistente virtual (IA)
   teamId                    String
-  status                    AsssitantStatus @default(PUBLIC)
+  status                    AssitantStatus @default(PUBLIC)
   openAIId                  String
   openAIVectorStoreFileId   String
   notionAccessToken         String?
+  language                  LanguageType
+  avatarId                  String 
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  files       File[] 
+  files       File[]
+  avatar      Avatar   @relation(fields: [avatarId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
 
   @@unique([name, teamId])  // Clave compuesta única en name y para cada team
   @@unique([openAIId])
+}
+
+model Avatar {
+  id            String   @id @default(uuid())
+  assistants    Assistant[]
+  avatarId      String
+  voiceAvatarId String
 }
 
 model UserTeam {
