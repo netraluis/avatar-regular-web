@@ -4,6 +4,8 @@ const nextConfig = {
     domains: [
       "sjgdbtgjgkkmztduxohh.supabase.co",
       "https://sjgdbtgjgkkmztduxohh.supabase.co",
+      "dkwrylibzobzgzzddull.supabase.co",
+      "https://dkwrylibzobzgzzddull.supabase.co",
     ],
   },
 };

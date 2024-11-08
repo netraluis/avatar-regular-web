@@ -36,15 +36,6 @@ export const getTeamByTeamId = async (teamId: string, userId: string) => {
         },
       },
     },
-    // select: {
-    //   team: {
-    //     select: {
-    //       id: true,
-    //       name: true,
-    //       subDomain: true,
-    //     },
-    //   },
-    // },
   });
 
   return subdomainInfo;
@@ -79,6 +70,28 @@ export const createTeam = async ({
   } catch (error) {
     console.error("Error creating team:", error);
     throw new Error("Error creating team");
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+export const updateTeam = async ({
+  teamId,
+  data,
+}: {
+  teamId: string;
+  data: Prisma.TeamUpdateInput;
+}) => {
+  try {
+    return await prisma.team.update({
+      where: {
+        id: teamId,
+      },
+      data,
+    });
+  } catch (error) {
+    console.error("Error updating team:", error);
+    throw new Error("Error updating team");
   } finally {
     await prisma.$disconnect();
   }

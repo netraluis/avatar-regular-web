@@ -63,3 +63,8 @@ export interface SuccessfullResponse<T> {
   status: number;
   data: T;
 }
+
+export enum FileUserImageType {
+  LOGO = "logo",
+  SYMBOL = "symbol",
+}

@@ -1,7 +1,5 @@
 "use client"; // Este archivo debe ser un cliente porque usará hooks
-
-import { useRouter } from "next/navigation";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 
 import { Assistant, Team } from "@prisma/client";
 
@@ -14,7 +12,7 @@ import { Assistant, Team } from "@prisma/client";
 
 type AppState = {
   teams: Team[];
-  teamSelected: Pick<Team, "id" | "name" | "subDomain"> | null;
+  teamSelected: Team | null;
   assistantsByTeam: Assistant[];
   user: any;
 };
@@ -25,7 +23,7 @@ type Action =
       type: "SET_TEAMS";
       payload: {
         teams: Team[];
-        teamSelected: Pick<Team, "id" | "name" | "subDomain"> | null;
+        teamSelected: Team | null;
       };
     }
   | { type: "SET_TEAM_SELECTED"; payload: Team | null }
@@ -33,7 +31,7 @@ type Action =
       type: "SET_ASSISTANTS";
       payload: {
         assistants: Assistant[];
-        teamSelected: Pick<Team, "id" | "name" | "subDomain"> | null;
+        teamSelected: Team | null;
       };
     }
   | { type: "SET_TEAM_CREATION"; payload: { newTeam: Team } }
@@ -107,24 +105,15 @@ export const AppProvider = ({
   children: React.ReactNode;
   user: any;
 }) => {
-  const router = useRouter();
 
   const initialState: AppState = {
     teams: [],
     teamSelected: null,
     assistantsByTeam: [],
-    user: { user: { id: user } },
+    user,
   };
 
   const [state, dispatch] = useReducer(appReducer, initialState);
-
-  useEffect(() => {
-    if (state.user?.user?.id) {
-      // return router.push("/team");
-    } else {
-      return router.push("/login");
-    }
-  }, [state.user?.user?.id]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>

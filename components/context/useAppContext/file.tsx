@@ -1,4 +1,8 @@
-import { SuccessfullResponse, VectorStoreFile } from "@/types/types";
+import {
+  FileUserImageType,
+  SuccessfullResponse,
+  VectorStoreFile,
+} from "@/types/types";
 import { FileType } from "@prisma/client";
 import { useState } from "react";
 
@@ -60,7 +64,6 @@ export const useFileVectorStoreAssistant = () => {
       const responseData = await response.json();
       setUpLoadFileError(null);
       setUpLoadFiledata(responseData);
-      console.log({ responseData });
       setFileData((prev) => prev.filter((file) => !file.isCharging));
       return setFileData((prev) => [
         ...prev.filter((file) => !file.isCharging),
@@ -95,7 +98,6 @@ export const useFileVectorStoreAssistant = () => {
       const responseData: SuccessfullResponse<VectorStoreFile[]> =
         await response.json();
       setGetFiledata(responseData);
-      console.log("GET", { responseData });
       return setFileData(responseData.data);
     } catch (error: any) {
       return setGetFileError({ error });
@@ -158,5 +160,76 @@ export const useFileVectorStoreAssistant = () => {
     getFileVectorStore,
     deleteFileVectorStore,
     fileData,
+  };
+};
+
+export const useSupabaseFile = () => {
+  const [upLoadSupabaseFileloading, setUpLoadSupabaseFileloading] =
+    useState(false);
+  const [upLoadSupabaseFileError, setUpLoadSupabaseFileError] =
+    useState<any>(null);
+  const [upLoadSupabaseFileData, setUpLoadSupabaseFileData] =
+    useState<any>(null);
+
+  async function uploadSupaseFile({
+    fileInput,
+    userId,
+    teamId,
+    fileUserImageType,
+    // fileType,
+  }: {
+    fileInput: FileList | null;
+    userId: string;
+    teamId: string;
+    fileUserImageType: FileUserImageType;
+    // fileType: FileType;
+  }) {
+    if (!fileInput || fileInput.length === 0) return;
+    try {
+      setUpLoadSupabaseFileloading(true);
+
+      const formData = new FormData();
+      Array.from(fileInput).forEach((file) => {
+        formData.append("files", file); // Usa el mismo nombre "files" para todos los archivos
+      });
+
+      formData.append("teamId", teamId);
+      formData.append("fileUserImageType", fileUserImageType);
+
+      // formData.append("purpose", "assistants");
+
+      const requestOptions = {
+        method: "POST",
+        body: formData,
+        headers: {
+          // "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+      };
+
+      const response = await fetch(
+        `/api/protected/file/supabase`,
+        requestOptions,
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+      setUpLoadSupabaseFileError(null);
+      setUpLoadSupabaseFileData(responseData);
+      return responseData;
+    } catch (error: any) {
+      return setUpLoadSupabaseFileError({ error });
+    } finally {
+      setUpLoadSupabaseFileloading(false);
+    }
+  }
+
+  return {
+    uploadSupaseFile,
+    upLoadSupabaseFileloading,
+    upLoadSupabaseFileError,
+    upLoadSupabaseFileData,
   };
 };
