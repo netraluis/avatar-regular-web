@@ -1,7 +1,7 @@
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 import { createContext, useContext, useReducer } from "react";
 
-import { Assistant, Team } from "@prisma/client";
+import { Assistant } from "@prisma/client";
 
 // export type Team = {
 //   id?: string;
@@ -11,8 +11,8 @@ import { Assistant, Team } from "@prisma/client";
 // };
 
 type AppState = {
-  teams: Team[];
-  teamSelected: Team | null;
+  teams: any[];
+  teamSelected: any | null;
   assistantsByTeam: Assistant[];
   user: any;
 };
@@ -22,19 +22,19 @@ type Action =
   | {
       type: "SET_TEAMS";
       payload: {
-        teams: Team[];
-        teamSelected: Team | null;
+        teams: any[];
+        teamSelected: any | null;
       };
     }
-  | { type: "SET_TEAM_SELECTED"; payload: Team | null }
+  | { type: "SET_TEAM_SELECTED"; payload: any | null }
   | {
       type: "SET_ASSISTANTS";
       payload: {
         assistants: Assistant[];
-        teamSelected: Team | null;
+        teamSelected: any | null;
       };
     }
-  | { type: "SET_TEAM_CREATION"; payload: { newTeam: Team } }
+  | { type: "SET_TEAM_CREATION"; payload: { newTeam: any } }
   | { type: "SET_USER"; payload: any }
   | { type: "SET_ASSISTANT_CREATION"; payload: { newAssistant: Assistant } }
   | { type: "SET_ASSISTANT_DELETE"; payload: { assistantId: string } }
@@ -105,7 +105,7 @@ export const AppProvider = ({
   children: React.ReactNode;
   user: any;
 }) => {
-
+  
   const initialState: AppState = {
     teams: [],
     teamSelected: null,

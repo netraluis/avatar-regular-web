@@ -91,3 +91,55 @@ export const useCreateTeam = () => {
 
   return { loadingCreateTeam, errorCreateTeam, createTeamData, createTeam };
 };
+
+export const useUpdateTeam = () => {
+  const { dispatch } = useAppContext();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
+  const [data, setData] = useState([]);
+
+  async function updateTeam(
+    teamId: string,
+    data: Prisma.TeamUpdateInput,
+    userId: string,
+  ) {
+    if (!teamId) return setError("No team id provided");
+    try {
+      setLoading(true);
+
+      const teamSelectedResponse = await fetch(
+        `/api/protected/team/${teamId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-id": userId, // Aquí enviamos el userId en los headers
+          },
+          body: JSON.stringify({ data }),
+        },
+      );
+
+      if (!teamSelectedResponse.ok) {
+        throw new Error(`Error: ${teamSelectedResponse.statusText}`);
+      }
+
+      const teamSelected = await teamSelectedResponse.json();
+
+      console.log("teamSelected", teamSelected);
+
+      dispatch({
+        type: "SET_TEAM_SELECTED",
+        payload: teamSelected,
+      });
+
+      setData(teamSelected);
+    } catch (error: any) {
+      setError({ error });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { loading, error, data, updateTeam };
+};

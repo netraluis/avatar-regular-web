@@ -36,7 +36,19 @@ export const getTeamByTeamId = async (teamId: string, userId: string) => {
         },
       },
     },
+    include: {
+      // users: {
+      //   include: {
+      //     user: true, // Incluye los detalles del usuario relacionado
+      //   },
+      // },
+      assistants: true, // Incluye todos los asistentes relacionados
+      welcome: true, // Incluye la información de Welcome, si existe
+      menuHeader: true, // Incluye la información de MenuHeader, si existe
+    },
   });
+
+  console.log("subdomainInfo", subdomainInfo);
 
   return subdomainInfo;
 };
@@ -88,6 +100,11 @@ export const updateTeam = async ({
         id: teamId,
       },
       data,
+      include: {
+        assistants: true, // Incluye todos los asistentes relacionados
+        welcome: true, // Incluye la información de Welcome, si existe
+        menuHeader: true, // Incluye la información de MenuHeader, si existe
+      },
     });
   } catch (error) {
     console.error("Error updating team:", error);

@@ -2,20 +2,23 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Archive } from "lucide-react";
+import { usePathname, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   TeamSettingsProvider,
   useTeamSettingsContext,
 } from "@/components/context/teamSettingsContext";
 
+import { Settings, Paintbrush, User, Gem, CreditCard } from "lucide-react";
+import { useUpdateTeam } from "@/components/context/useAppContext/team";
+import { useAppContext } from "@/components/context/appContext";
+
 const navItems = [
-  { name: "General", href: "general", icon: Archive },
-  { name: "Interface", href: "interface", icon: Archive },
-  { name: "Members", href: "members", icon: Archive },
-  { name: "Plans", href: "plans", icon: Archive },
-  { name: "Billings", href: "billings", icon: Archive },
+  { name: "General", href: "general", icon: Settings },
+  { name: "Interface", href: "interface", icon: Paintbrush },
+  { name: "Members", href: "members", icon: User },
+  { name: "Plans", href: "plans", icon: Gem },
+  { name: "Billings", href: "billings", icon: CreditCard },
 ];
 
 function Layout({
@@ -27,8 +30,18 @@ function Layout({
   const comparatePathName = pathname.split("/").slice(1)[3];
   const absolutePath = pathname.split("/").slice(1, 4).join("/");
 
+  const { state } = useAppContext();
+  const { teamId } = useParams();
   const { data } = useTeamSettingsContext();
+  const { updateTeam } = useUpdateTeam();
 
+  const saveHandler = async () => {
+    console.log({ data, state });
+    if (state.user.user.id) {
+      console.log("update");
+      await updateTeam(teamId as string, data, state.user.user.id);
+    }
+  };
   return (
     <div className="flex-1 p-8">
       <div className=" rounded-lg p-6">
@@ -45,9 +58,7 @@ function Layout({
             placeholder="Search files..."
             className="max-w-sm"
           /> */}
-            <Button onClick={() => console.log("click", { data })}>
-              + Update profile
-            </Button>
+            <Button onClick={saveHandler}>+ Update profile</Button>
           </div>
         </div>
         <div className="flex bg-white">
@@ -55,7 +66,7 @@ function Layout({
             <nav>
               {navItems.map((item, index) => (
                 <Link
-                  onClick={() => console.log("click Link", { data })}
+                  onClick={saveHandler}
                   key={index}
                   href={`/${absolutePath}/${item.href}`}
                   className={`flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded ${comparatePathName === item.href ? "bg-gray-200" : ""}`}

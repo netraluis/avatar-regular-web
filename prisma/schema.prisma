@@ -92,7 +92,7 @@ model Team {
   assistants  Assistant[] // Relación uno a muchos con asistentes virtuales
   subDomain   String       @unique(map: "Unique_SubDomain_Field")
   customDomain String?
-  welcome     Welcome?  
+  welcome     Welcome[]  
   logoUrl     String?
   symbolUrl   String?
   menuHeader      MenuHeader?
@@ -141,14 +141,14 @@ model TextHref {
 
 model Welcome {
   id          String      @id @default(uuid())
-  domainId    String
   text        String[]
   type        WelcomeType
   description String
   language    LanguageType
-  teamId      String      @unique
+  teamId      String      
 
   team        Team        @relation(fields: [teamId], references: [id], onDelete: Cascade) 
+  @@unique([language, teamId])
 }
 
 model Assistant {
@@ -170,7 +170,7 @@ model Assistant {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
 
-  @@unique([name, teamId])  // Clave compuesta única en name y para cada team
+  @@unique([name, teamId])  // Clave compuesta única en name y para cada assistant
   @@unique([openAIId])
 }
 

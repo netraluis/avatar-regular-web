@@ -79,7 +79,7 @@ export async function PATCH(
   } catch (error) {
     console.error("Error retrieving user id:", error);
 
-    return new NextResponse("Failed retrieving user id", {
+    return new NextResponse("Failed patching team", {
       status: 500,
     });
   }
