@@ -34,6 +34,10 @@ enum MenuHeaderType {
   FOOTER
 }
 
+enum FooterType {
+  PLAIN
+}
+
 enum LanguageType {
   EN
   ES
@@ -41,13 +45,16 @@ enum LanguageType {
   CA
 }
 
-model Messages {
+model Message {
   id          String   @id @default(cuid())
   role        String
   message     String
   threadId    String
   domainId    String  
   createdAt   DateTime @default(now())
+  assistantId String
+
+  assistant   Assistant        @relation(fields: [assistantId], references: [id], onDelete: Cascade)
 }
 
 model Domains {
@@ -95,9 +102,10 @@ model Team {
   welcome     Welcome[]  
   logoUrl     String?
   symbolUrl   String?
-  menuHeader      MenuHeader?
+  menuHeader      MenuHeader[]
   headerButton    HeaderButton[]
   defaultLanguage LanguageType
+  footer      Footer[]
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
@@ -122,8 +130,10 @@ model MenuHeader {
   type        MenuHeaderType
   textHref    TextHref[]
   language    LanguageType
-  teamId      String      @unique
+  teamId      String      
   team        Team?       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([type, language, teamId])
 }
 
 model TextHref {
@@ -151,6 +161,17 @@ model Welcome {
   @@unique([language, teamId])
 }
 
+model Footer {
+  id          String      @id @default(uuid())
+  type        FooterType  @default(PLAIN)
+  text        String
+  language    LanguageType
+  teamId      String      
+  team        Team?       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([language, teamId])
+}
+
 model Assistant {
   id                        String   @id @default(uuid())
   name                      String   // Nombre del asistente virtual (IA)
@@ -162,6 +183,7 @@ model Assistant {
   language                  LanguageType
   avatarId                  String?
   url                       String    @unique 
+  message                   Message[]           
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   files       File[]

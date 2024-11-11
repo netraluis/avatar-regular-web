@@ -105,7 +105,6 @@ export const AppProvider = ({
   children: React.ReactNode;
   user: any;
 }) => {
-  
   const initialState: AppState = {
     teams: [],
     teamSelected: null,

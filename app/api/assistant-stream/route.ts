@@ -42,17 +42,17 @@ export async function POST(req: Request) {
   });
 
   try {
-    await prisma.messages.createMany({
-      data: [
-        {
-          role: "user",
-          message: input.message,
-          threadId,
-          domainId: input.domainId,
-          createdAt: new Date(),
-        },
-      ],
-    });
+    // await prisma.messages.createMany({
+    //   data: [
+    //     {
+    //       role: "user",
+    //       message: input.message,
+    //       threadId,
+    //       domainId: input.domainId,
+    //       createdAt: new Date(),
+    //     },
+    //   ],
+    // });
   } catch (err) {
     console.error(err);
   }
@@ -91,17 +91,17 @@ export async function POST(req: Request) {
           }
         }
 
-        await prisma.messages.createMany({
-          data: [
-            {
-              role: "assistant",
-              message: accumulatedMessage,
-              threadId,
-              domainId: input.domainId,
-              createdAt: new Date(),
-            },
-          ],
-        });
+        // await prisma.messages.createMany({
+        //   data: [
+        //     {
+        //       role: "assistant",
+        //       message: accumulatedMessage,
+        //       threadId,
+        //       domainId: input.domainId,
+        //       createdAt: new Date(),
+        //     },
+        //   ],
+        // });
       } catch (e) {
         console.error(e);
       }

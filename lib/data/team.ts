@@ -44,7 +44,12 @@ export const getTeamByTeamId = async (teamId: string, userId: string) => {
       // },
       assistants: true, // Incluye todos los asistentes relacionados
       welcome: true, // Incluye la información de Welcome, si existe
-      menuHeader: true, // Incluye la información de MenuHeader, si existe
+      menuHeader: {
+        include: {
+          textHref: true, // Incluye la información de TextHref, si existe
+        },
+      }, // Incluye la información de MenuHeader, si existe
+      footer: true,
     },
   });
 
@@ -101,9 +106,14 @@ export const updateTeam = async ({
       },
       data,
       include: {
-        assistants: true, // Incluye todos los asistentes relacionados
-        welcome: true, // Incluye la información de Welcome, si existe
-        menuHeader: true, // Incluye la información de MenuHeader, si existe
+        assistants: true,
+        welcome: true,
+        menuHeader: {
+          include: {
+            textHref: true,
+          },
+        },
+        footer: true,
       },
     });
   } catch (error) {
