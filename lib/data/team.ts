@@ -53,8 +53,6 @@ export const getTeamByTeamId = async (teamId: string, userId: string) => {
     },
   });
 
-  console.log("subdomainInfo", subdomainInfo);
-
   return subdomainInfo;
 };
 

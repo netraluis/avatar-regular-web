@@ -371,7 +371,7 @@ export const useAssistant = ({
             "Content-Type": "application/json",
             "x-user-id": userId,
           },
-          body: JSON.stringify({ message }),
+          body: JSON.stringify({ message, assistantId }),
         });
 
         const response = await fetch(`/api/protected/thread/${threadId}/run`, {

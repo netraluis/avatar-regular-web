@@ -1,6 +1,6 @@
 import { AssistantResponse } from "ai";
 import OpenAI from "openai";
-import prisma from "../../../lib/prisma";
+// import prisma from "../../../lib/prisma";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

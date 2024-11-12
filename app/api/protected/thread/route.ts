@@ -1,4 +1,5 @@
 import { getAssistant } from "@/lib/data/assistant";
+import { commonOnEvent } from "@/lib/helper/threadMessage";
 import { createThreadAndRun } from "@/lib/openAI/run";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
@@ -29,10 +30,7 @@ export async function POST(request: NextRequest) {
         const onEvent = (
           event: OpenAI.Beta.Assistants.AssistantStreamEvent,
         ) => {
-          // Enviar el evento al cliente en cuanto lo recibes
-          controller.enqueue(
-            new TextEncoder().encode(JSON.stringify(event) + "\n"),
-          );
+          commonOnEvent(event, controller, localAssistant.id, body.message);
         };
 
         try {

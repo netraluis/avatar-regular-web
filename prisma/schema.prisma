@@ -45,16 +45,22 @@ enum LanguageType {
   CA
 }
 
+enum RoleUserType {
+  ASSISTANT
+  USER
+}
+
 model Message {
   id          String   @id @default(cuid())
-  role        String
+  role        RoleUserType
   message     String
   threadId    String
-  domainId    String  
   createdAt   DateTime @default(now())
   assistantId String
+  filesId     String[]
+  runId       String?
 
-  assistant   Assistant        @relation(fields: [assistantId], references: [id], onDelete: Cascade)
+  assistant   Assistant        @relation(fields: [assistantId], references: [id])
 }
 
 model Domains {
