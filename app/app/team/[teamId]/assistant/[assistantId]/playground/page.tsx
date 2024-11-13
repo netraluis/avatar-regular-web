@@ -100,8 +100,15 @@ export default function Playground() {
     setThreadId(internatlThreadId);
   }, [internatlThreadId]);
 
+  React.useEffect(() => {
+    // Si `messagesRef` está disponible y tiene el último mensaje
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 grow flex flex-col overflow-hidden">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Playground</h1>
         <Button onClick={handleUpdate}>Save changes</Button>
@@ -110,7 +117,7 @@ export default function Playground() {
         The playground allows you to experiment with different configurations
         without affecting the live chatbot.
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden">
         <Card className="p-6">
           <form className="space-y-6">
             <div>
@@ -190,11 +197,14 @@ export default function Playground() {
             </div>
           </form>
         </Card>
-        <Card className="flex flex-col">
+        <Card className="flex flex-col relative overflow-hidden ">
           <CardHeader>
             <CardTitle>Output</CardTitle>
           </CardHeader>
-          <div className="md:h-96 overflow-y-auto " ref={scrollRef}>
+          <div
+            className="overflow-y-auto grow scrollbar-hidden"
+            ref={scrollRef}
+          >
             <CardContent className=" space-y-4 " ref={messagesRef}>
               {messages &&
                 messages.map((msg, index) => (
@@ -212,17 +222,19 @@ export default function Playground() {
               <div className="w-full h-px" ref={visibilityRef} />
             </CardContent>
           </div>
-          <div className="p-4 border-t flex items-center space-x-2">
-            <Input
-              placeholder="Type your message here..."
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-            />
-            <Button size="icon" variant="ghost">
-              <Mic className="h-4 w-4" />
-            </Button>
-            <Button onClick={handleSendMessage}>Send</Button>
+          <div className="w-full">
+            <div className="p-4 border-t flex items-center space-x-2">
+              <Input
+                placeholder="Type your message here..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+              />
+              <Button size="icon" variant="ghost">
+                <Mic className="h-4 w-4" />
+              </Button>
+              <Button onClick={handleSendMessage}>Send</Button>
+            </div>
           </div>
         </Card>
       </div>

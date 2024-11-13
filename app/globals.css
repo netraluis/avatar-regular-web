@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.scrollbar-hidden {
+  scrollbar-width: none; /* Oculta el scroll en Firefox */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none; /* Oculta el scroll en Chrome, Safari y Opera */
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
