@@ -196,7 +196,7 @@ export default function Interface() {
   }, [secondaryMenu]);
 
   return (
-    <div className="max-w-2xl mx-auto p-4 space-y-8">
+    <div className="max-w-2xl mx-auto p-4 space-y-8 ">
       <Card>
         <CardHeader>
           <CardTitle>Welcome message</CardTitle>
