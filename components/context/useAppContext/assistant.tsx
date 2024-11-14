@@ -365,23 +365,28 @@ export const useAssistant = ({
           }
         }
       } else {
-        await fetch(`/api/protected/thread/${threadId}/message`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-user-id": userId,
+        await fetch(
+          `/api/protected/assistant/${assistantId}/thread/${threadId}/message`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-user-id": userId,
+            },
+            body: JSON.stringify({ message }),
           },
-          body: JSON.stringify({ message, assistantId }),
-        });
+        );
 
-        const response = await fetch(`/api/protected/thread/${threadId}/run`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-user-id": userId,
+        const response = await fetch(
+          `/api/protected/assistant/${assistantId}/thread/${threadId}/run`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-user-id": userId,
+            },
           },
-          body: JSON.stringify({ assistantId }),
-        });
+        );
 
         if (!response.body) {
           throw new Error("No response stream found");

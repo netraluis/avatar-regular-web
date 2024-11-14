@@ -6,7 +6,7 @@ import OpenAI from "openai";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { threadId: string } },
+  { params }: { params: { threadId: string; assistantId: string } },
 ) {
   try {
     const userId = request.headers.get("x-user-id");
@@ -17,9 +17,7 @@ export async function POST(
       });
     }
 
-    const body = await request.json();
-    const { assistantId } = body;
-    const { threadId } = params;
+    const { threadId, assistantId } = params;
 
     const localAssistant = await getAssistant(assistantId as string);
 

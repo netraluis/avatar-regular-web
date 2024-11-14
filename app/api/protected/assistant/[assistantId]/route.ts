@@ -20,7 +20,7 @@ export async function GET(
         status: 400,
       });
     }
-    console.log("params.assistantId", params.assistantId);
+
     const localAssistant: Assistant | null = await getAssistant(
       params.assistantId as string,
     );
