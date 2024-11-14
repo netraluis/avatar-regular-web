@@ -31,7 +31,6 @@ export async function GET(
     const groupedMessages = messagesDB.messages.reduce(
       (acc: any, message: any) => {
         const { threadId, role, message: text, createdAt } = message;
-        console.log({ threadId, role, text });
 
         if (!acc[threadId]) {
           acc[threadId] = {

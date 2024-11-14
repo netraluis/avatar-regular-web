@@ -64,7 +64,7 @@ export default function Component() {
         dateFrom,
         dateTo,
       },
-      state.user?.user?.id as string,
+      state.user?.user?.id as string
     );
   }, [page, dateFrom, dateTo, assistantId]); // Añadimos `dateFrom` y `dateTo` como dependencias
 
@@ -75,8 +75,10 @@ export default function Component() {
         userId: state.user?.user?.id as string,
         assistantId: assistantId as string,
       });
+    }else{
+      setThreadId(dataFetchThreadsMessages[0]?.threadId)
     }
-  }, [threadId]);
+  }, [threadId, dataFetchThreadsMessages]);
 
   // Función para actualizar un filtro específico en la URL
   const updateUrlParams = (key: string, value: string | number | undefined) => {
@@ -115,7 +117,7 @@ export default function Component() {
                 variant={"outline"}
                 className={cn(
                   "w-[240px] justify-start text-left font-normal",
-                  !date && "text-muted-foreground",
+                  !date && "text-muted-foreground"
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
@@ -162,30 +164,23 @@ export default function Component() {
                 key={index}
                 className={cn(
                   "p-4 mb-2 mr-2 rounded-lg border hover:bg-muted/50 cursor-pointer hover:scale",
-                  i.threadId === threadId && "bg-muted",
+                  i.threadId === threadId && "bg-muted"
                 )}
               >
                 <div className="space-y-1">
                   {i.messages.map((msg: any, index: number) => {
                     return (
-                      <>
-                        {/* <span>{msg.createdAt}</span> 
-                          hay que formatear la fecha
-                        */}
-                        <p
-                          key={index}
-                          className={
-                            msg.role === RoleUserType.USER
-                              ? "font-medium "
-                              : "text-sm text-muted-foreground"
-                          }
-                        >
-                          {msg.role === RoleUserType.USER
-                            ? "User"
-                            : "Assistant"}
-                          : {msg.message}
-                        </p>
-                      </>
+                      <p
+                        key={index}
+                        className={
+                          msg.role === RoleUserType.USER
+                            ? "font-medium "
+                            : "text-sm text-muted-foreground"
+                        }
+                      >
+                        {msg.role === RoleUserType.USER ? "User" : "Assistant"}:{" "}
+                        {msg.message}
+                      </p>
                     );
                   })}
                 </div>
