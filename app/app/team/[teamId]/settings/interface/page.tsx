@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  Footer,
   FooterType,
   LanguageType,
   MenuHeaderType,
@@ -31,21 +32,33 @@ export default function Interface() {
     state: { teamSelected },
   } = useAppContext();
 
+  const [foot, setFoot] = useState<Footer>();
+  const [wel, setWel] = useState<Welcome>();
+
   console.log({ teamSelected: teamSelected });
+
+  useEffect(() => {
+    setFoot(
+      teamSelected?.footer?.find(
+        (foot: Footer) => foot.language === teamSelected?.defaultLanguage,
+      ),
+    );
+    setWel(
+      teamSelected?.welcome?.find(
+        (wel: Welcome) => wel.language === teamSelected?.defaultLanguage,
+      ),
+    );
+  }, [teamSelected, teamSelected?.defaultLanguage]);
 
   useEffect(() => {
     setPrimaryMenu(
       teamSelected?.menuHeader?.find(
-        (menu: any) =>
-          menu.language === LanguageType.ES &&
-          menu.type === MenuHeaderType.HEADER,
+        (menu: any) => menu.type === MenuHeaderType.HEADER,
       )?.textHref || [],
     );
     setSecondaryMenu(
       teamSelected?.menuHeader?.find(
-        (menu: any) =>
-          menu.language === LanguageType.ES &&
-          menu.type === MenuHeaderType.BODY,
+        (menu: any) => menu.type === MenuHeaderType.BODY,
       )?.textHref || [],
     );
   }, [teamSelected?.menuHeader]);
@@ -67,6 +80,8 @@ export default function Interface() {
         numberOrder: 0,
         menuHeaderId: null,
         headerButtonId: null,
+        language: teamSelected?.defaultLanguage || LanguageType.ES,
+        defaultTextHrefId: null,
       },
     ]);
   };
@@ -81,6 +96,8 @@ export default function Interface() {
         numberOrder: 0,
         menuHeaderId: null,
         headerButtonId: null,
+        language: teamSelected?.defaultLanguage || LanguageType.ES,
+        defaultTextHrefId: null,
       },
     ]);
   };
@@ -120,16 +137,14 @@ export default function Interface() {
   const menuHandler = (
     menuItem: TextHref[],
     menuHeaderType: MenuHeaderType,
-    language: LanguageType,
   ) => {
     const updatedData: Prisma.TeamUpdateInput = {
       ...data,
       menuHeader: {
         upsert: {
           where: {
-            type_language_teamId: {
+            type_teamId: {
               type: menuHeaderType, // O el tipo que corresponda
-              language, // Asegúrate de definir el idioma correcto
               teamId: teamSelected?.id,
             },
           },
@@ -147,24 +162,29 @@ export default function Interface() {
                   href: item.href,
                   numberOrder:
                     menuItem.findIndex((el) => el.id === item.id) + 1,
+                  originalTextHrefId: null,
+                  language: teamSelected?.defaultLanguage || LanguageType.ES,
                 },
                 update: {
                   text: item.text,
                   href: item.href,
                   numberOrder:
                     menuItem.findIndex((el) => el.id === item.id) + 1,
+                  originalTextHrefId: null,
+                  language: teamSelected?.defaultLanguage || LanguageType.ES,
                 },
               })),
             },
           },
           create: {
-            type: menuHeaderType, // Cambia este valor según corresponda
-            language, // Asegúrate de definir el idioma correcto
+            type: menuHeaderType,
             textHref: {
               create: menuItem.map((item) => ({
                 text: item.text,
                 href: item.href,
                 numberOrder: menuItem.findIndex((el) => el.id === item.id) + 1,
+                originalTextHrefId: null,
+                language: teamSelected?.defaultLanguage || LanguageType.ES,
               })),
             },
           },
@@ -176,21 +196,13 @@ export default function Interface() {
   };
 
   useEffect(() => {
-    const updatedData = menuHandler(
-      primaryMenu,
-      MenuHeaderType.HEADER,
-      LanguageType.ES,
-    );
+    const updatedData = menuHandler(primaryMenu, MenuHeaderType.HEADER);
 
     setData(updatedData);
   }, [primaryMenu]);
 
   useEffect(() => {
-    const updatedData = menuHandler(
-      secondaryMenu,
-      MenuHeaderType.BODY,
-      LanguageType.ES,
-    );
+    const updatedData = menuHandler(secondaryMenu, MenuHeaderType.BODY);
 
     setData(updatedData);
   }, [secondaryMenu]);
@@ -205,56 +217,56 @@ export default function Interface() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {teamSelected?.welcome?.map((wel: Welcome, index: number) => (
-            <div className="space-y-2" key={index}>
-              <Label htmlFor="welcome-message">Your message</Label>
-              <Textarea
-                id="welcome-message"
-                placeholder="Type your message here"
-                className="min-h-[100px]"
-                value={
-                  (!Array.isArray(data?.welcome?.update) &&
-                    Array.isArray(data?.welcome?.update?.data?.text) &&
-                    data?.welcome?.update?.data?.text[0]) ||
-                  (!Array.isArray(data.welcome?.create) &&
-                    Array.isArray(data.welcome?.create?.text) &&
-                    data.welcome?.create?.text[0]) ||
-                  wel?.text[0] ||
-                  ""
-                }
-                onChange={(e) => {
-                  setData({
-                    ...data,
-                    welcome: wel
-                      ? {
-                          update: {
-                            where: {
-                              language_teamId: {
-                                teamId: teamSelected.id,
-                                language: LanguageType.ES,
-                              },
-                            },
-                            data: {
-                              text: [e.target.value],
+          <div className="space-y-2">
+            <Label htmlFor="welcome-message">Your message</Label>
+            <Textarea
+              id="welcome-message"
+              placeholder="Type your message here"
+              className="min-h-[100px]"
+              value={
+                (!Array.isArray(data?.welcome?.update) &&
+                  Array.isArray(data?.welcome?.update?.data?.text) &&
+                  data?.welcome?.update?.data?.text[0]) ||
+                (!Array.isArray(data.welcome?.create) &&
+                  Array.isArray(data.welcome?.create?.text) &&
+                  data.welcome?.create?.text[0]) ||
+                wel?.text[0] ||
+                ""
+              }
+              onChange={(e) => {
+                setData({
+                  ...data,
+                  welcome: wel
+                    ? {
+                        update: {
+                          where: {
+                            language_teamId: {
+                              teamId: teamSelected.id,
+                              language:
+                                teamSelected?.language || LanguageType.ES,
                             },
                           },
-                        }
-                      : {
-                          create: {
+                          data: {
                             text: [e.target.value],
-                            type: WelcomeType.PLAIN,
-                            description: "",
-                            language: LanguageType.ES,
                           },
                         },
-                  });
-                }}
-              />
-              <p className="text-sm text-muted-foreground">
-                Your message will be copied to the support team.
-              </p>
-            </div>
-          ))}
+                      }
+                    : {
+                        create: {
+                          text: [e.target.value],
+                          type: WelcomeType.PLAIN,
+                          description: "",
+                          language: teamSelected?.language || LanguageType.ES,
+                        },
+                      },
+                });
+              }}
+            />
+            <p className="text-sm text-muted-foreground">
+              Your message will be copied to the support team.
+            </p>
+          </div>
+          {/* ))} */}
           <Button variant="secondary" size="sm" className="gap-2">
             <Eye className="w-4 h-4" />
             Preview
@@ -386,55 +398,57 @@ export default function Interface() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {teamSelected?.footer?.map((foot: any, index: number) => (
-            <div className="space-y-2" key={index}>
-              <Label htmlFor="footer-message">Your message</Label>
-              <Textarea
-                id="footer-message"
-                placeholder="Type your message here"
-                className="min-h-[100px]"
-                value={
-                  (!Array.isArray(data?.footer?.update) &&
-                    Array.isArray(data?.footer?.update?.data?.text) &&
-                    data?.footer?.update?.data?.text) ||
-                  (!Array.isArray(data.footer?.create) &&
-                    Array.isArray(data.footer?.create?.text) &&
-                    data.footer?.create?.text) ||
-                  foot?.text[0] ||
-                  ""
-                }
-                onChange={(e) => {
-                  setData({
-                    ...data,
-                    footer: foot
-                      ? {
-                          update: {
-                            where: {
-                              language_teamId: {
-                                teamId: teamSelected.id,
-                                language: LanguageType.ES,
-                              },
-                            },
-                            data: {
-                              text: e.target.value,
+          <div className="space-y-2">
+            <Label htmlFor="footer-message">
+              Your message dd
+              {!Array.isArray(data.footer?.create) &&
+                Array.isArray(data.footer?.create?.text) &&
+                data.footer?.create?.text}
+            </Label>
+            <Textarea
+              id="footer-message"
+              placeholder="Type your message here"
+              className="min-h-[100px]"
+              value={
+                (!Array.isArray(data?.footer?.update) &&
+                  (data?.footer?.update?.data?.text as string)) ||
+                (!Array.isArray(data.footer?.create) &&
+                  data.footer?.create?.text) ||
+                foot?.text ||
+                ""
+              }
+              onChange={(e) => {
+                setData({
+                  ...data,
+                  footer: foot
+                    ? {
+                        update: {
+                          where: {
+                            language_teamId: {
+                              teamId: teamSelected.id,
+                              language:
+                                teamSelected?.language || LanguageType.ES,
                             },
                           },
-                        }
-                      : {
-                          create: {
+                          data: {
                             text: e.target.value,
-                            type: FooterType.PLAIN,
-                            language: LanguageType.ES,
                           },
                         },
-                  });
-                }}
-              />
-              <p className="text-sm text-muted-foreground">
-                Your message will be copied to the support team.
-              </p>
-            </div>
-          ))}
+                      }
+                    : {
+                        create: {
+                          text: e.target.value,
+                          type: FooterType.PLAIN,
+                          language: teamSelected?.language || LanguageType.ES,
+                        },
+                      },
+                });
+              }}
+            />
+            <p className="text-sm text-muted-foreground">
+              Your message will be copied to the support team.
+            </p>
+          </div>
           <Button variant="secondary" size="sm" className="gap-2">
             <Eye className="w-4 h-4" />
             Preview

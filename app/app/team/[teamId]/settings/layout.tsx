@@ -9,13 +9,21 @@ import {
   useTeamSettingsContext,
 } from "@/components/context/teamSettingsContext";
 
-import { Settings, Paintbrush, User, Gem, CreditCard } from "lucide-react";
+import {
+  Settings,
+  Paintbrush,
+  User,
+  Gem,
+  CreditCard,
+  Languages,
+} from "lucide-react";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useAppContext } from "@/components/context/appContext";
 
 const navItems = [
   { name: "General", href: "general", icon: Settings },
   { name: "Interface", href: "interface", icon: Paintbrush },
+  { name: "Localisations", href: "localisations", icon: Languages },
   { name: "Members", href: "members", icon: User },
   { name: "Plans", href: "plans", icon: Gem },
   { name: "Billings", href: "billings", icon: CreditCard },
@@ -36,9 +44,7 @@ function Layout({
   const { updateTeam } = useUpdateTeam();
 
   const saveHandler = async () => {
-    console.log({ data, state });
     if (state.user.user.id) {
-      console.log("update");
       await updateTeam(teamId as string, data, state.user.user.id);
     }
   };

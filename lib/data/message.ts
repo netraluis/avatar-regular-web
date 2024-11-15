@@ -51,7 +51,6 @@ export const getPaginatedThreadsMessages = async ({
         WHERE "assistantId" = '${assistantId}' ${dateCondition}
       `);
 
-
     // Extrae los mensajes y el total de threads desde los resultados.
     const messages = results.map((row: Message) => ({
       threadId: row.threadId,
