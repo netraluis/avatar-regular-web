@@ -51,14 +51,14 @@ export default function Playground() {
   }, []);
 
   React.useEffect(() => {
-    if (!getAssistantData) return;
+    if (!getAssistantData?.openAIassistant) return;
     console.log({ getAssistantData });
 
     setAssistantValues({
-      model: getAssistantData.model || "gpt-4",
-      instructions: getAssistantData.instructions || "",
-      temperature: getAssistantData.temperature || 0.5,
-      top_p: getAssistantData.top_p || 0.5,
+      model: getAssistantData.openAIassistant.model || "gpt-4",
+      instructions: getAssistantData.openAIassistant.instructions || "",
+      temperature: getAssistantData.openAIassistant.temperature || 0.5,
+      top_p: getAssistantData.openAIassistant.top_p || 0.5,
     });
   }, [getAssistantData]);
 
@@ -75,7 +75,8 @@ export default function Playground() {
         updateAssistant({
           assistantId: assistantId as string,
           userId: state.user.user.id,
-          assistantUpdateParams: assistantValues,
+          openAIassistantUpdateParams: assistantValues,
+          localAssistantUpdateParams: {},
         });
     } catch (error) {
       console.error("An error occurred while updating the assistant", error);

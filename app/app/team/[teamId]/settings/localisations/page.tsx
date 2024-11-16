@@ -23,8 +23,6 @@ import { Badge } from "@/components/ui/badge";
 import { LanguageType } from "@prisma/client";
 
 export default function Component() {
-
-
   return (
     <>
       <div className="w-full px-4 py-2 flex items-center justify-between gap-2 border mb-2 rounded-lg ">

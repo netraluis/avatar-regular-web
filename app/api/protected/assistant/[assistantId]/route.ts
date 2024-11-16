@@ -7,6 +7,7 @@ import { deleteVectorStoreFile } from "@/lib/openAI/vector-store";
 import { Assistant } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { updateAssistant as updateAssistantLocally } from "@/lib/data/assistant";
 
 export async function GET(
   request: NextRequest,
@@ -30,17 +31,16 @@ export async function GET(
       });
     }
 
-    const assistant: OpenAI.Beta.Assistants.Assistant = await getAssistantById(
-      localAssistant?.openAIId as string,
-    );
+    const openAIassistant: OpenAI.Beta.Assistants.Assistant =
+      await getAssistantById(localAssistant?.openAIId as string);
 
-    if (!assistant) {
+    if (!openAIassistant) {
       return new NextResponse("Assistant not found", {
         status: 404,
       });
     }
 
-    const response = { ...localAssistant, ...assistant };
+    const response = { localAssistant, openAIassistant };
 
     return new NextResponse(JSON.stringify(response), {
       status: 200,
@@ -109,19 +109,29 @@ export async function PATCH(
 
     const body = await request.json();
 
-    const localAssistant: Assistant | null = await getAssistant(
-      params.assistantId as string,
+    const localAssistant = await updateAssistantLocally(
+      params.assistantId,
+      body.localAssistantUpdateParams,
     );
+
+    // const localAssistant: Assistant | null = await getAssistant(
+    //   params.assistantId as string
+    // );
     if (!localAssistant) {
       return new NextResponse("Assistant not found", {
         status: 404,
       });
     }
 
-    const assistant: OpenAI.Beta.Assistants.Assistant =
-      await modifyAssistantById(localAssistant?.openAIId as string, body);
+    const openAIassistant: OpenAI.Beta.Assistants.Assistant =
+      await modifyAssistantById(
+        localAssistant?.openAIId as string,
+        body.openAIassistantUpdateParams,
+      );
 
-    return new NextResponse(JSON.stringify(assistant), {
+    const response = { localAssistant, openAIassistant };
+
+    return new NextResponse(JSON.stringify(response), {
       status: 200,
     });
   } catch (error) {

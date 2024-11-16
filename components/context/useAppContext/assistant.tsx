@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAppContext } from "../appContext";
-import { Assistant } from "@prisma/client";
+import { Assistant, Prisma } from "@prisma/client";
 import {
   AssistantCreateParams,
   AssistantUpdateParams,
@@ -170,9 +170,10 @@ export const useDeleteAssistant = () => {
 export const useGetAssistant = () => {
   const [loadingGetAssistant, setLoadingGetAssistant] = useState(false);
   const [errorGetAssistant, setErrorGetAssistant] = useState<any>(null);
-  const [getAssistantData, setGetAssistantData] = useState<
-    (OpenAI.Beta.Assistants.Assistant & Assistant) | null
-  >(null);
+  const [getAssistantData, setGetAssistantData] = useState<{
+    openAIassistant: OpenAI.Beta.Assistants.Assistant;
+    localAssistant: Assistant;
+  } | null>(null);
 
   async function getAssistant({
     assistantId,
@@ -222,11 +223,13 @@ export const useUpdateAssistant = () => {
   async function updateAssistant({
     assistantId,
     userId,
-    assistantUpdateParams,
+    openAIassistantUpdateParams,
+    localAssistantUpdateParams,
   }: {
     assistantId: string;
     userId: string;
-    assistantUpdateParams: AssistantUpdateParams;
+    openAIassistantUpdateParams: AssistantUpdateParams;
+    localAssistantUpdateParams: Prisma.AssistantUpdateInput;
   }) {
     try {
       setLoadingUpdateAssistant(true);
@@ -236,7 +239,10 @@ export const useUpdateAssistant = () => {
           "Content-Type": "application/json",
           "x-user-id": userId,
         },
-        body: JSON.stringify(assistantUpdateParams),
+        body: JSON.stringify({
+          openAIassistantUpdateParams,
+          localAssistantUpdateParams,
+        }),
       });
 
       if (!response.ok) {
