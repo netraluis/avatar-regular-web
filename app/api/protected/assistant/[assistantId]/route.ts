@@ -4,7 +4,6 @@ import { getAssistantById, modifyAssistantById } from "@/lib/openAI/assistant";
 import { deleteFile } from "@/lib/openAI/file";
 import { deleteFile as deleteFileLocally } from "@/lib/data/file";
 import { deleteVectorStoreFile } from "@/lib/openAI/vector-store";
-import { Assistant } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { updateAssistant as updateAssistantLocally } from "@/lib/data/assistant";
@@ -22,9 +21,7 @@ export async function GET(
       });
     }
 
-    const localAssistant: Assistant | null = await getAssistant(
-      params.assistantId as string,
-    );
+    const localAssistant = await getAssistant(params.assistantId as string);
     if (!localAssistant) {
       return new NextResponse("Assistant not found", {
         status: 404,

@@ -46,7 +46,7 @@ export default function Component() {
       if (event.origin !== window.location.origin) return; // Seguridad: verificar el origen
 
       if (event.data.type === "NOTION_AUTH_SUCCESS") {
-        if (!getAssistantData?.notionAccessToken) {
+        if (!getAssistantData?.localAssistant?.notionAccessToken) {
           try {
             await fetch(`/api/notion/oauth/token`, {
               method: "POST",
@@ -156,7 +156,8 @@ export default function Component() {
           headers: {
             "Content-Type": "application/json",
             // "x-user-id": userId,
-            "x-acccess-token": getAssistantData?.notionAccessToken as string,
+            "x-acccess-token": getAssistantData?.localAssistant
+              ?.notionAccessToken as string,
           },
         },
       );
@@ -175,7 +176,8 @@ export default function Component() {
         headers: {
           "Content-Type": "application/json",
           // "x-user-id": userId,
-          "x-acccess-token": getAssistantData?.notionAccessToken as string,
+          "x-acccess-token": getAssistantData?.localAssistant
+            ?.notionAccessToken as string,
         },
       });
       return await databaseResponse.json();
@@ -247,7 +249,7 @@ export default function Component() {
               onClick={() => setIsModalOpenNotionAuth(true)}
             >
               {!loadingGetAssistant ? (
-                getAssistantData?.notionAccessToken ? (
+                getAssistantData?.localAssistant?.notionAccessToken ? (
                   "Cambiar permisos Notion"
                 ) : (
                   "Conecta con Notion"

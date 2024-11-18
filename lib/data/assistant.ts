@@ -6,7 +6,7 @@ import {
 import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
 import prisma from "../prisma";
 import { createVectorStore } from "../openAI/vector-store";
-import { Prisma, Assistant, LanguageType } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 export const getAssistantsByTeam = async (teamId: string) => {
   const teamInfo = await prisma.assistant.findMany({
@@ -41,7 +41,6 @@ export const createAssistantByTeam = async (
       teamId: teamId,
       openAIId: newAssistantOpenAi.id,
       openAIVectorStoreFileId: newVectorStoreFile.id,
-      language: LanguageType.ES, // default to 'en' if not provided
       url: url,
     },
   });
@@ -72,12 +71,19 @@ export const deleteAssistant = async (assistantId: string) => {
   return assistant;
 };
 
+export type GetAssistantType = Prisma.AssistantGetPayload<{
+  include: { assistantCard: true };
+}> | null;
+
 export const getAssistant = async (
   assistantId: string,
-): Promise<Assistant | null> => {
+): Promise<GetAssistantType> => {
   return await prisma.assistant.findUnique({
     where: {
       id: assistantId,
+    },
+    include: {
+      assistantCard: true,
     },
   });
 };

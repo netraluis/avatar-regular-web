@@ -4,29 +4,22 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  TeamSettingsProvider,
-  useTeamSettingsContext,
-} from "@/components/context/teamSettingsContext";
 
-import {
-  Settings,
-  Paintbrush,
-  User,
-  Gem,
-  CreditCard,
-  Languages,
-} from "lucide-react";
-import { useUpdateTeam } from "@/components/context/useAppContext/team";
+import { Settings, Paintbrush, Languages } from "lucide-react";
 import { useAppContext } from "@/components/context/appContext";
+import {
+  AssistantSettingsProvider,
+  useAssistantSettingsContext,
+} from "@/components/context/assistantSettingsContext";
+import {
+  useGetAssistant,
+  useUpdateAssistant,
+} from "@/components/context/useAppContext/assistant";
 
 const navItems = [
   { name: "General", href: "general", icon: Settings },
   { name: "Interface", href: "interface", icon: Paintbrush },
   { name: "Localisations", href: "localisations", icon: Languages },
-  { name: "Members", href: "members", icon: User },
-  { name: "Plans", href: "plans", icon: Gem },
-  { name: "Billings", href: "billings", icon: CreditCard },
 ];
 
 function Layout({
@@ -35,17 +28,39 @@ function Layout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
-  const comparatePathName = pathname.split("/").slice(1)[3];
-  const absolutePath = pathname.split("/").slice(1, 4).join("/");
+  const comparatePathName = pathname.split("/").slice(1)[5];
+  const absolutePath = pathname.split("/").slice(1, 6).join("/");
 
   const { state } = useAppContext();
-  const { teamId } = useParams();
-  const { data } = useTeamSettingsContext();
-  const { updateTeam } = useUpdateTeam();
+  const { data, setAssistantValues } = useAssistantSettingsContext();
+  const { updateAssistant } = useUpdateAssistant();
+  const { assistantId } = useParams();
+
+  const { getAssistantData, getAssistant } = useGetAssistant();
+
+  React.useEffect(() => {
+    if (state.user.user.id) {
+      getAssistant({
+        assistantId: assistantId as string,
+        userId: state.user.user.id,
+      });
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (getAssistantData?.localAssistant) {
+      console.log({ getAssistantData });
+      setAssistantValues(getAssistantData.localAssistant);
+    }
+  }, [getAssistantData]);
 
   const saveHandler = async () => {
     if (state.user.user.id) {
-      await updateTeam(teamId as string, data, state.user.user.id);
+      await updateAssistant({
+        assistantId: assistantId as string,
+        localAssistantUpdateParams: data,
+        userId: state.user.user.id,
+      });
     }
   };
   return (
@@ -96,8 +111,8 @@ export default function ProviderWrapper({
   children: React.ReactNode;
 }>) {
   return (
-    <TeamSettingsProvider>
+    <AssistantSettingsProvider>
       <Layout>{children}</Layout>
-    </TeamSettingsProvider>
+    </AssistantSettingsProvider>
   );
 }

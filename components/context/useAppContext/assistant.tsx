@@ -6,6 +6,7 @@ import {
   AssistantUpdateParams,
 } from "openai/resources/beta/assistants.mjs";
 import OpenAI from "openai";
+import { GetAssistantType } from "@/lib/data/assistant";
 
 export const useFetchAssistantsByTeamId = () => {
   const { dispatch } = useAppContext();
@@ -172,7 +173,7 @@ export const useGetAssistant = () => {
   const [errorGetAssistant, setErrorGetAssistant] = useState<any>(null);
   const [getAssistantData, setGetAssistantData] = useState<{
     openAIassistant: OpenAI.Beta.Assistants.Assistant;
-    localAssistant: Assistant;
+    localAssistant: GetAssistantType;
   } | null>(null);
 
   async function getAssistant({
@@ -217,8 +218,10 @@ export const useGetAssistant = () => {
 export const useUpdateAssistant = () => {
   const [loadingUpdateAssistant, setLoadingUpdateAssistant] = useState(false);
   const [errorUpdateAssistant, setErrorUpdateAssistant] = useState<any>(null);
-  const [updateAssistantData, setUpdateAssistantData] =
-    useState<OpenAI.Beta.Assistants.Assistant | null>(null);
+  const [updateAssistantData, setUpdateAssistantData] = useState<{
+    openAIassistantUpdateParams: OpenAI.Beta.Assistants.Assistant;
+    localAssistantUpdateParams: Assistant;
+  } | null>(null);
 
   async function updateAssistant({
     assistantId,
@@ -228,7 +231,7 @@ export const useUpdateAssistant = () => {
   }: {
     assistantId: string;
     userId: string;
-    openAIassistantUpdateParams: AssistantUpdateParams;
+    openAIassistantUpdateParams?: AssistantUpdateParams;
     localAssistantUpdateParams: Prisma.AssistantUpdateInput;
   }) {
     try {

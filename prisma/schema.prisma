@@ -195,11 +195,11 @@ model Assistant {
   openAIId                  String
   openAIVectorStoreFileId   String
   notionAccessToken         String?
-  language                  LanguageType
   avatarId                  String?
   url                       String    @unique 
   message                   Message[]
-  assistantCard             AssistantCard[]             
+  assistantCard             AssistantCard[]
+  emoji                     String?             
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   files       File[]
@@ -214,9 +214,8 @@ model Assistant {
 
 model AssistantCard {
   id          String      @id @default(uuid())
-  emoji       String
-  title       String
-  text        String[]
+  title       String      @default("")
+  description String[]
   type        AssistantCardType
   language    LanguageType
   assistantId String      
