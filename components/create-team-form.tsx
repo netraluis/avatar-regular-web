@@ -14,12 +14,20 @@ import { useRouter } from "next/navigation";
 import { useCreateTeam } from "./context/useAppContext/team";
 import slugify from "slugify";
 import { LanguageType } from "@prisma/client";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function CreateTeamForm() {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const [teamName, setTeamName] = useState("");
   const [subdomain, setSubdomain] = useState("");
+  const [language, setLanguage] = useState<LanguageType | null>(null);
 
   const {
     state: { user },
@@ -32,14 +40,18 @@ function CreateTeamForm() {
     if (formRef.current) {
       // const formData = new FormData(formRef.current);
       // const teamName = formData.get("name") as string;
-      createTeam({
-        data: {
-          name: teamName,
-          subDomain: subdomain,
-          defaultLanguage: LanguageType.ES,
-        },
-        userId: user.user.id,
-      });
+      if(!language){
+        console.log("no language");
+      }else{
+        createTeam({
+          data: {
+            name: teamName,
+            subDomain: subdomain,
+            defaultLanguage: language,
+          },
+          userId: user.user.id,
+        });
+      }
     }
   };
 
@@ -57,6 +69,10 @@ function CreateTeamForm() {
     // Convertimos el nombre en un slug para el subdominio
     const slug = slugify(name, { lower: true, strict: true });
     setSubdomain(slug);
+  };
+
+  const handleLanguageChange = (value: LanguageType) => {
+    setLanguage(value);
   };
 
   return (
@@ -100,13 +116,32 @@ function CreateTeamForm() {
                 disabled // Desactivado porque es solo para visualización
               />
             </div>
-            <Button
-              type="submit"
-              disabled={loadingCreateTeam}
-              className="w-full"
-            >
-              {loadingCreateTeam ? "Creando" : "Save"}
-            </Button>
+            <div className="pt-4">
+              <Select
+                onValueChange={handleLanguageChange}
+                value={language || undefined}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Idioma" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.values(LanguageType).map((i, index) => (
+                    <SelectItem key={index} value={i}>
+                      {i}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {language && teamName && (
+              <Button
+                type="submit"
+                disabled={loadingCreateTeam}
+                className="w-full"
+              >
+                {loadingCreateTeam ? "Creando" : "Crear"}
+              </Button>
+            )}
           </form>
         </CardContent>
       </Card>
