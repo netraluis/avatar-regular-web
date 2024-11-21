@@ -9,7 +9,7 @@ export default function Avatar({ name }: any) {
         <div>
           <img
             className="inline-block h-9 w-9 rounded-full"
-            src={name === "assistant" ? "/start.png" : "avatar.png"}
+            src={name === "assistant" ? "/start.png" : "/avatar.png"}
             alt=""
           />
         </div>

@@ -46,10 +46,11 @@ export const getTeamByTeamId = async (teamId: string, userId: string) => {
       welcome: true, // Incluye la información de Welcome, si existe
       menuHeader: {
         include: {
-          textHref: true, // Incluye la información de TextHref, si existe
+          textHref: true,
         },
       }, // Incluye la información de MenuHeader, si existe
       footer: true,
+      menuFooter: true,
     },
   });
 
@@ -112,6 +113,7 @@ export const updateTeam = async ({
           },
         },
         footer: true,
+        menuFooter: true,
       },
     });
   } catch (error) {

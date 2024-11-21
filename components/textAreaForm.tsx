@@ -32,6 +32,7 @@ export const TextAreaForm = ({
   handleKeyDown,
   input,
   submitMessage,
+  loading,
   status,
 }: TextAreaFormProps) => {
   const textAreaRef = useRef(null);
@@ -138,7 +139,7 @@ export const TextAreaForm = ({
 
   const sendMessage = (e: any) => {
     e.preventDefault();
-    if (status !== "awaiting_message") return;
+    if (status !== "thread.run.completed") return;
     submitMessage();
   };
 
@@ -152,7 +153,7 @@ export const TextAreaForm = ({
                 ref={textAreaRef}
                 tabIndex={0}
                 onKeyDown={(e: any) => {
-                  if (status !== "awaiting_message") return;
+                  if (status !== "thread.run.completed") return;
                   handleKeyDown(e);
                 }}
                 placeholder="Envia la teva pregunta..."
@@ -211,7 +212,7 @@ export const TextAreaForm = ({
 
             {!recording && (
               <div className="flex-shrink-0 self-end">
-                {!input && status === "awaiting_message" ? (
+                {!input && status === "thread.run.completed" ? (
                   <Button onClick={(e) => startRecordingF(e)}>
                     {!transcribing ? (
                       <>
@@ -230,10 +231,10 @@ export const TextAreaForm = ({
                   </Button>
                 ) : (
                   <Button
-                    disabled={status !== "awaiting_message"}
+                    disabled={status !== "thread.run.completed" || loading}
                     onClick={sendMessage}
                   >
-                    {status === "awaiting_message" ? (
+                    {status === "thread.run.completed" && !loading ? (
                       <>
                         <PaperAirplaneIcon
                           className="ml-0.5 h-5 w-5 mr-1"

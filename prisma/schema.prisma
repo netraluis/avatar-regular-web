@@ -42,6 +42,10 @@ enum FooterType {
   PLAIN
 }
 
+enum MenuFooterType {
+  PLAIN
+}
+
 enum LanguageType {
   EN
   ES
@@ -54,6 +58,11 @@ enum RoleUserType {
   USER
 }
 
+enum ModeMessageType {
+  TEST
+  PROD
+}
+
 model Message {
   id          String   @id @default(cuid())
   role        RoleUserType
@@ -63,6 +72,7 @@ model Message {
   assistantId String
   filesId     String[]
   runId       String?
+  mode        ModeMessageType
 
   assistant   Assistant        @relation(fields: [assistantId], references: [id])
 }
@@ -115,7 +125,10 @@ model Team {
   menuHeader      MenuHeader[]
   headerButton    HeaderButton[]
   defaultLanguage LanguageType
+  selectedLanguages LanguageType[]
   footer      Footer[]
+  teamDescription TeamDescription[]
+  menuFooter  MenuFooter[]
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
@@ -176,9 +189,30 @@ model Welcome {
   @@unique([language, teamId])
 }
 
+model TeamDescription {
+  id          String      @id @default(uuid())
+  text        String
+  language    LanguageType
+  teamId      String      
+  team        Team?       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([language, teamId])
+}
+
 model Footer {
   id          String      @id @default(uuid())
   type        FooterType  @default(PLAIN)
+  text        String
+  language    LanguageType
+  teamId      String      
+  team        Team?       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([language, teamId])
+}
+
+model MenuFooter {
+  id          String      @id @default(uuid())
+  type        MenuFooterType  @default(PLAIN)
   text        String
   language    LanguageType
   teamId      String      

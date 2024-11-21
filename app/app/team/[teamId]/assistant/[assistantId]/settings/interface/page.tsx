@@ -40,6 +40,7 @@ export default function Interface() {
       (ass) => ass.language === teamSelected.defaultLanguage,
     );
     setTitle(card?.title || "");
+    setDescription(card?.description[0] || "");
   }, [assistantValues]);
 
   return (

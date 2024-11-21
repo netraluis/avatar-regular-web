@@ -5,8 +5,8 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { useContext } from "react";
-import { GlobalContext } from "./context/globalContext";
+import { useTeamAssistantContext } from "./context/teamAssistantContext";
+import { usePathname, useRouter } from "next/navigation";
 
 // Tipos para las props
 interface AvatarEmojiProps {
@@ -56,28 +56,24 @@ const CardComponent: React.FC<CardComponentProps> = ({
 
 // Componente principal que renderiza varias tarjetas
 export default function Dashboard() {
-  const { setState, domainData, setWelcomeCard } = useContext(GlobalContext);
+  const { data } = useTeamAssistantContext();
+  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <div className="flex justify-center space-x-4 p-4">
-      {domainData.welcomeCards.map((card, index) => (
+      {data?.assistants.map((card, index) => (
         <div
           key={index}
           onClick={() => {
-            setState({
-              position: 2,
-              voiceId: card.voiceId,
-              avatarId: card.avatarId,
-              assistantId: card.assistantId,
-            });
-            setWelcomeCard(card);
+            router.push(`${pathname}/${card.url}`);
           }}
         >
           <CardComponent
             key={index}
-            title={card.title}
-            description={card.description}
-            emoji={card.emoji}
+            title={card.name}
+            description={card.assistantCard[0].description[0]}
+            emoji={card.emoji || ""}
           />
         </div>
       ))}

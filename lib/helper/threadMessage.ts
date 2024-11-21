@@ -1,12 +1,13 @@
 import OpenAI from "openai";
 import { FileCitationAnnotation } from "openai/resources/beta/threads/messages.mjs";
 import { createMessage } from "../data/message";
-import { RoleUserType } from "@prisma/client";
+import { ModeMessageType, RoleUserType } from "@prisma/client";
 
 export const commonOnEvent = async (
   event: OpenAI.Beta.Assistants.AssistantStreamEvent,
   controller: ReadableStreamDefaultController<any>,
   assistantId: string,
+  mode: ModeMessageType,
   message?: string,
 ) => {
   if (event.event === "thread.message.delta") {
@@ -29,7 +30,6 @@ export const commonOnEvent = async (
   if (event.event === "thread.message.completed") {
     if (event.data.content[0].type === "text") {
       const { value, annotations } = event.data.content[0].text;
-      console.log({ data: event.data });
 
       const textAnnotations: string[] = [];
       const idAnnotations = (annotations as FileCitationAnnotation[]).map(
@@ -47,6 +47,7 @@ export const commonOnEvent = async (
           filesId: [],
           runId: null,
           assistant: { connect: { id: assistantId } },
+          mode,
         });
       }
 
@@ -57,6 +58,7 @@ export const commonOnEvent = async (
         filesId: idAnnotations,
         runId: event.data.run_id,
         assistant: { connect: { id: assistantId } },
+        mode,
       });
     }
   }

@@ -275,7 +275,7 @@ export const useAssistant = ({
 }: {
   threadId: string | undefined;
   assistantId: string;
-  userId: string;
+  userId: string | undefined;
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
@@ -287,7 +287,11 @@ export const useAssistant = ({
     undefined,
   );
 
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>("thread.run.completed");
+
+  const headers: HeadersInit = userId
+    ? { "Content-Type": "application/json", "x-user-id": userId }
+    : { "Content-Type": "application/json" };
 
   const submitMessage = async (message: string) => {
     setMessages((prevMessages) => [
@@ -299,10 +303,7 @@ export const useAssistant = ({
       if (!threadId) {
         const response = await fetch(`/api/protected/thread`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-user-id": userId,
-          },
+          headers,
           body: JSON.stringify({ message, assistantId }),
         });
 
@@ -378,10 +379,7 @@ export const useAssistant = ({
           `/api/protected/assistant/${assistantId}/thread/${threadId}/message`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-user-id": userId,
-            },
+            headers,
             body: JSON.stringify({ message }),
           },
         );
@@ -390,10 +388,7 @@ export const useAssistant = ({
           `/api/protected/assistant/${assistantId}/thread/${threadId}/run`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-user-id": userId,
-            },
+            headers,
           },
         );
 
@@ -422,6 +417,7 @@ export const useAssistant = ({
             if (line.trim()) {
               try {
                 const parsedEvent = JSON.parse(line); // Parseamos solo líneas completas
+                console.log({ eventos: parsedEvent.event });
                 setStatus(parsedEvent.event);
                 setData((prevData) => [...prevData, parsedEvent]); // Actualizamos el estado con el evento
                 if (parsedEvent?.data?.delta?.content[0]?.text?.value) {

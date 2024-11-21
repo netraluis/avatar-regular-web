@@ -1,0 +1,1 @@
+UPDATE "Message" SET "mode" = 'TEST' WHERE "mode" IS NULL;-- This is an empty migration.

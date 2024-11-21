@@ -1,14 +1,16 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import { cn } from "@/lib/utils";
-import { GlobalContext } from "./context/globalContext";
+import { useTeamAssistantContext } from "./context/teamAssistantContext";
 
 interface FooterTextProps extends React.ComponentProps<"p"> {
   className?: string;
 }
 
 export function FooterText({ className, ...props }: FooterTextProps) {
-  const { domainData } = useContext(GlobalContext);
+  const { data } = useTeamAssistantContext();
+  const footerText = data?.footer[0]?.text;
+
   return (
     <p
       className={cn(
@@ -17,10 +19,7 @@ export function FooterText({ className, ...props }: FooterTextProps) {
       )}
       {...props}
     >
-      {/* Totes les respostes dd&aposaquesta conversa estan generades mitjançant una
-      Intel·ligència Artificial (AI) */}
-      {domainData?.footerText ||
-        "Totes les respostes d'aquesta conversa estan generades mitjançant una Intel·ligència Artificial (AI)"}
+      {footerText || ""}
     </p>
   );
 }

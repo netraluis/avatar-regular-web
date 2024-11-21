@@ -22,6 +22,8 @@ import {
   TextHref,
   Welcome,
   WelcomeType,
+  MenuFooterType,
+  MenuFooter,
 } from "@prisma/client";
 import { Eye, GripVertical, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -32,8 +34,9 @@ export default function Interface() {
     state: { teamSelected },
   } = useAppContext();
 
-  const [foot, setFoot] = useState<Footer>();
-  const [wel, setWel] = useState<Welcome>();
+  const [foot, setFoot] = useState<string>();
+  const [wel, setWel] = useState<string>();
+  const [headerFoot, setHeaderFoot] = useState<string>();
 
   console.log({ teamSelected: teamSelected });
 
@@ -41,12 +44,18 @@ export default function Interface() {
     setFoot(
       teamSelected?.footer?.find(
         (foot: Footer) => foot.language === teamSelected?.defaultLanguage,
-      ),
+      )?.text,
     );
     setWel(
       teamSelected?.welcome?.find(
         (wel: Welcome) => wel.language === teamSelected?.defaultLanguage,
-      ),
+      )?.text[0],
+    );
+    setHeaderFoot(
+      teamSelected?.menuFooter?.find(
+        (menuFooter: MenuFooter) =>
+          menuFooter.language === teamSelected?.defaultLanguage,
+      )?.text,
     );
   }, [teamSelected, teamSelected?.defaultLanguage]);
 
@@ -162,7 +171,6 @@ export default function Interface() {
                   href: item.href,
                   numberOrder:
                     menuItem.findIndex((el) => el.id === item.id) + 1,
-                  originalTextHrefId: null,
                   language: teamSelected?.defaultLanguage || LanguageType.ES,
                 },
                 update: {
@@ -170,7 +178,6 @@ export default function Interface() {
                   href: item.href,
                   numberOrder:
                     menuItem.findIndex((el) => el.id === item.id) + 1,
-                  originalTextHrefId: null,
                   language: teamSelected?.defaultLanguage || LanguageType.ES,
                 },
               })),
@@ -183,7 +190,6 @@ export default function Interface() {
                 text: item.text,
                 href: item.href,
                 numberOrder: menuItem.findIndex((el) => el.id === item.id) + 1,
-                originalTextHrefId: null,
                 language: teamSelected?.defaultLanguage || LanguageType.ES,
               })),
             },
@@ -197,7 +203,6 @@ export default function Interface() {
 
   useEffect(() => {
     const updatedData = menuHandler(primaryMenu, MenuHeaderType.HEADER);
-
     setData(updatedData);
   }, [primaryMenu]);
 
@@ -223,17 +228,9 @@ export default function Interface() {
               id="welcome-message"
               placeholder="Type your message here"
               className="min-h-[100px]"
-              value={
-                (!Array.isArray(data?.welcome?.update) &&
-                  Array.isArray(data?.welcome?.update?.data?.text) &&
-                  data?.welcome?.update?.data?.text[0]) ||
-                (!Array.isArray(data.welcome?.create) &&
-                  Array.isArray(data.welcome?.create?.text) &&
-                  data.welcome?.create?.text[0]) ||
-                wel?.text[0] ||
-                ""
-              }
+              value={wel || ""}
               onChange={(e) => {
+                setWel(e.target.value);
                 setData({
                   ...data,
                   welcome: wel
@@ -383,6 +380,52 @@ export default function Interface() {
               Add item
             </Button>
           </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="footer-header">Footer header</Label>
+                <div className="ml-4 inline-flex items-center justify-center rounded-full bg-sky-500 px-3 py-1 text-sm font-medium text-white">
+                  Premium
+                </div>
+              </div>
+              <Button variant="blue">Change plan</Button>
+            </div>
+
+            <Textarea
+              id="footer-header"
+              placeholder="Type your message here"
+              className="min-h-[100px]"
+              value={headerFoot || ""}
+              onChange={(e) => {
+                setHeaderFoot(e.target.value);
+                setData({
+                  ...data,
+                  menuFooter: {
+                    upsert: {
+                      where: {
+                        language_teamId: {
+                          teamId: teamSelected.id,
+                          language: teamSelected?.language || LanguageType.ES,
+                        },
+                      },
+                      update: {
+                        text: e.target.value,
+                      },
+                      create: {
+                        text: e.target.value,
+                        type: MenuFooterType.PLAIN,
+                        language: teamSelected?.language || LanguageType.ES,
+                      },
+                    },
+                  },
+                });
+              }}
+            />
+            <p className="text-sm text-muted-foreground">
+              Your message will be copied to the support team.
+            </p>
+          </div>
           <Button variant="secondary" size="sm" className="gap-2">
             <Eye className="w-4 h-4" />
             Preview
@@ -399,25 +442,14 @@ export default function Interface() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="footer-message">
-              Your message dd
-              {!Array.isArray(data.footer?.create) &&
-                Array.isArray(data.footer?.create?.text) &&
-                data.footer?.create?.text}
-            </Label>
+            <Label htmlFor="footer-message">Your message</Label>
             <Textarea
               id="footer-message"
               placeholder="Type your message here"
               className="min-h-[100px]"
-              value={
-                (!Array.isArray(data?.footer?.update) &&
-                  (data?.footer?.update?.data?.text as string)) ||
-                (!Array.isArray(data.footer?.create) &&
-                  data.footer?.create?.text) ||
-                foot?.text ||
-                ""
-              }
+              value={foot || ""}
               onChange={(e) => {
+                setFoot(e.target.value);
                 setData({
                   ...data,
                   footer: foot

@@ -1,17 +1,22 @@
 import { getAssistant } from "@/lib/data/assistant";
 import { commonOnEvent } from "@/lib/helper/threadMessage";
-import { createThreadAndRun } from "@/lib/openAI/run";
+import { createRun } from "@/lib/openAI/run";
 import { ModeMessageType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { threadId: string } },
+) {
   try {
     const userId = request.headers.get("x-user-id");
 
     const body = await request.json();
+    const { assistantId } = body;
+    const { threadId } = params;
 
-    const localAssistant = await getAssistant(body.assistantId as string);
+    const localAssistant = await getAssistant(assistantId as string);
 
     if (!localAssistant) {
       return new NextResponse("Assistant not found", {
@@ -19,26 +24,25 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Crear el stream de respuesta para el cliente
     const stream = new ReadableStream({
       async start(controller) {
         // Definir el callback para manejar cada evento
-        const onEvent = (
+        const onEvent = async (
           event: OpenAI.Beta.Assistants.AssistantStreamEvent,
         ) => {
-          commonOnEvent(
+          await commonOnEvent(
             event,
             controller,
             localAssistant.id,
             userId ? ModeMessageType.TEST : ModeMessageType.PROD,
-            body.message,
           );
         };
-
         try {
           // Ejecutar la función y manejar los eventos conforme llegan
-          await createThreadAndRun({
+          await createRun({
             assistantId: localAssistant?.openAIId,
-            message: body.message,
+            threadId: threadId as string,
             onEvent, // Pasamos el callback onEvent
           });
 
@@ -50,13 +54,14 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Retornar el stream de eventos progresivos
     return new NextResponse(stream, {
       headers: { "Content-Type": "text/event-stream" },
     });
   } catch (error) {
-    console.error("Error creating thread and run :", error);
+    console.error("Error running thread", error);
 
-    return new NextResponse("Failed creating thread and run ", {
+    return new NextResponse("Failed running thread", {
       status: 500,
     });
   }

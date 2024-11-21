@@ -1,6 +1,7 @@
 import { getAssistant } from "@/lib/data/assistant";
 import { commonOnEvent } from "@/lib/helper/threadMessage";
 import { createRun } from "@/lib/openAI/run";
+import { ModeMessageType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
@@ -10,12 +11,6 @@ export async function POST(
 ) {
   try {
     const userId = request.headers.get("x-user-id");
-
-    if (!userId) {
-      return new NextResponse("user need to be log in", {
-        status: 400,
-      });
-    }
 
     const { threadId, assistantId } = params;
 
@@ -34,7 +29,12 @@ export async function POST(
         const onEvent = async (
           event: OpenAI.Beta.Assistants.AssistantStreamEvent,
         ) => {
-          await commonOnEvent(event, controller, localAssistant.id);
+          await commonOnEvent(
+            event,
+            controller,
+            localAssistant.id,
+            userId ? ModeMessageType.TEST : ModeMessageType.PROD,
+          );
         };
         try {
           // Ejecutar la función y manejar los eventos conforme llegan

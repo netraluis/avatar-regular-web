@@ -40,9 +40,9 @@ function CreateTeamForm() {
     if (formRef.current) {
       // const formData = new FormData(formRef.current);
       // const teamName = formData.get("name") as string;
-      if(!language){
+      if (!language) {
         console.log("no language");
-      }else{
+      } else {
         createTeam({
           data: {
             name: teamName,

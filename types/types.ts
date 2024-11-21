@@ -6,6 +6,7 @@ export interface TextAreaFormProps {
   handleKeyDown: (e: KeyboardEvent<HTMLTextAreaElement>) => void;
   input: string;
   submitMessage: () => void;
+  loading: boolean;
   status: string;
 }
 
