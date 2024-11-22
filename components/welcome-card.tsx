@@ -68,6 +68,7 @@ export default function Dashboard() {
           onClick={() => {
             router.push(`${pathname}/${card.url}`);
           }}
+          className="cursor-pointer"
         >
           <CardComponent
             key={index}

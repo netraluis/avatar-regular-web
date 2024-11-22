@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useAppContext } from "../appContext";
 import { Assistant, Prisma } from "@prisma/client";
 import {
@@ -269,14 +269,12 @@ export const useUpdateAssistant = () => {
 };
 
 export const useAssistant = ({
-  threadId,
   assistantId,
   userId,
 }: {
-  threadId: string | undefined;
-  assistantId: string;
+  assistantId: string | undefined;
   userId: string | undefined;
-}) => {
+}): UseAssistantResponse => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState<any[]>([]);
@@ -289,6 +287,19 @@ export const useAssistant = ({
 
   const [status, setStatus] = useState<string>("thread.run.completed");
 
+  if (!assistantId) {
+    return {
+      loading: false,
+      error: false,
+      data: [],
+      submitMessage: () => {},
+      messages: [],
+      status: "",
+      setInternalThreadId,
+      setMessages,
+    };
+  }
+
   const headers: HeadersInit = userId
     ? { "Content-Type": "application/json", "x-user-id": userId }
     : { "Content-Type": "application/json" };
@@ -300,7 +311,8 @@ export const useAssistant = ({
     ]);
     setLoading(true);
     try {
-      if (!threadId) {
+      console.log({ internatlThreadId, message, assistantId });
+      if (!internatlThreadId) {
         const response = await fetch(`/api/protected/thread`, {
           method: "POST",
           headers,
@@ -337,7 +349,10 @@ export const useAssistant = ({
                 if (parsedEvent.event === "thread.created") {
                   setInternalThreadId(parsedEvent.data.id);
                 }
-                if (parsedEvent?.data?.delta?.content[0]?.text?.value) {
+                if (
+                  parsedEvent?.data?.delta?.content &&
+                  parsedEvent?.data?.delta?.content[0]?.text?.value
+                ) {
                   const message =
                     parsedEvent?.data?.delta?.content[0]?.text?.value;
                   const id = parsedEvent?.data?.id;
@@ -376,7 +391,7 @@ export const useAssistant = ({
         }
       } else {
         await fetch(
-          `/api/protected/assistant/${assistantId}/thread/${threadId}/message`,
+          `/api/protected/assistant/${assistantId}/thread/${internatlThreadId}/message`,
           {
             method: "POST",
             headers,
@@ -385,7 +400,7 @@ export const useAssistant = ({
         );
 
         const response = await fetch(
-          `/api/protected/assistant/${assistantId}/thread/${threadId}/run`,
+          `/api/protected/assistant/${assistantId}/thread/${internatlThreadId}/run`,
           {
             method: "POST",
             headers,
@@ -417,10 +432,12 @@ export const useAssistant = ({
             if (line.trim()) {
               try {
                 const parsedEvent = JSON.parse(line); // Parseamos solo líneas completas
-                console.log({ eventos: parsedEvent.event });
                 setStatus(parsedEvent.event);
                 setData((prevData) => [...prevData, parsedEvent]); // Actualizamos el estado con el evento
-                if (parsedEvent?.data?.delta?.content[0]?.text?.value) {
+                if (
+                  parsedEvent?.data?.delta?.content &&
+                  parsedEvent?.data?.delta?.content[0]?.text?.value
+                ) {
                   const message =
                     parsedEvent?.data?.delta?.content[0]?.text?.value;
                   const id = parsedEvent?.data?.id;
@@ -470,8 +487,28 @@ export const useAssistant = ({
     error,
     data,
     submitMessage,
-    internatlThreadId,
     messages,
     status,
+    setInternalThreadId,
+    setMessages,
   };
 };
+
+export interface UseAssistantResponse {
+  loading: boolean;
+  error: any;
+  data: any[];
+  submitMessage: (message: string) => void;
+  messages: { role: string; message: string; id: string }[];
+  status: string;
+  setInternalThreadId: Dispatch<SetStateAction<string | undefined>>;
+  setMessages: Dispatch<
+    SetStateAction<
+      {
+        role: string;
+        message: string;
+        id: string;
+      }[]
+    >
+  >;
+}

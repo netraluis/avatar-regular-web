@@ -5,64 +5,32 @@ import {
   XMarkIcon,
   Bars3CenterLeftIcon,
   CameraIcon,
+  ChatBubbleLeftIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-// import { useRouter } from "next/navigation";
-// import Disclaimer from "./disclaimer";
-// import { usePathname } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { useTeamAssistantContext } from "./context/teamAssistantContext";
 import { basePublicUrl } from "@/lib/helper/images";
 import { MenuFooterType, MenuHeaderType } from "@prisma/client";
+import { Button } from "./ui/button";
+import { House, MessageCircle } from "lucide-react";
 
 export default function Header() {
-  const { data } = useTeamAssistantContext();
+  const { data, useAssistantResponse } = useTeamAssistantContext();
 
-  // const pathname = usePathname();
-
+  const { lang, assistantUrl } = useParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // const createNovaConversa = () => {
-  //   // setActualsThreadId([...actualsThreadId, actualThreadId]);
-  //   // setMobileMenuOpen(false);
-  //   // localStorage.setItem("new-talk", JSON.stringify(actualThreadId));
-  // };
-  // const router = useRouter();
-
-  // Verificar si el usuario tiene sesión
-  // useEffect(() => {
-  //   const getSession = async () => {
-  //     const { data: sessionData, error } = await supabase.auth.getSession();
-  //     if (error) {
-  //       console.error("Error fetching session:", error);
-  //     } else {
-  //       setUser(sessionData?.session?.user || null);
-  //     }
-  //   };
-
-  //   getSession();
-
-  //   // Listener para cambios de autenticación (ej: sign in/out)
-  //   const { data: authListener } = supabase.auth.onAuthStateChange(
-  //     (event, session) => {
-  //       setUser(session?.user || null);
-  //       if (session) {
-  //         getSession(); // Forzar actualización manual después del cambio de auth
-  //       } else {
-  //         router.push("/login");
-  //       }
-  //     },
-  //   );
-
-  //   // Limpia el listener al desmontar el componente
-  //   return () => {
-  //     authListener.subscription.unsubscribe();
-  //   };
-  // }, [router]);
+  const router = useRouter();
 
   const returnToInicial = () => {
-    // setActualsThreadId([""]);
-    // setState({ position: 1 });
-    // router.push("/");
+    useAssistantResponse?.setInternalThreadId(undefined);
+    useAssistantResponse?.setMessages([]);
+    router.push(`/${lang}`);
+  };
+
+  const startNewConversation = () => {
+    useAssistantResponse?.setInternalThreadId(undefined);
+    useAssistantResponse?.setMessages([]);
   };
 
   const menuHeader = data?.menuHeader
@@ -82,7 +50,7 @@ export default function Header() {
       >
         <div
           onClick={returnToInicial}
-          className="relative h-[74px] aspect-video overflow-hidden"
+          className="relative h-[74px] aspect-video overflow-hidden cursor-pointer"
         >
           {data?.logoUrl ? (
             <Image
@@ -111,27 +79,23 @@ export default function Header() {
             <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />
             <span className="sr-only">Open main menu</span>
           </button>
-          {/* {user && (
-            <div className="p-3 rounded-full text-gray-700 hover:bg-gray-50">
-              <form action="/api/auth/signout" method="post">
-                <button className="button block text-gray-600" type="submit">
-                  <ArrowRightStartOnRectangleIcon
-                    className="h-6 w-6"
-                    aria-hidden="true"
-                  />
-                </button>
-              </form>
-            </div>
-          )} */}
         </div>
         <div className="hidden lg:flex lg:gap-x-12 lg:items-center">
           {/* Elementos de navegación para desktop */}
-          {/* {state.position === 2 && (
-            <Button onClick={() => createNovaConversa()}>
-              <ChatBubbleLeftIcon className="h-5 w-5 mr-1" aria-hidden="true" />
-              Nova conversa
+          {assistantUrl && (
+            <Button variant="outline" onClick={() => returnToInicial()}>
+              <House className="h-5 w-5 mr-2" />
+              Tornar a l'inici
             </Button>
-          )} */}
+          )}
+          {assistantUrl &&
+            useAssistantResponse?.messages &&
+            useAssistantResponse?.messages?.length > 0 && (
+              <Button onClick={() => startNewConversation()}>
+                <MessageCircle className="h-5 w-5 mr-2" />
+                Nova conversa
+              </Button>
+            )}
           {/* <Disclaimer data={domainData?.headerDisclaimer} /> */}
           <Popover className="relative">
             <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-8 text-gray-900">
@@ -165,22 +129,6 @@ export default function Header() {
                       </div>
                     </div>
                   ))}
-                  {/* {user && (
-                    <div className="p-3 rounded-full text-gray-700 hover:bg-gray-50">
-                      <form action="/api/auth/signout" method="post">
-                        <button
-                          className="button block text-gray-600 flex"
-                          type="submit"
-                        >
-                          <ArrowRightStartOnRectangleIcon
-                            className="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                          <div className="ml-2">Tancar sessió</div>
-                        </button>
-                      </form>
-                    </div>
-                  )} */}
                   <div className="mt-5">
                     {menuBody?.map((item) => (
                       <a
@@ -212,18 +160,6 @@ export default function Header() {
               </Popover.Panel>
             </Transition>
           </Popover>
-          {/* {!!user && (
-            <div>
-              <form action="/api/auth/signout" method="post">
-                <button className="button block text-gray-600" type="submit">
-                  <ArrowRightStartOnRectangleIcon
-                    className="h-6 w-6"
-                    aria-hidden="true"
-                  />
-                </button>
-              </form>
-            </div>
-          )} */}
         </div>
       </nav>
       <Dialog
@@ -264,34 +200,33 @@ export default function Header() {
                 </a>
               ))}
             </div>
-            {/* {!!user && (
-              <div>
-                <form action="/api/auth/signout" method="post">
-                  <button
-                    className="button block text-gray-600 flex"
-                    type="submit"
+            <div>
+              {assistantUrl &&
+                useAssistantResponse?.messages &&
+                useAssistantResponse?.messages?.length > 0 && (
+                  <Button
+                    size="lg"
+                    className="ml-2"
+                    onClick={() => startNewConversation()}
                   >
-                    <ArrowRightStartOnRectangleIcon
-                      className="h-6 w-6"
-                      aria-hidden="true"
-                    />
-                    <div className="ml-2">Tancar sessió</div>
-                  </button>
-                </form>
-              </div>
-            )} */}
-            {/* {state.position === 2 && (
-              <Button
-                className="ml-2 mb-7"
-                onClick={() => createNovaConversa()}
-              >
-                <ChatBubbleLeftIcon
-                  className="h-5 w-5 mr-1"
-                  aria-hidden="true"
-                />
-                Nova conversa
-              </Button>
-            )} */}
+                    <MessageCircle className="h-5 w-5 mr-2" />
+                    Nova conversa
+                  </Button>
+                )}
+            </div>
+            <div>
+              {assistantUrl && (
+                <Button
+                  size="lg"
+                  className="ml-2"
+                  onClick={() => returnToInicial()}
+                  variant="outline"
+                >
+                  <House className="h-5 w-5 mr-2" />
+                  Tornar a l'inici
+                </Button>
+              )}
+            </div>
             <div className="mt-7 pt-6 ">
               {menuBody?.map((item) => (
                 <a

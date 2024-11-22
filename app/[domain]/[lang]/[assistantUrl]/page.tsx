@@ -3,22 +3,20 @@
 import * as React from "react";
 import { useParams } from "next/navigation";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
-import { useAssistant } from "@/components/context/useAppContext/assistant";
 import { useTeamAssistantContext } from "@/components/context/teamAssistantContext";
 import { TextAreaForm } from "@/components/textAreaForm";
 import { ChatList } from "@/components/chat-list";
 import { cn } from "@/lib/utils";
 
-export default function Playground() {
-  const { assistantUrl } = useParams();
+export default function AssistantUrl() {
   const [message, setMessage] = React.useState("");
-  const [threadId, setThreadId] = React.useState<string | undefined>();
 
-  const { data } = useTeamAssistantContext();
+  const { useAssistantResponse } = useTeamAssistantContext();
 
-  const assistantId = data?.assistants.find(
-    (assistant) => assistant.url === assistantUrl,
-  )?.id;
+  if (!useAssistantResponse) return <>No se ha encontrado asistente</>;
+
+  const { submitMessage, messages, error, loading, status } =
+    useAssistantResponse;
 
   const handleSendMessage = () => {
     if (message.trim()) {
@@ -27,13 +25,6 @@ export default function Playground() {
     }
   };
 
-  const { submitMessage, internatlThreadId, messages, error, loading, status } =
-    useAssistant({
-      threadId: threadId,
-      assistantId: assistantId as string,
-      userId: undefined,
-    });
-
   const {
     messagesRef,
     scrollRef,
@@ -41,10 +32,6 @@ export default function Playground() {
 
     // isAtBottom, scrollToBottom
   } = useScrollAnchor();
-
-  React.useEffect(() => {
-    setThreadId(internatlThreadId);
-  }, [internatlThreadId]);
 
   React.useEffect(() => {
     // Si `messagesRef` está disponible y tiene el último mensaje
