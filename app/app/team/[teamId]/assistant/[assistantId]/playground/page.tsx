@@ -29,7 +29,6 @@ export default function Playground() {
   const { state } = useAppContext();
   const { assistantId } = useParams();
   const [message, setMessage] = React.useState("");
-  const [threadId, setThreadId] = React.useState<string | undefined>();
 
   const [assistantValues, setAssistantValues] = React.useState({
     model: "gpt-4",
@@ -83,8 +82,7 @@ export default function Playground() {
     }
   };
 
-  const { submitMessage, internatlThreadId, messages } = useAssistant({
-    threadId: threadId,
+  const { submitMessage, messages } = useAssistant({
     assistantId: assistantId as string,
     userId: state.user?.user?.id,
   });
@@ -97,9 +95,6 @@ export default function Playground() {
     // isAtBottom, scrollToBottom
   } = useScrollAnchor();
 
-  React.useEffect(() => {
-    setThreadId(internatlThreadId);
-  }, [internatlThreadId]);
 
   React.useEffect(() => {
     // Si `messagesRef` está disponible y tiene el último mensaje

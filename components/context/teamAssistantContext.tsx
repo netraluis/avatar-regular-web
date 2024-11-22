@@ -47,7 +47,6 @@ export const TeamAssistantProvider = ({
     : undefined;
 
   const useAssistantResponse: UseAssistantResponse = useAssistant({
-    // threadId: undefined,
     assistantId: assistantId,
     userId: undefined,
   });

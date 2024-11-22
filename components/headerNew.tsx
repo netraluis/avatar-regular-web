@@ -5,7 +5,6 @@ import {
   XMarkIcon,
   Bars3CenterLeftIcon,
   CameraIcon,
-  ChatBubbleLeftIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter, useParams } from "next/navigation";
@@ -85,7 +84,7 @@ export default function Header() {
           {assistantUrl && (
             <Button variant="outline" onClick={() => returnToInicial()}>
               <House className="h-5 w-5 mr-2" />
-              Tornar a l'inici
+              Tornar a l&rsquo;inici
             </Button>
           )}
           {assistantUrl &&
@@ -223,7 +222,7 @@ export default function Header() {
                   variant="outline"
                 >
                   <House className="h-5 w-5 mr-2" />
-                  Tornar a l'inici
+                  Tornar a l&rsquo;inici
                 </Button>
               )}
             </div>

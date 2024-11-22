@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useParams } from "next/navigation";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { useTeamAssistantContext } from "@/components/context/teamAssistantContext";
 import { TextAreaForm } from "@/components/textAreaForm";
