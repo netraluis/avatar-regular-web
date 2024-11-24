@@ -10,7 +10,7 @@ import Image from "next/image";
 import { useRouter, useParams } from "next/navigation";
 import { useTeamAssistantContext } from "./context/teamAssistantContext";
 import { basePublicUrl } from "@/lib/helper/images";
-import { MenuFooterType, MenuHeaderType } from "@prisma/client";
+import { MenuHeaderType } from "@prisma/client";
 import { Button } from "./ui/button";
 import { House, MessageCircle } from "lucide-react";
 
@@ -39,7 +39,7 @@ export default function Header() {
     ?.find((menu) => menu.type === MenuHeaderType.BODY)
     ?.textHref?.sort((a, b) => a.numberOrder - b.numberOrder);
   const menuFooter = data?.menuFooter.find(
-    (menu) => menu.type === MenuFooterType.PLAIN,
+    (menu) => menu.language === lang,
   )?.text;
   return (
     <div className="bg-white pt-4 fixed top-0 z-10 w-full">

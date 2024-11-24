@@ -51,7 +51,6 @@ export default function Playground() {
 
   React.useEffect(() => {
     if (!getAssistantData?.openAIassistant) return;
-    console.log({ getAssistantData });
 
     setAssistantValues({
       model: getAssistantData.openAIassistant.model || "gpt-4",
@@ -94,7 +93,6 @@ export default function Playground() {
 
     // isAtBottom, scrollToBottom
   } = useScrollAnchor();
-
 
   React.useEffect(() => {
     // Si `messagesRef` está disponible y tiene el último mensaje

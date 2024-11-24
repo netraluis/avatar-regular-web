@@ -68,4 +68,5 @@ export interface SuccessfullResponse<T> {
 export enum FileUserImageType {
   LOGO = "logo",
   SYMBOL = "symbol",
+  AVATAR = "avatar",
 }

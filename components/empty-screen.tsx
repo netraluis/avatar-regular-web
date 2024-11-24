@@ -1,5 +1,6 @@
 import { ChatBubbleBottomCenterIcon } from "@heroicons/react/24/solid";
 import { useTeamAssistantContext } from "./context/teamAssistantContext";
+import Avatar from "./avatar";
 
 export function EmptyScreen({ children }: { children: React.ReactNode }) {
   const { data } = useTeamAssistantContext();
@@ -14,40 +15,36 @@ export function EmptyScreen({ children }: { children: React.ReactNode }) {
       </div>
     );
 
-  switch (data?.welcome[0]?.type) {
-    case "GLOVE":
+  switch (data?.welcomeType) {
+    case "BUBBLE":
       return (
         <div className=" mx-auto max-w-2xl px-4">
-          <div className="rounded-lg pb-8">
-            {/* <div className="ml-12 mt-3.5 flex mb-5 "> */}
-            {data?.welcome.map((wel, index) => (
-              <div
-                key={index}
-                className="flex items-start space-x-2 relative my-4"
-              >
-                {/* <Avatar className="w-12 h-12">
-                    {domainData?.welcomeDesign?.data?.length &&
-                      domainData?.welcomeDesign?.data?.length - 1 === index && (
-                        <img
-                          src="/avatar-photo.jpeg"
-                          alt="Avatar"
-                          className="rounded-full "
+          <div className="pb-8 flex justify-center">
+            <div className="flex items-end space-x-2 relative my-4">
+              <Avatar
+                className="w-12 h-12"
+                imageUrl={`https://${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${data?.avatarUrl}`}
+                roleName=""
+              ></Avatar>
+              <div className="flex flex-col">
+                {data?.welcome[0]?.text &&
+                  data?.welcome[0]?.text.map((wel, index) => (
+                    <div
+                      className="mt-3 bg-green-100 p-3 rounded-xl p-4"
+                      key={index}
+                    >
+                      <p className="text-base">
+                        {" "}
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: wel,
+                          }}
                         />
-                      )}
-                  </Avatar> */}
-
-                <div className="bg-green-100 p-3 rounded-xl p-4">
-                  <p className="text-base">
-                    {" "}
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html: wel.text[0],
-                      }}
-                    />
-                  </p>
-                </div>
+                      </p>
+                    </div>
+                  ))}
               </div>
-            ))}
+            </div>
           </div>
           <div className="px-14">{children}</div>
         </div>

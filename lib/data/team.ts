@@ -51,6 +51,7 @@ export const getTeamByTeamId = async (teamId: string, userId: string) => {
       }, // Incluye la información de MenuHeader, si existe
       footer: true,
       menuFooter: true,
+      headerButton: true,
     },
   });
 
@@ -114,6 +115,7 @@ export const updateTeam = async ({
         },
         footer: true,
         menuFooter: true,
+        headerButton: true,
       },
     });
   } catch (error) {

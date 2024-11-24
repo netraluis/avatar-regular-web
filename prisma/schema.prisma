@@ -25,7 +25,7 @@ enum FileType {
 
 enum WelcomeType {
   PLAIN
-  GLOVE
+  BUBBLE
 }
 
 enum AssistantCardType {
@@ -36,14 +36,6 @@ enum MenuHeaderType {
   HEADER
   BODY
   FOOTER
-}
-
-enum FooterType {
-  PLAIN
-}
-
-enum MenuFooterType {
-  PLAIN
 }
 
 enum LanguageType {
@@ -61,6 +53,10 @@ enum RoleUserType {
 enum ModeMessageType {
   TEST
   PROD
+}
+
+enum HeaderButtonType {
+  PLAIN
 }
 
 model Message {
@@ -122,6 +118,7 @@ model Team {
   welcome     Welcome[]  
   logoUrl     String?
   symbolUrl   String?
+  avatarUrl   String?
   menuHeader      MenuHeader[]
   headerButton    HeaderButton[]
   defaultLanguage LanguageType
@@ -129,6 +126,7 @@ model Team {
   footer      Footer[]
   teamDescription TeamDescription[]
   menuFooter  MenuFooter[]
+  welcomeType WelcomeType
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
@@ -139,12 +137,15 @@ model Team {
 
 model HeaderButton {
   id          String      @id @default(uuid())
-  buttonText  String
-  title       String
-  buttonType  String
-  textHref    TextHref[]
+  buttonText  String?
+  title       String?
+  type  HeaderButtonType
+  text        String[]
   teamId      String
+  language    LanguageType
+  
   team        Team?       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  @@unique([language, teamId])
 
 }
 
@@ -165,14 +166,12 @@ model TextHref {
   numberOrder     Int
   language        LanguageType
   menuHeaderId    String?     
-  headerButtonId  String?    
   defaultTextHrefId String?  
 
   defaultTextHref   TextHref? @relation("TextHrefDefault", fields: [defaultTextHrefId], references: [id], onDelete: Cascade)
   translations      TextHref[] @relation("TextHrefDefault")
 
   menuHeader        MenuHeader?   @relation(fields: [menuHeaderId], references: [id], onDelete: Cascade)
-  headerButton      HeaderButton? @relation(fields: [headerButtonId], references: [id], onDelete: Cascade) 
 
 }
 
@@ -180,7 +179,6 @@ model TextHref {
 model Welcome {
   id          String      @id @default(uuid())
   text        String[]
-  type        WelcomeType
   description String
   language    LanguageType
   teamId      String      
@@ -201,7 +199,6 @@ model TeamDescription {
 
 model Footer {
   id          String      @id @default(uuid())
-  type        FooterType  @default(PLAIN)
   text        String
   language    LanguageType
   teamId      String      
@@ -212,7 +209,6 @@ model Footer {
 
 model MenuFooter {
   id          String      @id @default(uuid())
-  type        MenuFooterType  @default(PLAIN)
   text        String
   language    LanguageType
   teamId      String      

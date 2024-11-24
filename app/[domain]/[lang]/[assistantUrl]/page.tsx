@@ -6,11 +6,22 @@ import { useTeamAssistantContext } from "@/components/context/teamAssistantConte
 import { TextAreaForm } from "@/components/textAreaForm";
 import { ChatList } from "@/components/chat-list";
 import { cn } from "@/lib/utils";
+import { useParams } from "next/navigation";
 
 export default function AssistantUrl() {
+  const { assistantUrl } = useParams();
   const [message, setMessage] = React.useState("");
+  const [card, setCard] = React.useState<any>(null);
 
-  const { useAssistantResponse } = useTeamAssistantContext();
+  const { useAssistantResponse, data } = useTeamAssistantContext();
+
+  React.useEffect(() => {
+    if (data?.assistants) {
+      const card = data.assistants.find((card) => card.url === assistantUrl)
+        ?.assistantCard[0];
+      setCard(card);
+    }
+  }, [data]);
 
   if (!useAssistantResponse) return <>No se ha encontrado asistente</>;
 
@@ -62,10 +73,14 @@ export default function AssistantUrl() {
       ref={scrollRef}
     >
       <div className={cn("pb-[200px] pt-[100px]")} ref={messagesRef}>
-        <ChatList
-          messages={messages}
-          showAnalizeInfo={status === "thread.run.completed" && loading}
-        />
+        {data?.avatarUrl && (
+          <ChatList
+            messages={messages}
+            showAnalizeInfo={status === "thread.run.completed" && loading}
+            avatarUrl={`https://${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${data?.avatarUrl}`}
+            assistantName={card?.title || ""}
+          />
+        )}
         {error && (
           <div>Estem treballant en l’error… Disculpa les molèsties.</div>
         )}

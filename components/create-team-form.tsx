@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCreateTeam } from "./context/useAppContext/team";
 import slugify from "slugify";
-import { LanguageType } from "@prisma/client";
+import { LanguageType, WelcomeType } from "@prisma/client";
 import {
   Select,
   SelectContent,
@@ -45,6 +45,7 @@ function CreateTeamForm() {
       } else {
         createTeam({
           data: {
+            welcomeType: WelcomeType.PLAIN,
             name: teamName,
             subDomain: subdomain,
             defaultLanguage: language,

@@ -27,9 +27,11 @@ export async function getTeamDataByDomainOrCustomDomainMetadata(
 
 export type GetTeamDataByDomainOrCustomDomainPage = Prisma.TeamGetPayload<{
   select: {
+    welcomeType: true;
     name: true;
     logoUrl: true;
     symbolUrl: true;
+    avatarUrl: true;
     footer: {
       select: {
         text: true;
@@ -37,7 +39,6 @@ export type GetTeamDataByDomainOrCustomDomainPage = Prisma.TeamGetPayload<{
     };
     welcome: {
       select: {
-        type: true;
         text: true;
         description: true;
       };
@@ -104,9 +105,11 @@ export async function getTeamDataByDomainOrCustomDomainPage({
       ? { subDomain: subdomain } // If subdomain is true, filter by subdomain
       : { customDomain: domain }, // Otherwise, filter by customDomain
     select: {
+      welcomeType: true,
       name: true,
       logoUrl: true,
       symbolUrl: true,
+      avatarUrl: true,
       footer: {
         where: {
           language: language, // Filtra por el idioma específico
@@ -120,7 +123,6 @@ export async function getTeamDataByDomainOrCustomDomainPage({
           language: language,
         },
         select: {
-          type: true,
           text: true,
           description: true,
         },

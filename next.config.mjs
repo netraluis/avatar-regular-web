@@ -7,6 +7,7 @@ const nextConfig = {
       "dkwrylibzobzgzzddull.supabase.co",
       "https://dkwrylibzobzgzzddull.supabase.co",
     ],
+    dangerouslyAllowSVG: true,
   },
 };
 

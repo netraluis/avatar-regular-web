@@ -10,24 +10,38 @@ export type UIState = {
 export interface ChatList {
   messages: any;
   showAnalizeInfo: boolean;
+  avatarUrl: string;
+  assistantName: string;
 }
 
-export function ChatList({ messages, showAnalizeInfo }: ChatList) {
+export function ChatList({
+  messages,
+  showAnalizeInfo,
+  avatarUrl,
+  assistantName,
+}: ChatList) {
   return (
     <div className="relative mx-auto max-w-2xl px-4">
       {messages.length > 0 &&
         messages.map((message: any) => {
           return (
             <div className="my-4" key={message.id}>
-              <Avatar name={message.role} />
-              <MarkdownDisplay markdownText={message.message} />
+              <Avatar
+                imageUrl={
+                  message.role === "assistant" && avatarUrl
+                    ? avatarUrl
+                    : "/start.png"
+                }
+                roleName={message.role === "assistant" ? assistantName : "Tu"}
+              />
+              {<MarkdownDisplay markdownText={message.message} />}
             </div>
           );
         })}
 
       {showAnalizeInfo && (
         <div className="my-4">
-          <Avatar name="assistant" />
+          <Avatar imageUrl={avatarUrl} />
           <div className="mt-4 text-slate-400 flex font-light text-sm">
             <ArrowPathIcon
               className="ml-0.5 h-5 w-5 animate-spin mr-1"
