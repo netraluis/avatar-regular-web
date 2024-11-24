@@ -23,7 +23,7 @@ export function EmptyScreen({ children }: { children: React.ReactNode }) {
             <div className="flex items-end space-x-2 relative my-4">
               <Avatar
                 className="w-12 h-12"
-                imageUrl={`https://${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${data?.avatarUrl}`}
+                imageUrl={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.avatarUrl}`}
                 roleName=""
               ></Avatar>
               <div className="flex flex-col">

@@ -333,7 +333,7 @@ export default function Interface() {
                 teamSelected?.avatarUrl ? (
                 <div className="w-10 h-10 rounded-full  flex items-center justify-center">
                   <Image
-                    src={`https://${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${welAvatarUrl}?timestamp=${new Date().getTime()}`}
+                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${welAvatarUrl}?timestamp=${new Date().getTime()}`}
                     alt="avatar"
                     width={30}
                     height={30}

@@ -118,7 +118,7 @@ export default function Component() {
                 teamSelected?.logoUrl ? (
                 <div className="w-10 h-10 rounded-full  flex items-center justify-center">
                   <Image
-                    src={`https://${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${teamSelected.logoUrl}?timestamp=${new Date().getTime()}`}
+                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${teamSelected.logoUrl}?timestamp=${new Date().getTime()}`}
                     alt="favicon"
                     width={30}
                     height={30}
@@ -166,7 +166,7 @@ export default function Component() {
                 teamSelected?.symbolUrl ? (
                 <div className="w-10 h-10 rounded-full  flex items-center justify-center">
                   <Image
-                    src={`https://${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${(typeof data?.symbolUrl === "string" && data?.symbolUrl) || teamSelected?.symbolUrl}?timestamp=${new Date().getTime()}`}
+                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${(typeof data?.symbolUrl === "string" && data?.symbolUrl) || teamSelected?.symbolUrl}?timestamp=${new Date().getTime()}`}
                     alt="favicon"
                     width={30}
                     height={30}

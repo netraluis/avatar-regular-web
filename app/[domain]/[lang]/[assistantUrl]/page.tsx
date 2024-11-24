@@ -77,7 +77,7 @@ export default function AssistantUrl() {
           <ChatList
             messages={messages}
             showAnalizeInfo={status === "thread.run.completed" && loading}
-            avatarUrl={`https://${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID}.supabase.co/storage/v1/object/public/${data?.avatarUrl}`}
+            avatarUrl={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.avatarUrl}`}
             assistantName={card?.title || ""}
           />
         )}
