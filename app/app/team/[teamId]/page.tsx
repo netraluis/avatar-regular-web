@@ -37,12 +37,6 @@ import {
   useFetchAssistantsByTeamId,
 } from "@/components/context/useAppContext/assistant";
 
-// export async function generateStaticParams() {
-//   return teams.map((team) => ({
-//     teamId: team.id,
-//   }));
-// }
-
 export default function Dashboard() {
   const router = useRouter();
   const {

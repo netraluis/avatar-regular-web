@@ -58,6 +58,24 @@ export const getTeamByTeamId = async (teamId: string, userId: string) => {
   return subdomainInfo;
 };
 
+export const getAssistantsByTeam = async (teamId: string, userId: string) => {
+  const subdomainInfo = await prisma.team.findFirst({
+    where: {
+      id: teamId,
+      users: {
+        some: {
+          userId: userId, // Verificar que el usuario está relacionado con el equipo
+        },
+      },
+    },
+    include: {
+      assistants: true, // Incluye todos los asistentes relacionados
+    },
+  });
+
+  return subdomainInfo;
+};
+
 export const createTeam = async ({
   data,
   userId,
@@ -124,4 +142,14 @@ export const updateTeam = async ({
   } finally {
     await prisma.$disconnect();
   }
+};
+
+export const deleteTeam = async ({ teamId }: { teamId: string }) => {
+  const team = await prisma.team.delete({
+    where: {
+      id: teamId,
+    },
+  });
+
+  return team;
 };

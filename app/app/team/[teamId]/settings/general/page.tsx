@@ -12,11 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState, useEffect, useRef } from "react";
 import slugify from "slugify";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, LoaderCircle } from "lucide-react";
 import { useSupabaseFile } from "@/components/context/useAppContext/file";
 import { FileUserImageType } from "@/types/types";
 import Image from "next/image";
 import { useTeamSettingsContext } from "@/components/context/teamSettingsContext";
+import { useDeleteTeam } from "@/components/context/useAppContext/team";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
   const {
@@ -26,6 +28,10 @@ export default function Component() {
   const { data, setData } = useTeamSettingsContext();
 
   const { uploadSupaseFile } = useSupabaseFile();
+
+  const router = useRouter();
+
+  const { loading, deleteTeam } = useDeleteTeam();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const fileInputLogoRef = useRef<HTMLInputElement | null>(null);
@@ -222,7 +228,16 @@ export default function Component() {
             All your uploaded data and trained chatbots will be deleted. This
             action is not reversible
           </p>
-          <Button variant="destructive">Delete Acme Inc</Button>
+          <Button
+            onClick={async () => {
+              console.log(teamSelected.id as string, user.user.id);
+              await deleteTeam(teamSelected.id as string, user.user.id);
+              router.push(`/team`);
+            }}
+            variant="destructive"
+          >
+            {loading ? teamSelected?.name : <LoaderCircle />}
+          </Button>
         </CardContent>
       </Card>
     </div>

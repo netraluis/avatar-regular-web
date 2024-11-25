@@ -35,6 +35,7 @@ type Action =
       };
     }
   | { type: "SET_TEAM_CREATION"; payload: { newTeam: any } }
+  | { type: "SET_TEAM_DELETE"; payload: { teamId: string } }
   | { type: "SET_USER"; payload: any }
   | { type: "SET_ASSISTANT_CREATION"; payload: { newAssistant: Assistant } }
   | { type: "SET_ASSISTANT_DELETE"; payload: { assistantId: string } }
@@ -59,6 +60,11 @@ const appReducer = (state: AppState, action: Action): AppState => {
       };
     case "SET_TEAM_CREATION":
       return { ...state, teams: [...state.teams, action.payload.newTeam] };
+    case "SET_TEAM_DELETE":
+      return {
+        ...state,
+        teams: state.teams.filter((team) => team.id !== action.payload.teamId),
+      };
     case "SET_USER":
       return { ...state, user: action.payload };
     case "SET_ASSISTANT_CREATION":

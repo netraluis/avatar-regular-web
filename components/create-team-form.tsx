@@ -49,6 +49,7 @@ function CreateTeamForm() {
             name: teamName,
             subDomain: subdomain,
             defaultLanguage: language,
+            selectedLanguages: [language],
           },
           userId: user.user.id,
         });

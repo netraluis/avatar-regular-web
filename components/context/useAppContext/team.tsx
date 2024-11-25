@@ -126,8 +126,6 @@ export const useUpdateTeam = () => {
 
       const teamSelected = await teamSelectedResponse.json();
 
-      console.log("teamSelected", teamSelected);
-
       dispatch({
         type: "SET_TEAM_SELECTED",
         payload: teamSelected,
@@ -142,4 +140,49 @@ export const useUpdateTeam = () => {
   }
 
   return { loading, error, data, updateTeam };
+};
+
+export const useDeleteTeam = () => {
+  const { dispatch } = useAppContext();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
+  const [deleteTeamdata, setDeleteTeamdata] = useState([]);
+
+  async function deleteTeam(teamId: string, userId: string) {
+    if (!teamId) return setError("No team id provided");
+    try {
+      setLoading(true);
+
+      const teamSelectedResponse = await fetch(
+        `/api/protected/team/${teamId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-id": userId, // Aquí enviamos el userId en los headers
+          },
+        },
+      );
+
+      if (!teamSelectedResponse.ok) {
+        throw new Error(`Error: ${teamSelectedResponse.statusText}`);
+      }
+
+      const teamSelected = await teamSelectedResponse.json();
+
+      dispatch({
+        type: "SET_TEAM_DELETE",
+        payload: teamSelected.id,
+      });
+
+      setDeleteTeamdata(teamSelected);
+    } catch (error: any) {
+      setError({ error });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { loading, error, deleteTeamdata, deleteTeam };
 };
