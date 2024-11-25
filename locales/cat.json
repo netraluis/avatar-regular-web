@@ -1,0 +1,18 @@
+{
+  "app": {
+    "login": {
+      "title": "Login",
+      "description": "Introdueix el teu email per accedir al teu compte",
+      "error": {
+        "invalid_credentials": "Les credencials introduïdes no són correctes",
+        "unknown_error": "Ho sentim hi ha hagut un error"
+      },
+      "email": "Email",
+      "password": "Contrasenya",
+      "forgot_password": "Has oblidat la contrasenya?",
+      "login": "Inicia sessió",
+      "dont_have_account": "No tens un compte?",
+      "sign_up": "Registra't"
+    }
+  }
+}

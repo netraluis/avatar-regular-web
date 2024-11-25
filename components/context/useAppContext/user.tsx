@@ -35,7 +35,7 @@ export const useUserLogout = () => {
 
 export const useLoginUser = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<any>(null);
 
   async function loginUser({
@@ -55,14 +55,18 @@ export const useLoginUser = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
       const responseData = await response.json();
+      if (!response.ok) {
+        console.log("response", responseData.error);
+        // throw new Error(`Error: ${response.statusText}`);
+        setError(responseData.error as string);
+      }
+
       setData(responseData);
       return { data: responseData };
     } catch (error: any) {
-      setError({ error });
+      console.error("error", error);
+      setError("unknown_error");
       return { error };
     } finally {
       setLoading(false);

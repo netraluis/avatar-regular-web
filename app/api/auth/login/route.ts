@@ -12,11 +12,11 @@ export async function POST(request: NextRequest) {
   });
 
   if (error) {
-    return new NextResponse(JSON.stringify({ error: error.message }), {
-      status: 400,
+    console.log("error", error.code, error.status);
+    return new NextResponse(JSON.stringify({ error: error.code }), {
+      status: error.status,
     });
   }
-  console.log({ error, data });
   return new NextResponse(JSON.stringify(data), {
     status: 200,
   });

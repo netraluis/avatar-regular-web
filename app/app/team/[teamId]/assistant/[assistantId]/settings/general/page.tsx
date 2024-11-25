@@ -21,10 +21,7 @@ import { useRouter, usePathname } from "next/navigation";
 
 export default function Component() {
   const { data, setData, assistantValues } = useAssistantSettingsContext();
-  const {
-    loadingDeleteAssistant,
-    deleteAssistant,
-  } = useDeleteAssistant();
+  const { loadingDeleteAssistant, deleteAssistant } = useDeleteAssistant();
 
   const {
     state: { user },
