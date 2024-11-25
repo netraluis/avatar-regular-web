@@ -14,9 +14,24 @@ import { useEffect } from "react";
 import slugify from "slugify";
 
 import { useAssistantSettingsContext } from "@/components/context/assistantSettingsContext";
+import { useDeleteAssistant } from "@/components/context/useAppContext/assistant";
+import { useAppContext } from "@/components/context/appContext";
+import { LoaderCircle } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function Component() {
   const { data, setData, assistantValues } = useAssistantSettingsContext();
+  const {
+    loadingDeleteAssistant,
+    deleteAssistant,
+  } = useDeleteAssistant();
+
+  const {
+    state: { user },
+  } = useAppContext();
+
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     if (data.name) {
@@ -91,7 +106,20 @@ export default function Component() {
             All your uploaded data and trained chatbots will be deleted. This
             action is not reversible
           </p>
-          <Button variant="destructive">Delete Acme Inc</Button>
+          <Button
+            onClick={async () => {
+              if (!assistantValues?.id || !user.user.id) return;
+              await deleteAssistant({
+                assistantId: assistantValues?.id,
+                userId: user.user.id,
+              });
+              const absolutePath = pathname.split("/").slice(1, 3).join("/");
+              router.push(`/${absolutePath}`);
+            }}
+            variant="destructive"
+          >
+            {loadingDeleteAssistant ? <LoaderCircle /> : assistantValues?.name}
+          </Button>
         </CardContent>
       </Card>
     </div>

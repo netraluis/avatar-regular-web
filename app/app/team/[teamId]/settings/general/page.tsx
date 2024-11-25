@@ -236,7 +236,7 @@ export default function Component() {
             }}
             variant="destructive"
           >
-            {loading ? teamSelected?.name : <LoaderCircle />}
+            {loading ? <LoaderCircle /> : teamSelected?.name}
           </Button>
         </CardContent>
       </Card>

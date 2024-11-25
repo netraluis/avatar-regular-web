@@ -49,7 +49,6 @@ function Layout({
 
   React.useEffect(() => {
     if (getAssistantData?.localAssistant) {
-      console.log({ getAssistantData });
       setAssistantValues(getAssistantData.localAssistant);
     }
   }, [getAssistantData]);
