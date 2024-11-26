@@ -145,7 +145,7 @@ export default function Component() {
                   accept=".png,.jpg,.jpeg"
                   onChange={async (e) => {
                     setLogoLoading(true);
-                    if (e.target.files && teamSelected?.id) {
+                    if (e.target.files && teamSelected?.id && user?.user.id) {
                       const url = await uploadSupaseFile({
                         fileInput: e.target.files as unknown as FileList,
                         userId: user.user.id,
@@ -194,7 +194,7 @@ export default function Component() {
                   accept=".svg"
                   onChange={async (e) => {
                     setSymbolLoading(true);
-                    if (e.target.files && teamSelected?.id) {
+                    if (e.target.files && teamSelected?.id && user?.user.id) {
                       const url = await uploadSupaseFile({
                         fileInput: e.target.files as unknown as FileList,
                         userId: user.user.id,
@@ -230,7 +230,7 @@ export default function Component() {
           </p>
           <Button
             onClick={async () => {
-              console.log(teamSelected.id as string, user.user.id);
+              if (!teamSelected?.id || !user?.user.id) return;
               await deleteTeam(teamSelected.id as string, user.user.id);
               router.push(`/team`);
             }}

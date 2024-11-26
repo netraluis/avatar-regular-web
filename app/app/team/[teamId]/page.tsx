@@ -47,7 +47,10 @@ export default function Dashboard() {
   const { deleteAssistant } = useDeleteAssistant();
 
   useEffect(() => {
-    fetchAssistantsByTeamId(teamId as string, user?.user?.id);
+    if (!user?.user.id) {
+      return router.push(`/login`);
+    }
+    fetchAssistantsByTeamId(teamId as string, user.user.id);
   }, []);
 
   const handleCreateNewAssistantRoute = () => {
@@ -55,6 +58,7 @@ export default function Dashboard() {
   };
 
   const handleDeleteAssistant = (assistantId: string) => {
+    if (!user?.user.id) return;
     deleteAssistant({ assistantId, userId: user.user.id });
   };
 

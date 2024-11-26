@@ -39,12 +39,16 @@ function CreateAssistantForm() {
         name: assistantName,
         model: ChatModel.GPT3,
       };
-      createAssistant({
-        assistantCreateParams,
-        teamId: teamId as string,
-        url: url,
-        userId: user?.user?.id,
-      });
+      if (user?.user.id) {
+        createAssistant({
+          assistantCreateParams,
+          teamId: teamId as string,
+          url: url,
+          userId: user?.user.id,
+        });
+      } else {
+        router.push("/login");
+      }
     }
   };
 

@@ -13,12 +13,15 @@ import Link from "next/link";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useLoginUser } from "../context/useAppContext/user";
+import { useAppContext } from "../context/appContext";
+import { useEffect } from "react";
 
 const login = {
   title: "Login",
   description: "Introdueix el teu email per accedir al teu compte",
   error: {
     invalid_credentials: "Les credencials introduïdes no són correctes",
+    email_not_confirmed: "El teu email no ha estat confirmat",
     unknown_error: "Ho sentim hi ha hagut un error",
   },
   email: "Email",
@@ -30,9 +33,20 @@ const login = {
 };
 
 export default function Login() {
-  const { loginUser, error, loading } = useLoginUser();
+  const { loginUser, error, data, loading } = useLoginUser();
+  const { dispatch } = useAppContext();
 
   const router = useRouter();
+
+  useEffect(() => {
+    if(data){
+      dispatch({
+        type: "SET_USER",
+        payload: data,
+      });
+      router.push("/");
+    }
+  }, [data]);
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -53,7 +67,6 @@ export default function Login() {
                 email: formData.get("email") as string,
                 password: formData.get("password") as string,
               });
-              router.push("team");
             }}
           >
             <div className="grid gap-2">

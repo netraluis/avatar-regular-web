@@ -2,19 +2,15 @@
 import { createContext, useContext, useReducer } from "react";
 
 import { Assistant } from "@prisma/client";
-
-// export type Team = {
-//   id?: string;
-//   name: string;
-//   subDomain: string;
-//   customDomain?: string;
-// };
+import { UserData } from "@/types/types";
+import { Team } from "@prisma/client";
+import { GetTeamByTeamId } from "@/lib/data/team";
 
 type AppState = {
-  teams: any[];
-  teamSelected: any | null;
+  teams: Team[];
+  teamSelected: GetTeamByTeamId | null;
   assistantsByTeam: Assistant[];
-  user: any;
+  user: UserData | null;
 };
 
 // Acciones que el reducer manejará
@@ -22,21 +18,21 @@ type Action =
   | {
       type: "SET_TEAMS";
       payload: {
-        teams: any[];
-        teamSelected: any | null;
+        teams: Team[];
+        teamSelected: GetTeamByTeamId | null;
       };
     }
-  | { type: "SET_TEAM_SELECTED"; payload: any | null }
+  | { type: "SET_TEAM_SELECTED"; payload: GetTeamByTeamId | null }
   | {
       type: "SET_ASSISTANTS";
       payload: {
         assistants: Assistant[];
-        teamSelected: any | null;
+        teamSelected: GetTeamByTeamId | null;
       };
     }
   | { type: "SET_TEAM_CREATION"; payload: { newTeam: any } }
   | { type: "SET_TEAM_DELETE"; payload: { teamId: string } }
-  | { type: "SET_USER"; payload: any }
+  | { type: "SET_USER"; payload: UserData }
   | { type: "SET_ASSISTANT_CREATION"; payload: { newAssistant: Assistant } }
   | { type: "SET_ASSISTANT_DELETE"; payload: { assistantId: string } }
   | { type: "SET_USER_LOGOUT" };
@@ -109,7 +105,7 @@ export const AppProvider = ({
   user,
 }: {
   children: React.ReactNode;
-  user: any;
+  user: UserData | null;
 }) => {
   const initialState: AppState = {
     teams: [],

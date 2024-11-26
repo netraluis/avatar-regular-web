@@ -26,13 +26,19 @@ export const useFetchTeamsByUserId = () => {
       }
       const responseData = await response.json();
 
-      const teamSelected = responseData.length > 0 ? responseData[0] : {};
+      // const teamSelected = responseData.length > 0 ? responseData[0] : {};
       dispatch({
         type: "SET_TEAMS",
-        payload: { teams: responseData, teamSelected },
+        payload: {
+          teams: responseData.teams,
+          teamSelected: responseData.teamSelected,
+        },
       });
       setDataTeamsByUserId(responseData);
-      return { teams: responseData, teamSelected };
+      return {
+        teams: responseData.teams,
+        teamSelected: responseData.teamSelected,
+      };
     } catch (error: any) {
       setErrorTeamsByUserId({ error });
     } finally {

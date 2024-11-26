@@ -15,7 +15,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { Mic } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "@/components/context/appContext";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { ChatModel } from "@/types/types";
@@ -28,6 +28,7 @@ import {
 export default function Playground() {
   const { state } = useAppContext();
   const { assistantId } = useParams();
+  const router = useRouter();
   const [message, setMessage] = React.useState("");
 
   const [assistantValues, setAssistantValues] = React.useState({
@@ -46,6 +47,8 @@ export default function Playground() {
         assistantId: assistantId as string,
         userId: state.user.user.id,
       });
+    } else {
+      router.push("/login");
     }
   }, []);
 

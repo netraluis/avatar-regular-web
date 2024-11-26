@@ -40,8 +40,8 @@ function CreateTeamForm() {
     if (formRef.current) {
       // const formData = new FormData(formRef.current);
       // const teamName = formData.get("name") as string;
-      if (!language) {
-        console.log("no language");
+      if (!language || !user?.user.id) {
+        router.push("/login");
       } else {
         createTeam({
           data: {

@@ -105,7 +105,7 @@ export default function Component() {
           </p>
           <Button
             onClick={async () => {
-              if (!assistantValues?.id || !user.user.id) return;
+              if (!assistantValues?.id || !user?.user.id) return;
               await deleteAssistant({
                 assistantId: assistantValues?.id,
                 userId: user.user.id,

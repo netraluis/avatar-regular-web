@@ -55,6 +55,9 @@ export default function Component() {
 
   // Actualiza los datos al cambiar la página o los filtros de fecha
   useEffect(() => {
+    if (!state.user?.user.id) {
+      return router.push(`/login`);
+    }
     fetchThreadsMessages(
       {
         page,
@@ -64,15 +67,18 @@ export default function Component() {
         dateFrom,
         dateTo,
       },
-      state.user?.user?.id as string,
+      state.user?.user.id as string,
     );
   }, [page, dateFrom, dateTo, assistantId]); // Añadimos `dateFrom` y `dateTo` como dependencias
 
   useEffect(() => {
+    if (!state.user?.user.id) {
+      return router.push(`/login`);
+    }
     if (threadId) {
       fetchMessageByThread({
         threadId,
-        userId: state.user?.user?.id as string,
+        userId: state.user.user.id,
         assistantId: assistantId as string,
       });
     } else {

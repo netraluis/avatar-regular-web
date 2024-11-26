@@ -14,12 +14,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Footer,
   LanguageType,
   MenuHeaderType,
   Prisma,
   TextHref,
-  Welcome,
   WelcomeType,
   MenuFooter,
   HeaderButtonType,
@@ -65,12 +63,12 @@ export default function Interface() {
   useEffect(() => {
     setFoot(
       teamSelected?.footer?.find(
-        (foot: Footer) => foot.language === teamSelected?.defaultLanguage,
+        (foot) => foot.language === teamSelected?.defaultLanguage,
       )?.text,
     );
 
     const welcome = teamSelected?.welcome?.find(
-      (wel: Welcome) => wel.language === teamSelected?.defaultLanguage,
+      (wel) => wel.language === teamSelected?.defaultLanguage,
     );
 
     setWelText(welcome?.text || [""]);
@@ -96,12 +94,12 @@ export default function Interface() {
   useEffect(() => {
     setPrimaryMenu(
       teamSelected?.menuHeader?.find(
-        (menu: any) => menu.type === MenuHeaderType.HEADER,
+        (menu) => menu.type === MenuHeaderType.HEADER,
       )?.textHref || [],
     );
     setSecondaryMenu(
       teamSelected?.menuHeader?.find(
-        (menu: any) => menu.type === MenuHeaderType.BODY,
+        (menu) => menu.type === MenuHeaderType.BODY,
       )?.textHref || [],
     );
   }, [teamSelected?.menuHeader]);
@@ -193,6 +191,7 @@ export default function Interface() {
     menuItem: TextHref[],
     menuHeaderType: MenuHeaderType,
   ) => {
+    if (!teamSelected?.id) return data;
     const updatedData: Prisma.TeamUpdateInput = {
       ...data,
       menuHeader: {
@@ -248,13 +247,14 @@ export default function Interface() {
   };
 
   const welcomeHandler = () => {
+    if (!teamSelected?.id) return data;
     const updatedData: Prisma.TeamUpdateInput = {
       ...data,
       welcome: {
         upsert: {
           where: {
             language_teamId: {
-              language: teamSelected?.language || LanguageType.ES, // O el tipo que corresponda
+              language: teamSelected?.defaultLanguage || LanguageType.ES, // O el tipo que corresponda
               teamId: teamSelected?.id,
             },
           },
@@ -263,7 +263,7 @@ export default function Interface() {
           },
           create: {
             text: welText,
-            language: teamSelected?.language || LanguageType.ES,
+            language: teamSelected?.defaultLanguage || LanguageType.ES,
             description: "",
           },
         },
@@ -353,12 +353,13 @@ export default function Interface() {
                   // multiple
                   accept=".png,.jpg,.jpeg"
                   onChange={async (e) => {
+                    if (!teamSelected?.id || !user?.user.id) return;
                     setAvatarLoading(true);
                     if (e.target.files && teamSelected?.id) {
                       const url = await uploadSupaseFile({
                         fileInput: e.target.files as unknown as FileList,
                         userId: user.user.id,
-                        teamId: teamSelected.id as string,
+                        teamId: teamSelected.id,
                         fileUserImageType: FileUserImageType.AVATAR,
                       });
                       setWelAvatarUrl(url.data);
@@ -382,6 +383,7 @@ export default function Interface() {
                 className="min-h-[100px]"
                 value={welText[0] || ""}
                 onChange={(e) => {
+                  if (!teamSelected?.id) return;
                   setWelText([e.target.value]);
                   setData({
                     ...data,
@@ -392,7 +394,8 @@ export default function Interface() {
                               language_teamId: {
                                 teamId: teamSelected.id,
                                 language:
-                                  teamSelected?.language || LanguageType.ES,
+                                  teamSelected?.defaultLanguage ||
+                                  LanguageType.ES,
                               },
                             },
                             data: {
@@ -404,7 +407,8 @@ export default function Interface() {
                           create: {
                             text: [e.target.value],
                             description: "",
-                            language: teamSelected?.language || LanguageType.ES,
+                            language:
+                              teamSelected?.defaultLanguage || LanguageType.ES,
                           },
                         },
                   });
@@ -595,6 +599,7 @@ export default function Interface() {
               className="min-h-[100px]"
               value={headerFoot || ""}
               onChange={(e) => {
+                if (!teamSelected?.id) return;
                 setHeaderFoot(e.target.value);
                 setData({
                   ...data,
@@ -603,7 +608,8 @@ export default function Interface() {
                       where: {
                         language_teamId: {
                           teamId: teamSelected.id,
-                          language: teamSelected?.language || LanguageType.ES,
+                          language:
+                            teamSelected?.defaultLanguage || LanguageType.ES,
                         },
                       },
                       update: {
@@ -611,7 +617,8 @@ export default function Interface() {
                       },
                       create: {
                         text: e.target.value,
-                        language: teamSelected?.language || LanguageType.ES,
+                        language:
+                          teamSelected?.defaultLanguage || LanguageType.ES,
                       },
                     },
                   },
@@ -645,6 +652,7 @@ export default function Interface() {
               // className="min-h-[100px]"
               value={headerButton || ""}
               onChange={(e) => {
+                if (!teamSelected?.id) return;
                 setHeaderButton(e.target.value);
                 setData({
                   ...data,
@@ -652,7 +660,8 @@ export default function Interface() {
                     upsert: {
                       where: {
                         language_teamId: {
-                          language: teamSelected?.language || LanguageType.ES,
+                          language:
+                            teamSelected?.defaultLanguage || LanguageType.ES,
                           teamId: teamSelected.id,
                         },
                       },
@@ -666,7 +675,8 @@ export default function Interface() {
                         title: headerButtonTitle,
                         type: HeaderButtonType.PLAIN,
                         text: headerButtonText,
-                        language: teamSelected?.language || LanguageType.ES,
+                        language:
+                          teamSelected?.defaultLanguage || LanguageType.ES,
                       },
                     },
                   },
@@ -682,6 +692,7 @@ export default function Interface() {
               // className="min-h-[100px]"
               value={headerButtonTitle || ""}
               onChange={(e) => {
+                if (!teamSelected?.id) return;
                 setHeaderButtonTitle(e.target.value);
                 setData({
                   ...data,
@@ -689,7 +700,8 @@ export default function Interface() {
                     upsert: {
                       where: {
                         language_teamId: {
-                          language: teamSelected?.language || LanguageType.ES,
+                          language:
+                            teamSelected?.defaultLanguage || LanguageType.ES,
                           teamId: teamSelected.id,
                         },
                       },
@@ -703,7 +715,8 @@ export default function Interface() {
                         title: e.target.value,
                         type: HeaderButtonType.PLAIN,
                         text: headerButtonText,
-                        language: teamSelected?.language || LanguageType.ES,
+                        language:
+                          teamSelected?.defaultLanguage || LanguageType.ES,
                       },
                     },
                   },
@@ -719,6 +732,7 @@ export default function Interface() {
               className="min-h-[100px]"
               value={(headerButtonText && headerButtonText[0]) || ""}
               onChange={(e) => {
+                if (!teamSelected?.id) return;
                 setHeaderButtonText([e.target.value]);
                 setData({
                   ...data,
@@ -726,7 +740,8 @@ export default function Interface() {
                     upsert: {
                       where: {
                         language_teamId: {
-                          language: teamSelected?.language || LanguageType.ES,
+                          language:
+                            teamSelected?.defaultLanguage || LanguageType.ES,
                           teamId: teamSelected.id,
                         },
                       },
@@ -740,7 +755,8 @@ export default function Interface() {
                         title: headerButtonTitle,
                         type: HeaderButtonType.PLAIN,
                         text: [e.target.value],
-                        language: teamSelected?.language || LanguageType.ES,
+                        language:
+                          teamSelected?.defaultLanguage || LanguageType.ES,
                       },
                     },
                   },
@@ -770,6 +786,7 @@ export default function Interface() {
               className="min-h-[100px]"
               value={foot || ""}
               onChange={(e) => {
+                if (!teamSelected?.id) return;
                 setFoot(e.target.value);
                 setData({
                   ...data,
@@ -780,7 +797,8 @@ export default function Interface() {
                             language_teamId: {
                               teamId: teamSelected.id,
                               language:
-                                teamSelected?.language || LanguageType.ES,
+                                teamSelected?.defaultLanguage ||
+                                LanguageType.ES,
                             },
                           },
                           data: {
@@ -791,7 +809,8 @@ export default function Interface() {
                     : {
                         create: {
                           text: e.target.value,
-                          language: teamSelected?.language || LanguageType.ES,
+                          language:
+                            teamSelected?.defaultLanguage || LanguageType.ES,
                         },
                       },
                 });

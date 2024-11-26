@@ -14,14 +14,16 @@ const RedirectComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (user?.user?.id) {
-          const response = await fetchTeamsByUserId(user?.user?.id);
+        if (user?.user.id) {
+          const response = await fetchTeamsByUserId(user.user.id);
 
           if (response?.teamSelected?.id) {
             router.push(`/team/${response.teamSelected.id}`);
           } else {
             router.push(`/team/new`);
           }
+        } else {
+          router.push(`/login`);
         }
       } catch (error) {
         console.error("Error fetching teams:", error);
@@ -29,7 +31,7 @@ const RedirectComponent = () => {
     };
 
     fetchData();
-  }, [user?.user?.id]);
+  }, [user?.user.id]);
 
   return <div>Loading...</div>;
 };

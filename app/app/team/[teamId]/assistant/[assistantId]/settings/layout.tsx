@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname, useParams } from "next/navigation";
+import { usePathname, useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 import { Settings, Paintbrush, Languages } from "lucide-react";
@@ -28,6 +28,7 @@ function Layout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const router = useRouter();
   const comparatePathName = pathname.split("/").slice(1)[5];
   const absolutePath = pathname.split("/").slice(1, 6).join("/");
 
@@ -39,11 +40,13 @@ function Layout({
   const { getAssistantData, getAssistant } = useGetAssistant();
 
   React.useEffect(() => {
-    if (state.user.user.id) {
+    if (state.user?.user.id) {
       getAssistant({
         assistantId: assistantId as string,
         userId: state.user.user.id,
       });
+    } else {
+      router.push("/login");
     }
   }, []);
 
@@ -54,7 +57,7 @@ function Layout({
   }, [getAssistantData]);
 
   const saveHandler = async () => {
-    if (state.user.user.id) {
+    if (state.user?.user.id) {
       await updateAssistant({
         assistantId: assistantId as string,
         localAssistantUpdateParams: data,

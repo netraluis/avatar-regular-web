@@ -14,10 +14,24 @@ import { useContext, useState } from "react";
 import { GlobalContext } from "@/components/context/globalContext";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
+const signUp = {
+  signup: "Sign Up",
+  description: "Entri les dades per crear un compte",
+  email: "Email",
+  password: "Password",
+  already_have_account: "Ja tens un compte?",
+  login: "Inicia sessió",
+  error: {
+    'Password should be at least 6 characters.': 'La contrasenya ha de tenir almenys 6 caràcters.',
+    unknown_error: "Ho sentim hi ha hagut un error",
+  }
+}
+
 export default function Signup() {
   const [error, setError] = useState<string | null>(null);
   const { setUser } = useContext(GlobalContext);
   const [loading, setLoading] = useState(false);
+  const [message, setMesssage] = useState(false);
 
   const handleSignup = async (formData: FormData) => {
     setLoading(true);
@@ -35,6 +49,7 @@ export default function Signup() {
       });
 
       const result = await response.json();
+      console.log(result)
 
       if (!response.ok) {
         setError(result.error || "Signup failed.");
@@ -46,20 +61,20 @@ export default function Signup() {
       setError("An unexpected error occurred.");
     } finally {
       setLoading(false);
+      setMesssage(true)
     }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="mx-auto max-w-sm">
+     {!message || error ? <div className="mx-auto max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Sign Up</CardTitle>
+          <CardTitle className="text-2xl">{signUp.signup}</CardTitle>
           <CardDescription>
-            Enter your details below to create a new account
+            {signUp.description}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {error && <p className="text-red-500">{error}</p>}
           <form
             className="grid gap-4"
             onSubmit={(e) => {
@@ -82,6 +97,12 @@ export default function Signup() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" name="password" required />
             </div>
+            {error && (
+              <p className="text-red-500">
+                {signUp.error[error as keyof typeof signUp.error] ||
+                  signUp.error.unknown_error}
+              </p>
+            )}
             <Button className="w-full" type="submit" disabled={loading}>
               {loading && (
                 <ArrowPathIcon
@@ -94,6 +115,7 @@ export default function Signup() {
           </form>
           <div className="mt-4 text-center">
             <p className="text-sm">
+              
               Already have an account?{" "}
               <Link href="/login" className="text-blue-500 underline">
                 Login
@@ -101,7 +123,7 @@ export default function Signup() {
             </p>
           </div>
         </CardContent>
-      </div>
+      </div>: <div className="mx-auto max-w-sm">Tu solicitud ha sido enviada</div>}
     </div>
   );
 }

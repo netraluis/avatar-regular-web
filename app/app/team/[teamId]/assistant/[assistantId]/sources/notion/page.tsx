@@ -12,7 +12,7 @@ import {
 import { Trash2, RefreshCcw, Plus, Minus } from "lucide-react";
 import { useEffect, useState } from "react";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "@/components/context/appContext";
 import { Loader } from "@/components/loader";
 import {
@@ -39,6 +39,8 @@ export default function Component() {
   const {
     state: { user },
   } = useAppContext();
+
+  const router = useRouter();
 
   useEffect(() => {
     // Listener para el mensaje de autenticación completada
@@ -94,10 +96,10 @@ export default function Component() {
 
   const params = useParams();
 
-  const fetchData = async () => {
+  const fetchData = async (userId: string) => {
     await getAssistant({
       assistantId: params.assistantId as string,
-      userId: user?.user?.id,
+      userId,
     });
     await getFileVectorStore({
       assistantId: params.assistantId as string,
@@ -106,7 +108,11 @@ export default function Component() {
   };
 
   useEffect(() => {
-    fetchData();
+    if (user?.user.id) {
+      fetchData(user?.user?.id);
+    } else {
+      router.push("/login");
+    }
   }, [params.assistantId]);
 
   const handleDelete = async (fileId: string) => {

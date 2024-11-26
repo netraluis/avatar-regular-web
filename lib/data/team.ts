@@ -1,6 +1,55 @@
 import prisma from "../prisma";
 import { Prisma } from "@prisma/client";
 
+export type GetTeamByTeamId = Prisma.TeamGetPayload<{
+  select: {
+    headerButton: true;
+    subDomain: true;
+    defaultLanguage: true;
+    welcomeType: true;
+    name: true;
+    logoUrl: true;
+    symbolUrl: true;
+    avatarUrl: true;
+    id: true;
+    footer: {
+      select: {
+        text: true;
+        language: true;
+      };
+    };
+    welcome: {
+      select: {
+        text: true;
+        description: true;
+        language: true;
+      };
+    };
+    menuHeader: {
+      select: {
+        type: true;
+        textHref: true;
+      };
+    };
+    menuFooter: true;
+    customDomain: true;
+    assistants: {
+      select: {
+        id: true;
+        name: true;
+        emoji: true;
+        url: true;
+        assistantCard: {
+          select: {
+            title: true;
+            description: true;
+          };
+        };
+      };
+    };
+  };
+}> | null;
+
 export const getTeamsByUser = async (userId: string) => {
   //   const response = await fetch(`/api/teams/${id}`);
   //   return response.json();
@@ -24,7 +73,10 @@ export const getTeamsByUser = async (userId: string) => {
   return subdomainInfo;
 };
 
-export const getTeamByTeamId = async (teamId: string, userId: string) => {
+export const getTeamByTeamId = async (
+  teamId: string,
+  userId: string,
+): Promise<GetTeamByTeamId> => {
   //   const response = await fetch(`/api/teams/${id}`);
   //   return response.json();
   const subdomainInfo = await prisma.team.findFirst({
@@ -36,22 +88,51 @@ export const getTeamByTeamId = async (teamId: string, userId: string) => {
         },
       },
     },
-    include: {
-      // users: {
-      //   include: {
-      //     user: true, // Incluye los detalles del usuario relacionado
-      //   },
-      // },
-      assistants: true, // Incluye todos los asistentes relacionados
-      welcome: true, // Incluye la información de Welcome, si existe
+    select: {
+      headerButton: true,
+      subDomain: true,
+      defaultLanguage: true,
+      id: true,
+      welcomeType: true,
+      name: true,
+      logoUrl: true,
+      symbolUrl: true,
+      avatarUrl: true,
+      footer: {
+        select: {
+          text: true,
+          language: true,
+        },
+      },
+      welcome: {
+        select: {
+          text: true,
+          description: true,
+          language: true,
+        },
+      },
       menuHeader: {
-        include: {
+        select: {
+          type: true,
           textHref: true,
         },
-      }, // Incluye la información de MenuHeader, si existe
-      footer: true,
+      },
       menuFooter: true,
-      headerButton: true,
+      customDomain: true,
+      assistants: {
+        select: {
+          id: true,
+          name: true,
+          emoji: true,
+          url: true,
+          assistantCard: {
+            select: {
+              title: true,
+              description: true,
+            },
+          },
+        },
+      },
     },
   });
 

@@ -59,11 +59,10 @@ export const useLoginUser = () => {
       if (!response.ok) {
         console.log("response", responseData.error);
         // throw new Error(`Error: ${response.statusText}`);
-        setError(responseData.error as string);
+        return setError(responseData.error as string);
       }
 
       setData(responseData);
-      return { data: responseData };
     } catch (error: any) {
       console.error("error", error);
       setError("unknown_error");

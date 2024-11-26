@@ -13,6 +13,18 @@
       "login": "Inicia sessió",
       "dont_have_account": "No tens un compte?",
       "sign_up": "Registra't"
+    },
+    "signUp": {
+      "signup": "Sign Up",
+      "description": "Entri les dades per crear un compte",
+      "email": "Email",
+      "password": "Password",
+      "already_have_account": "Ja tens un compte?",
+      "login": "Inicia sessió",
+      "error": {
+        "Password should be at least 6 characters.": "La contrasenya ha de tenir almenys 6 caràcters.",
+        "unknown_error": "Ho sentim hi ha hagut un error"
+      }
     }
   }
 }

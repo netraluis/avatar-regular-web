@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, usePathname } from "next/navigation";
 import { Combobox } from "../combo-box";
 import React, { useEffect } from "react";
 import { useAppContext } from "../context/appContext";
@@ -41,6 +41,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   const { fetchTeamsByUserId } = useFetchTeamsByUserId();
   const { fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
   const { userLogout } = useUserLogout();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (user?.user?.id && teamId) {
@@ -89,6 +90,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     const newPath = `/team/${teamId}/settings/${subMenu}`;
     router.push(newPath);
   };
+
+  if(pathname === "/login" || pathname === "/signup") {
+    return <>{children}</>;
+  }
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden">

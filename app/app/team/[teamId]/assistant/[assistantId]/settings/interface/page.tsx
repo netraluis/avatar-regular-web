@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import EmojiPicker from "@/components/ui/emoji-picker";
 import { useAssistantSettingsContext } from "@/components/context/assistantSettingsContext";
 import { useAppContext } from "@/components/context/appContext";
-import { AssistantCardType } from "@prisma/client";
+import { AssistantCardType, LanguageType } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function Interface() {
@@ -34,10 +34,9 @@ export default function Interface() {
   const { data, setData, assistantValues } = useAssistantSettingsContext();
 
   useEffect(() => {
-    console.log({ assistantValues });
     setSelectedEmoji(assistantValues?.emoji || "");
     const card = assistantValues?.assistantCard.find(
-      (ass) => ass.language === teamSelected.defaultLanguage,
+      (ass) => ass.language === teamSelected?.defaultLanguage,
     );
     setTitle(card?.title || "");
     setDescription(card?.description[0] || "");
@@ -78,7 +77,8 @@ export default function Interface() {
                       where: {
                         language_assistantId: {
                           assistantId: assistantValues!.id,
-                          language: teamSelected.defaultLanguage,
+                          language:
+                            teamSelected?.defaultLanguage || LanguageType.ES,
                         },
                       },
                       update: {
@@ -88,7 +88,8 @@ export default function Interface() {
                       create: {
                         title: e.target.value,
                         type: AssistantCardType.REGULAR,
-                        language: teamSelected.defaultLanguage,
+                        language:
+                          teamSelected?.defaultLanguage || LanguageType.ES,
                       },
                     },
                   },
@@ -117,7 +118,8 @@ export default function Interface() {
                       where: {
                         language_assistantId: {
                           assistantId: assistantValues!.id,
-                          language: teamSelected.defaultLanguage,
+                          language:
+                            teamSelected?.defaultLanguage || LanguageType.ES,
                         },
                       },
                       update: {
@@ -127,7 +129,8 @@ export default function Interface() {
                       create: {
                         description: [e.target.value],
                         type: AssistantCardType.REGULAR,
-                        language: teamSelected.defaultLanguage,
+                        language:
+                          teamSelected?.defaultLanguage || LanguageType.ES,
                       },
                     },
                   },

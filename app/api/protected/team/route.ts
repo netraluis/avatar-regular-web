@@ -1,4 +1,4 @@
-import { createTeam, getTeamsByUser } from "@/lib/data/team";
+import { createTeam, getTeamByTeamId, getTeamsByUser } from "@/lib/data/team";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -13,7 +13,19 @@ export async function GET(request: NextRequest) {
 
     const teams = await getTeamsByUser(userId);
 
-    return new NextResponse(JSON.stringify(teams), {
+    const response = {
+      teams,
+      teamSelected: {},
+    };
+
+    if (teams.length > 0 && teams[0].id) {
+      const teamSelected = await getTeamByTeamId(teams[0].id, userId);
+      if (teamSelected) {
+        response.teamSelected = teamSelected;
+      }
+    }
+
+    return new NextResponse(JSON.stringify(response), {
       status: 200,
     });
   } catch (error) {
