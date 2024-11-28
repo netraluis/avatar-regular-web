@@ -16,8 +16,7 @@ const RedirectComponent = () => {
       try {
         if (user?.user.id) {
           const response = await fetchTeamsByUserId(user?.user.id);
-
-          if (response?.teamSelected?.id) {
+          if (response && response?.teamSelected?.id) {
             router.push(`/team/${response.teamSelected.id}`);
           } else {
             router.push(`/team/new`);

@@ -8,7 +8,6 @@ export async function POST(request: NextRequest) {
   const { email, otp, type = "email", password } = await request.json();
   const decodedEmail = decodeURIComponent(email || "").replace(/\s/g, "+");
 
-
   try {
     const { error, data } = await supabase.auth.verifyOtp({
       email: decodedEmail,

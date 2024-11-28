@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAppContext } from "../appContext";
+import { UserData } from "@/types/types";
 
 export const useUserLogout = () => {
   const { dispatch } = useAppContext();
@@ -34,6 +35,7 @@ export const useUserLogout = () => {
 };
 
 export const useLoginUser = () => {
+  const { dispatch } = useAppContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<any>(null);
@@ -59,6 +61,8 @@ export const useLoginUser = () => {
       if (!response.ok) {
         return setError(responseData.error as string);
       }
+
+      dispatch({ type: "SET_USER", payload: responseData as UserData });
 
       setData(responseData);
     } catch (error: any) {

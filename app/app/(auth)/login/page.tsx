@@ -14,6 +14,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useLoginUser } from "@/components/context/useAppContext/user";
+import { useAppContext } from "@/components/context/appContext";
 
 const login = {
   title: "Login",
@@ -32,16 +33,19 @@ const login = {
 };
 
 export default function Login() {
-  const { loginUser, error, data, loading } = useLoginUser();
+  const { loginUser, error, loading } = useLoginUser();
+
+  const {
+    state: { user },
+  } = useAppContext();
 
   const router = useRouter();
 
   useEffect(() => {
-    if (data) {
+    if (user?.user.id) {
       router.push("/");
     }
-  }, [data]);
-
+  }, [user?.user.id]);
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="mx-auto max-w-sm">

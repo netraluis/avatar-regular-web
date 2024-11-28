@@ -94,7 +94,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   if (
     pathname === "/login" ||
     pathname === "/signup" ||
-    pathname === "/confirm" || 
+    pathname === "/confirm" ||
     pathname === "/forgot-password" ||
     pathname === "/reset-password"
   ) {
