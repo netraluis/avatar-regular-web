@@ -5,10 +5,9 @@ import { createClient } from "@/lib/supabase/server";
 export async function POST(request: NextRequest) {
   const supabase = createClient();
 
-  const { email, otp, type = "email" } = await request.json();
+  const { email, otp, type = "email", password } = await request.json();
   const decodedEmail = decodeURIComponent(email || "").replace(/\s/g, "+");
 
-  console.log({ email, otp, type });
 
   try {
     const { error, data } = await supabase.auth.verifyOtp({
@@ -21,6 +20,17 @@ export async function POST(request: NextRequest) {
       return new NextResponse(JSON.stringify({ error: error.code }), {
         status: 400,
       });
+    }
+
+    const updateUserRes = await supabase.auth.updateUser({ password });
+
+    if (updateUserRes.error) {
+      return new NextResponse(
+        JSON.stringify({ error: updateUserRes.error.code }),
+        {
+          status: 400,
+        },
+      );
     }
 
     return new NextResponse(JSON.stringify(data), {

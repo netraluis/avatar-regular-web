@@ -9,31 +9,28 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import { useSignupUser } from "@/components/context/useAppContext/user";
+import { useUserForgotPassword } from "@/components/context/useAppContext/user";
 
-const signUp = {
-  signup: "Sign Up",
-  description: "Entri les dades per crear un compte",
+const forgotPassword = {
+  title: "Reseteja la contrasenya",
+  description:
+    "Entri les dades per enviar un correo per actualitzar la contrasenya",
   email: "Email",
-  password: "Password",
-  already_have_account: "Ja tens un compte?",
-  login: "Inicia sessió",
+  send: "Enviar",
   error: {
-    weak_password: "La contrasenya ha de tenir almenys 6 caràcters.",
     unknown_error: "Ho sentim hi ha hagut un error",
   },
 };
 
 export default function Signup() {
-  const { signupUser, loading, data, error } = useSignupUser();
+  const { userForgotPassword, loading, data, error } = useUserForgotPassword();
   const [message, setMesssage] = useState(false);
-  const handleSignup = async (formData: FormData) => {
-    await signupUser({
+
+  const handleSendEmailForgotPassword = async (formData: FormData) => {
+    await userForgotPassword({
       email: formData.get("email") as string,
-      password: formData.get("password") as string,
     });
   };
 
@@ -46,8 +43,8 @@ export default function Signup() {
       {!message || error ? (
         <div className="mx-auto max-w-sm">
           <CardHeader>
-            <CardTitle className="text-2xl">{signUp.signup}</CardTitle>
-            <CardDescription>{signUp.description}</CardDescription>
+            <CardTitle className="text-2xl">{forgotPassword.title}</CardTitle>
+            <CardDescription>{forgotPassword.description}</CardDescription>
           </CardHeader>
           <CardContent>
             <form
@@ -55,7 +52,7 @@ export default function Signup() {
               onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
-                handleSignup(formData);
+                handleSendEmailForgotPassword(formData);
               }}
             >
               <div className="grid gap-2">
@@ -68,14 +65,11 @@ export default function Signup() {
                   required
                 />
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" name="password" required />
-              </div>
               {error && (
                 <p className="text-red-500">
-                  {signUp.error[error as keyof typeof signUp.error] ||
-                    signUp.error.unknown_error}
+                  {forgotPassword.error[
+                    error as keyof typeof forgotPassword.error
+                  ] || forgotPassword.error.unknown_error}
                 </p>
               )}
               <Button className="w-full" type="submit" disabled={loading}>
@@ -85,17 +79,18 @@ export default function Signup() {
                     aria-hidden="true"
                   />
                 )}
-                Sign Up
+                {forgotPassword.send}
               </Button>
             </form>
-            <div className="mt-4 text-center">
-              <p className="text-sm">
-                Already have an account?{" "}
-                <Link href="/login" className="text-blue-500 underline">
-                  Login
-                </Link>
-              </p>
-            </div>
+            {/* <div className="mt-4 text-center">
+            <p className="text-sm">
+
+              Already have an account?{" "}
+              <Link href="/login" className="text-blue-500 underline">
+                Login
+              </Link>
+            </p>
+          </div> */}
           </CardContent>
         </div>
       ) : (

@@ -91,7 +91,13 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     router.push(newPath);
   };
 
-  if(pathname === "/login" || pathname === "/signup") {
+  if (
+    pathname === "/login" ||
+    pathname === "/signup" ||
+    pathname === "/confirm" || 
+    pathname === "/forgot-password" ||
+    pathname === "/reset-password"
+  ) {
     return <>{children}</>;
   }
 

@@ -5,17 +5,16 @@ import { createClient } from "@/lib/supabase/server";
 export async function POST(request: NextRequest) {
   const supabase = createClient();
 
-  const { email, otp, type = "email" } = await request.json();
+  const { email } = await request.json();
   const decodedEmail = decodeURIComponent(email || "").replace(/\s/g, "+");
 
-  console.log({ email, otp, type });
-
   try {
-    const { error, data } = await supabase.auth.verifyOtp({
-      email: decodedEmail,
-      type,
-      token: otp,
-    });
+    const { data, error } = await supabase.auth.resetPasswordForEmail(
+      decodedEmail,
+      {
+        redirectTo: `${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/reset-password`,
+      },
+    );
 
     if (error) {
       return new NextResponse(JSON.stringify({ error: error.code }), {

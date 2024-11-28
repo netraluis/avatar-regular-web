@@ -12,7 +12,6 @@ export async function POST(request: NextRequest) {
   });
 
   if (error) {
-    console.log("error", error.code, error.status);
     return new NextResponse(JSON.stringify({ error: error.code }), {
       status: error.status,
     });
