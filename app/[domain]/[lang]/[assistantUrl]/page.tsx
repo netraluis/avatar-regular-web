@@ -73,14 +73,18 @@ export default function AssistantUrl() {
       ref={scrollRef}
     >
       <div className={cn("pb-[200px] pt-[100px]")} ref={messagesRef}>
-        {data?.avatarUrl && (
+        {
           <ChatList
             messages={messages}
             showAnalizeInfo={status === "thread.run.completed" && loading}
-            avatarUrl={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.avatarUrl}`}
+            avatarUrl={
+              data?.avatarUrl
+                ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.avatarUrl}`
+                : undefined
+            }
             assistantName={card?.title || ""}
           />
-        )}
+        }
         {error && (
           <div>Estem treballant en l’error… Disculpa les molèsties.</div>
         )}

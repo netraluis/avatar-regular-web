@@ -10,7 +10,7 @@ export type UIState = {
 export interface ChatList {
   messages: any;
   showAnalizeInfo: boolean;
-  avatarUrl: string;
+  avatarUrl?: string;
   assistantName: string;
 }
 
@@ -20,7 +20,6 @@ export function ChatList({
   avatarUrl,
   assistantName,
 }: ChatList) {
-  console.log({ messages, showAnalizeInfo, avatarUrl, assistantName });
   return (
     <div className="relative mx-auto max-w-2xl px-4">
       {messages.length > 0 &&
@@ -29,8 +28,10 @@ export function ChatList({
             <div className="my-4" key={message.id}>
               <Avatar
                 imageUrl={
-                  message.role === "assistant" && avatarUrl
+                  message.role === "assistant"
                     ? avatarUrl
+                      ? avatarUrl
+                      : "/avatar.png"
                     : "/start.png"
                 }
                 roleName={message.role === "assistant" ? assistantName : "Tu"}
@@ -39,10 +40,9 @@ export function ChatList({
             </div>
           );
         })}
-
       {showAnalizeInfo && (
         <div className="my-4">
-          <Avatar imageUrl={avatarUrl} />
+          <Avatar imageUrl={avatarUrl ? avatarUrl : "/avatar.png"} />
           <div className="mt-4 text-slate-400 flex font-light text-sm">
             <ArrowPathIcon
               className="ml-0.5 h-5 w-5 animate-spin mr-1"
