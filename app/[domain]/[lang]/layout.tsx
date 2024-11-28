@@ -90,7 +90,6 @@ export default async function DomainLayout({
       <body>
         <TeamAssistantProvider initialData={data}>
           <Header />
-          <div className="h-16"></div>
           <main>{children}</main>
         </TeamAssistantProvider>
       </body>

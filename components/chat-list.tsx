@@ -41,15 +41,12 @@ export function ChatList({
           );
         })}
       {showAnalizeInfo && (
-        <div className="my-4">
-          <Avatar imageUrl={avatarUrl ? avatarUrl : "/avatar.png"} />
-          <div className="mt-4 text-slate-400 flex font-light text-sm">
-            <ArrowPathIcon
-              className="ml-0.5 h-5 w-5 animate-spin mr-1"
-              aria-hidden="true"
-            />
-            <span>Analitzant totes les fonts d’informació</span>
-          </div>
+        <div className="mt-4 text-slate-400 flex font-light text-sm">
+          <ArrowPathIcon
+            className="ml-0.5 h-5 w-5 animate-spin mr-1"
+            aria-hidden="true"
+          />
+          <span>Analitzant totes les fonts d’informació</span>
         </div>
       )}
     </div>
