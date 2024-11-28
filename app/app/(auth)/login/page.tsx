@@ -21,7 +21,7 @@ const login = {
   description: "Introdueix el teu email per accedir al teu compte",
   error: {
     invalid_credentials: "Les credencials introduïdes no són correctes",
-    email_not_confirmed: "El teu email no ha estat confirmat",
+    email_not_confirmed: "El teu email no ha estat confirmat, si us plau ves a la teva bústia de correu",
     unknown_error: "Ho sentim hi ha hagut un error",
   },
   email: "Email",
@@ -42,10 +42,10 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
-    if (user?.user.id) {
+    if (user?.user?.id) {
       router.push("/");
     }
-  }, [user?.user.id]);
+  }, [user?.user?.id]);
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="mx-auto max-w-sm">
