@@ -20,6 +20,7 @@ export function ChatList({
   avatarUrl,
   assistantName,
 }: ChatList) {
+  console.log({ messages, showAnalizeInfo, avatarUrl, assistantName });
   return (
     <div className="relative mx-auto max-w-2xl px-4">
       {messages.length > 0 &&
