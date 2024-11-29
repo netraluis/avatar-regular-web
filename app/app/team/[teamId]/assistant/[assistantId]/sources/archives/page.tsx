@@ -89,8 +89,8 @@ export default function Component() {
 
   return (
     <>
-      <div className="flex-1 p-8">
-        <div className="bg-white shadow-md rounded-lg p-6">
+      <div className="p-6 grid grid-cols-1 gap-6 grow overflow-hidden">
+        {/* <div className="bg-white shadow-md rounded-lg p-6 overflow-auto border"> */}
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-2xl font-semibold">Files</h1>
           </div>
@@ -106,7 +106,7 @@ export default function Component() {
             />
             <Button onClick={() => setIsModalOpen(true)}>+ Upload file</Button>
           </div>
-          <Table>
+          <Table className="overflow-y-auto grow scrollbar-hidden">
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[30px]">
@@ -168,7 +168,7 @@ export default function Component() {
               )}
             </TableBody>
           </Table>
-        </div>
+        {/* </div> */}
       </div>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-[425px]">

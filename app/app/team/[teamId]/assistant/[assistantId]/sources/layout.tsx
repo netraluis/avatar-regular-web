@@ -30,7 +30,7 @@ export default function Layout({
   const absolutePath = pathname.split("/").slice(1, 6).join("/");
 
   return (
-    <div className="flex bg-white">
+    <div className="flex bg-white overflow-hidden">
       <div className="w-64 p-4">
         <nav>
           {navItems.map((item, index) => (
@@ -45,7 +45,7 @@ export default function Layout({
           ))}
         </nav>
       </div>
-      <div className="flex-1">{children}</div>
+      <div className="flex flex-col overflow-hidden">{children}</div>
     </div>
   );
 }
