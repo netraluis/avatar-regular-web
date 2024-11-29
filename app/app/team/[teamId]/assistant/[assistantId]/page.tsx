@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
+import FullScreenLoader from "@/components/full-screen-loader";
 
 const RedirectComponent = () => {
   const params = useParams();
@@ -10,7 +11,7 @@ const RedirectComponent = () => {
     router.push(`${params.assistantId}/playground`);
   }, []);
 
-  return <div>Loading..</div>;
+  return <FullScreenLoader isLoading={true}/>;
 };
 
 export default RedirectComponent;

@@ -1,3 +1,5 @@
+import FullScreenLoader from "@/components/full-screen-loader";
+
 export default function Loading() {
-  return <div>Loading dashboard...</div>;
+  return <FullScreenLoader isLoading={true}/>;
 }

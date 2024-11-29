@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import FullScreenLoader from "@/components/full-screen-loader";
 
 const RedirectComponent = () => {
   const router = useRouter();
@@ -9,7 +10,7 @@ const RedirectComponent = () => {
     router.push(`settings/general`);
   }, []);
 
-  return <div>Loading..</div>;
+  return <FullScreenLoader isLoading={true}/>;
 };
 
 export default RedirectComponent;

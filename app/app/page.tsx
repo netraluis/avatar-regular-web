@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/components/context/appContext";
 import { useFetchTeamsByUserId } from "@/components/context/useAppContext/team";
+import FullScreenLoader from "@/components/full-screen-loader";
 
 const RedirectComponent = () => {
   const router = useRouter();
@@ -32,7 +33,7 @@ const RedirectComponent = () => {
     fetchData();
   }, [user?.user?.id]);
 
-  return <div>Loading...</div>;
+  return <FullScreenLoader isLoading={true}/>;
 };
 
 export default RedirectComponent;
