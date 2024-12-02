@@ -20,6 +20,7 @@ import {
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useAppContext } from "@/components/context/appContext";
 import { HeaderLayout } from "@/components/layouts/title-layout";
+import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
 
 const navItems = [
   { name: "General", href: "general", icon: Settings },
@@ -80,6 +81,7 @@ function Layout({
             ))}
           </nav>
         </div>
+        {/* <SideDashboardLayout navItems={navItems} comparatePathName={comparatePathName} absolutePath={absolutePath} actionButtonOnClick={saveHandler} /> */}
         <div className="flex-1 scrollbar-hidden overflow-auto">{children}</div>
       </div>
     </HeaderLayout>
