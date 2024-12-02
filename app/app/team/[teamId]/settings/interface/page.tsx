@@ -41,7 +41,7 @@ import {
   InputCharging,
 } from "@/components/loaders/loadersSkeleton";
 
-export const interfaceText = {
+const interfaceText = {
   title: "Ajusts del equip",
   description: "Això és com et veuran els altres al lloc.",
   name: "Nom de l'equip",
@@ -95,7 +95,7 @@ export const interfaceText = {
 
 export default function Interface() {
   const {
-    state: { user, teamSelected },
+    state: { teamSelected },
   } = useAppContext();
 
   const [foot, setFoot] = useState<string>();
