@@ -14,17 +14,15 @@ import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import { UploadImage } from "@/components/upload-image";
 import { CustomCard } from "@/components/custom-card";
 
-const general = {
-  setting: {
-    title: "Ajusts del equip",
-    description: "Això és com et veuran els altres al lloc.",
-    name: "Nom de l'equip",
-    nameDescription:
-      "Aquest és el teu nom públic. Pot ser el teu nom real o un pseudònim.",
-    url: "URL de l'equip",
-    urlDescription:
-      "La propera URL de l'equip causarà una redirecció a la nova URL.",
-  },
+const setting = {
+  title: "Ajusts del equip",
+  description: "Això és com et veuran els altres al lloc.",
+  name: "Nom de l'equip",
+  nameDescription:
+    "Aquest és el teu nom públic. Pot ser el teu nom real o un pseudònim.",
+  url: "URL de l'equip",
+  urlDescription:
+    "La propera URL de l'equip causarà una redirecció a la nova URL.",
   logo: {
     title: "Imatges de l'equip",
     description: "Així és com et veuran els altres al lloc.",
@@ -72,13 +70,10 @@ export default function Component() {
   }, [data.name]);
 
   return (
-    <div className="max-w-2xl mx-auto space-y-8 flex flex-col">
-      <CustomCard
-        title={general.setting.title}
-        description={general.setting.description}
-      >
+    <div>
+      <CustomCard title={setting.title} description={setting.description}>
         <div className="space-y-2">
-          <Label htmlFor="team-name">{general.setting.name}</Label>
+          <Label htmlFor="team-name">{setting.name}</Label>
           {teamSelected?.name ? (
             <Input
               id="team-name"
@@ -95,11 +90,11 @@ export default function Component() {
             <InputCharging />
           )}
           <p className="text-sm text-muted-foreground">
-            {general.setting.nameDescription}
+            {setting.nameDescription}
           </p>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="team-url">{general.setting.url}</Label>
+          <Label htmlFor="team-url">{setting.url}</Label>
           <div className="flex items-center space-x-2">
             {teamSelected?.subDomain ? (
               <Input
@@ -116,37 +111,39 @@ export default function Component() {
             )}
             <span className="text-muted-foreground">.chatbotfor.com</span>
           </div>
-          <p className="text-sm text-muted-foreground">{}</p>
+          <p className="text-sm text-muted-foreground">
+            {setting.urlDescription}
+          </p>
         </div>
       </CustomCard>
 
       <CustomCard
-        title={general.logo.title}
-        description={general.logo.description}
+        title={setting.logo.title}
+        description={setting.logo.description}
       >
         <UploadImage
           src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.logoUrl || teamSelected?.logoUrl}?timestamp=${new Date().getTime()}`}
-          description={general.logo.uploadLogo}
+          description={setting.logo.uploadLogo}
           alt="logo"
-          recommendedSize={general.logo.recommendedSize}
+          recommendedSize={setting.logo.recommendedSize}
           fileUserImageType={FileUserImageType.LOGO}
           accept=".png,.jpg,.jpeg"
-          choose={general.logo.choose}
+          choose={setting.logo.choose}
         />
         <UploadImage
           src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.symbolUrl || teamSelected?.symbolUrl}?timestamp=${new Date().getTime()}`}
-          description={general.favicon.uploadLogo}
+          description={setting.favicon.uploadLogo}
           alt="favicon"
-          recommendedSize={general.favicon.recommendedSize}
+          recommendedSize={setting.favicon.recommendedSize}
           fileUserImageType={FileUserImageType.SYMBOL}
           accept=".svg"
-          choose={general.favicon.choose}
+          choose={setting.favicon.choose}
         />
       </CustomCard>
 
       <CustomCard
-        title={general.setting.title}
-        description={general.setting.description}
+        title={setting.delete.title}
+        description={setting.delete.description}
         separator={false}
       >
         <Button
@@ -157,7 +154,7 @@ export default function Component() {
           }}
           variant="destructive"
         >
-          {loading ? general.delete.loading : teamSelected?.name}
+          {loading ? setting.delete.loading : teamSelected?.name}
         </Button>
       </CustomCard>
     </div>

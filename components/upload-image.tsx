@@ -26,6 +26,7 @@ export const UploadImage = ({
   recommendedSize,
   fileUserImageType,
   accept,
+  choose,
 }: UploadImageProps) => {
   const {
     state: { user, teamSelected },
@@ -44,7 +45,7 @@ export const UploadImage = ({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 mb-3">
       <Label>{description}</Label>
       <div className="flex items-center space-x-2">
         {logoLoading || imageLoading || !teamSelected ? (
@@ -72,7 +73,7 @@ export const UploadImage = ({
           onClick={handleLogoClick}
           disabled={logoLoading}
         >
-          Choose
+          {choose}
           <input
             ref={fileInputLogoRef}
             type="file"

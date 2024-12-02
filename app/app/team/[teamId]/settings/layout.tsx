@@ -65,14 +65,16 @@ function Layout({
       ActionButtonLogo={Save}
       actionButtonOnClick={saveHandler}
     >
-      <div className="flex sh-full justify-start overflow-auto max-w-6xl ml-[40px] gap-8">
+      <div className="flex sh-full justify-start overflow-auto px-[40px] gap-8 w-full">
         <SideDashboardLayout
           navItems={navItems}
           comparatePathName={comparatePathName}
           absolutePath={absolutePath}
           actionButtonOnClick={saveHandler}
         />
-        <div className="flex-1 scrollbar-hidden overflow-auto">{children}</div>
+        <div className="flex-1 scrollbar-hidden overflow-auto px-4 w-full">
+          {children}
+        </div>
       </div>
     </TitleLayout>
   );

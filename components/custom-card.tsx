@@ -21,13 +21,13 @@ export const CustomCard = ({
   separator = true,
 }: CustomCardProps) => {
   return (
-    <Card className="p-2 gap-4">
+    <Card className="p-2 gap-4 mb-4 w-full">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       {separator && <Separator className="mb-4" />}
-      <CardContent>{children}</CardContent>
+      <CardContent className="space-y-4">{children}</CardContent>
     </Card>
   );
 };
