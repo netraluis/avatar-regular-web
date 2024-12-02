@@ -63,7 +63,7 @@ export const TitleLayout = ({
         </div>
       </div>
       <Separator />
-      <div className="grow flex flex-col overflow-auto items-start p-4">
+      <div className="grow flex flex-col overflow-auto items-start p-4 m-4">
         {children}
       </div>
     </div>

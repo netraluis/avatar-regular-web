@@ -20,7 +20,7 @@ export const SideDashboardLayout = ({
   actionButtonOnClick,
 }: SideDashboardLayoutProps) => {
   return (
-    <div className="w-64 p-4 scrollbar-hidden overflow-auto flex flex-col">
+    <div className="w-64 scrollbar-hidden overflow-auto flex flex-col">
       <nav>
         {navItems.map((item, index) => (
           <Link
