@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye } from "lucide-react";
 import { useEffect, useState } from "react";
 import EmojiPicker from "@/components/ui/emoji-picker";
 import { useAssistantSettingsContext } from "@/components/context/assistantSettingsContext";
@@ -141,11 +139,6 @@ export default function Interface() {
               Your message will be copied to the support team.
             </p>
           </div>
-          {/* ))} */}
-          <Button variant="secondary" size="sm" className="gap-2">
-            <Eye className="w-4 h-4" />
-            Preview
-          </Button>
         </CardContent>
       </Card>
     </div>

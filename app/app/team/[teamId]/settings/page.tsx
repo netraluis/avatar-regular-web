@@ -10,7 +10,7 @@ const RedirectComponent = () => {
     router.push(`settings/general`);
   }, []);
 
-  return <FullScreenLoader isLoading={true}/>;
+  return <FullScreenLoader isLoading={true} />;
 };
 
 export default RedirectComponent;

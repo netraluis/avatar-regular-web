@@ -90,85 +90,83 @@ export default function Component() {
   return (
     <>
       <div className="p-6 grid grid-cols-1 gap-6 grow overflow-hidden">
-        {/* <div className="bg-white shadow-md rounded-lg p-6 overflow-auto border"> */}
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold">Files</h1>
-          </div>
-          <p className="text-sm text-gray-500 mb-4">
-            Drag & drop files here, or click to select files (Supported File
-            Types: .pdf, .doc, .docx, .txt)
-          </p>
-          <div className="flex justify-between items-center mb-4">
-            <Input
-              type="text"
-              placeholder="Search files..."
-              className="max-w-sm"
-            />
-            <Button onClick={() => setIsModalOpen(true)}>+ Upload file</Button>
-          </div>
-          <Table className="overflow-y-auto grow scrollbar-hidden">
-            <TableHeader>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-semibold">Files</h1>
+        </div>
+        <p className="text-sm text-gray-500 mb-4">
+          Drag & drop files here, or click to select files (Supported File
+          Types: .pdf, .doc, .docx, .txt)
+        </p>
+        <div className="flex justify-between items-center mb-4">
+          <Input
+            type="text"
+            placeholder="Search files..."
+            className="max-w-sm"
+          />
+          <Button onClick={() => setIsModalOpen(true)}>+ Upload file</Button>
+        </div>
+        <Table className="overflow-y-auto grow scrollbar-hidden">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[30px]">
+                <Input type="checkbox" />
+              </TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Bytes</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {getFileError && <>{getFileError.message}</>}
+            {getFileloading ? (
               <TableRow>
-                <TableHead className="w-[30px]">
-                  <Input type="checkbox" />
-                </TableHead>
-                <TableHead>Name</TableHead>
-                <TableHead>Bytes</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right"></TableHead>
+                <TableCell colSpan={5} className="text-center">
+                  <Loader />
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {getFileError && <>{getFileError.message}</>}
-              {getFileloading ? (
-                <TableRow>
-                  <TableCell colSpan={5} className="text-center">
-                    <Loader />
+            ) : (
+              fileData &&
+              fileData.map((file: VectorStoreFile, index: number) => (
+                <TableRow
+                  key={index}
+                  className={
+                    file.isCharging ? "bg-slate-100 animate-pulse" : ""
+                  }
+                >
+                  <TableCell>
+                    <Input type="checkbox" />
                   </TableCell>
-                </TableRow>
-              ) : (
-                fileData &&
-                fileData.map((file: VectorStoreFile, index: number) => (
-                  <TableRow
-                    key={index}
-                    className={
-                      file.isCharging ? "bg-slate-100 animate-pulse" : ""
-                    }
-                  >
+                  <TableCell>{file.filename}</TableCell>
+                  <TableCell>{file.bytes}</TableCell>
+                  <TableCell>
+                    <span
+                      className={`px-2 py-1 ${file.filename === "processed" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"} rounded-full text-xs`}
+                    >
+                      {file.filename}
+                    </span>
+                  </TableCell>
+                  {
                     <TableCell>
-                      <Input type="checkbox" />
-                    </TableCell>
-                    <TableCell>{file.filename}</TableCell>
-                    <TableCell>{file.bytes}</TableCell>
-                    <TableCell>
-                      <span
-                        className={`px-2 py-1 ${file.filename === "processed" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"} rounded-full text-xs`}
+                      <Button
+                        aria-haspopup="true"
+                        size="icon"
+                        variant="alert"
+                        onClick={() => {
+                          handleDelete(file.id);
+                        }}
+                        disabled={file.isCharging}
                       >
-                        {file.filename}
-                      </span>
+                        <Trash2 className="h-4 w-4" />
+                        <span className="sr-only">Toggle menu</span>
+                      </Button>
                     </TableCell>
-                    {
-                      <TableCell>
-                        <Button
-                          aria-haspopup="true"
-                          size="icon"
-                          variant="alert"
-                          onClick={() => {
-                            handleDelete(file.id);
-                          }}
-                          disabled={file.isCharging}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </TableCell>
-                    }
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        {/* </div> */}
+                  }
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
       </div>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-[425px]">

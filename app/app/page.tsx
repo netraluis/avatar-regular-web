@@ -33,7 +33,7 @@ const RedirectComponent = () => {
     fetchData();
   }, [user?.user?.id]);
 
-  return <FullScreenLoader isLoading={true}/>;
+  return <FullScreenLoader isLoading={true} />;
 };
 
 export default RedirectComponent;

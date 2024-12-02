@@ -1,7 +1,11 @@
 import React from "react";
 import Image from "next/image";
 
-export default function FullScreenLoader({ isLoading }: { isLoading: boolean }) {
+export default function FullScreenLoader({
+  isLoading,
+}: {
+  isLoading: boolean;
+}) {
   if (!isLoading) return null;
 
   return (

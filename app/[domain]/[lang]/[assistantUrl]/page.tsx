@@ -76,7 +76,10 @@ export default function AssistantUrl() {
         {
           <ChatList
             messages={messages}
-            showAnalizeInfo={status === "thread.run.queued" || status === "thread.run.in_progress"}
+            showAnalizeInfo={
+              status === "thread.run.queued" ||
+              status === "thread.run.in_progress"
+            }
             avatarUrl={
               data?.avatarUrl
                 ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.avatarUrl}`

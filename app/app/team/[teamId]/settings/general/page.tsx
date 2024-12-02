@@ -172,7 +172,7 @@ export default function Component() {
                 teamSelected?.symbolUrl ? (
                 <div className="w-10 h-10 rounded-full  flex items-center justify-center">
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${ data?.symbolUrl || teamSelected?.symbolUrl}?timestamp=${new Date().getTime()}`}
+                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.symbolUrl || teamSelected?.symbolUrl}?timestamp=${new Date().getTime()}`}
                     alt="favicon"
                     width={30}
                     height={30}

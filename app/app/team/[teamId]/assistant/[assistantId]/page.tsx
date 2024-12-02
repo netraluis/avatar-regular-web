@@ -11,7 +11,7 @@ const RedirectComponent = () => {
     router.push(`${params.assistantId}/playground`);
   }, []);
 
-  return <FullScreenLoader isLoading={true}/>;
+  return <FullScreenLoader isLoading={true} />;
 };
 
 export default RedirectComponent;
