@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { usePathname, useParams } from "next/navigation";
 import {
   TeamSettingsProvider,
@@ -19,8 +18,9 @@ import {
 } from "lucide-react";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useAppContext } from "@/components/context/appContext";
-import { HeaderLayout } from "@/components/layouts/title-layout";
+
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
+import { TitleLayout } from "@/components/layouts/title-layout";
 
 const navItems = [
   { name: "General", href: "general", icon: Settings },
@@ -57,7 +57,7 @@ function Layout({
     }
   };
   return (
-    <HeaderLayout
+    <TitleLayout
       cardTitle={teamSettings.cardTitle}
       cardDescription={teamSettings.cardDescription}
       urlPreview={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${state.teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${state.teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
@@ -65,26 +65,16 @@ function Layout({
       ActionButtonLogo={Save}
       actionButtonOnClick={saveHandler}
     >
-      <div className="flex sh-full overflow-auto">
-        <div className="w-64 p-4 scrollbar-hidden  overflow-auto flex flex-col">
-          <nav>
-            {navItems.map((item, index) => (
-              <Link
-                onClick={saveHandler}
-                key={index}
-                href={`/${absolutePath}/${item.href}`}
-                className={`flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded ${comparatePathName === item.href ? "bg-gray-200" : ""}`}
-              >
-                <item.icon className="mr-2 h-4 w-4" />
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-        </div>
-        {/* <SideDashboardLayout navItems={navItems} comparatePathName={comparatePathName} absolutePath={absolutePath} actionButtonOnClick={saveHandler} /> */}
+      <div className="flex sh-full justify-start overflow-auto max-w-6xl ml-[40px] gap-8">
+        <SideDashboardLayout
+          navItems={navItems}
+          comparatePathName={comparatePathName}
+          absolutePath={absolutePath}
+          actionButtonOnClick={saveHandler}
+        />
         <div className="flex-1 scrollbar-hidden overflow-auto">{children}</div>
       </div>
-    </HeaderLayout>
+    </TitleLayout>
   );
 }
 

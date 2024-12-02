@@ -187,7 +187,9 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         )}
       </header>
       <Separator />
-      <div className="grow overflow-auto flex flex-col">{children}</div>
+      <div className="grow overflow-auto flex flex-col items-center">
+        {children}
+      </div>
     </div>
   );
 }

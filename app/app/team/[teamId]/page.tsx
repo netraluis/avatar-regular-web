@@ -29,7 +29,7 @@ import {
   useDeleteAssistant,
   useFetchAssistantsByTeamId,
 } from "@/components/context/useAppContext/assistant";
-import { HeaderLayout } from "@/components/layouts/title-layout";
+import { TitleLayout } from "@/components/layouts/title-layout";
 
 const teamIdText = {
   cardTitle: "Assistant",
@@ -70,7 +70,7 @@ export default function Dashboard() {
 
   return (
     // <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-    <HeaderLayout
+    <TitleLayout
       cardTitle={teamIdText.cardTitle}
       cardDescription={teamIdText.cardDescription}
       urlPreview={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
@@ -166,7 +166,7 @@ export default function Dashboard() {
           </CardContent>
         </Card>
       )}
-    </HeaderLayout>
+    </TitleLayout>
     // </main>
   );
 }

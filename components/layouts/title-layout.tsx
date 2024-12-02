@@ -3,15 +3,11 @@ import { Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import {
-  Card,
-  CardDescription,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-export interface HeaderLayoutProps {
+export interface TitleLayoutProps {
   children: React.ReactNode;
   cardTitle: string;
   cardDescription: string;
@@ -21,7 +17,7 @@ export interface HeaderLayoutProps {
   actionButtonOnClick: () => void;
 }
 
-export const HeaderLayout = ({
+export const TitleLayout = ({
   children,
   cardTitle,
   cardDescription,
@@ -29,14 +25,14 @@ export const HeaderLayout = ({
   actionButtonText,
   ActionButtonLogo,
   actionButtonOnClick,
-}: HeaderLayoutProps) => {
+}: TitleLayoutProps) => {
   const router = useRouter();
   const handlePreview = () => {
     router.push(urlPreview);
   };
 
   return (
-    <div className="flex flex-col overflow-auto mx-4 py-2">
+    <div className="flex flex-col overflow-auto mx-4 py-2 max-w-6xl">
       <div className="flex items-center gap-4 py-1.5 px-1.5">
         <Card className="border-none bg-transparent shadow-none p-0">
           <CardTitle>{cardTitle}</CardTitle>
@@ -67,7 +63,9 @@ export const HeaderLayout = ({
         </div>
       </div>
       <Separator />
-      <div className="grow flex flex-col overflow-auto">{children}</div>
+      <div className="grow flex flex-col overflow-auto items-start p-4">
+        {children}
+      </div>
     </div>
   );
 };
