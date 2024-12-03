@@ -15,6 +15,7 @@ import {
   CreditCard,
   Languages,
   Save,
+  Link2,
 } from "lucide-react";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useAppContext } from "@/components/context/appContext";
@@ -26,6 +27,7 @@ const navItems = [
   { name: "General", href: "general", icon: Settings },
   { name: "Interface", href: "interface", icon: Paintbrush },
   { name: "Localisations", href: "localisations", icon: Languages },
+  { name: "Custom domain", href: "custom-domain", icon: Link2 },
   { name: "Members", href: "members", icon: User },
   { name: "Plans", href: "plans", icon: Gem },
   { name: "Billings", href: "billings", icon: CreditCard },

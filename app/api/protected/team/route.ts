@@ -48,7 +48,6 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    console.log("body", body);
 
     if (!body.name) {
       return new NextResponse("team name is required", {
@@ -60,6 +59,12 @@ export async function POST(request: NextRequest) {
       data: body,
       userId,
     });
+
+    if (teamResult.errorCode) {
+      return new NextResponse(JSON.stringify(teamResult), {
+        status: 400,
+      });
+    }
 
     return new NextResponse(JSON.stringify(teamResult), {
       status: 200,

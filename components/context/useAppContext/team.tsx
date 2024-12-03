@@ -79,10 +79,16 @@ export const useCreateTeam = () => {
         body: JSON.stringify(data),
       });
 
+      const responseData = await response.json();
       if (!response.ok) {
+        if (responseData.errorCode === "P2002") {
+          return setErrorCreateTeam({
+            errorCode: responseData.errorCode,
+            message: "Team name already exists",
+          });
+        }
         throw new Error(`Error: ${response.statusText}`);
       }
-      const responseData = await response.json();
       dispatch({
         type: "SET_TEAM_CREATION",
         payload: { newTeam: responseData },

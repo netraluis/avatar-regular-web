@@ -51,8 +51,6 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
 }> | null;
 
 export const getTeamsByUser = async (userId: string) => {
-  //   const response = await fetch(`/api/teams/${id}`);
-  //   return response.json();
   const subdomainInfo = await prisma.userTeam
     .findMany({
       where: {
@@ -183,8 +181,11 @@ export const createTeam = async ({
       // Retornar el nuevo equipo
       return newTeam;
     });
-  } catch (error) {
-    console.error("Error creating team:", error);
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      // console.log("Error code:", error.code, "Error message:", error.message);
+      return { errorCode: error.code, errorMessage: error.message };
+    }
     throw new Error("Error creating team");
   } finally {
     await prisma.$disconnect();
@@ -233,4 +234,13 @@ export const deleteTeam = async ({ teamId }: { teamId: string }) => {
   });
 
   return team;
+};
+
+export const getDuplicateTeamBySubdomain = async (subDomain: string) => {
+  const team = await prisma.team.findFirst({
+    where: {
+      subDomain,
+    },
+  });
+  return !!team;
 };
