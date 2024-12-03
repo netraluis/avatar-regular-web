@@ -50,6 +50,26 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
   };
 }> | null;
 
+export type UpdateTeamByTeamIdResponse =
+  | {
+      success: true;
+      data: Prisma.TeamGetPayload<{
+        select: {
+          assistants: true;
+          welcome: true;
+          menuHeader: {
+            include: {
+              textHref: true;
+            };
+          };
+          footer: true;
+          menuFooter: true;
+          headerButton: true;
+        };
+      }>;
+    }
+  | { success: false; errorCode: string; errorMessage: string };
+
 export const getTeamsByUser = async (userId: string) => {
   const subdomainInfo = await prisma.userTeam
     .findMany({
@@ -198,9 +218,9 @@ export const updateTeam = async ({
 }: {
   teamId: string;
   data: Prisma.TeamUpdateInput;
-}) => {
+}): Promise<UpdateTeamByTeamIdResponse> => {
   try {
-    return await prisma.team.update({
+    const updateData = await prisma.team.update({
       where: {
         id: teamId,
       },
@@ -218,9 +238,23 @@ export const updateTeam = async ({
         headerButton: true,
       },
     });
-  } catch (error) {
+
+    return { success: true, data: updateData };
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      // console.log("Error code:", error.code, "Error message:", error.message);
+      return {
+        success: false,
+        errorCode: error.code,
+        errorMessage: error.message,
+      };
+    }
     console.error("Error updating team:", error);
-    throw new Error("Error updating team");
+    return {
+      success: false,
+      errorCode: "UNKNOWN_ERROR",
+      errorMessage: "An unexpected error occurred.",
+    };
   } finally {
     await prisma.$disconnect();
   }
@@ -237,10 +271,21 @@ export const deleteTeam = async ({ teamId }: { teamId: string }) => {
 };
 
 export const getDuplicateTeamBySubdomain = async (subDomain: string) => {
-  const team = await prisma.team.findFirst({
-    where: {
-      subDomain,
-    },
-  });
-  return !!team;
+  try {
+    const team = await prisma.team.findFirst({
+      where: {
+        subDomain,
+      },
+    });
+    return {
+      success: true,
+      data: !!team,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      errorCode: "UNKNOWN_ERROR",
+      errorMessage: "An unexpected error occurred.",
+    };
+  }
 };

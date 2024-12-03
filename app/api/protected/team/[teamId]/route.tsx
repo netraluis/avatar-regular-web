@@ -83,6 +83,12 @@ export async function PATCH(
       data: body.data as Prisma.TeamUpdateInput,
     });
 
+    if (!team.success) {
+      return new NextResponse(JSON.stringify(team), {
+        status: 400,
+      });
+    }
+
     return new NextResponse(JSON.stringify(team), {
       status: 200,
     });

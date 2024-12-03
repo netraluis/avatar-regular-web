@@ -132,11 +132,12 @@ export const useUpdateTeam = () => {
         },
       );
 
-      if (!teamSelectedResponse.ok) {
-        throw new Error(`Error: ${teamSelectedResponse.statusText}`);
-      }
-
       const teamSelected = await teamSelectedResponse.json();
+
+      if (!teamSelectedResponse.ok) {
+        return setError({ error: teamSelected.errorCode });
+        // throw new Error(`Error: ${teamSelectedResponse.statusText}`);
+      }
 
       dispatch({
         type: "SET_TEAM_SELECTED",
@@ -197,4 +198,44 @@ export const useDeleteTeam = () => {
   }
 
   return { loading, error, deleteTeamdata, deleteTeam };
+};
+
+export const useExistSubdomain = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
+  const [data, setData] = useState(null);
+
+  async function existSubdomain(subdomain: string) {
+    if (!subdomain) return setError("No subdomain provided");
+    setError(null);
+    setData(null);
+
+    try {
+      setLoading(true);
+
+      const teamSelectedResponse = await fetch(
+        `/api/protected/team/subdomain/${subdomain}`,
+        {
+          method: "GET",
+        },
+      );
+      const teamSelected = await teamSelectedResponse.json();
+
+      console.log({ teamSelected });
+
+      if (!teamSelectedResponse.ok) {
+        console.log({ teamSelected });
+        return setError({ error: teamSelected.errorCode });
+      }
+
+      setData(teamSelected.data);
+      return teamSelected.data;
+    } catch (error: any) {
+      setError({ error });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { loading, error, data, existSubdomain };
 };

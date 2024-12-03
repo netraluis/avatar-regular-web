@@ -35,6 +35,7 @@ const teamIdText = {
   cardTitle: "Assistant",
   cardDescription: "Visio global dels teus assistents",
   createAssistant: "Create Assistant",
+  errorGettingAssistants: "Error obtenint els assistents",
 };
 
 export default function Dashboard() {
@@ -43,7 +44,7 @@ export default function Dashboard() {
     state: { teamSelected, assistantsByTeam, user },
   } = useAppContext();
   const { teamId } = useParams();
-  const { loading, fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
+  const { loading, fetchAssistantsByTeamId, error } = useFetchAssistantsByTeamId();
   const { deleteAssistant } = useDeleteAssistant();
 
   useEffect(() => {
@@ -77,6 +78,9 @@ export default function Dashboard() {
       actionButtonText={teamIdText.createAssistant}
       ActionButtonLogo={PlusCircle}
       actionButtonOnClick={handleCreateNewAssistantRoute}
+      actionButtonLoading={loading}
+      actionErrorText={teamIdText.errorGettingAssistants}
+      actionError={error}
     >
       {loading ? (
         <Loader />

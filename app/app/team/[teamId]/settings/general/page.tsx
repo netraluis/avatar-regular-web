@@ -93,7 +93,7 @@ export default function Component() {
             {setting.nameDescription}
           </p>
         </div>
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <Label htmlFor="team-url">{setting.url}</Label>
           <div className="flex items-center space-x-2">
             {teamSelected?.subDomain ? (
@@ -114,7 +114,7 @@ export default function Component() {
           <p className="text-sm text-muted-foreground">
             {setting.urlDescription}
           </p>
-        </div>
+        </div> */}
       </CustomCard>
 
       <CustomCard

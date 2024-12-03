@@ -1,4 +1,4 @@
-import { Eye } from "lucide-react";
+import { Eye, LoaderCircle } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -15,6 +15,9 @@ export interface TitleLayoutProps {
   actionButtonText: string;
   ActionButtonLogo: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   actionButtonOnClick: () => void;
+  actionButtonLoading: boolean;
+  actionErrorText: string;
+  actionError: any;
 }
 
 export const TitleLayout = ({
@@ -25,6 +28,9 @@ export const TitleLayout = ({
   actionButtonText,
   ActionButtonLogo,
   actionButtonOnClick,
+  actionButtonLoading,
+  actionErrorText,
+  actionError,
 }: TitleLayoutProps) => {
   const router = useRouter();
   const handlePreview = () => {
@@ -39,6 +45,11 @@ export const TitleLayout = ({
           <CardDescription>{cardDescription}</CardDescription>
         </Card>
         <div className="ml-auto flex items-center py-2 px-4 gap-2">
+          {actionError && (
+            <Button variant="alert" disabled>
+              {actionErrorText}
+            </Button>
+          )}
           <Button variant="secondary" size="sm" onClick={handlePreview}>
             <Link
               href={urlPreview}
@@ -54,8 +65,13 @@ export const TitleLayout = ({
             size="sm"
             className="h-8 py-2 px-4 gap-2"
             onClick={actionButtonOnClick}
+            disabled={actionButtonLoading}
           >
-            <ActionButtonLogo className="h-3.5 w-3.5" />
+            {actionButtonLoading ? (
+              <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <ActionButtonLogo className="h-3.5 w-3.5" />
+            )}
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
               {actionButtonText}
             </span>

@@ -44,6 +44,17 @@ export const UploadImage = ({
     fileInputLogoRef.current?.click();
   };
 
+  const field = (fileUserImageType: FileUserImageType) => {
+    switch (fileUserImageType) {
+      case FileUserImageType.LOGO:
+        return "logoUrl";
+      case FileUserImageType.AVATAR:
+        return "avatarUrl";
+      case FileUserImageType.SYMBOL:
+        return "symbolUrl";
+    }
+  };
+
   return (
     <div className="space-y-2 mb-3">
       <Label>{description}</Label>
@@ -88,7 +99,7 @@ export const UploadImage = ({
                   teamId: teamSelected.id as string,
                   fileUserImageType,
                 });
-                setData({ ...data, logoUrl: url.data });
+                setData({ ...data, [field(fileUserImageType)]: url.data });
               }
               setLogoLoading(false);
             }}

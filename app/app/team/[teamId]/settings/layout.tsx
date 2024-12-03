@@ -37,6 +37,7 @@ const teamSettings = {
   cardTitle: "Ajustos de l'equip",
   cardDescription: "Configura l'equip com vulguis",
   actionButtonText: "Desa",
+  actionErrorText: "Hi hagut un error al update",
 };
 
 function Layout({
@@ -51,7 +52,7 @@ function Layout({
   const { state } = useAppContext();
   const { teamId } = useParams();
   const { data } = useTeamSettingsContext();
-  const { updateTeam } = useUpdateTeam();
+  const { updateTeam, loading, error } = useUpdateTeam();
 
   const saveHandler = async () => {
     if (state.user?.user.id) {
@@ -66,6 +67,9 @@ function Layout({
       actionButtonText={teamSettings.actionButtonText}
       ActionButtonLogo={Save}
       actionButtonOnClick={saveHandler}
+      actionButtonLoading={loading}
+      actionErrorText={teamSettings.actionErrorText}
+      actionError={error}
     >
       <div className="flex sh-full justify-start overflow-auto px-[40px] gap-8 w-full">
         <SideDashboardLayout
