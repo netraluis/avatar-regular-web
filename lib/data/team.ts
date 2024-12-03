@@ -272,8 +272,6 @@ export const updateTeam = async ({
       },
     });
 
-    console.log("updateData", updateData);
-
     return { success: true, data: updateData };
   } catch (error: any) {
     if (error.code === "P2002") {
