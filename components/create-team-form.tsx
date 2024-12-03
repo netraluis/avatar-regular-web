@@ -33,7 +33,8 @@ function CreateTeamForm() {
     state: { user },
   } = useAppContext();
 
-  const { loadingCreateTeam, createTeamData, createTeam } = useCreateTeam();
+  const { loadingCreateTeam, createTeamData, createTeam, errorCreateTeam } =
+    useCreateTeam();
 
   const createHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -135,6 +136,7 @@ function CreateTeamForm() {
                 </SelectContent>
               </Select>
             </div>
+            {errorCreateTeam && <>{JSON.stringify(errorCreateTeam)}</>}
             {language && teamName && (
               <Button
                 type="submit"
