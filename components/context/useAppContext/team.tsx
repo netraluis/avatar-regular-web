@@ -141,7 +141,7 @@ export const useUpdateTeam = () => {
 
       dispatch({
         type: "SET_TEAM_SELECTED",
-        payload: teamSelected,
+        payload: teamSelected.data,
       });
 
       setData(teamSelected);

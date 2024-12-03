@@ -53,20 +53,7 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
 export type UpdateTeamByTeamIdResponse =
   | {
       success: true;
-      data: Prisma.TeamGetPayload<{
-        select: {
-          assistants: true;
-          welcome: true;
-          menuHeader: {
-            include: {
-              textHref: true;
-            };
-          };
-          footer: true;
-          menuFooter: true;
-          headerButton: true;
-        };
-      }>;
+      data: GetTeamByTeamId;
     }
   | { success: false; errorCode: string; errorMessage: string };
 
@@ -218,26 +205,74 @@ export const updateTeam = async ({
 }: {
   teamId: string;
   data: Prisma.TeamUpdateInput;
-}): Promise<UpdateTeamByTeamIdResponse> => {
+}) => {
   try {
     const updateData = await prisma.team.update({
       where: {
         id: teamId,
       },
       data,
-      include: {
-        assistants: true,
-        welcome: true,
+      // include: {
+      //   assistants: true,
+      //   welcome: true,
+      //   menuHeader: {
+      //     include: {
+      //       textHref: true,
+      //     },
+      //   },
+      //   footer: true,
+      //   menuFooter: true,
+      //   headerButton: true,
+      // },
+      select: {
+        headerButton: true,
+        subDomain: true,
+        defaultLanguage: true,
+        id: true,
+        welcomeType: true,
+        name: true,
+        logoUrl: true,
+        symbolUrl: true,
+        avatarUrl: true,
+        footer: {
+          select: {
+            text: true,
+            language: true,
+          },
+        },
+        welcome: {
+          select: {
+            text: true,
+            description: true,
+            language: true,
+          },
+        },
         menuHeader: {
-          include: {
+          select: {
+            type: true,
             textHref: true,
           },
         },
-        footer: true,
         menuFooter: true,
-        headerButton: true,
+        customDomain: true,
+        assistants: {
+          select: {
+            id: true,
+            name: true,
+            emoji: true,
+            url: true,
+            assistantCard: {
+              select: {
+                title: true,
+                description: true,
+              },
+            },
+          },
+        },
       },
     });
+
+    console.log("updateData", updateData);
 
     return { success: true, data: updateData };
   } catch (error: any) {
