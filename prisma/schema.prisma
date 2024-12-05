@@ -161,18 +161,24 @@ model MenuHeader {
 
 model TextHref {
   id              String      @id @default(uuid())
-  text            String
-  href            String
   numberOrder     Int
-  language        LanguageType
   menuHeaderId    String?     
-  defaultTextHrefId String?  
-
-  defaultTextHref   TextHref? @relation("TextHrefDefault", fields: [defaultTextHrefId], references: [id], onDelete: Cascade)
-  translations      TextHref[] @relation("TextHrefDefault")
+  hrefLanguages     HrefLanguages[]
 
   menuHeader        MenuHeader?   @relation(fields: [menuHeaderId], references: [id], onDelete: Cascade)
 
+}
+
+model HrefLanguages {
+  id              String     @id @default(uuid())
+  text            String
+  href            String
+  language        LanguageType
+  textHrefId      String     
+
+  textHref        TextHref   @relation(fields: [textHrefId], references: [id], onDelete: Cascade)
+
+  @@unique([textHrefId, language])
 }
 
 

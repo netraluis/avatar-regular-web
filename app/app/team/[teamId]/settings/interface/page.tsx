@@ -21,6 +21,7 @@ import {
   WelcomeType,
   MenuFooter,
   HeaderButtonType,
+  HrefLanguages,
 } from "@prisma/client";
 import { GripVertical, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -40,6 +41,7 @@ import {
   TextAreaCharging,
   InputCharging,
 } from "@/components/loaders/loadersSkeleton";
+import { v4 as uuidv4 } from "uuid";
 
 const interfaceText = {
   title: "Ajusts del equip",
@@ -93,6 +95,10 @@ const interfaceText = {
   },
 };
 
+interface ExtendedTextHref extends TextHref {
+  hrefLanguages: HrefLanguages[];
+}
+
 export default function Interface() {
   const {
     state: { teamSelected },
@@ -106,6 +112,15 @@ export default function Interface() {
   const [welText, setWelText] = useState<string[]>([""]);
   const [welType, setWelType] = useState<WelcomeType>(WelcomeType.PLAIN);
   const [welAvatarUrl, setWelAvatarUrl] = useState<string>("");
+  const [menuHeaderId, setMenuHeaderId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMenuHeaderId(
+      teamSelected?.menuHeader?.find(
+        (menu) => menu.type === MenuHeaderType.HEADER,
+      )?.id || uuidv4(),
+    );
+  }, [teamSelected]);
 
   useEffect(() => {
     setFoot(
@@ -154,36 +169,48 @@ export default function Interface() {
   const { data, setData } = useTeamSettingsContext();
 
   // Estado para los menús
-  const [primaryMenu, setPrimaryMenu] = useState<TextHref[]>([]);
+  const [primaryMenu, setPrimaryMenu] = useState<ExtendedTextHref[]>([]);
 
-  const [secondaryMenu, setSecondaryMenu] = useState<TextHref[]>([]);
+  const [secondaryMenu, setSecondaryMenu] = useState<ExtendedTextHref[]>([]);
 
   const addPrimaryMenuItem = () => {
+    const textHrefId = uuidv4();
     setPrimaryMenu([
       ...primaryMenu,
       {
-        id: Date.now().toString(),
-        text: "",
-        href: "",
+        id: textHrefId,
         numberOrder: 0,
-        menuHeaderId: null,
-        language: teamSelected?.defaultLanguage || LanguageType.ES,
-        defaultTextHrefId: null,
+        menuHeaderId: menuHeaderId,
+        hrefLanguages: [
+          {
+            id: uuidv4(),
+            text: "",
+            href: "",
+            language: teamSelected?.defaultLanguage || LanguageType.ES,
+            textHrefId: textHrefId,
+          },
+        ],
       },
     ]);
   };
 
   const addSecondaryMenuItem = () => {
+    const textHrefId = uuidv4();
     setSecondaryMenu([
       ...secondaryMenu,
       {
-        id: Date.now().toString(),
-        text: "",
-        href: "",
+        id: textHrefId,
         numberOrder: 0,
-        menuHeaderId: null,
-        language: teamSelected?.defaultLanguage || LanguageType.ES,
-        defaultTextHrefId: null,
+        menuHeaderId: menuHeaderId,
+        hrefLanguages: [
+          {
+            id: uuidv4(),
+            text: "",
+            href: "",
+            language: teamSelected?.defaultLanguage || LanguageType.ES,
+            textHrefId: textHrefId,
+          },
+        ],
       },
     ]);
   };
@@ -198,9 +225,22 @@ export default function Interface() {
     value: string,
   ) => {
     setPrimaryMenu(
-      primaryMenu.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item,
-      ),
+      primaryMenu.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            hrefLanguages: item.hrefLanguages.map((href) =>
+              href.textHrefId === id &&
+              href.language === teamSelected?.defaultLanguage
+                ? { ...href, [field]: value }
+                : href,
+            ),
+          };
+        } else {
+          return item;
+        }
+        // return item.id === id ? { ...item, [field]: value } : item,
+      }),
     );
   };
 
@@ -210,9 +250,21 @@ export default function Interface() {
     value: string,
   ) => {
     setSecondaryMenu(
-      secondaryMenu.map((item) =>
-        item.id === id ? { ...item, [field]: value } : item,
-      ),
+      secondaryMenu.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            hrefLanguages: item.hrefLanguages.map((href) =>
+              href.textHrefId === id &&
+              href.language === teamSelected?.defaultLanguage
+                ? { ...href, [field]: value }
+                : href,
+            ),
+          };
+        } else {
+          return item;
+        }
+      }),
     );
   };
 
@@ -236,7 +288,7 @@ export default function Interface() {
   };
 
   const menuHandler = (
-    menuItem: TextHref[],
+    menuItem: ExtendedTextHref[],
     menuHeaderType: MenuHeaderType,
   ) => {
     if (!teamSelected?.id) return data;
@@ -254,37 +306,53 @@ export default function Interface() {
             textHref: {
               deleteMany: {
                 id: {
-                  notIn: menuItem.map((item) => item.id),
+                  notIn: [],
                 },
               },
-              upsert: menuItem.map((item) => ({
-                where: { id: item.id },
-                create: {
-                  text: item.text,
-                  href: item.href,
+              create: menuItem.map((item) => {
+                console.log({ item });
+                return {
+                  id: item.id,
                   numberOrder:
                     menuItem.findIndex((el) => el.id === item.id) + 1,
-                  language: teamSelected?.defaultLanguage || LanguageType.ES,
-                },
-                update: {
-                  text: item.text,
-                  href: item.href,
-                  numberOrder:
-                    menuItem.findIndex((el) => el.id === item.id) + 1,
-                  language: teamSelected?.defaultLanguage || LanguageType.ES,
-                },
-              })),
+                  hrefLanguages: {
+                    create: item.hrefLanguages.map((hrefLanguage) => {
+                      console.log({ hrefLanguage });
+                      // if(hrefLanguage.language !== teamSelected?.defaultLanguage){
+                      //   return {}
+                      // }
+                      return {
+                        text: hrefLanguage.text,
+                        href: hrefLanguage.href,
+                        language: hrefLanguage.language,
+                        // textHrefId: item.id,
+                      };
+                    }),
+                  },
+                };
+              }),
             },
           },
           create: {
             type: menuHeaderType,
             textHref: {
-              create: menuItem.map((item) => ({
-                text: item.text,
-                href: item.href,
-                numberOrder: menuItem.findIndex((el) => el.id === item.id) + 1,
-                language: teamSelected?.defaultLanguage || LanguageType.ES,
-              })),
+              create: menuItem.map((item) => {
+                return {
+                  // text: item.text,
+                  // href: item.href,
+                  numberOrder:
+                    menuItem.findIndex((el) => el.id === item.id) + 1,
+                  hrefLanguages: {
+                    create: item.hrefLanguages.map((hrefLanguage) => ({
+                      // id: hrefLanguage.id,
+                      text: hrefLanguage.text,
+                      href: hrefLanguage.href,
+                      language: hrefLanguage.language,
+                      // textHrefId: hrefLanguage.textHrefId,
+                    })),
+                  },
+                };
+              }),
             },
           },
         },
@@ -504,38 +572,45 @@ export default function Interface() {
               onReorder={setPrimaryMenu}
               className="space-y-2 mb-2"
             >
-              {primaryMenu.map((item) => (
-                <Reorder.Item key={item.id} value={item}>
-                  <motion.div
-                    className="grid grid-cols-[auto_1fr_2fr_auto] gap-2 items-center"
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                  >
-                    <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab active:cursor-grabbing" />
-                    <Input
-                      value={item.text}
-                      onChange={(e) =>
-                        updatePrimaryMenuItem(item.id, "text", e.target.value)
-                      }
-                      placeholder="Label name"
-                    />
-                    <Input
-                      value={item.href}
-                      onChange={(e) =>
-                        updatePrimaryMenuItem(item.id, "href", e.target.value)
-                      }
-                      placeholder="https://acme.com"
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => deletePrimaryMenuItem(item.id)}
+              {primaryMenu.map((item) => {
+                const values = item.hrefLanguages.find(
+                  (item) =>
+                    item.language === teamSelected?.defaultLanguage ||
+                    LanguageType.ES,
+                );
+                return (
+                  <Reorder.Item key={item.id} value={item}>
+                    <motion.div
+                      className="grid grid-cols-[auto_1fr_2fr_auto] gap-2 items-center"
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
                     >
-                      <Trash2 className="w-4 h-4 text-muted-foreground" />
-                    </Button>
-                  </motion.div>
-                </Reorder.Item>
-              ))}
+                      <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab active:cursor-grabbing" />
+                      <Input
+                        value={values?.text}
+                        onChange={(e) =>
+                          updatePrimaryMenuItem(item.id, "text", e.target.value)
+                        }
+                        placeholder="Label name"
+                      />
+                      <Input
+                        value={values?.href}
+                        onChange={(e) =>
+                          updatePrimaryMenuItem(item.id, "href", e.target.value)
+                        }
+                        placeholder="https://acme.com"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => deletePrimaryMenuItem(item.id)}
+                      >
+                        <Trash2 className="w-4 h-4 text-muted-foreground" />
+                      </Button>
+                    </motion.div>
+                  </Reorder.Item>
+                );
+              })}
             </Reorder.Group>
           ) : (
             <TextAreaCharging />
@@ -566,38 +641,53 @@ export default function Interface() {
               onReorder={setSecondaryMenu}
               className="space-y-2"
             >
-              {secondaryMenu.map((item) => (
-                <Reorder.Item key={item.id} value={item}>
-                  <motion.div
-                    className="grid grid-cols-[auto_1fr_2fr_auto] gap-2 items-center"
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                  >
-                    <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab active:cursor-grabbing" />
-                    <Input
-                      value={item.text}
-                      onChange={(e) =>
-                        updateSecondaryMenuItem(item.id, "text", e.target.value)
-                      }
-                      placeholder="Label name"
-                    />
-                    <Input
-                      value={item.href}
-                      onChange={(e) =>
-                        updateSecondaryMenuItem(item.id, "href", e.target.value)
-                      }
-                      placeholder="https://acme.com"
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => deleteSecondaryMenuItem(item.id)}
+              {secondaryMenu.map((item) => {
+                const values = item.hrefLanguages.find(
+                  (item) =>
+                    item.language === teamSelected?.defaultLanguage ||
+                    LanguageType.ES,
+                );
+                return (
+                  <Reorder.Item key={item.id} value={item}>
+                    <motion.div
+                      className="grid grid-cols-[auto_1fr_2fr_auto] gap-2 items-center"
+                      whileHover={{ scale: 1.01 }}
+                      whileTap={{ scale: 0.99 }}
                     >
-                      <Trash2 className="w-4 h-4 text-muted-foreground" />
-                    </Button>
-                  </motion.div>
-                </Reorder.Item>
-              ))}
+                      <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab active:cursor-grabbing" />
+                      <Input
+                        value={values?.text}
+                        onChange={(e) =>
+                          updateSecondaryMenuItem(
+                            item.id,
+                            "text",
+                            e.target.value,
+                          )
+                        }
+                        placeholder="Label name"
+                      />
+                      <Input
+                        value={values?.href}
+                        onChange={(e) =>
+                          updateSecondaryMenuItem(
+                            item.id,
+                            "href",
+                            e.target.value,
+                          )
+                        }
+                        placeholder="https://acme.com"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => deleteSecondaryMenuItem(item.id)}
+                      >
+                        <Trash2 className="w-4 h-4 text-muted-foreground" />
+                      </Button>
+                    </motion.div>
+                  </Reorder.Item>
+                );
+              })}
             </Reorder.Group>
           ) : (
             <TextAreaCharging />

@@ -27,8 +27,24 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
     };
     menuHeader: {
       select: {
+        id: true;
         type: true;
-        textHref: true;
+        textHref: {
+          select: {
+            id: true;
+            numberOrder: true;
+            menuHeaderId: true;
+            hrefLanguages: {
+              select: {
+                text: true;
+                href: true;
+                language: true;
+                id: true;
+                textHrefId: true;
+              };
+            };
+          };
+        };
       };
     };
     menuFooter: true;
@@ -118,8 +134,24 @@ export const getTeamByTeamId = async (
       },
       menuHeader: {
         select: {
+          id: true,
           type: true,
-          textHref: true,
+          textHref: {
+            select: {
+              id: true,
+              numberOrder: true,
+              menuHeaderId: true,
+              hrefLanguages: {
+                select: {
+                  text: true,
+                  href: true,
+                  language: true,
+                  id: true,
+                  textHrefId: true,
+                },
+              },
+            },
+          },
         },
       },
       menuFooter: true,
@@ -249,8 +281,24 @@ export const updateTeam = async ({
         },
         menuHeader: {
           select: {
+            id: true,
             type: true,
-            textHref: true,
+            textHref: {
+              select: {
+                id: true,
+                numberOrder: true,
+                menuHeaderId: true,
+                hrefLanguages: {
+                  select: {
+                    text: true,
+                    href: true,
+                    language: true,
+                    id: true,
+                    textHrefId: true,
+                  },
+                },
+              },
+            },
           },
         },
         menuFooter: true,

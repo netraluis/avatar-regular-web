@@ -131,13 +131,13 @@ export async function getTeamDataByDomainOrCustomDomainPage({
         select: {
           type: true,
           textHref: {
-            where: {
-              language: language, // Filtra por el idioma específico
-            },
             select: {
-              text: true,
-              href: true,
               numberOrder: true,
+              hrefLanguages: {
+                where: {
+                  language: language,
+                }
+              }
             },
           },
         },
