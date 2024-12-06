@@ -10,7 +10,7 @@ export interface SideDashboardLayoutProps {
   navItems: NavItemsProps[];
   comparatePathName: string;
   absolutePath: string;
-  actionButtonOnClick: () => void;
+  actionButtonOnClick?: () => void;
 }
 
 export const SideDashboardLayout = ({

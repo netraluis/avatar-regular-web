@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Download, CalendarIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -29,6 +29,10 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useParams } from "next/navigation";
+import {
+  InputCharging,
+  CustomCardCharging,
+} from "@/components/loaders/loadersSkeleton";
 
 export default function Component() {
   const router = useRouter();
@@ -41,11 +45,18 @@ export default function Component() {
   const dateFrom = searchParams.get("dateFrom");
   const dateTo = searchParams.get("dateTo");
 
-  const { fetchThreadsMessages, dataFetchThreadsMessages, hasMoreMessages } =
-    useFetchThreadsMessages();
+  const {
+    fetchThreadsMessages,
+    dataFetchThreadsMessages,
+    hasMoreMessages,
+    loadingFetchThreadsMessages,
+  } = useFetchThreadsMessages();
 
-  const { dataFetchMessageByThread, fetchMessageByThread } =
-    useFetchMessageByThread();
+  const {
+    dataFetchMessageByThread,
+    fetchMessageByThread,
+    loadingFetchMessageByThread,
+  } = useFetchMessageByThread();
   const [date, setDate] = useState<DateRange | undefined>({
     from: dateFrom ? new Date(dateFrom) : undefined,
     to: dateTo ? new Date(dateTo) : undefined,
@@ -72,19 +83,27 @@ export default function Component() {
   }, [page, dateFrom, dateTo, assistantId]); // Añadimos `dateFrom` y `dateTo` como dependencias
 
   useEffect(() => {
-    if (!state.user?.user.id) {
-      return router.push(`/login`);
-    }
-    if (threadId) {
-      fetchMessageByThread({
-        threadId,
-        userId: state.user.user.id,
-        assistantId: assistantId as string,
-      });
-    } else {
-      setThreadId(dataFetchThreadsMessages[0]?.threadId);
-    }
+    const updateFetchMessageByThread = async () => {
+      if (!state.user?.user.id) {
+        return router.push(`/login`);
+      }
+      if (threadId) {
+        await fetchMessageByThread({
+          threadId,
+          userId: state.user.user.id,
+          assistantId: assistantId as string,
+        });
+      } else {
+        setThreadId(dataFetchThreadsMessages[0]?.threadId);
+      }
+    };
+
+    updateFetchMessageByThread();
   }, [threadId, dataFetchThreadsMessages]);
+
+  useEffect(() => {
+    setThreadId(dataFetchThreadsMessages[0]?.threadId);
+  }, [dataFetchThreadsMessages]);
 
   // Función para actualizar un filtro específico en la URL
   const updateUrlParams = (key: string, value: string | number | undefined) => {
@@ -95,6 +114,11 @@ export default function Component() {
       params.delete(key);
     }
     router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const deleteUrlParams = () => {
+    setDate(undefined);
+    router.push(`${pathname}`);
   };
 
   // Función para cambiar de página
@@ -114,7 +138,7 @@ export default function Component() {
   };
 
   return (
-    <>
+    <div className="overflow-auto flex flex-col grow h-full">
       <div className="w-full px-4 py-2 flex items-center justify-between gap-2 border mb-2 rounded-lg ">
         <div className="flex grow items-center gap-2 flex-1">
           <Popover>
@@ -155,79 +179,101 @@ export default function Component() {
         </div>
 
         <div className="flex items-center ">
-          <Button size="sm" className="">
-            <Download className="w-4 h-4 mr-1" />
-            Export
+          <Button size="sm" className="" onClick={deleteUrlParams}>
+            {/* <Download className="w-4 h-4 mr-1" /> */}
+            Restart filters
           </Button>
         </div>
       </div>
-      <div className="flex grow rounded-lg bg-background overflow-hidden">
-        <div className="w-80 flex flex-col overflow-hidden">
-          <div className="overflow-auto grow">
-            {dataFetchThreadsMessages.map((i, index) => (
-              <div
-                onClick={() => setThreadId(i.threadId)}
-                key={index}
-                className={cn(
-                  "p-4 mb-2 mr-2 rounded-lg border hover:bg-muted/50 cursor-pointer hover:scale",
-                  i.threadId === threadId && "bg-muted",
-                )}
-              >
-                <div className="space-y-1">
-                  {i.messages.map((msg: any, index: number) => {
-                    return (
-                      <p
-                        key={index}
-                        className={
-                          msg.role === RoleUserType.USER
-                            ? "font-medium "
-                            : "text-sm text-muted-foreground"
-                        }
-                      >
-                        {msg.role === RoleUserType.USER ? "User" : "Assistant"}:{" "}
-                        {msg.message}
-                      </p>
-                    );
-                  })}
+      <div className="flex grow rounded-lg bg-background overflow-auto ">
+        <div className="w-80 flex flex-col overflow-auto h-full">
+          {!loadingFetchThreadsMessages ? (
+            <div className="overflow-auto grow scrollbar-hidden grow">
+              {dataFetchThreadsMessages.length > 0 ? (
+                dataFetchThreadsMessages.map((i, index) => (
+                  <div
+                    onClick={() => setThreadId(i.threadId)}
+                    key={index}
+                    className={cn(
+                      "p-4 mb-2 mr-2 rounded-lg border hover:bg-muted/50 cursor-pointer hover:scale",
+                      i.threadId === threadId && "bg-muted",
+                    )}
+                  >
+                    <div className="space-y-1">
+                      {i.messages.map((msg: any, index: number) => {
+                        return (
+                          <p
+                            key={index}
+                            className={`h-[40px] overflow-hidden ${
+                              msg.role === RoleUserType.USER
+                                ? "font-medium "
+                                : "text-sm text-muted-foreground"
+                            }`}
+                          >
+                            {msg.role === RoleUserType.USER
+                              ? "User"
+                              : "Assistant"}
+                            : {msg.message}
+                          </p>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="h-full grow p-4 mr-2 rounded-lg border flex justify-center items-center">
+                  <>no hay datos</>
                 </div>
-              </div>
-            ))}
-          </div>
-          <div className="pr-2">
-            <Pagination className="border mr-2 rounded-lg">
-              <PaginationContent>
-                {page > 1 && (
-                  <PaginationItem>
-                    <PaginationPrevious
-                      onClick={() => handlePageChange(page - 1)}
-                    />
-                  </PaginationItem>
-                )}
-                <PaginationItem>
-                  <PaginationLink onClick={() => handlePageChange(1)}>
-                    {page}
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                {hasMoreMessages && (
-                  <PaginationItem>
-                    <PaginationNext
-                      onClick={() => handlePageChange(page + 1)}
-                    />
-                  </PaginationItem>
-                )}
-              </PaginationContent>
-            </Pagination>
-          </div>
+              )}
+            </div>
+          ) : (
+            <div className="mr-2 mb-2 h-full">
+              <CustomCardCharging height="full" />
+            </div>
+          )}
+          {dataFetchThreadsMessages.length > 0 && (
+            <div className="pr-2">
+              {!loadingFetchThreadsMessages ? (
+                <Pagination className="border mr-2 rounded-lg">
+                  <PaginationContent>
+                    {page > 1 && (
+                      <PaginationItem>
+                        <PaginationPrevious
+                          onClick={() => handlePageChange(page - 1)}
+                        />
+                      </PaginationItem>
+                    )}
+                    <PaginationItem>
+                      <PaginationLink onClick={() => handlePageChange(1)}>
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                    {hasMoreMessages && (
+                      <PaginationItem>
+                        <PaginationNext
+                          onClick={() => handlePageChange(page + 1)}
+                        />
+                      </PaginationItem>
+                    )}
+                  </PaginationContent>
+                </Pagination>
+              ) : (
+                <InputCharging />
+              )}
+            </div>
+          )}
         </div>
 
         {/* Main Chat Area */}
         <div className="flex-1 flex flex-col border rounded-lg">
-          <div className="flex-1 overflow-auto p-4 space-y-4">
-            <div className="flex flex-col max-w-100% space-y-2">
-              {dataFetchMessageByThread &&
+          <div className="flex-1 overflow-auto p-4 space-y-4 scrollbar-hidden">
+            <div className="flex flex-col max-w-100% space-y-2 scrollbar-hidden overflow-auto">
+              {!loadingFetchMessageByThread ? (
+                threadId &&
+                dataFetchMessageByThread &&
                 dataFetchMessageByThread.map((message, index: number) => (
                   <div
                     key={index}
@@ -239,11 +285,17 @@ export default function Component() {
                   >
                     <p>{message.message}</p>
                   </div>
-                ))}
+                ))
+              ) : (
+                <>
+                  <InputCharging />
+                  <InputCharging />
+                </>
+              )}
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
