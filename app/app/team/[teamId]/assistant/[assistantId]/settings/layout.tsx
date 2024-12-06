@@ -18,8 +18,7 @@ import {
 
 const navItems = [
   { name: "General", href: "general", icon: Settings },
-  { name: "Interface", href: "interface", icon: Paintbrush },
-  { name: "Localisations", href: "localisations", icon: Languages },
+  { name: "Interface", href: "interface", icon: Paintbrush }
 ];
 
 function Layout({

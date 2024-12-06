@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
-import { Mic } from "lucide-react";
+import { LoaderCircle, Save } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "@/components/context/appContext";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
@@ -24,12 +24,28 @@ import {
   useGetAssistant,
   useUpdateAssistant,
 } from "@/components/context/useAppContext/assistant";
+import { InputCharging, SelectCharging, TextAreaCharging } from "@/components/loaders/loadersSkeleton";
+
+
+const playground = {
+  title: "Zona de proves",
+  description: "La zona de proves et permet experimentar amb diferents configuracions sense afectar el chatbot en directe.",
+  model: "Model",
+  instructions: "Instruccions",
+  temperature: "Temperatura",
+  top_p: "Top P",
+  output: "Sortida",
+  typeYourMessageHere: "Escriu el teu missatge aquí...",
+  send: "Enviar",
+  save: "Desar canvis",
+}
 
 export default function Playground() {
   const { state } = useAppContext();
   const { assistantId } = useParams();
   const router = useRouter();
   const [message, setMessage] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const [assistantValues, setAssistantValues] = React.useState({
     model: "gpt-4",
@@ -71,9 +87,10 @@ export default function Playground() {
   };
 
   const handleUpdate = async () => {
+    setLoading(true);
     try {
       if (assistantValues && assistantId && state.user?.user?.id)
-        updateAssistant({
+        await updateAssistant({
           assistantId: assistantId as string,
           userId: state.user.user.id,
           openAIassistantUpdateParams: assistantValues,
@@ -81,6 +98,8 @@ export default function Playground() {
         });
     } catch (error) {
       console.error("An error occurred while updating the assistant", error);
+    } finally{
+      setLoading(false);
     }
   };
 
@@ -105,10 +124,15 @@ export default function Playground() {
   }, [messages]);
 
   return (
-    <div className="container mx-auto p-4 grow flex flex-col overflow-hidden">
+    <div className="container mx-auto p-4 grow flex flex-col overflow-auto">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Playground</h1>
-        <Button onClick={handleUpdate}>Save changes</Button>
+        <h1 className="text-2xl font-bold">{playground.title}</h1>
+        {getAssistantData ? <Button onClick={handleUpdate}>
+          {loading ? 
+            <LoaderCircle className="h-3.5 w-3.5 mr-2 animate-spin" /> : 
+            <Save className="h-3.5 w-3.5 mr-2" />
+          } Save changes
+        </Button>: <SelectCharging/>}
       </div>
       <p className="text-sm text-gray-500 mb-4">
         The playground allows you to experiment with different configurations
@@ -119,7 +143,7 @@ export default function Playground() {
           <form className="space-y-6">
             <div>
               <Label htmlFor="model">Model</Label>
-              <Select
+              {getAssistantData?.openAIassistant.model ? <Select
                 defaultValue={assistantValues.model}
                 value={assistantValues.model}
                 onValueChange={(value) =>
@@ -136,14 +160,14 @@ export default function Playground() {
                     </SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </Select> : <InputCharging/>}
             </div>
             <div>
               <Label htmlFor="instructions">Instructions</Label>
-              <Textarea
+              {getAssistantData?.openAIassistant.instructions ? <Textarea
                 id="instructions"
                 placeholder="Type your instructions here"
-                className="h-32"
+                className="h-[100px]"
                 value={assistantValues.instructions}
                 onChange={(e) =>
                   setAssistantValues((prev) => ({
@@ -151,7 +175,7 @@ export default function Playground() {
                     instructions: e.target.value,
                   }))
                 }
-              />
+              /> : <TextAreaCharging/>}
               <p className="text-xs text-gray-500 mt-1">
                 Customize your chatbot personality and style with specific
                 instructions.
@@ -159,9 +183,9 @@ export default function Playground() {
             </div>
             <div>
               <Label htmlFor="temperature">
-                Temperature: {assistantValues.temperature.toFixed(2)}
+                Temperature: {getAssistantData?.openAIassistant.temperature ? assistantValues.temperature.toFixed(2): ''}
               </Label>
-              <Slider
+              { getAssistantData?.openAIassistant.temperature ? <Slider
                 className="mt-3"
                 id="temperature"
                 min={0}
@@ -174,13 +198,13 @@ export default function Playground() {
                     temperature: value[0],
                   }))
                 }
-              />
+              /> : <InputCharging/>}
             </div>
             <div>
               <Label htmlFor="top-p">
-                Top P: {assistantValues.top_p.toFixed(2)}
+                Top P: { getAssistantData?.openAIassistant.top_p ? assistantValues.top_p.toFixed(2): ''}
               </Label>
-              <Slider
+              { getAssistantData?.openAIassistant.top_p ? <Slider
                 className="mt-3"
                 id="top-p"
                 min={0}
@@ -190,7 +214,7 @@ export default function Playground() {
                 onValueChange={(value) =>
                   setAssistantValues((prev) => ({ ...prev, top_p: value[0] }))
                 }
-              />
+              />: <InputCharging/>}
             </div>
           </form>
         </Card>
@@ -227,10 +251,10 @@ export default function Playground() {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               />
-              <Button size="icon" variant="ghost">
+              {/* <Button size="icon" variant="ghost">
                 <Mic className="h-4 w-4" />
-              </Button>
-              <Button onClick={handleSendMessage}>Send</Button>
+              </Button> */}
+              {getAssistantData ? <Button onClick={handleSendMessage}>Send</Button> : <SelectCharging/>}
             </div>
           </div>
         </Card>
