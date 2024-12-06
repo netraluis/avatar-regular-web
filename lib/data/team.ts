@@ -3,6 +3,7 @@ import { Prisma } from "@prisma/client";
 
 export type GetTeamByTeamId = Prisma.TeamGetPayload<{
   select: {
+    selectedLanguages: true;
     headerButton: true;
     subDomain: true;
     defaultLanguage: true;
@@ -59,6 +60,7 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
           select: {
             title: true;
             description: true;
+            language: true;
           };
         };
       };
@@ -110,6 +112,7 @@ export const getTeamByTeamId = async (
       },
     },
     select: {
+      selectedLanguages: true,
       headerButton: true,
       subDomain: true,
       defaultLanguage: true,
@@ -166,6 +169,7 @@ export const getTeamByTeamId = async (
             select: {
               title: true,
               description: true,
+              language: true,
             },
           },
         },
@@ -257,6 +261,7 @@ export const updateTeam = async ({
       //   headerButton: true,
       // },
       select: {
+        selectedLanguages: true,
         headerButton: true,
         subDomain: true,
         defaultLanguage: true,
@@ -313,6 +318,7 @@ export const updateTeam = async ({
               select: {
                 title: true,
                 description: true,
+                language: true,
               },
             },
           },

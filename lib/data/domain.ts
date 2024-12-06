@@ -136,8 +136,8 @@ export async function getTeamDataByDomainOrCustomDomainPage({
               hrefLanguages: {
                 where: {
                   language: language,
-                }
-              }
+                },
+              },
             },
           },
         },
