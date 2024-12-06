@@ -16,6 +16,8 @@ import {
   useUserConfirmation,
 } from "@/components/context/useAppContext/user";
 import { useEffect, useRef, useState } from "react";
+import ConfirmationScreen from "@/components/user-process/redirect";
+import { PartyPopper, Link2Off } from "lucide-react";
 
 const login = {
   title: "Confirmar compte",
@@ -38,6 +40,16 @@ const login = {
   login: "Inicia sessió",
   dont_have_account: "No tens un compte?",
   sign_up: "Registra't",
+
+  successEmail: "Enhorabona! La teva conta ha estat confirmada",
+  successDescription:
+    "Inicia la sessió per començar a crear el teu assistent personalitzat",
+  successButtonText: "Iniciar sessió",
+
+  otpError: "Oops! L’enllaç ha caducat",
+  otpErrorDescription:
+    "Sembla que l’enllaç de confirmació ha caducat. No passa res, et podem enviar un de nou.",
+  otpErrorButtonText: "Reenviar un nou enllaç",
 };
 
 export default function Confirmation() {
@@ -123,19 +135,29 @@ export default function Confirmation() {
               </Button>
             )}
             {success && !loading && (
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  router.push("/login");
-                }}
-                className="w-full"
-                type="submit"
-                disabled={loading}
-              >
-                {login.success}
-              </Button>
+              // <Button
+              //   onClick={(e) => {
+              //     e.preventDefault();
+              //     router.push("/login");
+              //   }}
+              //   className="w-full"
+              //   type="submit"
+              //   disabled={loading}
+              // >
+              //   {login.success}
+              // </Button>
+              <ConfirmationScreen
+                title={login.successEmail}
+                description={login.successDescription}
+                buttonText={login.successButtonText}
+                logo={PartyPopper}
+                onButtonClick={() => router.push("/login")}
+                loading={false}
+                // logoAction={PartyPopper}
+                // logoLoading={PartyPopper}
+              />
             )}
-            {error === "otp_expired" && (
+            {/* {error === "otp_expired" && (
               <div className="mt-4 text-center">
                 <p className="text-sm mb-2">{login.otp_expired}</p>
                 <Button
@@ -153,6 +175,19 @@ export default function Confirmation() {
                   {login.otp_send}
                 </Button>
               </div>
+            )} */}
+
+            {error === "otp_expired" && (
+              <ConfirmationScreen
+                title={login.otpError}
+                description={login.otpErrorDescription}
+                buttonText={login.otpErrorButtonText}
+                logo={Link2Off}
+                onButtonClick={() => useOtpExp.otpExpired({ email })}
+                loading={false}
+                // logoAction={PartyPopper}
+                logoLoading={ArrowPathIcon}
+              />
             )}
           </form>
         </CardContent>

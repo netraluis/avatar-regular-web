@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
-import { LoaderCircle, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "@/components/context/appContext";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
@@ -135,7 +135,8 @@ export default function Playground() {
     }
   }, [messages]);
 
-  return (<TitleLayout
+  return (
+    <TitleLayout
       cardTitle={playground.title}
       cardDescription={playground.description}
       urlPreview={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
