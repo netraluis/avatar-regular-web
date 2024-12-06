@@ -29,6 +29,7 @@ import {
   SelectCharging,
   TextAreaCharging,
 } from "@/components/loaders/loadersSkeleton";
+import { TitleLayout } from "@/components/layouts/title-layout";
 
 const playground = {
   title: "Zona de proves",
@@ -42,6 +43,7 @@ const playground = {
   typeYourMessageHere: "Escriu el teu missatge aquí...",
   send: "Enviar",
   save: "Desar canvis",
+  error: "Hi ha hagut un error en desar els canvis",
 };
 
 export default function Playground() {
@@ -50,6 +52,11 @@ export default function Playground() {
   const router = useRouter();
   const [message, setMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<any>(undefined);
+
+  const {
+    state: { teamSelected },
+  } = useAppContext();
 
   const [assistantValues, setAssistantValues] = React.useState({
     model: "gpt-4",
@@ -102,6 +109,7 @@ export default function Playground() {
         });
     } catch (error) {
       console.error("An error occurred while updating the assistant", error);
+      setError(error);
     } finally {
       setLoading(false);
     }
@@ -127,24 +135,17 @@ export default function Playground() {
     }
   }, [messages]);
 
-  return (
-    <div className="container mx-auto p-4 grow flex flex-col overflow-auto">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">{playground.title}</h1>
-        {getAssistantData ? (
-          <Button onClick={handleUpdate}>
-            {loading ? (
-              <LoaderCircle className="h-3.5 w-3.5 mr-2 animate-spin" />
-            ) : (
-              <Save className="h-3.5 w-3.5 mr-2" />
-            )}{" "}
-            {playground.save}
-          </Button>
-        ) : (
-          <SelectCharging />
-        )}
-      </div>
-      <p className="text-sm text-gray-500 mb-4">{playground.description}</p>
+  return (<TitleLayout
+      cardTitle={playground.title}
+      cardDescription={playground.description}
+      urlPreview={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
+      actionButtonText={playground.save}
+      ActionButtonLogo={Save}
+      actionButtonOnClick={handleUpdate}
+      actionButtonLoading={loading}
+      actionErrorText={playground.error}
+      actionError={error}
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden">
         <Card className="p-6">
           <form className="space-y-6">
@@ -292,6 +293,6 @@ export default function Playground() {
           </div>
         </Card>
       </div>
-    </div>
+    </TitleLayout>
   );
 }
