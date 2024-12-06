@@ -84,7 +84,7 @@ export default function Dashboard() {
       {loading ? (
         <Loader />
       ) : (
-        <Card className='w-full'>
+        <Card className="w-full">
           <CardContent>
             <Table>
               <TableHeader>

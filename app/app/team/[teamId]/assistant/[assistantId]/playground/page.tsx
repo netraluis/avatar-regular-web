@@ -24,21 +24,25 @@ import {
   useGetAssistant,
   useUpdateAssistant,
 } from "@/components/context/useAppContext/assistant";
-import { InputCharging, SelectCharging, TextAreaCharging } from "@/components/loaders/loadersSkeleton";
-
+import {
+  InputCharging,
+  SelectCharging,
+  TextAreaCharging,
+} from "@/components/loaders/loadersSkeleton";
 
 const playground = {
   title: "Zona de proves",
-  description: "La zona de proves et permet experimentar amb diferents configuracions sense afectar el chatbot en directe.",
+  description:
+    "La zona de proves et permet experimentar amb diferents configuracions sense afectar el chatbot en directe.",
   model: "Model",
   instructions: "Instruccions",
   temperature: "Temperatura",
-  top_p: "Top P",
+  topP: "Top P",
   output: "Sortida",
   typeYourMessageHere: "Escriu el teu missatge aquí...",
   send: "Enviar",
   save: "Desar canvis",
-}
+};
 
 export default function Playground() {
   const { state } = useAppContext();
@@ -98,7 +102,7 @@ export default function Playground() {
         });
     } catch (error) {
       console.error("An error occurred while updating the assistant", error);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -127,55 +131,66 @@ export default function Playground() {
     <div className="container mx-auto p-4 grow flex flex-col overflow-auto">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">{playground.title}</h1>
-        {getAssistantData ? <Button onClick={handleUpdate}>
-          {loading ? 
-            <LoaderCircle className="h-3.5 w-3.5 mr-2 animate-spin" /> : 
-            <Save className="h-3.5 w-3.5 mr-2" />
-          } Save changes
-        </Button>: <SelectCharging/>}
+        {getAssistantData ? (
+          <Button onClick={handleUpdate}>
+            {loading ? (
+              <LoaderCircle className="h-3.5 w-3.5 mr-2 animate-spin" />
+            ) : (
+              <Save className="h-3.5 w-3.5 mr-2" />
+            )}{" "}
+            {playground.save}
+          </Button>
+        ) : (
+          <SelectCharging />
+        )}
       </div>
-      <p className="text-sm text-gray-500 mb-4">
-        The playground allows you to experiment with different configurations
-        without affecting the live chatbot.
-      </p>
+      <p className="text-sm text-gray-500 mb-4">{playground.description}</p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden">
         <Card className="p-6">
           <form className="space-y-6">
             <div>
-              <Label htmlFor="model">Model</Label>
-              {getAssistantData?.openAIassistant.model ? <Select
-                defaultValue={assistantValues.model}
-                value={assistantValues.model}
-                onValueChange={(value) =>
-                  setAssistantValues((prev) => ({ ...prev, model: value }))
-                }
-              >
-                <SelectTrigger id="model">
-                  <SelectValue placeholder="Select a model" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.values(ChatModel).map((model) => (
-                    <SelectItem key={model} value={model}>
-                      {model}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select> : <InputCharging/>}
+              <Label htmlFor="model">{playground.model}</Label>
+              {getAssistantData?.openAIassistant.model ? (
+                <Select
+                  defaultValue={assistantValues.model}
+                  value={assistantValues.model}
+                  onValueChange={(value) =>
+                    setAssistantValues((prev) => ({ ...prev, model: value }))
+                  }
+                >
+                  <SelectTrigger id="model">
+                    <SelectValue placeholder="Select a model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.values(ChatModel).map((model) => (
+                      <SelectItem key={model} value={model}>
+                        {model}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <InputCharging />
+              )}
             </div>
             <div>
-              <Label htmlFor="instructions">Instructions</Label>
-              {getAssistantData?.openAIassistant.instructions ? <Textarea
-                id="instructions"
-                placeholder="Type your instructions here"
-                className="h-[100px]"
-                value={assistantValues.instructions}
-                onChange={(e) =>
-                  setAssistantValues((prev) => ({
-                    ...prev,
-                    instructions: e.target.value,
-                  }))
-                }
-              /> : <TextAreaCharging/>}
+              <Label htmlFor="instructions">{playground.instructions}</Label>
+              {getAssistantData?.openAIassistant.instructions ? (
+                <Textarea
+                  id="instructions"
+                  placeholder="Type your instructions here"
+                  className="h-[100px]"
+                  value={assistantValues.instructions}
+                  onChange={(e) =>
+                    setAssistantValues((prev) => ({
+                      ...prev,
+                      instructions: e.target.value,
+                    }))
+                  }
+                />
+              ) : (
+                <TextAreaCharging />
+              )}
               <p className="text-xs text-gray-500 mt-1">
                 Customize your chatbot personality and style with specific
                 instructions.
@@ -183,44 +198,58 @@ export default function Playground() {
             </div>
             <div>
               <Label htmlFor="temperature">
-                Temperature: {getAssistantData?.openAIassistant.temperature ? assistantValues.temperature.toFixed(2): ''}
+                {playground.temperature}:{" "}
+                {getAssistantData?.openAIassistant.temperature
+                  ? assistantValues.temperature.toFixed(2)
+                  : ""}
               </Label>
-              { getAssistantData?.openAIassistant.temperature ? <Slider
-                className="mt-3"
-                id="temperature"
-                min={0}
-                max={2}
-                step={0.01}
-                value={[assistantValues.temperature]}
-                onValueChange={(value) =>
-                  setAssistantValues((prev) => ({
-                    ...prev,
-                    temperature: value[0],
-                  }))
-                }
-              /> : <InputCharging/>}
+              {getAssistantData?.openAIassistant.temperature ? (
+                <Slider
+                  className="mt-3"
+                  id="temperature"
+                  min={0}
+                  max={2}
+                  step={0.01}
+                  value={[assistantValues.temperature]}
+                  onValueChange={(value) =>
+                    setAssistantValues((prev) => ({
+                      ...prev,
+                      temperature: value[0],
+                    }))
+                  }
+                />
+              ) : (
+                <InputCharging />
+              )}
             </div>
             <div>
               <Label htmlFor="top-p">
-                Top P: { getAssistantData?.openAIassistant.top_p ? assistantValues.top_p.toFixed(2): ''}
+                {playground.topP}:{" "}
+                {getAssistantData?.openAIassistant.top_p
+                  ? assistantValues.top_p.toFixed(2)
+                  : ""}
               </Label>
-              { getAssistantData?.openAIassistant.top_p ? <Slider
-                className="mt-3"
-                id="top-p"
-                min={0}
-                max={1}
-                step={0.01}
-                value={[assistantValues.top_p]}
-                onValueChange={(value) =>
-                  setAssistantValues((prev) => ({ ...prev, top_p: value[0] }))
-                }
-              />: <InputCharging/>}
+              {getAssistantData?.openAIassistant.top_p ? (
+                <Slider
+                  className="mt-3"
+                  id="top-p"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  value={[assistantValues.top_p]}
+                  onValueChange={(value) =>
+                    setAssistantValues((prev) => ({ ...prev, top_p: value[0] }))
+                  }
+                />
+              ) : (
+                <InputCharging />
+              )}
             </div>
           </form>
         </Card>
         <Card className="flex flex-col relative overflow-hidden ">
           <CardHeader>
-            <CardTitle>Output</CardTitle>
+            <CardTitle>{playground.output}</CardTitle>
           </CardHeader>
           <div
             className="overflow-y-auto grow scrollbar-hidden"
@@ -246,7 +275,7 @@ export default function Playground() {
           <div className="w-full">
             <div className="p-4 border-t flex items-center space-x-2">
               <Input
-                placeholder="Type your message here..."
+                placeholder={playground.typeYourMessageHere}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
@@ -254,7 +283,11 @@ export default function Playground() {
               {/* <Button size="icon" variant="ghost">
                 <Mic className="h-4 w-4" />
               </Button> */}
-              {getAssistantData ? <Button onClick={handleSendMessage}>Send</Button> : <SelectCharging/>}
+              {getAssistantData ? (
+                <Button onClick={handleSendMessage}>{playground.send}</Button>
+              ) : (
+                <SelectCharging />
+              )}
             </div>
           </div>
         </Card>

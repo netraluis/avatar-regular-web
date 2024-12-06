@@ -45,7 +45,7 @@ export default function Layout({
   return (
     <div className="container mx-auto p-4 grow flex flex-col overflow-auto w-full max-w-6xl">
       <Header />
-      <Separator/>
+      <Separator />
       <div className="grow flex flex-col overflow-auto items-start py-4 w-full">
         {children}
       </div>

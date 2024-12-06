@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-import { Settings, Paintbrush, Languages } from "lucide-react";
+import { Settings, Paintbrush } from "lucide-react";
 import { useAppContext } from "@/components/context/appContext";
 import {
   AssistantSettingsProvider,
@@ -18,7 +18,7 @@ import {
 
 const navItems = [
   { name: "General", href: "general", icon: Settings },
-  { name: "Interface", href: "interface", icon: Paintbrush }
+  { name: "Interface", href: "interface", icon: Paintbrush },
 ];
 
 function Layout({
