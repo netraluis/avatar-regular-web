@@ -1,37 +1,45 @@
 "use client";
 
-import {
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useUserForgotPassword } from "@/components/context/useAppContext/user";
+import ConfirmationScreen from "@/components/user-process/redirect";
+import { MailCheck } from "lucide-react";
+import Link from "next/link";
 
 const forgotPassword = {
-  title: "Reseteja la contrasenya",
+  title: "Recupera la teva contrasenya",
   description:
-    "Entri les dades per enviar un correo per actualitzar la contrasenya",
-  email: "Email",
-  send: "Enviar",
+    "Introdueix el correu electrònic amb el qual vas crear el compte i t’enviarem un enllaç per restablir la contrasenya.",
+  email: "Correu electrònic",
+  send: "Enviar enllaç de recuperació",
+  placeholder: "nom@chatbotfor.ai",
   error: {
     unknown_error: "Ho sentim hi ha hagut un error",
   },
+  emailSent: "Hem enviat un correu",
+  emailSentDescription1: "Ves a la teva safata d’entrada a ",
+  emailSentDescription2:
+    ". Allà hi trobaràs un enllaç per crear una nova contrasenya.",
+  emailSentSubDescription:
+    "Si no el veus, revisa la carpeta de correu no desitjat o promocions.",
+  linkText: "",
+  link: "",
 };
 
 export default function Signup() {
   const { userForgotPassword, loading, data, error } = useUserForgotPassword();
   const [message, setMesssage] = useState(false);
+  const [email, setEmail] = useState("");
 
   const handleSendEmailForgotPassword = async (formData: FormData) => {
     await userForgotPassword({
       email: formData.get("email") as string,
     });
+    setEmail(formData.get("email") as string);
   };
 
   useEffect(() => {
@@ -42,13 +50,13 @@ export default function Signup() {
     <div className="flex justify-center items-center min-h-screen">
       {!message || error ? (
         <div className="mx-auto max-w-sm">
-          <CardHeader>
-            <CardTitle className="text-2xl">{forgotPassword.title}</CardTitle>
-            <CardDescription>{forgotPassword.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
+          <ConfirmationScreen
+            title={forgotPassword.title}
+            description={forgotPassword.description}
+            loading={loading}
+          >
             <form
-              className="grid gap-4"
+              className="grid gap-4 w-full"
               onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
@@ -56,11 +64,11 @@ export default function Signup() {
               }}
             >
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{forgotPassword.email}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder={forgotPassword.placeholder}
                   name="email"
                   required
                 />
@@ -82,19 +90,32 @@ export default function Signup() {
                 {forgotPassword.send}
               </Button>
             </form>
-            {/* <div className="mt-4 text-center">
-            <p className="text-sm">
-
-              Already have an account?{" "}
-              <Link href="/login" className="text-blue-500 underline">
-                Login
-              </Link>
-            </p>
-          </div> */}
-          </CardContent>
+          </ConfirmationScreen>
         </div>
       ) : (
-        <div className="mx-auto max-w-sm">Tu solicitud ha sido enviada</div>
+        // <div className="mx-auto max-w-sm">Tu solicitud ha sido enviada</div>
+        <div className="mx-auto max-w-sm">
+          <ConfirmationScreen
+            title={forgotPassword.emailSent}
+            description={
+              <p>
+                {forgotPassword.emailSentDescription1}
+                <span className="font-medium text-slate-950">{email}</span>
+                {forgotPassword.emailSentDescription2}
+              </p>
+            }
+            logo={MailCheck}
+            loading={false}
+            linkText={
+              <p className="mt-4 text-muted-foreground">
+                {forgotPassword.emailSentSubDescription}{" "}
+                <Link href={forgotPassword.link} className="underline hover:">
+                  {forgotPassword.linkText}
+                </Link>
+              </p>
+            }
+          />
+        </div>
       )}
     </div>
   );

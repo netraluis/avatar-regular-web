@@ -1,14 +1,5 @@
 "use client";
 
-import {
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -17,7 +8,9 @@ import {
 } from "@/components/context/useAppContext/user";
 import { useEffect, useRef, useState } from "react";
 import ConfirmationScreen from "@/components/user-process/redirect";
-import { PartyPopper, Link2Off } from "lucide-react";
+import { PartyPopper, Link2Off, LoaderCircleIcon } from "lucide-react";
+import { useAppContext } from "@/components/context/appContext";
+import { UserData } from "@/types/types";
 
 const login = {
   title: "Confirmar compte",
@@ -50,6 +43,9 @@ const login = {
   otpErrorDescription:
     "Sembla que l’enllaç de confirmació ha caducat. No passa res, et podem enviar un de nou.",
   otpErrorButtonText: "Reenviar un nou enllaç",
+
+  verifyAccount: "Verificant el teu compte…",
+  verifyAccountDescription: "Aquest procés pot tardar uns segons ",
 };
 
 export default function Confirmation() {
@@ -57,6 +53,7 @@ export default function Confirmation() {
   const useOtpExp = useOtpExpired();
   const router = useRouter();
   const hasCalled = useRef(false);
+  const { dispatch } = useAppContext();
 
   const searchParams = useSearchParams();
   const email = decodeURIComponent(searchParams.get("email") || "").replace(
@@ -68,7 +65,6 @@ export default function Confirmation() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    console.log("confirm useEffect");
     if (!hasCalled.current && token && email) {
       userConfirmation({ email, otp: token });
       hasCalled.current = true;
@@ -77,6 +73,7 @@ export default function Confirmation() {
 
   useEffect(() => {
     if (data) {
+      dispatch({ type: "SET_USER", payload: data as UserData });
       setSuccess(true);
     }
   }, [data]);
@@ -88,36 +85,7 @@ export default function Confirmation() {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="mx-auto max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl">{login.title}</CardTitle>
-          <CardDescription>{login.description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">{login.email}</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="name@example.com"
-                name="email"
-                required
-                value={email || ""}
-                readOnly
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="otp">{login.token}</Label>
-              </div>
-              <Input
-                id="otp"
-                name="otp"
-                required
-                value={token || ""}
-                readOnly
-              />
-            </div>
+        {/* <form className="grid gap-4">
             {error && (
               <p className="text-red-500">
                 {login.error[error as keyof typeof login.error] ||
@@ -125,72 +93,40 @@ export default function Confirmation() {
                 {error}
               </p>
             )}
-            {loading && (
-              <Button className="w-full" type="submit" disabled={loading}>
-                <ArrowPathIcon
-                  className="ml-0.5 h-5 w-5 animate-spin mr-1"
-                  aria-hidden="true"
-                />
-                {login.verify_account}
-              </Button>
-            )}
-            {success && !loading && (
-              // <Button
-              //   onClick={(e) => {
-              //     e.preventDefault();
-              //     router.push("/login");
-              //   }}
-              //   className="w-full"
-              //   type="submit"
-              //   disabled={loading}
-              // >
-              //   {login.success}
-              // </Button>
-              <ConfirmationScreen
-                title={login.successEmail}
-                description={login.successDescription}
-                buttonText={login.successButtonText}
-                logo={PartyPopper}
-                onButtonClick={() => router.push("/login")}
-                loading={false}
-                // logoAction={PartyPopper}
-                // logoLoading={PartyPopper}
-              />
-            )}
-            {/* {error === "otp_expired" && (
-              <div className="mt-4 text-center">
-                <p className="text-sm mb-2">{login.otp_expired}</p>
-                <Button
-                  onClick={() => useOtpExp.otpExpired({ email })}
-                  className="w-full"
-                  type="submit"
-                  disabled={useOtpExp.loading}
-                >
-                  {useOtpExp.loading && (
-                    <ArrowPathIcon
-                      className="ml-0.5 h-5 w-5 animate-spin mr-1"
-                      aria-hidden="true"
-                    />
-                  )}
-                  {login.otp_send}
-                </Button>
-              </div>
-            )} */}
+          </form> */}
 
-            {error === "otp_expired" && (
-              <ConfirmationScreen
-                title={login.otpError}
-                description={login.otpErrorDescription}
-                buttonText={login.otpErrorButtonText}
-                logo={Link2Off}
-                onButtonClick={() => useOtpExp.otpExpired({ email })}
-                loading={false}
-                // logoAction={PartyPopper}
-                logoLoading={ArrowPathIcon}
-              />
-            )}
-          </form>
-        </CardContent>
+        {loading && (
+          <ConfirmationScreen
+            title={login.verifyAccount}
+            description={login.verifyAccountDescription}
+            logo={LoaderCircleIcon}
+            loading={false}
+          />
+        )}
+        {success && !loading && (
+          <ConfirmationScreen
+            title={login.successEmail}
+            description={login.successDescription}
+            buttonText={login.successButtonText}
+            logo={PartyPopper}
+            onButtonClick={() => {
+              router.push("/");
+            }}
+            loading={false}
+          />
+        )}
+
+        {error && (
+          <ConfirmationScreen
+            title={login.otpError}
+            description={login.otpErrorDescription}
+            buttonText={login.otpErrorButtonText}
+            logo={Link2Off}
+            onButtonClick={() => useOtpExp.otpExpired({ email })}
+            loading={false}
+            logoLoading={ArrowPathIcon}
+          />
+        )}
       </div>
     </div>
   );

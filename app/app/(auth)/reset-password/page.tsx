@@ -1,11 +1,5 @@
 "use client";
 
-import {
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,24 +7,31 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
-  useUserForgotPassword,
+  // useUserForgotPassword,
   useUserResetPassword,
 } from "@/components/context/useAppContext/user";
+import { useAppContext } from "@/components/context/appContext";
+import { UserData } from "@/types/types";
+import ConfirmationScreen from "@/components/user-process/redirect";
+import { Link2Off, PartyPopper } from "lucide-react";
 
 const resetPassword = {
-  title: "Reseta la contrasenya",
-  description: "Procedint per resetar la teva contrasenya",
-  verify_account: "Verificant compte",
-  success: "Contrasenya canviada, anar al login",
-  password: "Constraseya",
-  password_repeat: "Repeteix la contrasenya",
+  title: "Crea una nova contrasenya",
+  description: "Introdueix una nova contrasenya per accedir al teu compte.",
+  subDescription:
+    "Fes servir almenys 6 caràcters i combina lletres, números i algun símbol",
+  success: "Contrasenya restablerta!",
+  successDescription:
+    "La teva nova contrasenya s’ha actualitzat correctament. Ja pots accedir al teu compte.",
+  successButtonText: "Accedeix al tauler",
+  password: "Contrasenya nova",
+  password_repeat: "Repeteix la nova contrasenya",
   password_updating: "Actualitzant contrasenya",
   send: "Enviar",
 
   error: {
     same_password: "La contrasenya ha de ser la mateixa",
-    weak_password:
-      "La contrasenya ha de tenir almenys 6 caràcters. Per fer un altre intent hauras d`enviar el token de nou",
+    weak_password: "La contrasenya ha de tenir almenys 6 caràcters.",
     otp_expired:
       "El teu token ha expirat , no es vàlid, o ja has fet un intent",
     unknown_error: "Ho sentim hi ha hagut un error",
@@ -38,12 +39,21 @@ const resetPassword = {
   otp_expired: "",
   otp_send: "Enviat nou token",
   otp_sended: "Token enviat",
+
+  genericError: "El teu enllaç no és vàlid o ha expirat.",
+  genericErrorDescription: "Això pot passar per diverses raons:",
+  genericErrorList: [
+    "L’enllaç de verificació ha caducat",
+    // "L’adreça de correu no és correcta",
+    // "El teu compte ja ha estat confirmat",
+  ],
 };
 
 export default function Confirmation() {
+  const { dispatch } = useAppContext();
   const router = useRouter();
   const { userResetPassword, error, data, loading } = useUserResetPassword();
-  const useUserForgotPass = useUserForgotPassword();
+  // const useUserForgotPass = useUserForgotPassword();
 
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -56,6 +66,7 @@ export default function Confirmation() {
 
   useEffect(() => {
     if (data) {
+      dispatch({ type: "SET_USER", payload: data as UserData });
       setSuccess(true);
     }
   }, [data]);
@@ -69,18 +80,19 @@ export default function Confirmation() {
     if (!email || !token) return;
     if (newPassword !== repeatNewPassword)
       return setLocalError("same_password");
+    if (newPassword.length < 6) return setLocalError("weak_password");
     userResetPassword({ password: newPassword, token, email });
   }
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="mx-auto max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl">{resetPassword.title}</CardTitle>
-          <CardDescription>{resetPassword.description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form className="grid gap-4">
+      {!success && !error && (
+        <ConfirmationScreen
+          title={resetPassword.title}
+          description={resetPassword.description}
+          loading={loading}
+        >
+          <form className="w-full grid gap-4 pt-4">
             <div className="grid gap-2">
               <Label htmlFor="newPassword">{resetPassword.password}</Label>
               <Input
@@ -106,7 +118,9 @@ export default function Confirmation() {
                 onChange={(e) => setRepeatNewPassword(e.target.value)}
               />
             </div>
-
+            <p className=" text-muted-foreground">
+              {resetPassword.subDescription}{" "}
+            </p>
             {error && (
               <p className="text-red-500">
                 {resetPassword.error[
@@ -115,9 +129,15 @@ export default function Confirmation() {
               </p>
             )}
 
-            {localError && (
+            {localError === "same_password" && (
               <p className="text-red-500">
                 {resetPassword.error.same_password}
+              </p>
+            )}
+
+            {localError === "weak_password" && (
+              <p className="text-red-500">
+                {resetPassword.error.weak_password}
               </p>
             )}
 
@@ -137,46 +157,43 @@ export default function Confirmation() {
                 {resetPassword.password_updating}
               </Button>
             )}
-            {success && !loading && (
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  router.push("/login");
-                  // router.push('/login')
-                }}
-                className="w-full"
-                type="submit"
-                disabled={loading}
-              >
-                {resetPassword.success}
-              </Button>
-            )}
-            {error === "otp_expired" && (
-              <div className="mt-4 text-center">
-                <p className="text-sm mb-2">{resetPassword.otp_expired}</p>
-                <Button
-                  onClick={() =>
-                    useUserForgotPass.userForgotPassword({ email })
-                  }
-                  className="w-full"
-                  type="submit"
-                  disabled={useUserForgotPass.loading || useUserForgotPass.data}
-                >
-                  {useUserForgotPass.loading && (
-                    <ArrowPathIcon
-                      className="ml-0.5 h-5 w-5 animate-spin mr-1"
-                      aria-hidden="true"
-                    />
-                  )}
-                  {useUserForgotPass.data
-                    ? resetPassword.otp_sended
-                    : resetPassword.otp_send}
-                </Button>
-              </div>
-            )}
           </form>
-        </CardContent>
-      </div>
+        </ConfirmationScreen>
+      )}
+      {success && !loading && (
+        <ConfirmationScreen
+          title={resetPassword.success}
+          description={resetPassword.successDescription}
+          buttonText={resetPassword.successButtonText}
+          logo={PartyPopper}
+          onButtonClick={() => {
+            router.push("/");
+          }}
+          loading={false}
+        />
+      )}
+      {error && (
+        <ConfirmationScreen
+          title={resetPassword.genericError}
+          linkText={
+            <p className="mt-4 text-muted-foreground">
+              {resetPassword.genericErrorDescription}{" "}
+              <ul className="styled-list">
+                {resetPassword.genericErrorList.map((item, index) => (
+                  <li key={index}>
+                    {"  - "}
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </p>
+          }
+          logo={Link2Off}
+          loading={false}
+          buttonText={"Tornar a enviar"}
+          onButtonClick={() => router.push("/forgot-password")}
+        />
+      )}
     </div>
   );
 }
