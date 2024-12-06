@@ -16,6 +16,12 @@ export const TextAreaCharging = () => {
   return <Skeleton className="w-full h-[100px] rounded" />;
 };
 
-export const CustomCardCharging = ({height = '100px', width = 'full'}: {height?: string, width?: string}) => {
-  return <Skeleton className={`w-full h-${height} w-[${width}] rounded` }/>;
-}
+export const CustomCardCharging = ({
+  height = "100px",
+  width = "full",
+}: {
+  height?: string;
+  width?: string;
+}) => {
+  return <Skeleton className={`w-full h-${height} w-[${width}] rounded`} />;
+};

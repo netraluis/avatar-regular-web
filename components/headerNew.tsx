@@ -38,9 +38,11 @@ export default function Header() {
   const menuBody = data?.menuHeader
     ?.find((menu) => menu.type === MenuHeaderType.BODY)
     ?.textHref?.sort((a, b) => a.numberOrder - b.numberOrder);
-  const menuFooter = data?.menuFooter.find(
-    (menu) => menu.language === lang,
-  )?.text;
+  const menuFooter = data?.menuFooter[0]?.text;
+
+  console.log("menuHeader", menuHeader);
+  console.log("menuBody", menuBody);
+  console.log("menuFooter", menuFooter);
   return (
     <div className="bg-white pt-4 fixed top-0 z-10 w-full">
       <nav
@@ -119,10 +121,10 @@ export default function Header() {
                     >
                       <div className="flex-auto">
                         <a
-                          href={item.href}
+                          href={item.hrefLanguages[0].href}
                           className="block font-semibold text-gray-900"
                         >
-                          {item.text}
+                          {item.hrefLanguages[0].text}
                           <span className="absolute inset-0" />
                         </a>
                       </div>
@@ -131,12 +133,14 @@ export default function Header() {
                   <div className="mt-5">
                     {menuBody?.map((item) => (
                       <a
-                        href={item.href}
+                        href={item.hrefLanguages[0].href}
                         key={item.numberOrder}
                         className="group relative flex items-center gap-x-4 rounded-lg px-4 py-2 text-xs leading-3 hover:bg-gray-50"
                       >
                         <div className="flex-auto">
-                          <p className=" text-gray-600">{item.text}</p>
+                          <p className=" text-gray-600">
+                            {item.hrefLanguages[0].text}
+                          </p>
                         </div>
                       </a>
                     ))}
@@ -190,11 +194,13 @@ export default function Header() {
               {menuHeader?.map((item, index) => (
                 <a
                   key={index}
-                  href={item.href}
+                  href={item.hrefLanguages[0].href}
                   className="font-semibold text-gray-900"
                 >
                   <div className="w-full group flex items-center gap-x-6 rounded-lg px-4 py-2 text-lg leading-6 hover:bg-gray-50">
-                    <div className="flex-auto">{item.text}</div>
+                    <div className="flex-auto">
+                      {item.hrefLanguages[0].text}
+                    </div>
                   </div>
                 </a>
               ))}
@@ -229,12 +235,14 @@ export default function Header() {
             <div className="mt-7 pt-6 ">
               {menuBody?.map((item) => (
                 <a
-                  href={item.href}
+                  href={item.hrefLanguages[0].href}
                   key={item.numberOrder}
                   className="group relative flex items-center gap-x-4 rounded-lg text-xs leading-4 hover:bg-gray-50 my-3"
                 >
                   <div className="flex-auto">
-                    <p className="text-gray-600">{item.text}</p>
+                    <p className="text-gray-600">
+                      {item.hrefLanguages[0].text}
+                    </p>
                   </div>
                 </a>
               ))}

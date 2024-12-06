@@ -51,6 +51,7 @@ export type GetTeamDataByDomainOrCustomDomainPage = Prisma.TeamGetPayload<{
             text: true;
             href: true;
             numberOrder: true;
+            hrefLanguages: true;
           };
         };
       };
@@ -142,7 +143,11 @@ export async function getTeamDataByDomainOrCustomDomainPage({
           },
         },
       },
-      menuFooter: true,
+      menuFooter: {
+        where: {
+          language: language,
+        },
+      },
       customDomain: true,
       assistants: {
         select: {
