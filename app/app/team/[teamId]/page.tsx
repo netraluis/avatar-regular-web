@@ -2,8 +2,6 @@
 import Link from "next/link";
 import { MoreHorizontal, PlusCircle } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -86,13 +84,13 @@ export default function Dashboard() {
       {loading ? (
         <Loader />
       ) : (
-        <Card>
+        <Card className='w-full'>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead>type</TableHead>
+                  {/* <TableHead>type</TableHead> */}
                   <TableHead className="hidden md:table-cell">link</TableHead>
                   <TableHead className="hidden md:table-cell">status</TableHead>
                   <TableHead>
@@ -107,9 +105,9 @@ export default function Dashboard() {
                       <TableCell className="font-medium">
                         {assistant.name}
                       </TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         <Badge variant="outline">GPT-4</Badge>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell className="hidden md:table-cell">
                         <Link
                           href={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistant.url}`}
@@ -145,14 +143,14 @@ export default function Dashboard() {
                               <DropdownMenuItem>Edit</DropdownMenuItem>
                             </Link>
 
-                            <DropdownMenuItem
+                            {/* <DropdownMenuItem
                               onClick={() => {
                                 console.log("Clone clicando");
                               }}
                             >
                               Clone
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>Favorite</DropdownMenuItem>
+                            </DropdownMenuItem> */}
+                            {/* <DropdownMenuItem>Favorite</DropdownMenuItem> */}
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               onClick={() => {
