@@ -29,6 +29,8 @@ import { Option } from "@/types/types";
 import { useFetchTeamsByUserId } from "../context/useAppContext/team";
 import { useFetchAssistantsByTeamId } from "../context/useAppContext/assistant";
 import { useUserLogout } from "../context/useAppContext/user";
+import { teamsSettingsNav } from "@/app/app/team/[teamId]/settings/layout";
+import { assistantSettingsNav } from "@/app/app/team/[teamId]/assistant/[assistantId]/layout";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -92,6 +94,11 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     router.push(newPath);
   };
 
+  const handleAssistantsSettingsRoute = (subMenu: string) => {
+    const newPath = `/team/${teamId}/assistant/${assistantId}/${subMenu}`;
+    router.push(newPath);
+  };
+
   if (
     pathname === "/login" ||
     pathname === "/signup" ||
@@ -113,7 +120,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           className="cursor-pointer"
           onClick={() => router.push("/")}
         />
-        <Breadcrumb className="hidden md:flex">
+        <Breadcrumb className="flex">
           <BreadcrumbList>
             {teamSelected && (
               <BreadcrumbItem>
@@ -125,6 +132,9 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                     routerHandler={handleTeamRouteChange}
                     createNewTeamRoute={handleCreateNewTeamRoute}
                     settingsRouteHandler={handleTeamSettingsRoute}
+                    navItems={teamsSettingsNav}
+                    fromColor={"to-[#f4f269]"}
+                    toColor={"from-[#5cb270]"}
                   />
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -132,7 +142,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             {assistantId && assistantSelected && (
               <>
                 <BreadcrumbSeparator>
-                  <Slash className="h-4 w-4 text-muted-foreground" />
+                  <Slash className="h-4 w-4 text-slate-300" />
                 </BreadcrumbSeparator>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
@@ -142,7 +152,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                       subject="assistant"
                       routerHandler={handleAssistantRouteChange}
                       createNewTeamRoute={handleCreateNewTeamRoute}
-                      settingsRouteHandler={handleTeamSettingsRoute}
+                      settingsRouteHandler={handleAssistantsSettingsRoute}
+                      navItems={assistantSettingsNav}
+                      fromColor={"to-[#ff930f]"}
+                      toColor={"from-[#fff95b]"}
                     />
                   </BreadcrumbLink>
                 </BreadcrumbItem>
@@ -157,7 +170,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               <Button
                 variant="secondary"
                 size="icon"
-                className="rounded-full bg-gradient-to-r from-red-500 to-yellow-500 "
+                className="rounded-full bg-gradient-to-r from-[#0061ff] to-[#60efff] "
               >
                 {/* <Image
                   src="/avatar.png"

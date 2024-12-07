@@ -29,29 +29,7 @@ import {
 
 import { Option } from "@/types/types";
 import { ChevronRight } from "lucide-react";
-
-const settings = [
-  {
-    id: "general",
-    name: "General",
-    icon: <Settings className={cn("mr-2 h-4 w-4")} />,
-  },
-  {
-    id: "members",
-    name: "Members",
-    icon: <Users className={cn("mr-2 h-4 w-4")} />,
-  },
-  {
-    id: "plans",
-    name: "Plans",
-    icon: <CreditCard className={cn("mr-2 h-4 w-4")} />,
-  },
-  {
-    id: "billing",
-    name: "Billing",
-    icon: <Gem className={cn("mr-2 h-4 w-4")} />,
-  },
-];
+import { Separator } from "./ui/separator";
 
 export function Combobox({
   options,
@@ -60,6 +38,9 @@ export function Combobox({
   routerHandler,
   createNewTeamRoute,
   settingsRouteHandler,
+  navItems,
+  fromColor,
+  toColor,
 }: {
   options: Option[];
   optionSelected: Option;
@@ -67,6 +48,9 @@ export function Combobox({
   routerHandler: (route: string) => void;
   createNewTeamRoute: () => void;
   settingsRouteHandler: (route: string) => void;
+  navItems: Option[];
+  fromColor: string;
+  toColor: string;
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -77,13 +61,28 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[220px] justify-between"
         >
-          {optionSelected?.name ? optionSelected.name : `Search ${subject}...`}
+          <div
+            className={`h-7 w-7 rounded-full bg-gradient-to-r ${fromColor} ${toColor} mr-2`}
+          >
+            {/* <Image
+              src="/avatar.png"
+              width={36}
+              height={36}
+              alt="Avatar"
+              className=" rounded-full"
+            /> */}
+          </div>
+          <span className="truncate w-2/3">
+            {optionSelected?.name
+              ? optionSelected.name
+              : `Search ${subject}...`}
+          </span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[220px] p-0">
         <Command>
           <CommandInput placeholder={`Find a ${subject}`} />
           <CommandList>
@@ -99,7 +98,7 @@ export function Combobox({
                     routerHandler(currentValue);
                   }}
                 >
-                  {team.name}
+                  <span className="truncate w-full">{team.name}</span>
                   <Check
                     className={cn(
                       "ml-2 h-4 w-4",
@@ -111,14 +110,15 @@ export function Combobox({
                 </CommandItem>
               ))}
               <CommandItem className="flex" onSelect={createNewTeamRoute}>
-                <CirclePlus className={cn("mr-2 h-6 w-6")} />
+                <CirclePlus className={cn("mr-2 h-4 w-4")} />
                 Create {subject}
               </CommandItem>
             </CommandGroup>
           </CommandList>
+          <Separator />
           <CommandList>
             <CommandGroup heading="Settings">
-              {settings.map((setting: Option) => (
+              {navItems?.map((setting: Option) => (
                 <CommandItem
                   className="flex justify-between items-center"
                   key={setting.id}
@@ -129,7 +129,7 @@ export function Combobox({
                   }}
                 >
                   <div className="flex items-center">
-                    {setting.icon}
+                    {setting.icon && <setting.icon className="mr-2 h-4 w-4" />}
                     {setting.name}
                   </div>
                   <ChevronRight className={cn("ml-2 h-4 w-4")} />

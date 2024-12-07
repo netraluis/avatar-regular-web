@@ -51,7 +51,6 @@ export default function Component() {
   const pathname = usePathname();
   const router = useRouter();
 
-
   useEffect(() => {
     setLocalUrl(assistantValues?.url || "");
   }, [assistantValues]);

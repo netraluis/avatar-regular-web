@@ -23,14 +23,24 @@ import { useAppContext } from "@/components/context/appContext";
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
 import { TitleLayout } from "@/components/layouts/title-layout";
 
-const navItems = [
-  { name: "General", href: "general", icon: Settings },
-  { name: "Interface", href: "interface", icon: Paintbrush },
-  { name: "Localisations", href: "localisations", icon: Languages },
-  { name: "Custom domain", href: "custom-domain", icon: Link2 },
-  { name: "Members", href: "members", icon: User },
-  { name: "Plans", href: "plans", icon: Gem },
-  { name: "Billings", href: "billings", icon: CreditCard },
+export const teamsSettingsNav = [
+  { name: "General", href: "general", icon: Settings, id: "general" },
+  { name: "Interface", href: "interface", icon: Paintbrush, id: "interface" },
+  {
+    name: "Localisations",
+    href: "localisations",
+    icon: Languages,
+    id: "localisations",
+  },
+  {
+    name: "Custom domain",
+    href: "custom-domain",
+    icon: Link2,
+    id: "custom-domain",
+  },
+  { name: "Members", href: "members", icon: User, id: "members" },
+  { name: "Plans", href: "plans", icon: Gem, id: "plans" },
+  { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
 ];
 
 const teamSettings = {
@@ -73,7 +83,7 @@ function Layout({
     >
       <div className="flex sh-full justify-start overflow-auto px-[40px] gap-8 w-full">
         <SideDashboardLayout
-          navItems={navItems}
+          navItems={teamsSettingsNav}
           comparatePathName={comparatePathName}
           absolutePath={absolutePath}
           actionButtonOnClick={saveHandler}

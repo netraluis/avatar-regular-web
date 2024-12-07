@@ -13,6 +13,7 @@ export interface TextAreaFormProps {
 export interface Option {
   id: string;
   name: string;
+  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   [key: string]: any;
 }
 

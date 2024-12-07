@@ -5,12 +5,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 
-const navItems = [
-  { name: "Playground", href: "playground" },
-  { name: "Activity", href: "activity" },
-  { name: "Sources", href: "sources" },
-  { name: "Connect", href: "connect" },
-  { name: "Settings", href: "settings" },
+export const assistantSettingsNav = [
+  { name: "Playground", href: "playground", id: "playground" },
+  { name: "Activity", href: "activity", id: "activity" },
+  { name: "Sources", href: "sources", id: "sources" },
+  { name: "Connect", href: "connect", id: "connect" },
+  { name: "Settings", href: "settings", id: "settings" },
 ];
 
 function Header() {
@@ -19,14 +19,14 @@ function Header() {
   const absolutePath = pathname.split("/").slice(1, 5).join("/");
 
   return (
-    <nav className="flex space-x-4 border-b py-2 px-4">
-      {navItems.map((item) => (
+    <nav className="flex space-x-4 border-b py-0 px-4">
+      {assistantSettingsNav.map((item) => (
         <Link
           key={item.name}
           href={`/${absolutePath}/${item.href}`}
-          className={`py-2 px-4 text-sm font-medium transition-colors hover:text-primary ${
+          className={`pb-2 px-4 text-sm font-medium transition-colors hover:text-primary ${
             comparatePathName === item.href
-              ? "text-primary border-b-2 border-primary"
+              ? "text-primary border-primary border-b border-b-2 p-0"
               : "text-muted-foreground"
           }`}
         >
@@ -45,7 +45,6 @@ export default function Layout({
   return (
     <div className="container mx-auto px-4 pt-4 grow flex flex-col overflow-auto w-full max-w-6xl">
       <Header />
-      <Separator />
       <div className="grow flex flex-col overflow-auto items-start pt-4 w-full h-full">
         {children}
       </div>
