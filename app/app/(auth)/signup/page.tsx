@@ -111,7 +111,6 @@ export default function Signup() {
               {signUp.emailSentDescription2}
             </p>
           }
-          // buttonText={login.successButtonText}
           logo={MailCheck}
           loading={false}
           linkText={
@@ -122,8 +121,6 @@ export default function Signup() {
               </Link>
             </p>
           }
-          // logoAction={PartyPopper}
-          // logoLoading={PartyPopper}
         />
       )}
     </>
