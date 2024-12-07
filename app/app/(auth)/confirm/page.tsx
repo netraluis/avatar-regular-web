@@ -83,51 +83,39 @@ export default function Confirmation() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="mx-auto max-w-sm">
-        {/* <form className="grid gap-4">
-            {error && (
-              <p className="text-red-500">
-                {login.error[error as keyof typeof login.error] ||
-                  login.error.unknown_error}{" "}
-                {error}
-              </p>
-            )}
-          </form> */}
+    <>
+      {loading && (
+        <ConfirmationScreen
+          title={login.verifyAccount}
+          description={login.verifyAccountDescription}
+          logo={LoaderCircleIcon}
+          loading={false}
+        />
+      )}
+      {success && !loading && (
+        <ConfirmationScreen
+          title={login.successEmail}
+          description={login.successDescription}
+          buttonText={login.successButtonText}
+          logo={PartyPopper}
+          onButtonClick={() => {
+            router.push("/");
+          }}
+          loading={false}
+        />
+      )}
 
-        {loading && (
-          <ConfirmationScreen
-            title={login.verifyAccount}
-            description={login.verifyAccountDescription}
-            logo={LoaderCircleIcon}
-            loading={false}
-          />
-        )}
-        {success && !loading && (
-          <ConfirmationScreen
-            title={login.successEmail}
-            description={login.successDescription}
-            buttonText={login.successButtonText}
-            logo={PartyPopper}
-            onButtonClick={() => {
-              router.push("/");
-            }}
-            loading={false}
-          />
-        )}
-
-        {error && (
-          <ConfirmationScreen
-            title={login.otpError}
-            description={login.otpErrorDescription}
-            buttonText={login.otpErrorButtonText}
-            logo={Link2Off}
-            onButtonClick={() => useOtpExp.otpExpired({ email })}
-            loading={false}
-            logoLoading={ArrowPathIcon}
-          />
-        )}
-      </div>
-    </div>
+      {error && (
+        <ConfirmationScreen
+          title={login.otpError}
+          description={login.otpErrorDescription}
+          buttonText={login.otpErrorButtonText}
+          logo={Link2Off}
+          onButtonClick={() => useOtpExp.otpExpired({ email })}
+          loading={false}
+          logoLoading={ArrowPathIcon}
+        />
+      )}
+    </>
   );
 }

@@ -29,8 +29,15 @@ import { Option } from "@/types/types";
 import { useFetchTeamsByUserId } from "../context/useAppContext/team";
 import { useFetchAssistantsByTeamId } from "../context/useAppContext/assistant";
 import { useUserLogout } from "../context/useAppContext/user";
-import { teamsSettingsNav } from "@/app/app/team/[teamId]/settings/layout";
-import { assistantSettingsNav } from "@/app/app/team/[teamId]/assistant/[assistantId]/layout";
+import { assistantSettingsNav, teamsSettingsNav } from "@/lib/helper/navbar";
+
+const header = {
+  userAuth: {
+    contact: "Contacta",
+    signup: "Registra’t",
+    login: "Inicia sessió",
+  },
+};
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -106,7 +113,46 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     pathname === "/forgot-password" ||
     pathname === "/reset-password"
   ) {
-    return <>{children}</>;
+    return (
+      <div className="h-screen w-full flex flex-col overflow-hidden">
+        <header className="justify-between flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 p-4 flex">
+          <Image
+            src="/chatbotforLogo.svg"
+            alt="Logo"
+            width={170}
+            height={170}
+            className="cursor-pointer"
+            onClick={() => router.push("/")}
+          />
+          <div>
+            <Button variant="link">{header.userAuth.contact}</Button>
+            {pathname === "/login" && (
+              <Button
+                onClick={() => {
+                  router.push("/signup");
+                }}
+                variant="secondary"
+              >
+                {header.userAuth.signup}
+              </Button>
+            )}
+            {pathname === "/signup" && (
+              <Button
+                onClick={() => {
+                  router.push("/login");
+                }}
+                variant="secondary"
+              >
+                {header.userAuth.login}
+              </Button>
+            )}
+          </div>
+        </header>
+        <div className="grow overflow-auto flex flex-col items-center">
+          {children}
+        </div>
+      </div>
+    );
   }
 
   return (

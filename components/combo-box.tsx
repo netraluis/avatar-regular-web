@@ -5,10 +5,6 @@ import {
   Check,
   ChevronsUpDown,
   CirclePlus,
-  Gem,
-  CreditCard,
-  Settings,
-  Users,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";

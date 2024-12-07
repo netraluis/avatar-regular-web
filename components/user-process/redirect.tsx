@@ -26,15 +26,17 @@ export default function ConfirmationScreen({
   children,
 }: ConfirmationScreenProps) {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="max-w-md w-full flex flex-col items-start text-start space-y-6">
+    <div className="flex grow items-center justify-center p-4 w-full w-[450px]">
+      <div className="grow flex flex-col items-start text-start space-y-6">
         {Logo && (
           <div className="w-8 h-8">
             <Logo className="w-full h-full" />
           </div>
         )}
-        <div className="space-y-2">
-          <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+        <div className="space-y-2 w-full">
+          <h1 className="text-2xl font-semibold tracking-tight w-full">
+            {title}
+          </h1>
           {description && (
             <p className="text-muted-foreground">{description}</p>
           )}

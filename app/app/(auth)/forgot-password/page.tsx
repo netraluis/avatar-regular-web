@@ -47,9 +47,9 @@ export default function Signup() {
   }, [data]);
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <>
       {!message || error ? (
-        <div className="mx-auto max-w-sm">
+        <>
           <ConfirmationScreen
             title={forgotPassword.title}
             description={forgotPassword.description}
@@ -91,32 +91,30 @@ export default function Signup() {
               </Button>
             </form>
           </ConfirmationScreen>
-        </div>
+        </>
       ) : (
         // <div className="mx-auto max-w-sm">Tu solicitud ha sido enviada</div>
-        <div className="mx-auto max-w-sm">
-          <ConfirmationScreen
-            title={forgotPassword.emailSent}
-            description={
-              <p>
-                {forgotPassword.emailSentDescription1}
-                <span className="font-medium text-slate-950">{email}</span>
-                {forgotPassword.emailSentDescription2}
-              </p>
-            }
-            logo={MailCheck}
-            loading={false}
-            linkText={
-              <p className="mt-4 text-muted-foreground">
-                {forgotPassword.emailSentSubDescription}{" "}
-                <Link href={forgotPassword.link} className="underline hover:">
-                  {forgotPassword.linkText}
-                </Link>
-              </p>
-            }
-          />
-        </div>
+        <ConfirmationScreen
+          title={forgotPassword.emailSent}
+          description={
+            <p>
+              {forgotPassword.emailSentDescription1}
+              <span className="font-medium text-slate-950">{email}</span>
+              {forgotPassword.emailSentDescription2}
+            </p>
+          }
+          logo={MailCheck}
+          loading={false}
+          linkText={
+            <p className="mt-4 text-muted-foreground">
+              {forgotPassword.emailSentSubDescription}{" "}
+              <Link href={forgotPassword.link} className="underline">
+                {forgotPassword.linkText}
+              </Link>
+            </p>
+          }
+        />
       )}
-    </div>
+    </>
   );
 }

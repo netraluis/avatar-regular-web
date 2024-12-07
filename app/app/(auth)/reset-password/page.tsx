@@ -85,7 +85,7 @@ export default function Confirmation() {
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <>
       {!success && !error && (
         <ConfirmationScreen
           title={resetPassword.title}
@@ -194,6 +194,6 @@ export default function Confirmation() {
           onButtonClick={() => router.push("/forgot-password")}
         />
       )}
-    </div>
+    </>
   );
 }

@@ -8,40 +8,14 @@ import {
 } from "@/components/context/teamSettingsContext";
 
 import {
-  Settings,
-  Paintbrush,
-  User,
-  Gem,
-  CreditCard,
-  Languages,
   Save,
-  Link2,
 } from "lucide-react";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useAppContext } from "@/components/context/appContext";
 
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
 import { TitleLayout } from "@/components/layouts/title-layout";
-
-export const teamsSettingsNav = [
-  { name: "General", href: "general", icon: Settings, id: "general" },
-  { name: "Interface", href: "interface", icon: Paintbrush, id: "interface" },
-  {
-    name: "Localisations",
-    href: "localisations",
-    icon: Languages,
-    id: "localisations",
-  },
-  {
-    name: "Custom domain",
-    href: "custom-domain",
-    icon: Link2,
-    id: "custom-domain",
-  },
-  { name: "Members", href: "members", icon: User, id: "members" },
-  { name: "Plans", href: "plans", icon: Gem, id: "plans" },
-  { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
-];
+import { teamsSettingsNav } from "@/lib/helper/navbar";
 
 const teamSettings = {
   cardTitle: "Ajustos de l'equip",

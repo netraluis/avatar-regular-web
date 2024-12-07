@@ -3,15 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Separator } from "@/components/ui/separator";
-
-export const assistantSettingsNav = [
-  { name: "Playground", href: "playground", id: "playground" },
-  { name: "Activity", href: "activity", id: "activity" },
-  { name: "Sources", href: "sources", id: "sources" },
-  { name: "Connect", href: "connect", id: "connect" },
-  { name: "Settings", href: "settings", id: "settings" },
-];
+import { assistantSettingsNav } from "@/lib/helper/navbar";
 
 function Header() {
   const pathname = usePathname();
