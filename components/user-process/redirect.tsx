@@ -26,7 +26,7 @@ export default function ConfirmationScreen({
   children,
 }: ConfirmationScreenProps) {
   return (
-    <div className="flex grow items-center justify-center p-4 w-full w-[400px]">
+    <div className="flex grow items-center justify-center p-4 w-full w-[375px]">
       <div className="grow flex flex-col items-start text-start space-y-6">
         {Logo && (
           <div className="w-8 h-8">

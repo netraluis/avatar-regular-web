@@ -49,49 +49,48 @@ export default function Signup() {
   return (
     <>
       {!message || error ? (
-        <>
-          <ConfirmationScreen
-            title={forgotPassword.title}
-            description={forgotPassword.description}
-            loading={loading}
+        <ConfirmationScreen
+          title={forgotPassword.title}
+          description={forgotPassword.description}
+          loading={loading}
+        >
+          <form
+            className="grid gap-4 w-full"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              handleSendEmailForgotPassword(formData);
+            }}
           >
-            <form
-              className="grid gap-4 w-full"
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                handleSendEmailForgotPassword(formData);
-              }}
-            >
-              <div className="grid gap-2">
-                <Label htmlFor="email">{forgotPassword.email}</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder={forgotPassword.placeholder}
-                  name="email"
-                  required
+            <div className="grid gap-2">
+              <Label htmlFor="email">{forgotPassword.email}</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder={forgotPassword.placeholder}
+                name="email"
+                required
+              />
+            </div>
+            {error && (
+              <p className="text-red-500">
+                {forgotPassword.error[
+                  error as keyof typeof forgotPassword.error
+                ] || forgotPassword.error.unknown_error}
+              </p>
+            )}
+            <Button className="w-full" type="submit" disabled={loading}>
+              {loading && (
+                <ArrowPathIcon
+                  className="ml-0.5 h-5 w-5 animate-spin mr-1"
+                  aria-hidden="true"
                 />
-              </div>
-              {error && (
-                <p className="text-red-500">
-                  {forgotPassword.error[
-                    error as keyof typeof forgotPassword.error
-                  ] || forgotPassword.error.unknown_error}
-                </p>
               )}
-              <Button className="w-full" type="submit" disabled={loading}>
-                {loading && (
-                  <ArrowPathIcon
-                    className="ml-0.5 h-5 w-5 animate-spin mr-1"
-                    aria-hidden="true"
-                  />
-                )}
-                {forgotPassword.send}
-              </Button>
-            </form>
-          </ConfirmationScreen>
-        </>
+              {forgotPassword.send}
+            </Button>
+          </form>
+        </ConfirmationScreen>
+
       ) : (
         // <div className="mx-auto max-w-sm">Tu solicitud ha sido enviada</div>
         <ConfirmationScreen

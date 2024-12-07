@@ -169,12 +169,12 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
         <Image
           src="/chatbotforSymbol.svg"
           alt="Logo"
-          width={17}
-          height={17}
+          width={32}
+          height={32}
           className="cursor-pointer"
           onClick={() => router.push("/")}
         />
-        <Breadcrumb className="flex">
+        {teamSelected && <><Breadcrumb className="flex">
           <BreadcrumbList>
             {teamSelected && (
               <BreadcrumbItem>
@@ -251,7 +251,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        )}
+        )}</>}
       </header>
       <Separator />
       <div className="grow overflow-auto flex flex-col items-center">
