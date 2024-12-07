@@ -27,13 +27,11 @@ export default function Component() {
   } = useAppContext();
 
   useEffect(() => {
-    console.log({ teamSelected });
     const assistantUrl = teamSelected?.assistants.find(
       (ass) => ass.id === assistantId,
     )?.url;
-    console.log({ assistantUrl });
     setUrl(
-      `${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantUrl}`,
+      `https://${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantUrl}`,
     );
   }, [teamSelected]);
 
