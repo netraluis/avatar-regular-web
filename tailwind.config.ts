@@ -73,8 +73,8 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       width: {
-        'redirect': '375px',
-      }
+        redirect: "375px",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

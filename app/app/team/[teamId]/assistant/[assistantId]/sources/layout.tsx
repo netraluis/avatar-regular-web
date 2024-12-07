@@ -34,7 +34,7 @@ export default function Layout({
       cardTitle={sourcesLayout.title}
       cardDescription={sourcesLayout.description}
     >
-      <div className="flex sh-full justify-start overflow-auto px-[40px] gap-8 w-full overflow-hidden h-full">
+      <>
         <SideDashboardLayout
           navItems={navItems}
           comparatePathName={comparatePathName}
@@ -43,7 +43,7 @@ export default function Layout({
         <div className="flex-1 flex flex-col overflow-auto scrollbar-hidden">
           {children}
         </div>
-      </div>
+      </>
     </OnlyTitleLayout>
   );
 }

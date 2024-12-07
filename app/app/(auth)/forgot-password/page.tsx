@@ -90,7 +90,6 @@ export default function Signup() {
             </Button>
           </form>
         </ConfirmationScreen>
-
       ) : (
         // <div className="mx-auto max-w-sm">Tu solicitud ha sido enviada</div>
         <ConfirmationScreen

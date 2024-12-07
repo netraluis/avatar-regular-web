@@ -174,84 +174,88 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           className="cursor-pointer"
           onClick={() => router.push("/")}
         />
-        {teamSelected && <><Breadcrumb className="flex">
-          <BreadcrumbList>
-            {teamSelected && (
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Combobox
-                    options={teams as Option[]}
-                    optionSelected={teamSelected as Option}
-                    subject="team"
-                    routerHandler={handleTeamRouteChange}
-                    createNewTeamRoute={handleCreateNewTeamRoute}
-                    settingsRouteHandler={handleTeamSettingsRoute}
-                    navItems={teamsSettingsNav}
-                    fromColor={"to-[#f4f269]"}
-                    toColor={"from-[#5cb270]"}
-                  />
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            )}
-            {assistantId && assistantSelected && (
-              <>
-                <BreadcrumbSeparator>
-                  <Slash className="h-4 w-4 text-slate-300" />
-                </BreadcrumbSeparator>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Combobox
-                      options={assistantsByTeam}
-                      optionSelected={assistantSelected}
-                      subject="assistant"
-                      routerHandler={handleAssistantRouteChange}
-                      createNewTeamRoute={handleCreateNewTeamRoute}
-                      settingsRouteHandler={handleAssistantsSettingsRoute}
-                      navItems={assistantSettingsNav}
-                      fromColor={"to-[#ff930f]"}
-                      toColor={"from-[#fff95b]"}
-                    />
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            )}
-          </BreadcrumbList>
-        </Breadcrumb>
-        <div className="relative ml-auto flex-1 md:grow-0"></div>
-        {user?.user?.id && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="secondary"
-                size="icon"
-                className="rounded-full bg-gradient-to-r from-[#0061ff] to-[#60efff] "
-              >
-                {/* <Image
+        {teamSelected && (
+          <>
+            <Breadcrumb className="flex">
+              <BreadcrumbList>
+                {teamSelected && (
+                  <BreadcrumbItem>
+                    <BreadcrumbLink asChild>
+                      <Combobox
+                        options={teams as Option[]}
+                        optionSelected={teamSelected as Option}
+                        subject="team"
+                        routerHandler={handleTeamRouteChange}
+                        createNewTeamRoute={handleCreateNewTeamRoute}
+                        settingsRouteHandler={handleTeamSettingsRoute}
+                        navItems={teamsSettingsNav}
+                        fromColor={"to-[#f4f269]"}
+                        toColor={"from-[#5cb270]"}
+                      />
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                )}
+                {assistantId && assistantSelected && (
+                  <>
+                    <BreadcrumbSeparator>
+                      <Slash className="h-4 w-4 text-slate-300" />
+                    </BreadcrumbSeparator>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink asChild>
+                        <Combobox
+                          options={assistantsByTeam}
+                          optionSelected={assistantSelected}
+                          subject="assistant"
+                          routerHandler={handleAssistantRouteChange}
+                          createNewTeamRoute={handleCreateNewTeamRoute}
+                          settingsRouteHandler={handleAssistantsSettingsRoute}
+                          navItems={assistantSettingsNav}
+                          fromColor={"to-[#ff930f]"}
+                          toColor={"from-[#fff95b]"}
+                        />
+                      </BreadcrumbLink>
+                    </BreadcrumbItem>
+                  </>
+                )}
+              </BreadcrumbList>
+            </Breadcrumb>
+            <div className="relative ml-auto flex-1 md:grow-0"></div>
+            {user?.user?.id && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="rounded-full bg-gradient-to-r from-[#0061ff] to-[#60efff] "
+                  >
+                    {/* <Image
                   src="/avatar.png"
                   width={36}
                   height={36}
                   alt="Avatar"
                   className=" rounded-full"
                 /> */}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Settings</DropdownMenuItem>
-              <DropdownMenuItem>Support</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={async () => {
-                  await userLogout();
-                  router.push("/login");
-                }}
-              >
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}</>}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuItem>Support</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      await userLogout();
+                      router.push("/login");
+                    }}
+                  >
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+          </>
+        )}
       </header>
       <Separator />
       <div className="grow overflow-auto flex flex-col items-center">

@@ -30,14 +30,14 @@ export default function Layout({
       cardTitle={playgroundLayout.title}
       cardDescription={playgroundLayout.description}
     >
-      <div className="flex sh-full justify-start overflow-auto px-[40px] gap-8 w-full overflow-hidden h-full">
+      <>
         <SideDashboardLayout
           navItems={navItems}
           comparatePathName={comparatePathName}
           absolutePath={absolutePath}
         />
         <div className="flex-1 flex flex-col overflow-auto">{children}</div>
-      </div>
+      </>
     </OnlyTitleLayout>
   );
 }

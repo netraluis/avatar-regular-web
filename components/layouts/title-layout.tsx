@@ -38,9 +38,9 @@ export const TitleLayout = ({
   };
 
   return (
-    <div className="flex flex-col overflow-auto pt-2 w-full max-w-6xl">
+    <div className="flex flex-col overflow-auto pt-2 w-full ">
       <div className="flex items-center gap-4 py-1.5 px-1.5">
-        <Card className="border-none bg-transparent shadow-none p-0">
+        <Card className="border-none bg-transparent shadow-none py-2 px-4">
           <CardTitle>{cardTitle}</CardTitle>
           <CardDescription>{cardDescription}</CardDescription>
         </Card>
@@ -57,7 +57,7 @@ export const TitleLayout = ({
               rel="noopener noreferrer"
               className="flex items-center"
             >
-              <Eye className="w-3.5 h-3.5" />
+              <Eye className="w-3.5 h-3.5 mr-2" />
               Preview
             </Link>
           </Button>
@@ -79,8 +79,10 @@ export const TitleLayout = ({
         </div>
       </div>
       <Separator />
-      <div className="grow flex flex-col overflow-auto items-start mt-3 w-full">
-        {children}
+      <div className="grow flex flex-col overflow-auto items-start mt-3 w-full px-4 items-center">
+        <div className="flex sh-full justify-start overflow-auto gap-8 w-full overflow-hidden h-full max-w-screen-xl">
+          {children}
+        </div>
       </div>
     </div>
   );

@@ -84,7 +84,7 @@ function Layout({
       actionErrorText={assSettings.actionErrorText}
       actionError={errorUpdateAssistant}
     >
-      <div className="flex sh-full justify-start overflow-auto px-[40px] gap-8 w-full">
+      <>
         <SideDashboardLayout
           navItems={navItems}
           comparatePathName={comparatePathName}
@@ -94,7 +94,7 @@ function Layout({
         <div className="flex-1 scrollbar-hidden overflow-auto px-4 w-full">
           {children}
         </div>
-      </div>
+      </>
     </TitleLayout>
   );
 }

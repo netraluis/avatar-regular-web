@@ -21,8 +21,10 @@ export const OnlyTitleLayout = ({
         </Card>
       </div>
       <Separator />
-      <div className="grow flex flex-col overflow-auto items-start pt-8 w-full">
-        {children}
+      <div className="grow flex flex-col overflow-auto items-start pt-8 w-full items-center">
+        <div className="flex sh-full justify-start overflow-auto gap-8 max-w-screen-xl">
+          {children}
+        </div>
       </div>
     </div>
   );
