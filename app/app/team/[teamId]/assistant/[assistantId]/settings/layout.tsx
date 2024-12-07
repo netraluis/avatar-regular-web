@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-import { Settings, Paintbrush } from "lucide-react";
+import { Settings, Paintbrush, Save } from "lucide-react";
 import { useAppContext } from "@/components/context/appContext";
 import {
   AssistantSettingsProvider,
@@ -15,6 +15,15 @@ import {
   useGetAssistant,
   useUpdateAssistant,
 } from "@/components/context/useAppContext/assistant";
+import { TitleLayout } from "@/components/layouts/title-layout";
+import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
+
+const assSettings = {
+  cardTitle: "Ajustos de l'equip",
+  cardDescription: "Configura l'equip com vulguis",
+  actionButtonText: "Desa",
+  actionErrorText: "Hi hagut un error al update",
+};
 
 const navItems = [
   { name: "General", href: "general", icon: Settings },
@@ -33,7 +42,8 @@ function Layout({
 
   const { state } = useAppContext();
   const { data, setAssistantValues } = useAssistantSettingsContext();
-  const { updateAssistant } = useUpdateAssistant();
+  const { updateAssistant, loadingUpdateAssistant, errorUpdateAssistant } =
+    useUpdateAssistant();
   const { assistantId } = useParams();
 
   const { getAssistantData, getAssistant } = useGetAssistant();
@@ -65,44 +75,29 @@ function Layout({
     }
   };
   return (
-    <div className="flex flex-col rounded-lg overflow-hidden h-full">
-      <div className="flex justify-between">
-        <div>
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold">Settings</h1>
-          </div>
-          <p className="text-sm text-gray-500 mb-4">Maneja tus ajustes</p>
-        </div>
-        <div className="flex justify-between items-center mb-4">
-          {/* <Input
-            type="text"
-            placeholder="Search files..."
-            className="max-w-sm"
-          /> */}
-          <Button onClick={saveHandler}>+ Update profile</Button>
-        </div>
-      </div>
-      <div className="flex bg-white overflow-hidden h-full">
-        <div className="w-64 p-4 ">
-          <nav>
-            {navItems.map((item, index) => (
-              <Link
-                onClick={saveHandler}
-                key={index}
-                href={`/${absolutePath}/${item.href}`}
-                className={`flex items-center p-2 text-gray-700 hover:bg-gray-100 rounded ${comparatePathName === item.href ? "bg-gray-200" : ""}`}
-              >
-                <item.icon className="mr-2 h-4 w-4" />
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-        </div>
-        <div className="flex-1 overflow-y-auto h-full scrollbar-hidden">
+    <TitleLayout
+      cardTitle={assSettings.cardTitle}
+      cardDescription={assSettings.cardDescription}
+      urlPreview={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${state.teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${state.teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
+      actionButtonText={assSettings.actionButtonText}
+      ActionButtonLogo={Save}
+      actionButtonOnClick={saveHandler}
+      actionButtonLoading={loadingUpdateAssistant}
+      actionErrorText={assSettings.actionErrorText}
+      actionError={errorUpdateAssistant}
+    >
+      <div className="flex sh-full justify-start overflow-auto px-[40px] gap-8 w-full">
+        <SideDashboardLayout
+          navItems={navItems}
+          comparatePathName={comparatePathName}
+          absolutePath={absolutePath}
+          actionButtonOnClick={saveHandler}
+        />
+        <div className="flex-1 scrollbar-hidden overflow-auto px-4 w-full">
           {children}
         </div>
       </div>
-    </div>
+    </TitleLayout>
   );
 }
 

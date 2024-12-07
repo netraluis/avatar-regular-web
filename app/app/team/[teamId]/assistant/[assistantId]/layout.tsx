@@ -43,10 +43,10 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="container mx-auto p-4 grow flex flex-col overflow-auto w-full max-w-6xl">
+    <div className="container mx-auto px-4 pt-4 grow flex flex-col overflow-auto w-full max-w-6xl">
       <Header />
       <Separator />
-      <div className="grow flex flex-col overflow-auto items-start py-4 w-full h-full">
+      <div className="grow flex flex-col overflow-auto items-start pt-4 w-full h-full">
         {children}
       </div>
     </div>

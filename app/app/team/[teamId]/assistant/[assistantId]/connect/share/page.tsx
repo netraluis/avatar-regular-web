@@ -35,7 +35,7 @@ export default function Component() {
     );
   }, [teamSelected]);
 
-  const handleValidation = () => {
+  const handleRedirect = () => {
     window.open(url, "_blank");
   };
 
@@ -54,15 +54,10 @@ export default function Component() {
               <InputCharging />
             )}
 
-            <Button size="sm" onClick={handleValidation} variant="outline">
+            <Button size="sm" onClick={handleRedirect} variant="outline">
               <Copy className="h-4 w-4" />
             </Button>
           </div>
-          {/* <p className="text-sm text-muted-foreground">
-            {!useExist.loading && useExist.data !== null && useExist.data
-              ? customDomain.subdomain.teamSubdomainDuplicate
-              : customDomain.subdomain.urlDescription}
-          </p> */}
         </div>
       </CustomCard>
     </div>

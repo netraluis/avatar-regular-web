@@ -38,7 +38,7 @@ export const TitleLayout = ({
   };
 
   return (
-    <div className="flex flex-col overflow-auto py-2 w-full max-w-6xl">
+    <div className="flex flex-col overflow-auto pt-2 w-full max-w-6xl">
       <div className="flex items-center gap-4 py-1.5 px-1.5">
         <Card className="border-none bg-transparent shadow-none p-0">
           <CardTitle>{cardTitle}</CardTitle>
@@ -79,7 +79,7 @@ export const TitleLayout = ({
         </div>
       </div>
       <Separator />
-      <div className="grow flex flex-col overflow-auto items-start py-8 w-full">
+      <div className="grow flex flex-col overflow-auto items-start mt-3 w-full">
         {children}
       </div>
     </div>
