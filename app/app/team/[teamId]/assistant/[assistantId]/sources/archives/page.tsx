@@ -25,6 +25,7 @@ import { Loader } from "@/components/loader";
 import { FileType } from "@prisma/client";
 import { VectorStoreFile } from "@/types/types";
 import { useFileVectorStoreAssistant } from "@/components/context/useAppContext/file";
+import { CustomCard } from "@/components/custom-card";
 
 export default function Component() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -89,23 +90,21 @@ export default function Component() {
 
   return (
     <>
-      <div className="p-6 grid grid-cols-1 gap-6 grow overflow-hidden">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold">Files</h1>
-        </div>
-        <p className="text-sm text-gray-500 mb-4">
-          Drag & drop files here, or click to select files (Supported File
-          Types: .pdf, .doc, .docx, .txt)
-        </p>
-        <div className="flex justify-between items-center mb-4">
-          <Input
+      <CustomCard
+        title={"Files"}
+        description={
+          "Drag & drop files here, or click to select files (Supported File Types: .pdf, .doc, .docx, .txt)"
+        }
+      >
+        <div className="flex justify-end items-end mb-4">
+          {/* <Input
             type="text"
             placeholder="Search files..."
             className="max-w-sm"
-          />
+          /> */}
           <Button onClick={() => setIsModalOpen(true)}>+ Upload file</Button>
         </div>
-        <Table className="overflow-y-auto grow scrollbar-hidden">
+        <Table className="">
           <TableHeader>
             <TableRow>
               <TableHead className="w-[30px]">
@@ -117,7 +116,7 @@ export default function Component() {
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="overflow-y-auto grow scrollbar-hidden h-full">
             {getFileError && <>{getFileError.message}</>}
             {getFileloading ? (
               <TableRow>
@@ -141,9 +140,9 @@ export default function Component() {
                   <TableCell>{file.bytes}</TableCell>
                   <TableCell>
                     <span
-                      className={`px-2 py-1 ${file.filename === "processed" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"} rounded-full text-xs`}
+                      className={`px-2 py-1 ${!file.isCharging ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"} rounded-full text-xs`}
                     >
-                      {file.filename}
+                      {!file.isCharging ? "uploaded" : "uploading"}
                     </span>
                   </TableCell>
                   {
@@ -167,7 +166,7 @@ export default function Component() {
             )}
           </TableBody>
         </Table>
-      </div>
+      </CustomCard>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

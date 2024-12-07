@@ -24,6 +24,7 @@ import {
 import { FileType } from "@prisma/client";
 import { useGetAssistant } from "@/components/context/useAppContext/assistant";
 import { useFileVectorStoreAssistant } from "@/components/context/useAppContext/file";
+import { CustomCard } from "@/components/custom-card";
 
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
@@ -236,19 +237,16 @@ export default function Component() {
   return (
     <>
       <div className="flex-1 p-8">
-        <div className="bg-white shadow-md rounded-lg p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-semibold">Notion</h1>
-          </div>
-          <p className="text-sm text-gray-500 mb-4">
-            Nutre a tu assistente con tablas de Notion
-          </p>
-          <div className="flex justify-between items-center mb-4">
-            <Input
+        <CustomCard
+          title={"Notion"}
+          description={"Nutre a tu assistente con tablas de Notion"}
+        >
+          <div className="flex justify-end item-end mb-4">
+            {/* <Input
               type="text"
               placeholder="Search files..."
               className="max-w-sm"
-            />
+            /> */}
 
             <Button
               disabled={loadingGetAssistant}
@@ -379,7 +377,7 @@ export default function Component() {
               )}
             </TableBody>
           </Table>
-        </div>
+        </CustomCard>
       </div>
       <Dialog
         open={isModalOpenNotionAuth}
