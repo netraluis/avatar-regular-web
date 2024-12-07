@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Slash } from "lucide-react";
+import { Slash, Settings } from "lucide-react";
 
 import {
   Breadcrumb,
@@ -30,12 +30,27 @@ import { useFetchTeamsByUserId } from "../context/useAppContext/team";
 import { useFetchAssistantsByTeamId } from "../context/useAppContext/assistant";
 import { useUserLogout } from "../context/useAppContext/user";
 import { assistantSettingsNav, teamsSettingsNav } from "@/lib/helper/navbar";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import Link from "next/link";
 
 const header = {
   userAuth: {
     contact: "Contacta",
     signup: "Registra’t",
     login: "Inicia sessió",
+  },
+  dashboard: {
+    dashboard: "Assistents",
+    // history: "Historial",
+    resources: "Recursos",
+    help: "Ajuda",
+    settings: "Configuració",
   },
 };
 
@@ -52,6 +67,15 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   const { fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
   const { userLogout } = useUserLogout();
   const pathname = usePathname();
+
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const lastTwoSegments = pathSegments.slice(-2).join("/");
+
+  // Comparar los valores extraídos con `/team/${teamId}`
+  const isDashboardActive = lastTwoSegments === `team/${teamId}`;
+  const isSettingsActive = lastTwoSegments === `team/${teamId}/settings`;
+
+  console.log({ isDashboardActive });
 
   useEffect(() => {
     if (user?.user?.id && teamId) {
@@ -220,6 +244,65 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               </BreadcrumbList>
             </Breadcrumb>
             <div className="relative ml-auto flex-1 md:grow-0"></div>
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <Link href={`/team/${teamId}`} legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      <span
+                        className={`${isDashboardActive ? "text-foreground" : "text-muted-foreground"}`}
+                      >
+                        {header.dashboard.dashboard}
+                      </span>
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <span className="text-muted-foreground">
+                      <a
+                        href="https://detailed-glue-10a.notion.site/Chatbotfor-155916db2da68083a888d00a5d1c0d61"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {header.dashboard.resources}
+                      </a>
+                    </span>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    <span className="text-muted-foreground">
+                      <a
+                        href="https://wa.me/376644253?"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {header.dashboard.help}
+                      </a>
+                    </span>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link
+                    href={`/team/${teamId}/settings`}
+                    legacyBehavior
+                    passHref
+                  >
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      {/* <span className="text-muted-foreground">{header.dashboard.settings}</span> */}
+                      <Settings
+                        className={`h-5 w-5 ${isSettingsActive ? "animate-spin" : "text-muted-foreground"}`}
+                      />
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
             {user?.user?.id && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

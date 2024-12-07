@@ -3,7 +3,6 @@ import {
   Paintbrush,
   User,
   Gem,
-  CreditCard,
   Languages,
   Link2,
 } from "lucide-react";
@@ -25,7 +24,7 @@ export const teamsSettingsNav = [
   },
   { name: "Members", href: "members", icon: User, id: "members" },
   { name: "Plans", href: "plans", icon: Gem, id: "plans" },
-  { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
+  // { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
 ];
 
 export const assistantSettingsNav = [
