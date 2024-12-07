@@ -49,7 +49,7 @@ export default function Login() {
       loading={false}
     >
       <form
-        className="w-full grid gap-4 pt-4"
+        className="grid gap-4"
         onSubmit={async (e) => {
           e.preventDefault();
           const formData = new FormData(e.currentTarget);
@@ -59,7 +59,7 @@ export default function Login() {
           });
         }}
       >
-        <div className="w-full grid gap-2">
+        <div className="grid gap-2">
           <Label htmlFor="email">{login.email}</Label>
           <Input
             id="email"
@@ -75,7 +75,7 @@ export default function Login() {
           </div>
           <Input id="password" type="password" name="password" required />
         </div>
-        <p className=" text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           {login.forgotPassword}
           <Link href="/forgot-password" className="text-blue-500 underline">
             {login.forgotPasswordLinkText}

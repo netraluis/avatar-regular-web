@@ -29,9 +29,9 @@ export const teamsSettingsNav = [
 ];
 
 export const assistantSettingsNav = [
-    { name: "Playground", href: "playground", id: "playground" },
-    { name: "Activity", href: "activity", id: "activity" },
-    { name: "Sources", href: "sources", id: "sources" },
-    { name: "Connect", href: "connect", id: "connect" },
-    { name: "Settings", href: "settings", id: "settings" },
-  ];
+  { name: "Playground", href: "playground", id: "playground" },
+  { name: "Activity", href: "activity", id: "activity" },
+  { name: "Sources", href: "sources", id: "sources" },
+  { name: "Connect", href: "connect", id: "connect" },
+  { name: "Settings", href: "settings", id: "settings" },
+];

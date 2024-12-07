@@ -125,7 +125,15 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             onClick={() => router.push("/")}
           />
           <div>
-            <Button variant="link">{header.userAuth.contact}</Button>
+            <Button asChild variant="link">
+              <a
+                href="https://wa.me/376644253?"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {header.userAuth.contact}
+              </a>
+            </Button>
             {pathname === "/login" && (
               <Button
                 onClick={() => {

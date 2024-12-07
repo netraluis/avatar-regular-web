@@ -1,11 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  Check,
-  ChevronsUpDown,
-  CirclePlus,
-} from "lucide-react";
+import { Check, ChevronsUpDown, CirclePlus } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -70,7 +66,7 @@ export function Combobox({
               className=" rounded-full"
             /> */}
           </div>
-          <span className="truncate w-2/3">
+          <span className="truncate w-2/3 flex justify-start">
             {optionSelected?.name
               ? optionSelected.name
               : `Search ${subject}...`}

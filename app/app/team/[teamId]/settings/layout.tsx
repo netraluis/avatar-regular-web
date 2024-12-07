@@ -7,9 +7,7 @@ import {
   useTeamSettingsContext,
 } from "@/components/context/teamSettingsContext";
 
-import {
-  Save,
-} from "lucide-react";
+import { Save } from "lucide-react";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useAppContext } from "@/components/context/appContext";
 
