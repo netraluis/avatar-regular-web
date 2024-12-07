@@ -15,11 +15,10 @@ import { useAssistantSettingsContext } from "@/components/context/assistantSetti
 import { useDeleteAssistant } from "@/components/context/useAppContext/assistant";
 import { useAppContext } from "@/components/context/appContext";
 import { LoaderCircle } from "lucide-react";
-import { useRouter, usePathname, useParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { CustomCard } from "@/components/custom-card";
 import { useEffect, useState } from "react";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
-import { Copy } from "lucide-react";
 import slugify from "slugify";
 
 const assistantGeneral = {
@@ -40,7 +39,6 @@ const assistantGeneral = {
 export default function Component() {
   const { data, setData, assistantValues } = useAssistantSettingsContext();
   const { loadingDeleteAssistant, deleteAssistant } = useDeleteAssistant();
-  const [url, setUrl] = useState("");
   const [urlExist, setUrlExist] = useState(false);
   const [localUrl, setLocalUrl] = useState("");
   const [urlLoading, setUrlLoading] = useState(false);
@@ -52,23 +50,10 @@ export default function Component() {
 
   const pathname = usePathname();
   const router = useRouter();
-  const { assistantId } = useParams();
+
 
   useEffect(() => {
-    const assistantUrl = teamSelected?.assistants.find(
-      (ass) => ass.id === assistantId,
-    )?.url;
-    setUrl(
-      `https://${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantUrl}`,
-    );
-  }, [teamSelected]);
-
-  const handleRedirect = () => {
-    window.open(url, "_blank");
-  };
-
-  useEffect(() => {
-    setLocalUrl(assistantValues?.url);
+    setLocalUrl(assistantValues?.url || "");
   }, [assistantValues]);
 
   const handleUrl = () => {
@@ -76,7 +61,7 @@ export default function Component() {
     setUrlExist(false);
     setUrlValid(false);
     const urlToCheck = slugify(localUrl, { lower: true, strict: true });
-    const exists = teamSelected.assistants.some(
+    const exists = teamSelected?.assistants.some(
       (assistant) => assistant.url === urlToCheck,
     );
     if (exists) {

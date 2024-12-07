@@ -53,6 +53,7 @@ export default function Playground() {
   const [message, setMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<any>(undefined);
+  const [localError, setLocalError] = React.useState<any>(undefined);
 
   const {
     state: { teamSelected },
@@ -82,6 +83,8 @@ export default function Playground() {
   React.useEffect(() => {
     if (!getAssistantData?.openAIassistant) return;
 
+    console.log(getAssistantData.openAIassistant);
+
     setAssistantValues({
       model: getAssistantData.openAIassistant.model || "gpt-4",
       instructions: getAssistantData.openAIassistant.instructions || "",
@@ -98,6 +101,9 @@ export default function Playground() {
   };
 
   const handleUpdate = async () => {
+    console.log({ assistantValues });
+    if (assistantValues.instructions === "")
+      return setLocalError("Instructions are required");
     setLoading(true);
     try {
       if (assistantValues && assistantId && state.user?.user?.id)
@@ -147,7 +153,7 @@ export default function Playground() {
       actionErrorText={playground.error}
       actionError={error}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden w-full">
         <Card className="p-6">
           <form className="space-y-6">
             <div>
@@ -177,26 +183,26 @@ export default function Playground() {
             </div>
             <div>
               <Label htmlFor="instructions">{playground.instructions}</Label>
-              {getAssistantData?.openAIassistant.instructions ? (
+              {getAssistantData?.openAIassistant ? (
                 <Textarea
                   id="instructions"
                   placeholder="Type your instructions here"
                   className="h-[100px]"
                   value={assistantValues.instructions}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    console.log(e.target.value);
                     setAssistantValues((prev) => ({
                       ...prev,
                       instructions: e.target.value,
-                    }))
-                  }
+                    }));
+                  }}
                 />
               ) : (
                 <TextAreaCharging />
               )}
-              <p className="text-xs text-gray-500 mt-1">
-                Customize your chatbot personality and style with specific
-                instructions.
-              </p>
+              {localError && (
+                <p className="text-xs text-red-500 mt-1">{localError}</p>
+              )}
             </div>
             <div>
               <Label htmlFor="temperature">
