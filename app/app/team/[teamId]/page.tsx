@@ -103,7 +103,12 @@ export default function Dashboard() {
                   assistantsByTeam.map((assistant) => (
                     <TableRow key={assistant.id}>
                       <TableCell className="font-medium">
-                        {assistant.name}
+                        <Link
+                          href={`/team/${teamId}/assistant/${assistant.id}`}
+                          passHref
+                        >
+                          {assistant.name}
+                        </Link>
                       </TableCell>
                       {/* <TableCell>
                         <Badge variant="outline">GPT-4</Badge>

@@ -72,7 +72,7 @@ export default function Component() {
     setUrlLoading(false);
   };
   return (
-    <div className="max-w-2xl mx-auto p-4 space-y-8 flex flex-col">
+    <div>
       <CustomCard
         title={assistantGeneral.title}
         description={assistantGeneral.desription}
