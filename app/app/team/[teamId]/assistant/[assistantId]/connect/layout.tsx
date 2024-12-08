@@ -7,12 +7,13 @@ import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout"
 import { OnlyTitleLayout } from "@/components/layouts/only-title-layout";
 
 const connectLayout = {
-  title: "Share",
-  description: "Share your account",
+  title: "Connecta",
+  description: "Gestiona com compartir i integrar el teu assistent amb altres eines i plataformes.",
+  share: 'Comparteix'
 };
 
 const navItems = [
-  { name: "Share", href: "share", icon: ExternalLink },
+  { name: `${connectLayout.share}`, href: "share", icon: ExternalLink },
   // { name: "Analytics", href: "analytics", icon: PieChart },
 ];
 

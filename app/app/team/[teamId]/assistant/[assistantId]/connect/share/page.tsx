@@ -11,11 +11,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
 const share = {
-  title: "Ensenyar la teva pàgina",
-  desription: "Comparteix la teva pàgina amb els teus amics.",
+  title: "Comparteix l’enllaç",
+  desription: "Comparteix l’enllaç de la teva pàgina d’equip perquè altres usuaris puguin accedir al teu assistent.",
   chat: {
-    title: "Ajusta el teu domini personalitzat",
-    description: "Això és com et veuran els altres al lloc.",
+    title: "URL de l’equip",
+    description: "Aquest enllaç permet accedir directament al teu assistent.",
   },
 };
 
@@ -44,20 +44,20 @@ export default function Component() {
       <CustomCard title={share.title} description={share.desription}>
         <div className="space-y-2">
           <Label htmlFor="team-url">{share.chat.title}</Label>
-          <span className="text-muted-foreground">
-            {share.chat.description}
-          </span>
           <div className="flex items-center space-x-2">
             {teamSelected ? (
               <Input id="team-url" disabled read-only="true" value={url} />
             ) : (
               <InputCharging />
             )}
-
+            
             <Button size="sm" onClick={handleRedirect} variant="outline">
               <Copy className="h-4 w-4" />
             </Button>
           </div>
+          <p className="text-sm text-muted-foreground">
+            {share.chat.description}
+            </p>
         </div>
       </CustomCard>
     </div>
