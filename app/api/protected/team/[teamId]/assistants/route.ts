@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { teamId: string } }
+  { params }: { params: { teamId: string } },
 ) {
   try {
     // Extraer los parámetros de la ruta
@@ -34,7 +34,7 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { teamId: string } }
+  { params }: { params: { teamId: string } },
 ) {
   try {
     const userId = request.headers.get("x-user-id");
@@ -72,7 +72,7 @@ export async function POST(
     const newInternAssistant = await createAssistantByTeam(
       teamId,
       url,
-      assistantCreateParams
+      assistantCreateParams,
     );
 
     return new NextResponse(JSON.stringify(newInternAssistant), {

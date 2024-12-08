@@ -10,7 +10,7 @@ import { updateAssistant as updateAssistantLocally } from "@/lib/data/assistant"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { assistantId: string, teamId: string } },
+  { params }: { params: { assistantId: string; teamId: string } },
 ) {
   try {
     const userId = request.headers.get("x-user-id");
@@ -53,7 +53,7 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { assistantId: string, teamId: string } },
+  { params }: { params: { assistantId: string; teamId: string } },
 ) {
   try {
     const userId = request.headers.get("x-user-id");
@@ -93,7 +93,7 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { assistantId: string, teamId: string } },
+  { params }: { params: { assistantId: string; teamId: string } },
 ) {
   try {
     const userId = request.headers.get("x-user-id");

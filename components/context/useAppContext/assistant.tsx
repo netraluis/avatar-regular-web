@@ -138,13 +138,16 @@ export const useDeleteAssistant = () => {
   }) {
     try {
       setLoadingDeleteAssistant(true);
-      const response = await fetch(`/api/protected/team/${teamId}/assistants/${assistantId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "x-user-id": userId,
+      const response = await fetch(
+        `/api/protected/team/${teamId}/assistants/${assistantId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-id": userId,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -181,7 +184,7 @@ export const useGetAssistant = () => {
   async function getAssistant({
     assistantId,
     userId,
-    teamId
+    teamId,
   }: {
     assistantId: string;
     teamId: string;
@@ -189,13 +192,16 @@ export const useGetAssistant = () => {
   }) {
     try {
       setLoadingGetAssistant(true);
-      const response = await fetch(`/api/protected/team/${teamId}/assistants/${assistantId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-user-id": userId,
+      const response = await fetch(
+        `/api/protected/team/${teamId}/assistants/${assistantId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-id": userId,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -242,17 +248,20 @@ export const useUpdateAssistant = () => {
   }) {
     try {
       setLoadingUpdateAssistant(true);
-      const response = await fetch(`/api/protected/team/${teamId}/assistants/${assistantId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "x-user-id": userId,
+      const response = await fetch(
+        `/api/protected/team/${teamId}/assistants/${assistantId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-id": userId,
+          },
+          body: JSON.stringify({
+            openAIassistantUpdateParams,
+            localAssistantUpdateParams,
+          }),
         },
-        body: JSON.stringify({
-          openAIassistantUpdateParams,
-          localAssistantUpdateParams,
-        }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -277,7 +286,7 @@ export const useUpdateAssistant = () => {
 export const useAssistant = ({
   assistantId,
   userId,
-  teamId
+  teamId,
 }: {
   teamId: string;
   assistantId: string | undefined;
@@ -321,12 +330,14 @@ export const useAssistant = ({
     try {
       console.log({ internatlThreadId, message, assistantId });
       if (!internatlThreadId) {
-        
-        const response = await fetch(`/api/protected/team/${teamId}/assistants/${assistantId}/thread/`, {
-          method: "POST",
-          headers,
-          body: JSON.stringify({ message, assistantId }),
-        });
+        const response = await fetch(
+          `/api/protected/team/${teamId}/assistants/${assistantId}/thread/`,
+          {
+            method: "POST",
+            headers,
+            body: JSON.stringify({ message, assistantId }),
+          },
+        );
 
         if (!response.body) {
           throw new Error("No response stream found");

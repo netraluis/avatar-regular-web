@@ -36,7 +36,6 @@ export default function Layout({
 }>) {
   const pathname = usePathname();
   const comparatePathName = pathname.split("/").slice(1)[4];
-  console.log(comparatePathName);
   if (comparatePathName === "instructions" || comparatePathName === "files") {
     return <>{children}</>;
   }

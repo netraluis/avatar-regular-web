@@ -19,7 +19,7 @@ export const useFetchThreadsMessages = () => {
       dateFrom,
       dateTo,
       assistantId,
-      teamId
+      teamId,
     }: {
       page: number | null;
       pageSize: number | null;
@@ -98,7 +98,7 @@ export const useFetchMessageByThread = () => {
     threadId,
     userId,
     assistantId,
-    teamId
+    teamId,
   }: {
     teamId: string;
     threadId: string;
