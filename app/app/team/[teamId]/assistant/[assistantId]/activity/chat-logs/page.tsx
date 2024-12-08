@@ -34,6 +34,13 @@ import {
   CustomCardCharging,
 } from "@/components/loaders/loadersSkeleton";
 
+const chatlogs = {
+  filterByData: "Filtrar per data de creació",
+  restartFilters: "Reinicia els filtres",
+  noData: "No hi han dades",
+  filterByDate: "Filtra per data de creació",
+};
+
 export default function Component() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -163,7 +170,7 @@ export default function Component() {
                     format(date.from, "LLL dd, y")
                   )
                 ) : (
-                  <span>Filtra por fecha de creación</span>
+                  <span>{chatlogs.filterByData}</span>
                 )}
               </Button>
             </PopoverTrigger>
@@ -183,7 +190,7 @@ export default function Component() {
         <div className="flex items-center ">
           <Button size="sm" className="" onClick={deleteUrlParams}>
             {/* <Download className="w-4 h-4 mr-1" /> */}
-            Restart filters
+            {chatlogs.restartFilters}
           </Button>
         </div>
       </div>
@@ -224,7 +231,7 @@ export default function Component() {
                 ))
               ) : (
                 <div className="h-full grow p-4 mr-2 rounded-lg border flex justify-center items-center">
-                  <>no hay datos</>
+                  <>{chatlogs.noData}</>
                 </div>
               )}
             </div>

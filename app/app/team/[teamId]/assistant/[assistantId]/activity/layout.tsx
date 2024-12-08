@@ -6,13 +6,15 @@ import { usePathname } from "next/navigation";
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
 import { OnlyTitleLayout } from "@/components/layouts/only-title-layout";
 
-const playgroundLayout = {
-  title: "Activity",
-  description: "manage your account",
+const activityLayout = {
+  title: "Activitat",
+  description:
+    "Gestiona l’activitat del teu assistent i accedeix a registres de converses i analítiques detallades.",
+  chatLogs: "Registres de conversa",
 };
 
 const navItems = [
-  { name: "Chat Logs", href: "chat-logs", icon: Inbox },
+  { name: `${activityLayout.chatLogs}`, href: "chat-logs", icon: Inbox },
   // { name: "Analytics", href: "analytics", icon: PieChart },
 ];
 
@@ -27,8 +29,8 @@ export default function Layout({
 
   return (
     <OnlyTitleLayout
-      cardTitle={playgroundLayout.title}
-      cardDescription={playgroundLayout.description}
+      cardTitle={activityLayout.title}
+      cardDescription={activityLayout.description}
     >
       <>
         <SideDashboardLayout
