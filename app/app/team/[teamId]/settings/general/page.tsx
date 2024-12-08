@@ -15,34 +15,31 @@ import { UploadImage } from "@/components/upload-image";
 import { CustomCard } from "@/components/custom-card";
 
 const setting = {
-  title: "Ajusts del equip",
-  description: "Això és com et veuran els altres al lloc.",
+  title: "Configuració de l’equip",
+  description: "Personalitza la manera com el teu equip es mostra als altres dins la plataforma",
   name: "Nom de l'equip",
   nameDescription:
-    "Aquest és el teu nom públic. Pot ser el teu nom real o un pseudònim.",
+    "Pots utilitzar el teu nom real, un pseudònim o un nom que representi la teva organització. Tingues en compte que només podràs canviar-lo cada 30 dies.",
   url: "URL de l'equip",
   urlDescription:
     "La propera URL de l'equip causarà una redirecció a la nova URL.",
   logo: {
-    title: "Imatges de l'equip",
-    description: "Així és com et veuran els altres al lloc.",
-    uploadLogo: "Pujar un logotip",
+    title: "Logotip i favicon",
+    description: "Puja imatges personalitzades per identificar el teu equip",
+    uploadLogo: "Puja un logotip",
     choose: "Escollir",
-    uploadFavicon: "Pujar un favicon",
-    recommendedSize: "Mida recomanada 180 × 180",
+    recommendedSize: "El logotip es mostra en llocs visibles dins la plataforma",
   },
   favicon: {
     title: "Imatges del favicon",
-    description: "Així és com es veurà el favicon al lloc.",
-    uploadLogo: "Pujar un favicon",
-    choose: "Escollir favicon",
+    description: "El favicon és la icona que apareix al navegador quan visites el teu domini personalitzat.",
+    choose: "Escollir",
     uploadFavicon: "Pujar un favicon",
-    recommendedSize: "Mida recomanada 180 × 180",
+    recommendedSize: "El favicon és la icona que apareix al navegador quan visites el teu domini personalitzat.",
   },
   delete: {
-    title: "Zona de perill",
-    description:
-      "Un cop esborris el teu compte d'equip, no hi ha marxa enrere. Si us plau, sigues cert.",
+    title: "Zona perillosa",
+    description:'Un cop eliminis el compte del teu equip, no hi haurà marxa enrere. Si us plau, assegura’t. Totes les teves dades pujades i assistents GPT entrenats seran eliminats. Aquesta acció és irreversible.',
     delete: "Esborrar l'equip",
     loading: "Esborrant...",
   },
@@ -87,6 +84,7 @@ export default function Component() {
               onChange={(e) => {
                 setData({ ...data, name: e.target.value });
               }}
+              placeholder='Acme Inc.'
             />
           ) : (
             <InputCharging />
@@ -135,7 +133,7 @@ export default function Component() {
         />
         <UploadImage
           src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.symbolUrl || teamSelected?.symbolUrl}?timestamp=${new Date().getTime()}`}
-          description={setting.favicon.uploadLogo}
+          description={setting.favicon.uploadFavicon}
           alt="favicon"
           recommendedSize={setting.favicon.recommendedSize}
           fileUserImageType={FileUserImageType.SYMBOL}
@@ -144,6 +142,7 @@ export default function Component() {
           assistantId={assistantId as string}
         />
       </CustomCard>
+      
 
       <CustomCard
         title={setting.delete.title}
@@ -158,7 +157,7 @@ export default function Component() {
           }}
           variant="destructive"
         >
-          {loading ? setting.delete.loading : teamSelected?.name}
+          {loading ? setting.delete.loading : `${setting.delete.delete} ${teamSelected?.name}`}
         </Button>
       </CustomCard>
     </div>
