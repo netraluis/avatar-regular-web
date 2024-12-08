@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 const titleLayout = {
-  preview : 'Previsualitza'
-}
+  preview: "Previsualitza",
+};
 
 export interface TitleLayoutProps {
   children: React.ReactNode;

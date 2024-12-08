@@ -23,9 +23,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { useRouter, useParams, usePathname } from "next/navigation";
 import { Combobox } from "../combo-box";
-import React, { useEffect
-  
- } from "react";
+import React, { useEffect } from "react";
 import { useAppContext } from "../context/appContext";
 import { Option } from "@/types/types";
 import { useFetchTeamsByUserId } from "../context/useAppContext/team";
@@ -76,8 +74,6 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   // Comparar los valores extraídos con `/team/${teamId}`
   const isDashboardActive = lastTwoSegments === `team/${teamId}`;
   const isSettingsActive = lastTwoSegments === `team/${teamId}/settings`;
-
-
 
   useEffect(() => {
     if (user?.user?.id && teamId) {
@@ -262,7 +258,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>  
+                  <NavigationMenuLink
+                    asChild
+                    className={navigationMenuTriggerStyle()}
+                  >
                     <a
                       className="text-muted-foreground"
                       href="https://detailed-glue-10a.notion.site/Chatbotfor-155916db2da68083a888d00a5d1c0d61"
@@ -274,7 +273,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                  <NavigationMenuLink
+                    asChild
+                    className={navigationMenuTriggerStyle()}
+                  >
                     <a
                       className="text-muted-foreground"
                       href="https://wa.me/376644253?"
