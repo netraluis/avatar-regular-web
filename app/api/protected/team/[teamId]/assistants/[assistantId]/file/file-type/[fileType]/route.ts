@@ -6,8 +6,10 @@ import { promisify } from "util";
 import OpenAI from "openai";
 import { getAssistant } from "@/lib/data/assistant";
 import { FilePurpose } from "openai/resources/files.mjs";
-import { FileType, Prisma } from "@prisma/client";
+import { FileType, Prisma, File } from "@prisma/client";
 import { createFile } from "@/lib/data/file";
+import { VectorStoreFile, SuccessfullResponse } from "@/types/types";
+import { getFiles } from "@/lib/data/file";
 
 const pump = promisify(pipeline);
 
@@ -36,7 +38,7 @@ export async function POST(
 ) {
   try {
     const formData = await req.formData();
-    const files = formData.getAll("files") as File[];
+    const files = formData.getAll("files") as {name: string, stream: any}[];
     const assistantId = formData.get("assistantId") as string;
     const purpose = formData.get("purpose") as FilePurpose;
 
@@ -108,6 +110,46 @@ export async function POST(
     return NextResponse.json({ status: 200, data: uploadResults });
   } catch (e: any) {
     console.error("File upload error:", e);
+    return NextResponse.json({ status: 500, message: e.message });
+  }
+}
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { assistantId: string; fileType: FileType } },
+) {
+  const assistant = await getAssistant(params.assistantId);
+  if (!assistant) {
+    return NextResponse.json({
+      status: 400,
+      message: "Assistant not found",
+    });
+  }
+
+  if (!Object.values(FileType).includes(params.fileType as FileType)) {
+    return NextResponse.json({
+      status: 400,
+      message: "Invalid file type",
+    });
+  }
+
+  try {
+    const getFilesResponse = (
+      await getFiles({
+        assistantId: params.assistantId,
+        type: FileType[params.fileType],
+      })
+    ).map((file: File) => {
+      return { ...file, isCharging: false };
+    });
+
+    const response: SuccessfullResponse<VectorStoreFile[]> = {
+      status: 200,
+      data: getFilesResponse,
+    };
+    return NextResponse.json(response);
+  } catch (e: any) {
+    console.error("Error getting files:", e);
     return NextResponse.json({ status: 500, message: e.message });
   }
 }

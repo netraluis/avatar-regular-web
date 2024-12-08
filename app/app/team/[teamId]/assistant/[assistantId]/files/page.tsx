@@ -61,6 +61,7 @@ export default function Component() {
     await getFileVectorStore({
       assistantId: params.assistantId as string,
       fileType: FileType.FILE,
+      teamId: params.teamId as string,
     });
   };
 
@@ -89,6 +90,7 @@ export default function Component() {
       fileInput: files as unknown as FileList,
       assistantId: params.assistantId as string,
       fileType: FileType.FILE,
+      teamId: params.teamId as string,
     });
     setIsModalOpen(false);
   }, []);
@@ -244,6 +246,7 @@ export default function Component() {
                           fileInput: e.target.files,
                           assistantId: params.assistantId as string,
                           fileType: FileType.FILE,
+                          teamId: params.teamId as string,
                         });
                       }}
                     />

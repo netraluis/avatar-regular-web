@@ -42,6 +42,7 @@ import {
   InputCharging,
 } from "@/components/loaders/loadersSkeleton";
 import { v4 as uuidv4 } from "uuid";
+import { useParams } from "next/navigation";
 
 const interfaceText = {
   title: "Ajusts del equip",
@@ -111,8 +112,9 @@ export default function Interface() {
   const [headerButtonText, setHeaderButtonText] = useState<string[]>([""]);
   const [welText, setWelText] = useState<string[]>([""]);
   const [welType, setWelType] = useState<WelcomeType>(WelcomeType.PLAIN);
-  const [welAvatarUrl, setWelAvatarUrl] = useState<string>("");
   const [menuHeaderId, setMenuHeaderId] = useState<string | null>(null);
+
+  const {assistantId} = useParams();
 
   useEffect(() => {
     setMenuHeaderId(
@@ -135,7 +137,6 @@ export default function Interface() {
 
     setWelText(welcome?.text || [""]);
     setWelType(teamSelected?.welcomeType || WelcomeType.PLAIN);
-    setWelAvatarUrl(teamSelected?.avatarUrl || "");
     setHeaderFoot(
       teamSelected?.menuFooter?.find(
         (menuFooter: MenuFooter) =>
@@ -443,13 +444,14 @@ export default function Interface() {
           )}
         </div>
         <UploadImage
-          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${welAvatarUrl}?timestamp=${new Date().getTime()}`}
+          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.avatarUrl || teamSelected?.avatarUrl}?timestamp=${new Date().getTime()}`}
           description={interfaceText.avatar.uploadLogo}
           alt="avatar"
           recommendedSize={interfaceText.avatar.recommendedSize}
-          fileUserImageType={FileUserImageType.LOGO}
+          fileUserImageType={FileUserImageType.AVATAR}
           accept=".png,.jpg,.jpeg"
           choose={interfaceText.avatar.choose}
+          assistantId={assistantId as string}
         />
         {welType === WelcomeType.PLAIN && (
           <div className="space-y-2">

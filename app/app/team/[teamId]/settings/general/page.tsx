@@ -9,7 +9,7 @@ import slugify from "slugify";
 import { FileUserImageType } from "@/types/types";
 import { useTeamSettingsContext } from "@/components/context/teamSettingsContext";
 import { useDeleteTeam } from "@/components/context/useAppContext/team";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import { UploadImage } from "@/components/upload-image";
 import { CustomCard } from "@/components/custom-card";
@@ -52,6 +52,8 @@ export default function Component() {
   const {
     state: { user, teamSelected },
   } = useAppContext();
+
+  const {assistantId} = useParams();
 
   const { data, setData } = useTeamSettingsContext();
 
@@ -129,6 +131,7 @@ export default function Component() {
           fileUserImageType={FileUserImageType.LOGO}
           accept=".png,.jpg,.jpeg"
           choose={setting.logo.choose}
+          assistantId={assistantId as string}
         />
         <UploadImage
           src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.symbolUrl || teamSelected?.symbolUrl}?timestamp=${new Date().getTime()}`}
@@ -138,6 +141,7 @@ export default function Component() {
           fileUserImageType={FileUserImageType.SYMBOL}
           accept=".svg"
           choose={setting.favicon.choose}
+          assistantId={assistantId as string}
         />
       </CustomCard>
 

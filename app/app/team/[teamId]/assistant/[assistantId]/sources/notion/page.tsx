@@ -106,6 +106,7 @@ export default function Component() {
     await getFileVectorStore({
       assistantId: params.assistantId as string,
       fileType: FileType.NOTION,
+      teamId: params.teamId as string,
     });
   };
 
@@ -118,7 +119,7 @@ export default function Component() {
   }, [params.assistantId]);
 
   const handleDelete = async (fileId: string) => {
-    await deleteFileVectorStore({ fileId });
+    await deleteFileVectorStore({ fileId, teamId: params.teamId as string, assistantId: params.assistantId as string });
   };
 
   const openNotionAuthPopup = () => {
@@ -230,6 +231,7 @@ export default function Component() {
       fileInput: [file] as unknown as FileList,
       assistantId: params.assistantId as string,
       fileType: FileType.NOTION,
+      teamId: params.teamId as string,
     });
 
     setInputValue("");

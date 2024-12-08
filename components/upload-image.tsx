@@ -17,6 +17,7 @@ export interface UploadImageProps {
   fileUserImageType: FileUserImageType;
   accept: string;
   choose: string;
+  assistantId: string;
 }
 
 export const UploadImage = ({
@@ -27,6 +28,7 @@ export const UploadImage = ({
   fileUserImageType,
   accept,
   choose,
+  assistantId,
 }: UploadImageProps) => {
   const {
     state: { user, teamSelected },
@@ -98,6 +100,7 @@ export const UploadImage = ({
                   userId: user.user.id,
                   teamId: teamSelected.id as string,
                   fileUserImageType,
+                  assistantId,
                 });
                 setData({ ...data, [field(fileUserImageType)]: url.data });
               }

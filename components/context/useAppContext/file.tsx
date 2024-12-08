@@ -23,10 +23,12 @@ export const useFileVectorStoreAssistant = () => {
     fileInput,
     assistantId,
     fileType,
+    teamId
   }: {
     fileInput: FileList | null;
     assistantId: string;
     fileType: FileType;
+    teamId: string;
   }) {
     if (!fileInput || fileInput.length === 0) return;
     try {
@@ -54,9 +56,11 @@ export const useFileVectorStoreAssistant = () => {
       const requestOptions = { method: "POST", body: formData };
 
       const response = await fetch(
-        `/api/protected/file/file-type/${fileType}`,
+        `/api/protected/team/${teamId}/assistants/${assistantId}/file/file-type/${fileType}`,
         requestOptions,
       );
+
+      console.log({response});
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -79,14 +83,16 @@ export const useFileVectorStoreAssistant = () => {
   async function getFileVectorStore({
     assistantId,
     fileType,
+    teamId
   }: {
     assistantId: string;
     fileType: FileType;
+    teamId: string;
   }) {
     try {
       setGetFileloading(true);
       const response = await fetch(
-        `/api/protected/file/file-type/${fileType}/${assistantId}`,
+        `/api/protected/team/${teamId}/assistants/${assistantId}/file/file-type/${fileType}`,
         {
           method: "GET",
         },
@@ -106,7 +112,7 @@ export const useFileVectorStoreAssistant = () => {
     }
   }
 
-  async function deleteFileVectorStore({ fileId }: { fileId: string }) {
+  async function deleteFileVectorStore({ fileId, teamId, assistantId }: { fileId: string, teamId: string, assistantId: string }) {
     try {
       setFileData((pre) => {
         const res = pre.map((file) => {
@@ -117,7 +123,7 @@ export const useFileVectorStoreAssistant = () => {
         });
         return res;
       });
-      const response = await fetch(`/api/protected/file/${fileId}`, {
+      const response = await fetch(`/api/protected/team/${teamId}/assistants/${assistantId}/file/${fileId}`, {
         method: "DELETE",
       });
 
@@ -176,12 +182,14 @@ export const useSupabaseFile = () => {
     userId,
     teamId,
     fileUserImageType,
+    assistantId
     // fileType,
   }: {
     fileInput: FileList | null;
     userId: string;
     teamId: string;
     fileUserImageType: FileUserImageType;
+    assistantId: string;
     // fileType: FileType;
   }) {
     if (!fileInput || fileInput.length === 0) return;
@@ -208,7 +216,7 @@ export const useSupabaseFile = () => {
       };
 
       const response = await fetch(
-        `/api/protected/file/supabase`,
+        `/api/protected/team/${teamId}/assistants/${assistantId}/file/supabase`,
         requestOptions,
       );
 
