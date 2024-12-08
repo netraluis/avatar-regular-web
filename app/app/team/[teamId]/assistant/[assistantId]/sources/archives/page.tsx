@@ -27,6 +27,18 @@ import { VectorStoreFile } from "@/types/types";
 import { useFileVectorStoreAssistant } from "@/components/context/useAppContext/file";
 import { CustomCard } from "@/components/custom-card";
 
+const archives = {
+  title: 'Fitxers',
+  description: 'Sel·lecciona els  arxius per entrenar l’assistent. (Tipus de fitxers compatibles: .pdf, .doc, .docx, .txt)',
+  actionButton: 'Carrega un fitxer',
+  name: 'Nom',
+  characters: 'Caràcters',
+  status: 'Estat',
+  textDragAndDrop: 'Arrossega i deixa anar els fitxers aquí o',
+  browser: 'explora',
+  supportedFiles: 'Fitxers admesos: PDF, DOC, DOCX, TXT',
+}
+
 export default function Component() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -97,10 +109,8 @@ export default function Component() {
   return (
     <>
       <CustomCard
-        title={"Files"}
-        description={
-          "Drag & drop files here, or click to select files (Supported File Types: .pdf, .doc, .docx, .txt)"
-        }
+        title={archives.title}
+        description={archives.description}
       >
         <div className="flex justify-end items-end mb-4">
           {/* <Input
@@ -108,7 +118,7 @@ export default function Component() {
             placeholder="Search files..."
             className="max-w-sm"
           /> */}
-          <Button onClick={() => setIsModalOpen(true)}>+ Upload file</Button>
+          <Button onClick={() => setIsModalOpen(true)}>+ {archives.actionButton}</Button>
         </div>
         <Table className="">
           <TableHeader>
@@ -116,9 +126,9 @@ export default function Component() {
               <TableHead className="w-[30px]">
                 <Input type="checkbox" />
               </TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Bytes</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>{archives.name}</TableHead>
+              <TableHead>{archives.characters}</TableHead>
+              <TableHead>{archives.status}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -176,7 +186,7 @@ export default function Component() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Upload Files</DialogTitle>
+            <DialogTitle>{archives.actionButton}</DialogTitle>
           </DialogHeader>
           {upLoadFileError && <>{upLoadFileError.message}</>}
           {upLoadFileloading ? (
@@ -195,7 +205,7 @@ export default function Component() {
               <div className="flex flex-col items-center gap-2">
                 <Upload className="h-8 w-8 text-gray-400" />
                 <p className="text-sm text-gray-600">
-                  Drag and drop your files here, or{" "}
+                  {archives.textDragAndDrop}{" "}
                   <label className="text-primary hover:underline cursor-pointer">
                     browse
                     <input
@@ -217,7 +227,7 @@ export default function Component() {
                   </label>
                 </p>
                 <p className="text-xs text-gray-400">
-                  Supported files: PDF, DOC, DOCX, TXT
+                  {archives.supportedFiles}
                 </p>
               </div>
             </div>

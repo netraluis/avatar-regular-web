@@ -7,12 +7,13 @@ import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout"
 import { OnlyTitleLayout } from "@/components/layouts/only-title-layout";
 
 const sourcesLayout = {
-  title: "Sources",
-  description: "Manage your sources",
+  title: "Fonts",
+  description: "Gestiona les fonts d’informació que l’assistent utilitza per respondre a les consultes dels usuaris. Les fonts carregades ajuden l’assistent a trobar el contingut adequat segons les peticions.",
+  archives: "Fitxers",
 };
 
 const navItems = [
-  { name: "Archives", href: "archives", icon: Archive },
+  { name: `${sourcesLayout.archives}`, href: "archives", icon: Archive },
   // { name: "Texts", href: "texts", icon: FileText },
   // { name: "Emails", href: "emails", icon: Mail },
   // { name: "Q&A", href: "qna", icon: MessageSquare },

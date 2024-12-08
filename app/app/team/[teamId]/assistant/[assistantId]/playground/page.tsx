@@ -38,9 +38,11 @@ const playground = {
   model: "Model",
   instructions: "Instruccions",
   temperature: "Temperatura",
-  temperatureDescription:'Controla la creativitat de les respostes. Valors més alts generen respostes més creatives, mentre que valors més baixos són més directes.',
+  temperatureDescription:
+    "Controla la creativitat de les respostes. Valors més alts generen respostes més creatives, mentre que valors més baixos són més directes.",
   topP: "Top P",
-  topPDescription: 'Ajusta la probabilitat acumulativa per limitar les opcions del model. Mantén-lo baix per respostes més previsibles.',
+  topPDescription:
+    "Ajusta la probabilitat acumulativa per limitar les opcions del model. Mantén-lo baix per respostes més previsibles.",
   output: "Sortida",
   typeYourMessageHere: "Escriu el teu missatge aquí...",
   send: "Enviar",
@@ -213,20 +215,20 @@ export default function Playground() {
                   : ""}
               </Label>
               {getAssistantData?.openAIassistant.temperature ? (
-                  <Slider
-                    className="mt-3"
-                    id="temperature"
-                    min={0}
-                    max={2}
-                    step={0.01}
-                    value={[assistantValues.temperature]}
-                    onValueChange={(value) =>
-                      setAssistantValues((prev) => ({
-                        ...prev,
-                        temperature: value[0],
-                      }))
-                    }
-                  />
+                <Slider
+                  className="mt-3"
+                  id="temperature"
+                  min={0}
+                  max={2}
+                  step={0.01}
+                  value={[assistantValues.temperature]}
+                  onValueChange={(value) =>
+                    setAssistantValues((prev) => ({
+                      ...prev,
+                      temperature: value[0],
+                    }))
+                  }
+                />
               ) : (
                 <InputCharging />
               )}
