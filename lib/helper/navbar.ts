@@ -7,30 +7,47 @@ import {
   Link2,
 } from "lucide-react";
 
+const teamSettingsText = {
+  general: 'General',
+  interface: 'Interficie',
+  localistaions: 'Traduccions',
+  customDomain: 'Domini personalitzat',
+  members: 'Membres',
+  plans: 'Plans',
+}
+
 export const teamsSettingsNav = [
-  { name: "General", href: "general", icon: Settings, id: "general" },
-  { name: "Interface", href: "interface", icon: Paintbrush, id: "interface" },
+  { name: `${teamSettingsText.general}`, href: "general", icon: Settings, id: "general" },
+  { name: `${teamSettingsText.interface}`, href: "interface", icon: Paintbrush, id: "interface" },
   {
-    name: "Localisations",
+    name: `${teamSettingsText.localistaions}`,
     href: "localisations",
     icon: Languages,
     id: "localisations",
   },
   {
-    name: "Custom domain",
+    name: `${teamSettingsText.customDomain}`,
     href: "custom-domain",
     icon: Link2,
     id: "custom-domain",
   },
-  { name: "Members", href: "members", icon: User, id: "members" },
+  { name: `${teamSettingsText.members}`, href: "members", icon: User, id: "members" },
   { name: "Plans", href: "plans", icon: Gem, id: "plans" },
   // { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
 ];
 
+const assistantSettingsText = {
+  playground: 'Playground',
+  activity: 'Activitat',
+  sources: 'Fonts',
+  connect: 'Connecta',
+  settings: 'Configuració',
+}
+
 export const assistantSettingsNav = [
-  { name: "Playground", href: "playground", id: "playground" },
-  { name: "Activity", href: "activity", id: "activity" },
-  { name: "Sources", href: "sources", id: "sources" },
-  { name: "Connect", href: "connect", id: "connect" },
-  { name: "Settings", href: "settings", id: "settings" },
+  { name: `${assistantSettingsText.playground}`, href: "playground", id: "playground" },
+  { name: `${assistantSettingsText.activity}`, href: "activity", id: "activity" },
+  { name: `${assistantSettingsText.sources}`, href: "sources", id: "sources" },
+  { name: `${assistantSettingsText.connect}`, href: "connect", id: "connect" },
+  { name: `${assistantSettingsText.settings}`, href: "settings", id: "settings" },
 ];

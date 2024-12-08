@@ -16,8 +16,8 @@ import { TitleLayout } from "@/components/layouts/title-layout";
 import { teamsSettingsNav } from "@/lib/helper/navbar";
 
 const teamSettings = {
-  cardTitle: "Ajustos de l'equip",
-  cardDescription: "Configura l'equip com vulguis",
+  cardTitle: "Configuració",
+  cardDescription: "Gestiona la configuració del teu compte i ajusta les preferències",
   actionButtonText: "Desa",
   actionErrorText: "Hi hagut un error al update",
 };
