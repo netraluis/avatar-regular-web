@@ -14,6 +14,7 @@ interface ConfirmationScreenProps {
   nextActionActive: boolean;
   error: boolean;
   errorText: string;
+  logo?: React.ComponentType<{ className?: string }>;
 }
 
 export default function OnboardingBase({
@@ -29,10 +30,16 @@ export default function OnboardingBase({
   error,
   errorText,
   loading,
+  logo: Logo,
 }: ConfirmationScreenProps) {
   return (
     <div className="flex grow items-center justify-center p-4 w-full w-redirect">
       <div className="grow flex flex-col items-start text-start space-y-6">
+        {Logo && (
+          <div className="border-2 rounded-lg p-3 w-16 h-16">
+            <Logo className="w-full h-full" />
+          </div>
+        )}
         <div className="space-y-2 w-full">
           <h1 className="text-2xl font-semibold tracking-tight w-full">
             {title}

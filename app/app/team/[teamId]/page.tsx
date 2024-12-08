@@ -28,6 +28,8 @@ import {
   useFetchAssistantsByTeamId,
 } from "@/components/context/useAppContext/assistant";
 import { TitleLayout } from "@/components/layouts/title-layout";
+import OnboardingBase from "@/components/onboarding/onboarding-base";
+import { Bot } from "lucide-react";
 
 const teamIdText = {
   cardTitle: "Tauler d’Assistents ",
@@ -39,6 +41,10 @@ const teamIdText = {
   visibility: "Visibilitat",
   edit: "Editar",
   delete: "Eliminar",
+  createYourAssistant: "Crea el teu primer assistent",
+  createYourAssistantDescription:
+    "Personalitza el teu assistent en pocs passos: defineix les instruccions, afegeix fonts d’informació i ajusta el seu to de veu.",
+  textActionCreateYourAssistant: "Crear assistent",
 };
 
 export default function Dashboard() {
@@ -92,7 +98,7 @@ export default function Dashboard() {
     >
       {loading ? (
         <Loader />
-      ) : (
+      ) : assistantsByTeam.length > 0 ? (
         <Card className="w-full">
           <CardContent>
             <Table>
@@ -100,8 +106,12 @@ export default function Dashboard() {
                 <TableRow>
                   <TableHead>{teamIdText.name}</TableHead>
                   {/* <TableHead>type</TableHead> */}
-                  <TableHead className="hidden md:table-cell">{teamIdText.link}</TableHead>
-                  <TableHead className="hidden md:table-cell">{teamIdText.visibility}</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    {teamIdText.link}
+                  </TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    {teamIdText.visibility}
+                  </TableHead>
                   <TableHead>
                     <span className="sr-only">Actions</span>
                   </TableHead>
@@ -135,7 +145,8 @@ export default function Dashboard() {
                         </Link>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        {assistant.status.charAt(0).toUpperCase() + assistant.status.slice(1).toLowerCase()}
+                        {assistant.status.charAt(0).toUpperCase() +
+                          assistant.status.slice(1).toLowerCase()}
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>
@@ -154,7 +165,9 @@ export default function Dashboard() {
                               href={`/team/${teamId}/assistant/${assistant.id}`}
                               passHref
                             >
-                              <DropdownMenuItem>{teamIdText.edit}</DropdownMenuItem>
+                              <DropdownMenuItem>
+                                {teamIdText.edit}
+                              </DropdownMenuItem>
                             </Link>
 
                             {/* <DropdownMenuItem
@@ -182,6 +195,25 @@ export default function Dashboard() {
             </Table>
           </CardContent>
         </Card>
+      ) : (
+        <div className="w-full flex items-center justify-center">
+          <div className="flex flex-col justify-center">
+            <OnboardingBase
+              title={teamIdText.createYourAssistant}
+              description={teamIdText.createYourAssistantDescription}
+              loading={false}
+              backAction={() => {}}
+              nextAction={handleCreateNewAssistantRoute}
+              backActionText=""
+              nextActionText={teamIdText.textActionCreateYourAssistant}
+              backActionActive={false}
+              nextActionActive={true}
+              error={false}
+              errorText=""
+              logo={Bot}
+            />
+          </div>
+        </div>
       )}
     </TitleLayout>
     // </main>
