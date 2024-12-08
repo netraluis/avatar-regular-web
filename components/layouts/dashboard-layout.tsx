@@ -75,8 +75,6 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   const isDashboardActive = lastTwoSegments === `team/${teamId}`;
   const isSettingsActive = lastTwoSegments === `team/${teamId}/settings`;
 
-  console.log({ isDashboardActive });
-
   useEffect(() => {
     if (user?.user?.id && teamId) {
       fetchAssistantsByTeamId(teamId as string, user.user.id);

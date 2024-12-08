@@ -61,7 +61,9 @@ export default function Page() {
 
   useEffect(() => {
     if (createAssistantData) {
-      router.push(`instructions`);
+      router.push(
+        `/team/${teamId}/assistant/${createAssistantData.id}/instructions`,
+      );
     }
   }, [createAssistantData]);
 

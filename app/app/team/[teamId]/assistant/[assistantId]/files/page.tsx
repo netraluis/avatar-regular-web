@@ -7,9 +7,9 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TableHeader
+  TableHeader,
 } from "@/components/ui/table";
-import { Upload, Trash2 } from "lucide-react";
+import { Upload } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
@@ -51,7 +51,7 @@ export default function Component() {
     getFileVectorStore,
     getFileloading,
     getFileError,
-    deleteFileVectorStore,
+    // deleteFileVectorStore,
     fileData,
   } = useFileVectorStoreAssistant();
 
@@ -97,18 +97,20 @@ export default function Component() {
     fileInputRef.current?.click();
   };
 
-  const handleDelete = async (fileId: string) => {
-    await deleteFileVectorStore({ fileId });
-  };
-
-  // -----------
+  // const handleDelete = async (fileId: string) => {
+  //   await deleteFileVectorStore({ fileId });
+  // };
 
   const nextAction = async () => {
-    router.push("playground");
+    router.push(
+      `/team/${params.teamId}/assistant/${params.assistantId}/playground`,
+    );
   };
 
   const backAction = () => {
-    router.push("playground");
+    router.push(
+      `/team/${params.teamId}/assistant/${params.assistantId}/playground`,
+    );
   };
 
   return (
@@ -180,20 +182,20 @@ export default function Component() {
                             </span>
                           </TableCell>
                           {
-                            <TableCell>
-                              <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="alert"
-                                onClick={() => {
-                                  handleDelete(file.id);
-                                }}
-                                disabled={file.isCharging}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                                <span className="sr-only">Toggle menu</span>
-                              </Button>
-                            </TableCell>
+                            // <TableCell>
+                            //   <Button
+                            //     aria-haspopup="true"
+                            //     size="icon"
+                            //     variant="alert"
+                            //     onClick={() => {
+                            //       handleDelete(file.id);
+                            //     }}
+                            //     disabled={file.isCharging}
+                            //   >
+                            //     <Trash2 className="h-4 w-4" />
+                            //     <span className="sr-only">Toggle menu</span>
+                            //   </Button>
+                            // </TableCell>
                           }
                         </TableRow>
                       ))

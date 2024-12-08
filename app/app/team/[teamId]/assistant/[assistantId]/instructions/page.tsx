@@ -31,7 +31,7 @@ interface AssistantValues {
 
 export default function Page() {
   const { state } = useAppContext();
-  const { assistantId } = useParams();
+  const { assistantId, teamId } = useParams();
   const router = useRouter();
   const {
     state: { user, teams },
@@ -88,7 +88,7 @@ export default function Page() {
 
   useEffect(() => {
     if (updateAssistantData) {
-      router.push(`files`);
+      router.push(`/team/${teamId}/assistant/${assistantId}/files`);
     }
   }, [updateAssistantData]);
 
