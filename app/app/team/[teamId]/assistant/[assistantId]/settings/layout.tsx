@@ -18,11 +18,12 @@ import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout"
 
 const assSettings = {
   cardTitle: "Configuració",
-  cardDescription: "Gestiona la configuració del teu assistent i ajusta les preferències",
+  cardDescription:
+    "Gestiona la configuració del teu assistent i ajusta les preferències",
   actionButtonText: "Desa els canvis",
   actionErrorText: "Hi hagut un error al update",
-  general: 'General',
-  interface: 'Interficie'
+  general: "General",
+  interface: "Interficie",
 };
 
 const navItems = [

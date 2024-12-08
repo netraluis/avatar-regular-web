@@ -23,7 +23,8 @@ import slugify from "slugify";
 
 const assistantGeneral = {
   title: "Configuració de l’assistent",
-  desription: "Personalitza com es mostra el teu assistent dins de la plataforma.",
+  desription:
+    "Personalitza com es mostra el teu assistent dins de la plataforma.",
   assistantName: {
     title: "Nom de l’assistent",
     description:
@@ -39,7 +40,7 @@ const assistantGeneral = {
     description:
       "Si elimines aquest assistent, no hi haurà manera de recuperar-lo. Totes les dades pujades i els chatbots entrenats es perdran. Aquesta acció és irreversible.",
     actionButton: "Elimina l’assistent",
-    }
+  },
 };
 
 export default function Component() {
@@ -159,7 +160,11 @@ export default function Component() {
             }}
             variant="destructive"
           >
-            {loadingDeleteAssistant ? <LoaderCircle /> : assistantGeneral.delete.actionButton}
+            {loadingDeleteAssistant ? (
+              <LoaderCircle />
+            ) : (
+              assistantGeneral.delete.actionButton
+            )}
           </Button>
         </CardContent>
       </Card>

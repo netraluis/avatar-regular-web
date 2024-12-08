@@ -28,16 +28,17 @@ import { useFileVectorStoreAssistant } from "@/components/context/useAppContext/
 import { CustomCard } from "@/components/custom-card";
 
 const archives = {
-  title: 'Fitxers',
-  description: 'Sel·lecciona els  arxius per entrenar l’assistent. (Tipus de fitxers compatibles: .pdf, .doc, .docx, .txt)',
-  actionButton: 'Carrega un fitxer',
-  name: 'Nom',
-  characters: 'Caràcters',
-  status: 'Estat',
-  textDragAndDrop: 'Arrossega i deixa anar els fitxers aquí o',
-  browser: 'explora',
-  supportedFiles: 'Fitxers admesos: PDF, DOC, DOCX, TXT',
-}
+  title: "Fitxers",
+  description:
+    "Sel·lecciona els  arxius per entrenar l’assistent. (Tipus de fitxers compatibles: .pdf, .doc, .docx, .txt)",
+  actionButton: "Carrega un fitxer",
+  name: "Nom",
+  characters: "Caràcters",
+  status: "Estat",
+  textDragAndDrop: "Arrossega i deixa anar els fitxers aquí o",
+  browser: "explora",
+  supportedFiles: "Fitxers admesos: PDF, DOC, DOCX, TXT",
+};
 
 export default function Component() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -108,17 +109,16 @@ export default function Component() {
 
   return (
     <>
-      <CustomCard
-        title={archives.title}
-        description={archives.description}
-      >
+      <CustomCard title={archives.title} description={archives.description}>
         <div className="flex justify-end items-end mb-4">
           {/* <Input
             type="text"
             placeholder="Search files..."
             className="max-w-sm"
           /> */}
-          <Button onClick={() => setIsModalOpen(true)}>+ {archives.actionButton}</Button>
+          <Button onClick={() => setIsModalOpen(true)}>
+            + {archives.actionButton}
+          </Button>
         </div>
         <Table className="">
           <TableHeader>

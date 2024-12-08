@@ -12,7 +12,8 @@ import { useParams } from "next/navigation";
 
 const share = {
   title: "Comparteix l’enllaç",
-  desription: "Comparteix l’enllaç de la teva pàgina d’equip perquè altres usuaris puguin accedir al teu assistent.",
+  desription:
+    "Comparteix l’enllaç de la teva pàgina d’equip perquè altres usuaris puguin accedir al teu assistent.",
   chat: {
     title: "URL de l’equip",
     description: "Aquest enllaç permet accedir directament al teu assistent.",
@@ -50,14 +51,14 @@ export default function Component() {
             ) : (
               <InputCharging />
             )}
-            
+
             <Button size="sm" onClick={handleRedirect} variant="outline">
               <Copy className="h-4 w-4" />
             </Button>
           </div>
           <p className="text-sm text-muted-foreground">
             {share.chat.description}
-            </p>
+          </p>
         </div>
       </CustomCard>
     </div>

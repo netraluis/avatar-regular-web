@@ -27,16 +27,16 @@ import { useFileVectorStoreAssistant } from "@/components/context/useAppContext/
 import { CustomCard } from "@/components/custom-card";
 
 const notion = {
-  title: 'Notion',
-  description: 'Connecta’t a la teva base de dades de Notion.',
-  actionButton: 'Carrega un fitxer',
-  name: 'Nom',
-  characters: 'Caràcters',
-  status: 'Estat',
+  title: "Notion",
+  description: "Connecta’t a la teva base de dades de Notion.",
+  actionButton: "Carrega un fitxer",
+  name: "Nom",
+  characters: "Caràcters",
+  status: "Estat",
   // textDragAndDrop: 'Arrossega i deixa anar els fitxers aquí o',
   // browser: 'explora',
   // supportedFiles: 'Fitxers admesos: PDF, DOC, DOCX, TXT',
-}
+};
 
 export default function Component() {
   const [popup, setPopup] = useState<Window | null>(null);
@@ -256,10 +256,7 @@ export default function Component() {
   return (
     <>
       <div className="flex-1 p-8">
-        <CustomCard
-          title={notion.title}
-          description={notion.description}
-        >
+        <CustomCard title={notion.title} description={notion.description}>
           <div className="flex justify-end item-end mb-4">
             {/* <Input
               type="text"

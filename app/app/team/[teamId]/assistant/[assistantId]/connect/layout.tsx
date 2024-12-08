@@ -8,8 +8,9 @@ import { OnlyTitleLayout } from "@/components/layouts/only-title-layout";
 
 const connectLayout = {
   title: "Connecta",
-  description: "Gestiona com compartir i integrar el teu assistent amb altres eines i plataformes.",
-  share: 'Comparteix'
+  description:
+    "Gestiona com compartir i integrar el teu assistent amb altres eines i plataformes.",
+  share: "Comparteix",
 };
 
 const navItems = [

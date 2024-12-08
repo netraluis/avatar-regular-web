@@ -17,7 +17,8 @@ import { teamsSettingsNav } from "@/lib/helper/navbar";
 
 const teamSettings = {
   cardTitle: "Configuració",
-  cardDescription: "Gestiona la configuració del teu compte i ajusta les preferències",
+  cardDescription:
+    "Gestiona la configuració del teu compte i ajusta les preferències",
   actionButtonText: "Desa",
   actionErrorText: "Hi hagut un error al update",
 };

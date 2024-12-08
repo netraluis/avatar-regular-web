@@ -45,54 +45,62 @@ import { v4 as uuidv4 } from "uuid";
 import { useParams } from "next/navigation";
 
 const interfaceText = {
-  title: "Ajusts del equip",
-  description: "Això és com et veuran els altres al lloc.",
+  title: "Missatge de benvinguda",
+  description:
+    "Configura com els usuaris veuen el teu missatge de benvinguda al lloc web.",
+  welcomeType: "Selecciona el tema de l’assitent de xat",
   name: "Nom de l'equip",
   nameDescription:
     "Aquest és el teu nom públic. Pot ser el teu nom real o un pseudònim.",
   avatar: {
-    title: "Imatges de l'equip",
-    description: "Així és com et veuran els altres al lloc.",
-    uploadLogo: "Pujar un logotip",
-    choose: "Escollir",
-    uploadFavicon: "Pujar un favicon",
-    recommendedSize: "Mida recomanada 180 × 180",
+    // title: "Imatges de l'equip",
+    // description: "Així és com et veuran els altres al lloc.",
+    uploadLogo: "Carrega una imatge d’avatar",
+    choose: "Selecciona",
+    recommendedSize:
+      "Puja una imatge d’avatar personalitzada per representar l’assistent.",
   },
   welcomeMessage: {
-    title: "Al teu missatge de benvinguda",
-    description: "Aquest missatge sortira a la seva pàgina de benvinguda",
-    linesTitle: "Les lines del welcome",
-    line: "Linea",
-    addLine: "Afegir linea",
-    lineDescription: "Els bubbles es separen per lineas",
+    title: "El teu missatge",
+    description:
+      "Escriu el missatge de benvinguda que es mostrarà als usuaris.",
+    linesTitle: "Conversa de benvinguda",
+    line: "Missatge",
+    addLine: "Afegir missatge",
+    lineDescription: "Els bubbles simulen una conversa",
   },
   menu: {
     headerTitle: "Menu",
-    headerDescription: "Aquest seràn els valors que tindrem al menu del header",
-    menuHeaderTitle: "Menu superior",
+    headerDescription: "Afegeix enllaços al teu lloc web o blog.",
+    menuHeaderTitle: "Menú principal",
     menuHeaderTitleDescription:
       "Aquests valors apareixeran primers i més destacats",
-    menuBodyTitle: "Menu inferior",
-    menuBodyDescription: "Aquests valors apareixeran a la part mitja del menu",
-    menuFooterTitle: "Footer del menu",
-    menuFooterChangePlan: "Canviar al teu plan",
-    menuFooterDescription: "Aquest text apareixara a la part inferior del menu",
-    addItem: "Afegir Item",
+    menuBodyTitle: "Menu secundari",
+    menuBodyDescription:
+      "Afegeix enllaços addicionals (per exemple: Instagram, LinkedIn o Termes legals).",
+    menuFooterTitle: "Peu de pàgina",
+    menuFooterChangePlan: "Canvia de pla",
+    addItem: "Afegeix un element",
   },
   banner: {
-    title: "Banner de información",
-    description: "Disclaimer information situat en el menú",
-    buttonText: "Títol botó",
-    titleText: "Títol",
+    title: "Banner d’informació",
+    description:
+      "Personalitza un missatge informatiu que es mostrarà al menú del lloc web.",
+    buttonText: "Nom visible al menú",
+    buttonTextPlaceholder: "Exemple: Ajuda",
+    titleText: "Títol del banner",
+    titleTextPlaceholder: "Exemple: Fonts d'informació",
     text: "Text del banner",
     textDescription: "Aquest text sera el cos del banner",
+    textDescriptionPlaceholder: "",
   },
   footer: {
-    title: "Footer",
-    description: "És el texte que apareix al inferior de la pàgina",
-    text: "El seu footer",
-    textDescription:
-      "Aquest texte apareixera just abaix de la seva caixa de text",
+    title: "Missatge del peu de pàgina",
+    description:
+      "Escriu aquí un text breu i clar, per exemple, una nota legal, informació sobre intel·ligència artificial o qualsevol avís rellevant.",
+    text: "El teu missatge",
+    textPlaceholder:
+      "Genero respostes amb intel·ligència artificial i puc cometre errors.",
   },
 };
 
@@ -416,7 +424,7 @@ export default function Interface() {
           {teamSelected ? (
             <>
               <Label htmlFor="welcome-message-type">
-                Tipus del welcome message
+                {interfaceText.welcomeType}
               </Label>
               <Select
                 onValueChange={(value: WelcomeType) => {
@@ -755,9 +763,6 @@ export default function Interface() {
           ) : (
             <TextAreaCharging />
           )}
-          <p className="text-sm text-muted-foreground">
-            {interfaceText.menu.menuFooterDescription}
-          </p>
         </div>
       </CustomCard>
 
@@ -772,7 +777,7 @@ export default function Interface() {
           {teamSelected ? (
             <Input
               id="banner-button-text"
-              placeholder="Texto en el botón"
+              placeholder={interfaceText.banner.buttonTextPlaceholder}
               // className="min-h-[100px]"
               value={headerButton || ""}
               onChange={(e) => {
@@ -817,6 +822,7 @@ export default function Interface() {
             <Input
               id="banner-title"
               value={headerButtonTitle || ""}
+              placeholder={interfaceText.banner.titleTextPlaceholder}
               onChange={(e) => {
                 if (!teamSelected?.id) return;
                 setHeaderButtonTitle(e.target.value);
@@ -857,6 +863,7 @@ export default function Interface() {
           <Label htmlFor="banner-text">{interfaceText.banner.text}</Label>
           {teamSelected ? (
             <Textarea
+              placeholder={interfaceText.banner.textDescriptionPlaceholder}
               id="banner-text"
               className="min-h-[100px]"
               value={(headerButtonText && headerButtonText[0]) || ""}
@@ -911,6 +918,7 @@ export default function Interface() {
             <Label htmlFor="footer-message">{interfaceText.footer.text}</Label>
             {teamSelected ? (
               <Textarea
+                placeholder={interfaceText.footer.textPlaceholder}
                 id="footer-message"
                 className="min-h-[100px]"
                 value={foot || ""}
@@ -948,9 +956,6 @@ export default function Interface() {
             ) : (
               <TextAreaCharging />
             )}
-            <p className="text-sm text-muted-foreground">
-              {interfaceText.footer.textDescription}
-            </p>
           </div>
         </CardContent>
       </Card>

@@ -8,7 +8,8 @@ import { OnlyTitleLayout } from "@/components/layouts/only-title-layout";
 
 const sourcesLayout = {
   title: "Fonts",
-  description: "Gestiona les fonts d’informació que l’assistent utilitza per respondre a les consultes dels usuaris. Les fonts carregades ajuden l’assistent a trobar el contingut adequat segons les peticions.",
+  description:
+    "Gestiona les fonts d’informació que l’assistent utilitza per respondre a les consultes dels usuaris. Les fonts carregades ajuden l’assistent a trobar el contingut adequat segons les peticions.",
   archives: "Fitxers",
 };
 

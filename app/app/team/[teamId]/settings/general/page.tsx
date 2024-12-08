@@ -16,7 +16,8 @@ import { CustomCard } from "@/components/custom-card";
 
 const setting = {
   title: "Configuració de l’equip",
-  description: "Personalitza la manera com el teu equip es mostra als altres dins la plataforma",
+  description:
+    "Personalitza la manera com el teu equip es mostra als altres dins la plataforma",
   name: "Nom de l'equip",
   nameDescription:
     "Pots utilitzar el teu nom real, un pseudònim o un nom que representi la teva organització. Tingues en compte que només podràs canviar-lo cada 30 dies.",
@@ -28,18 +29,22 @@ const setting = {
     description: "Puja imatges personalitzades per identificar el teu equip",
     uploadLogo: "Puja un logotip",
     choose: "Escollir",
-    recommendedSize: "El logotip es mostra en llocs visibles dins la plataforma",
+    recommendedSize:
+      "El logotip es mostra en llocs visibles dins la plataforma",
   },
   favicon: {
     title: "Imatges del favicon",
-    description: "El favicon és la icona que apareix al navegador quan visites el teu domini personalitzat.",
+    description:
+      "El favicon és la icona que apareix al navegador quan visites el teu domini personalitzat.",
     choose: "Escollir",
     uploadFavicon: "Pujar un favicon",
-    recommendedSize: "El favicon és la icona que apareix al navegador quan visites el teu domini personalitzat.",
+    recommendedSize:
+      "El favicon és la icona que apareix al navegador quan visites el teu domini personalitzat.",
   },
   delete: {
     title: "Zona perillosa",
-    description:'Un cop eliminis el compte del teu equip, no hi haurà marxa enrere. Si us plau, assegura’t. Totes les teves dades pujades i assistents GPT entrenats seran eliminats. Aquesta acció és irreversible.',
+    description:
+      "Un cop eliminis el compte del teu equip, no hi haurà marxa enrere. Si us plau, assegura’t. Totes les teves dades pujades i assistents GPT entrenats seran eliminats. Aquesta acció és irreversible.",
     delete: "Esborrar l'equip",
     loading: "Esborrant...",
   },
@@ -84,7 +89,7 @@ export default function Component() {
               onChange={(e) => {
                 setData({ ...data, name: e.target.value });
               }}
-              placeholder='Acme Inc.'
+              placeholder="Acme Inc."
             />
           ) : (
             <InputCharging />
@@ -142,7 +147,6 @@ export default function Component() {
           assistantId={assistantId as string}
         />
       </CustomCard>
-      
 
       <CustomCard
         title={setting.delete.title}
@@ -157,7 +161,9 @@ export default function Component() {
           }}
           variant="destructive"
         >
-          {loading ? setting.delete.loading : `${setting.delete.delete} ${teamSelected?.name}`}
+          {loading
+            ? setting.delete.loading
+            : `${setting.delete.delete} ${teamSelected?.name}`}
         </Button>
       </CustomCard>
     </div>
