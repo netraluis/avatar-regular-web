@@ -34,10 +34,16 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const comparatePathName = pathname.split("/").slice(1)[4];
+  console.log(comparatePathName);
+  if (comparatePathName === "instructions" || comparatePathName === "files") {
+    return <>{children}</>;
+  }
   return (
     <div className="pt-4 grow flex flex-col overflow-auto w-full">
       <Header />
-      <div className="grow flex flex-col overflow-auto items-start pt-4 w-full h-full">
+      <div className="grow flex flex-col overflow-auto items-start pt-4 w-full h-full grow">
         {children}
       </div>
     </div>

@@ -13,7 +13,7 @@ export const OnlyTitleLayout = ({
   cardDescription,
 }: TitleLayoutProps) => {
   return (
-    <div className="flex flex-col overflow-auto pt-2 w-full">
+    <div className="flex flex-col overflow-auto p-2 w-full h-full">
       <div className="flex items-center gap-4 py-1.5 px-1.5">
         <Card className="border-none bg-transparent shadow-none py-2 px-4">
           <CardTitle>{cardTitle}</CardTitle>

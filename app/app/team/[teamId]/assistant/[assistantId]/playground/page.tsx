@@ -83,8 +83,6 @@ export default function Playground() {
   React.useEffect(() => {
     if (!getAssistantData?.openAIassistant) return;
 
-    console.log(getAssistantData.openAIassistant);
-
     setAssistantValues({
       model: getAssistantData.openAIassistant.model || "gpt-4",
       instructions: getAssistantData.openAIassistant.instructions || "",
@@ -154,7 +152,7 @@ export default function Playground() {
       actionError={error}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden w-full">
-        <Card className="p-6">
+        <Card className="p-6 w-full">
           <form className="space-y-6">
             <div>
               <Label htmlFor="model">{playground.model}</Label>
@@ -255,7 +253,7 @@ export default function Playground() {
             </div>
           </form>
         </Card>
-        <Card className="flex flex-col relative overflow-hidden ">
+        <Card className="flex flex-col relative overflow-hidden w-full grow">
           <CardHeader>
             <CardTitle>{playground.output}</CardTitle>
           </CardHeader>
