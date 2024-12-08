@@ -13,9 +13,9 @@ export default function Component() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold mb-2">Pricing and plans</h1>
+        <h1 className="text-3xl font-bold mb-2">Preus i plans</h1>
         <p className="text-muted-foreground">
-          Pick the plan that works best for you!
+          Tria el pla que millor s’adapti a tu!
         </p>
       </div>
 
@@ -26,15 +26,15 @@ export default function Component() {
               <h2 className="text-xl font-bold">Hobby</h2>
             </CardTitle>
             <div className="flex items-baseline justify-between">
-              <span className="text-4xl font-bold">$19</span>
-              <span className="text-sm text-muted-foreground">Per Month</span>
+              <span className="text-4xl font-bold">19 $</span>
+              <span className="text-sm text-muted-foreground">Al mes</span>
             </div>
           </CardHeader>
           <CardContent className="h-full">
             <div className="h-full flex flex-col">
               <div className="space-y-4">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  Everything in Free, plus...
+                  Tot el que inclou el pla gratuït, a més…
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
@@ -49,42 +49,37 @@ export default function Component() {
                 <ul className="space-y-2.5 pt-4">
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>Access to advanced models</span>
+                    <span>Accés a models avançats</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>2,000 message credits/month</span>
+                    <span>2.000 crèdits de missatges/mes</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>2 chatbots</span>
+                    <span>2 xatbots</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>11,000,000 characters/chatbot</span>
+                    <span>11.000.000 caràcters per xatbot</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>Unlimited links to train on</span>
+                    <span>Enllaços il·limitats per entrenar</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>API access</span>
+                    <span>Accés a l’API</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>Integrations</span>
+                    <span>Integracions</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>Basic Analytics</span>
+                    <span>Analítiques bàsiques</span>
                   </li>
                 </ul>
-              </div>
-              <div className="mt-auto pt-6">
-                <Button className="w-full" variant="outline">
-                  Upgrade
-                </Button>
               </div>
             </div>
           </CardContent>
@@ -93,36 +88,33 @@ export default function Component() {
         <Card className="border-primary">
           <CardHeader className="space-y-1">
             <CardTitle>
-              <h2 className="text-xl font-bold">Standard</h2>
+              <h2 className="text-xl font-bold">Estàndard</h2>
             </CardTitle>
             <div className="flex items-baseline justify-between">
               <span className="text-4xl font-bold">$99</span>
-              <span className="text-sm text-muted-foreground">Per Month</span>
+              <span className="text-sm text-muted-foreground">Al mes</span>
             </div>
           </CardHeader>
           <CardContent className="h-full">
             <div className="h-full flex flex-col">
               <div className="space-y-4">
                 <div className="text-sm text-muted-foreground">
-                  Everything in Hobby, plus...
+                  Tot el que inclou el pla Hobby, a més…
                 </div>
                 <ul className="space-y-2.5 pt-4">
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>10,000 message credits/month</span>
+                    <span>10.000 crèdits de missatges/mes</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>5 chatbots</span>
+                    <span>5 xatbots</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
                     <span>3 team members</span>
                   </li>
                 </ul>
-              </div>
-              <div className="mt-auto pt-6">
-                <Button className="w-full">Upgrade</Button>
               </div>
             </div>
           </CardContent>
@@ -131,53 +123,47 @@ export default function Component() {
         <Card>
           <CardHeader className="space-y-1">
             <CardTitle>
-              <h2 className="text-xl font-bold">Unlimited</h2>
+              <h2 className="text-xl font-bold">Il·limitat</h2>
             </CardTitle>
             <div className="flex items-baseline justify-between">
               <span className="text-4xl font-bold">$399</span>
-              <span className="text-sm text-muted-foreground">Per Month</span>
+              <span className="text-sm text-muted-foreground">Al mes</span>
             </div>
           </CardHeader>
           <CardContent className="h-full">
             <div className="h-full flex flex-col">
               <div className="space-y-4">
                 <div className="text-sm text-muted-foreground">
-                  Everything in Standard, plus...
+                  Tot el que inclou el pla Estàndard, a més…
                 </div>
                 <ul className="space-y-2.5 pt-4">
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
                     <span>
-                      40,000 message credits/month included (Messages over the
-                      limit will use your OpenAI API Key)
+                      40.000 crèdits de missatges/mes (els missatges que superin aquest límit utilitzaran la teva clau d’API d’OpenAI)
                     </span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>10 chatbots</span>
+                    <span>10 xatbots</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>5 team members</span>
+                    <span>5 membres de l’equip</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>Remove &apos;Powered by Chatbase&apos;</span>
+                    <span>Elimina “Powered by Chatbotfor</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>Use your own custom domains</span>
+                    <span>Usa els teus propis dominis personalitzats</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
-                    <span>Advanced Analytics</span>
+                    <span>Analítiques avançades</span>
                   </li>
                 </ul>
-              </div>
-              <div className="mt-auto pt-6">
-                <Button className="w-full" variant="outline">
-                  Upgrade
-                </Button>
               </div>
             </div>
           </CardContent>

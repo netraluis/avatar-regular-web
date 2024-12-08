@@ -34,6 +34,7 @@ export const teamsSettingsNav = [
     href: "localisations",
     icon: Languages,
     id: "localisations",
+    alpha: true 
   },
   {
     name: `${teamSettingsText.customDomain}`,
@@ -46,8 +47,9 @@ export const teamsSettingsNav = [
     href: "members",
     icon: User,
     id: "members",
+    alpha: true 
   },
-  { name: "Plans", href: "plans", icon: Gem, id: "plans" },
+  { name: "Plans", href: "plans", icon: Gem, id: "plans", alpha: true },
   // { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
 ];
 
