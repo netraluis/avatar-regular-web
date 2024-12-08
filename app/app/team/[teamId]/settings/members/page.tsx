@@ -31,9 +31,9 @@ export default function Component() {
     <div className="max-w-2xl mx-auto p-4">
       <Card>
         <CardHeader>
-          <CardTitle>Invite members</CardTitle>
+          <CardTitle>Convida membres</CardTitle>
           <CardDescription>
-            Anyone with the link can join the team
+            Comparteix l’enllaç perquè qualsevol persona amb accés pugui unir-se a l’equip.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -49,15 +49,15 @@ export default function Component() {
               onClick={handleCopy}
             >
               <Copy className="w-4 h-4 mr-2" />
-              {copied ? "Copied!" : "Copy Link"}
+              {copied ? "Copiat!" : "Copia l’enllaç"}
             </Button>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-sm font-medium">People with access</h3>
+            <h3 className="text-sm font-medium">Persones amb accés</h3>
             <div className="flex gap-2">
               <Input placeholder="anton@email.com" type="email" />
-              <Button className="shrink-0">Add member</Button>
+              <Button className="shrink-0">Afegir un membre</Button>
             </div>
 
             <div className="space-y-4">
@@ -77,14 +77,14 @@ export default function Component() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" size="sm">
-                        Can edit
+                        Pot editar
                         <ChevronDown className="w-4 h-4 ml-2" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Can edit</DropdownMenuItem>
-                      <DropdownMenuItem>Can view</DropdownMenuItem>
-                      <DropdownMenuItem>Can modify</DropdownMenuItem>
+                      <DropdownMenuItem>Pot editar</DropdownMenuItem>
+                      <DropdownMenuItem>Només lectura</DropdownMenuItem>
+                      <DropdownMenuItem>Pot modificar</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                   <Button variant="ghost" size="icon">
@@ -109,14 +109,14 @@ export default function Component() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" size="sm">
-                        Can modify
+                        Pot modificar
                         <ChevronDown className="w-4 h-4 ml-2" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Can edit</DropdownMenuItem>
-                      <DropdownMenuItem>Can view</DropdownMenuItem>
-                      <DropdownMenuItem>Can modify</DropdownMenuItem>
+                      <DropdownMenuItem>Pot editar</DropdownMenuItem>
+                      <DropdownMenuItem>Només lectura</DropdownMenuItem>
+                      <DropdownMenuItem>Pot modificar</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                   <Button variant="ghost" size="icon">
@@ -141,14 +141,14 @@ export default function Component() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" size="sm">
-                        Can modify
+                        Pot modificar
                         <ChevronDown className="w-4 h-4 ml-2" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuItem>Can edit</DropdownMenuItem>
-                      <DropdownMenuItem>Can view</DropdownMenuItem>
-                      <DropdownMenuItem>Can modify</DropdownMenuItem>
+                      <DropdownMenuItem>Pot editar</DropdownMenuItem>
+                      <DropdownMenuItem>Només lectura</DropdownMenuItem>
+                      <DropdownMenuItem>Pot modificar</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                   <Button variant="ghost" size="icon">
