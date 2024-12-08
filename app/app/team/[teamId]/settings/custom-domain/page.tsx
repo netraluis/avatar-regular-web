@@ -14,8 +14,8 @@ import slugify from "slugify";
 
 const customDomain = {
   subdomain: {
-    title: "Ajusta el teu subdomini personalitzat",
-    description: "Això és com et veuran els altres al lloc.",
+    title: "Domini personalitzat",
+    description: "Personalitza com els altres veuen el teu equip al lloc web configurant l’URL del teu equip o connectant un domini personalitzat.",
     validation: "Validar",
     urlTitle: "URL de l'equip",
     urlDescription:
