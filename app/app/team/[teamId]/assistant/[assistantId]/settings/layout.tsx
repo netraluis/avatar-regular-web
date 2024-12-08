@@ -17,15 +17,17 @@ import { TitleLayout } from "@/components/layouts/title-layout";
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
 
 const assSettings = {
-  cardTitle: "Ajustos de l'equip",
-  cardDescription: "Configura l'equip com vulguis",
-  actionButtonText: "Desa",
+  cardTitle: "Configuració",
+  cardDescription: "Gestiona la configuració del teu assistent i ajusta les preferències",
+  actionButtonText: "Desa els canvis",
   actionErrorText: "Hi hagut un error al update",
+  general: 'General',
+  interface: 'Interficie'
 };
 
 const navItems = [
-  { name: "General", href: "general", icon: Settings },
-  { name: "Interface", href: "interface", icon: Paintbrush },
+  { name: `${assSettings.general}`, href: "general", icon: Settings },
+  { name: `${assSettings.interface}`, href: "interface", icon: Paintbrush },
 ];
 
 function Layout({

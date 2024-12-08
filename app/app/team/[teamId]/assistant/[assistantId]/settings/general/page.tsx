@@ -22,10 +22,10 @@ import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import slugify from "slugify";
 
 const assistantGeneral = {
-  title: "Ensenyar la teva pàgina",
-  desription: "Comparteix la teva pàgina amb els teus amics.",
+  title: "Configuració de l’assistent",
+  desription: "Personalitza com es mostra el teu assistent dins de la plataforma.",
   assistantName: {
-    title: "Assistant name",
+    title: "Nom de l’assistent",
     description:
       "This is your public display name. It can be your real name or a pseudonym. You can only change this once every 30 days.",
   },
@@ -34,6 +34,12 @@ const assistantGeneral = {
     description: "Upcoming Team URL will cause a redirect to the new url.",
     errorExist: "Aquest subdomini ja existeix",
   },
+  delete: {
+    title: "Elimina l’assistent",
+    description:
+      "Si elimines aquest assistent, no hi haurà manera de recuperar-lo. Totes les dades pujades i els chatbots entrenats es perdran. Aquesta acció és irreversible.",
+    actionButton: "Elimina l’assistent",
+    }
 };
 
 export default function Component() {
@@ -97,9 +103,6 @@ export default function Component() {
           ) : (
             <InputCharging />
           )}
-          <p className="text-sm text-muted-foreground">
-            {assistantGeneral.assistantName.description}
-          </p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="team-url">
@@ -126,9 +129,6 @@ export default function Component() {
               {urlValid ? "validado" : urlLoading ? "Comprobando" : "Comprovar"}
             </Button>
           </div>
-          <p className="text-sm text-muted-foreground">
-            {assistantGeneral.assistantUrl.description}
-          </p>
           {urlExist && (
             <p className="text-sm text-muted-foreground text-red-500">
               {assistantGeneral.assistantUrl.description}
@@ -140,17 +140,12 @@ export default function Component() {
 
       <Card className="border-destructive">
         <CardHeader>
-          <CardTitle>Danger zone</CardTitle>
+          <CardTitle>{assistantGeneral.delete.title}</CardTitle>
           <CardDescription>
-            Once you delete your team account, there is no going back. Please be
-            certain.
+            {assistantGeneral.delete.description}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground mb-4">
-            All your uploaded data and trained chatbots will be deleted. This
-            action is not reversible
-          </p>
           <Button
             onClick={async () => {
               if (!assistantValues?.id || !user?.user.id) return;
@@ -164,7 +159,7 @@ export default function Component() {
             }}
             variant="destructive"
           >
-            {loadingDeleteAssistant ? <LoaderCircle /> : assistantValues?.name}
+            {loadingDeleteAssistant ? <LoaderCircle /> : assistantGeneral.delete.actionButton}
           </Button>
         </CardContent>
       </Card>
