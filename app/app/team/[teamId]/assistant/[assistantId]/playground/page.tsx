@@ -34,11 +34,13 @@ import { TitleLayout } from "@/components/layouts/title-layout";
 const playground = {
   title: "Zona de proves",
   description:
-    "La zona de proves et permet experimentar amb diferents configuracions sense afectar el chatbot en directe.",
+    "El Playground et permet experimentar amb diferents configuracions sense afectar el chatbot en viu.",
   model: "Model",
   instructions: "Instruccions",
   temperature: "Temperatura",
+  temperatureDescription:'Controla la creativitat de les respostes. Valors més alts generen respostes més creatives, mentre que valors més baixos són més directes.',
   topP: "Top P",
+  topPDescription: 'Ajusta la probabilitat acumulativa per limitar les opcions del model. Mantén-lo baix per respostes més previsibles.',
   output: "Sortida",
   typeYourMessageHere: "Escriu el teu missatge aquí...",
   send: "Enviar",
@@ -211,25 +213,29 @@ export default function Playground() {
                   : ""}
               </Label>
               {getAssistantData?.openAIassistant.temperature ? (
-                <Slider
-                  className="mt-3"
-                  id="temperature"
-                  min={0}
-                  max={2}
-                  step={0.01}
-                  value={[assistantValues.temperature]}
-                  onValueChange={(value) =>
-                    setAssistantValues((prev) => ({
-                      ...prev,
-                      temperature: value[0],
-                    }))
-                  }
-                />
+                  <Slider
+                    className="mt-3"
+                    id="temperature"
+                    min={0}
+                    max={2}
+                    step={0.01}
+                    value={[assistantValues.temperature]}
+                    onValueChange={(value) =>
+                      setAssistantValues((prev) => ({
+                        ...prev,
+                        temperature: value[0],
+                      }))
+                    }
+                  />
               ) : (
                 <InputCharging />
               )}
+              <p className="text-xs text-gray-500 mt-1">
+                {playground.temperatureDescription}
+              </p>
             </div>
             <div>
+              <></>
               <Label htmlFor="top-p">
                 {playground.topP}:{" "}
                 {getAssistantData?.openAIassistant.top_p
@@ -251,6 +257,9 @@ export default function Playground() {
               ) : (
                 <InputCharging />
               )}
+              <p className="text-xs text-gray-500 mt-1">
+                {playground.topPDescription}
+              </p>
             </div>
           </form>
         </Card>
