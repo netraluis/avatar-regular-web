@@ -11,9 +11,11 @@ export const AssistantProvider = ({
   children,
   assistantId,
   userId,
+  teamId
 }: {
   children: ReactNode;
   assistantId?: string;
+  teamId: string;
   userId?: string;
 }) => {
   if (!assistantId) return {};
@@ -21,6 +23,7 @@ export const AssistantProvider = ({
   const assistant = useAssistant({
     assistantId,
     userId,
+    teamId
   });
 
   return (

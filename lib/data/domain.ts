@@ -27,6 +27,7 @@ export async function getTeamDataByDomainOrCustomDomainMetadata(
 
 export type GetTeamDataByDomainOrCustomDomainPage = Prisma.TeamGetPayload<{
   select: {
+    id: true;
     welcomeType: true;
     name: true;
     logoUrl: true;
@@ -106,6 +107,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
       ? { subDomain: subdomain } // If subdomain is true, filter by subdomain
       : { customDomain: domain }, // Otherwise, filter by customDomain
     select: {
+      id: true,
       welcomeType: true,
       name: true,
       logoUrl: true,

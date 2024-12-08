@@ -42,7 +42,7 @@ function Layout({
   const { data, setAssistantValues } = useAssistantSettingsContext();
   const { updateAssistant, loadingUpdateAssistant, errorUpdateAssistant } =
     useUpdateAssistant();
-  const { assistantId } = useParams();
+  const { assistantId, teamId } = useParams();
 
   const { getAssistantData, getAssistant } = useGetAssistant();
 
@@ -51,6 +51,7 @@ function Layout({
       getAssistant({
         assistantId: assistantId as string,
         userId: state.user.user.id,
+        teamId: teamId as string,
       });
     } else {
       router.push("/login");
@@ -69,6 +70,7 @@ function Layout({
         assistantId: assistantId as string,
         localAssistantUpdateParams: data,
         userId: state.user.user.id,
+        teamId: teamId as string,
       });
     }
   };

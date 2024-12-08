@@ -52,6 +52,7 @@ export default function Page() {
       getAssistant({
         assistantId: assistantId as string,
         userId: state.user.user.id,
+        teamId: teamId as string,
       });
     } else {
       router.push("/login");
@@ -80,6 +81,7 @@ export default function Page() {
         userId: state?.user?.user?.id || "",
         openAIassistantUpdateParams: assistantValues,
         localAssistantUpdateParams: {},
+        teamId: teamId as string,
       });
     } else {
       router.push("/login");
@@ -88,7 +90,7 @@ export default function Page() {
 
   useEffect(() => {
     if (updateAssistantData) {
-      router.push(`/team/${teamId}/assistant/${assistantId}/files`);
+      router.push(`/team/${teamId}/assistants/${assistantId}/files`);
     }
   }, [updateAssistantData]);
 

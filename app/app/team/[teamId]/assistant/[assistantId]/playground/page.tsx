@@ -48,7 +48,7 @@ const playground = {
 
 export default function Playground() {
   const { state } = useAppContext();
-  const { assistantId } = useParams();
+  const { assistantId, teamId } = useParams();
   const router = useRouter();
   const [message, setMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -74,6 +74,7 @@ export default function Playground() {
       getAssistant({
         assistantId: assistantId as string,
         userId: state.user.user.id,
+        teamId: teamId as string,
       });
     } else {
       router.push("/login");
@@ -99,7 +100,6 @@ export default function Playground() {
   };
 
   const handleUpdate = async () => {
-    console.log({ assistantValues });
     if (assistantValues.instructions === "")
       return setLocalError("Instructions are required");
     setLoading(true);
@@ -110,6 +110,7 @@ export default function Playground() {
           userId: state.user.user.id,
           openAIassistantUpdateParams: assistantValues,
           localAssistantUpdateParams: {},
+          teamId: teamId as string,
         });
     } catch (error) {
       console.error("An error occurred while updating the assistant", error);
@@ -122,6 +123,7 @@ export default function Playground() {
   const { submitMessage, messages } = useAssistant({
     assistantId: assistantId as string,
     userId: state.user?.user?.id,
+    teamId: teamId as string,
   });
 
   const {
@@ -188,7 +190,6 @@ export default function Playground() {
                   className="h-[100px]"
                   value={assistantValues.instructions}
                   onChange={(e) => {
-                    console.log(e.target.value);
                     setAssistantValues((prev) => ({
                       ...prev,
                       instructions: e.target.value,

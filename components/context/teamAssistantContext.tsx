@@ -49,6 +49,7 @@ export const TeamAssistantProvider = ({
   const useAssistantResponse: UseAssistantResponse = useAssistant({
     assistantId: assistantId,
     userId: undefined,
+    teamId: initialData?.id as string,
   });
 
   const value: TeamAssistantContextProps = {

@@ -82,7 +82,7 @@ export const useCreateAssistant = () => {
   }) {
     try {
       setLoadingCreateAssistant(true);
-      const response = await fetch(`/api/protected/assistant`, {
+      const response = await fetch(`/api/protected/team/${teamId}/assistants`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -128,15 +128,17 @@ export const useDeleteAssistant = () => {
     useState<Assistant | null>(null);
 
   async function deleteAssistant({
+    teamId,
     assistantId,
     userId,
   }: {
+    teamId: string;
     assistantId: string;
     userId: string;
   }) {
     try {
       setLoadingDeleteAssistant(true);
-      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
+      const response = await fetch(`/api/protected/team/${teamId}/assistants/${assistantId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -179,13 +181,15 @@ export const useGetAssistant = () => {
   async function getAssistant({
     assistantId,
     userId,
+    teamId
   }: {
     assistantId: string;
+    teamId: string;
     userId: string;
   }) {
     try {
       setLoadingGetAssistant(true);
-      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
+      const response = await fetch(`/api/protected/team/${teamId}/assistants/${assistantId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -228,7 +232,9 @@ export const useUpdateAssistant = () => {
     userId,
     openAIassistantUpdateParams,
     localAssistantUpdateParams,
+    teamId,
   }: {
+    teamId: string;
     assistantId: string;
     userId: string;
     openAIassistantUpdateParams?: AssistantUpdateParams;
@@ -236,7 +242,7 @@ export const useUpdateAssistant = () => {
   }) {
     try {
       setLoadingUpdateAssistant(true);
-      const response = await fetch(`/api/protected/assistant/${assistantId}`, {
+      const response = await fetch(`/api/protected/team/${teamId}/assistants/${assistantId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -271,7 +277,9 @@ export const useUpdateAssistant = () => {
 export const useAssistant = ({
   assistantId,
   userId,
+  teamId
 }: {
+  teamId: string;
   assistantId: string | undefined;
   userId: string | undefined;
 }): UseAssistantResponse => {
@@ -313,7 +321,8 @@ export const useAssistant = ({
     try {
       console.log({ internatlThreadId, message, assistantId });
       if (!internatlThreadId) {
-        const response = await fetch(`/api/protected/thread`, {
+        
+        const response = await fetch(`/api/protected/team/${teamId}/assistants/${assistantId}/thread/`, {
           method: "POST",
           headers,
           body: JSON.stringify({ message, assistantId }),
@@ -391,7 +400,7 @@ export const useAssistant = ({
         }
       } else {
         await fetch(
-          `/api/protected/assistant/${assistantId}/thread/${internatlThreadId}/message`,
+          `/api/protected/team/${teamId}/assistants/${assistantId}/thread/${internatlThreadId}/message`,
           {
             method: "POST",
             headers,
@@ -400,7 +409,7 @@ export const useAssistant = ({
         );
 
         const response = await fetch(
-          `/api/protected/assistant/${assistantId}/thread/${internatlThreadId}/run`,
+          `/api/protected/team/${teamId}/assistants/${assistantId}/thread/${internatlThreadId}/run`,
           {
             method: "POST",
             headers,

@@ -19,6 +19,7 @@ export const useFetchThreadsMessages = () => {
       dateFrom,
       dateTo,
       assistantId,
+      teamId
     }: {
       page: number | null;
       pageSize: number | null;
@@ -26,6 +27,7 @@ export const useFetchThreadsMessages = () => {
       assistantId: string;
       dateFrom: string | null;
       dateTo: string | null;
+      teamId: string;
     },
     userId: string,
   ) {
@@ -45,7 +47,7 @@ export const useFetchThreadsMessages = () => {
     if (dateFrom) queryParams.set("dateFrom", dateFrom);
     if (dateTo) queryParams.set("dateTo", dateTo);
 
-    const url = `/api/protected/assistant/${assistantId}/thread/messages?${queryParams.toString()}`;
+    const url = `/api/protected/team/${teamId}/assistants/${assistantId}/thread/messages?${queryParams.toString()}`;
 
     try {
       setLoadingFetchThreadsMessages(true);
@@ -96,7 +98,9 @@ export const useFetchMessageByThread = () => {
     threadId,
     userId,
     assistantId,
+    teamId
   }: {
+    teamId: string;
     threadId: string;
     userId: string;
     assistantId: string;
@@ -112,7 +116,7 @@ export const useFetchMessageByThread = () => {
     try {
       setLoadingFetchMessageByThread(true);
       const response = await fetch(
-        `/api/protected/assistant/${assistantId}/thread/${threadId}/message`,
+        `/api/protected/team/${teamId}/assistants/${assistantId}/thread/${threadId}/message`,
         {
           method: "GET",
           headers: {

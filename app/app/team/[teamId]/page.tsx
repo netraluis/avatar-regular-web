@@ -59,7 +59,7 @@ export default function Dashboard() {
 
   const handleDeleteAssistant = (assistantId: string) => {
     if (!user?.user.id) return;
-    deleteAssistant({ assistantId, userId: user.user.id });
+    deleteAssistant({ assistantId, userId: user.user.id, teamId: teamId as string });
   };
 
   useEffect(() => {

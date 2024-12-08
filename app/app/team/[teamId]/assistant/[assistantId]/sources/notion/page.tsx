@@ -101,6 +101,7 @@ export default function Component() {
     await getAssistant({
       assistantId: params.assistantId as string,
       userId,
+      teamId: params.teamId as string,
     });
     await getFileVectorStore({
       assistantId: params.assistantId as string,

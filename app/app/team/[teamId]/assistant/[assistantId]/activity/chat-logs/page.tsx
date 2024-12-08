@@ -37,7 +37,7 @@ import {
 export default function Component() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { assistantId } = useParams();
+  const { assistantId, teamId } = useParams();
   const pathname = usePathname();
 
   // Lee los filtros desde los parámetros de la URL
@@ -77,6 +77,7 @@ export default function Component() {
         assistantId: assistantId as string,
         dateFrom,
         dateTo,
+        teamId: teamId as string,
       },
       state.user?.user.id as string,
     );
@@ -92,6 +93,7 @@ export default function Component() {
           threadId,
           userId: state.user.user.id,
           assistantId: assistantId as string,
+          teamId: teamId as string,
         });
       } else {
         setThreadId(dataFetchThreadsMessages[0]?.threadId);

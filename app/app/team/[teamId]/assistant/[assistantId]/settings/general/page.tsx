@@ -15,7 +15,7 @@ import { useAssistantSettingsContext } from "@/components/context/assistantSetti
 import { useDeleteAssistant } from "@/components/context/useAppContext/assistant";
 import { useAppContext } from "@/components/context/appContext";
 import { LoaderCircle } from "lucide-react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import { CustomCard } from "@/components/custom-card";
 import { useEffect, useState } from "react";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
@@ -37,6 +37,7 @@ const assistantGeneral = {
 };
 
 export default function Component() {
+  const { teamId } = useParams();
   const { data, setData, assistantValues } = useAssistantSettingsContext();
   const { loadingDeleteAssistant, deleteAssistant } = useDeleteAssistant();
   const [urlExist, setUrlExist] = useState(false);
@@ -156,6 +157,7 @@ export default function Component() {
               await deleteAssistant({
                 assistantId: assistantValues?.id,
                 userId: user.user.id,
+                teamId: teamId as string,
               });
               const absolutePath = pathname.split("/").slice(1, 3).join("/");
               router.push(`/${absolutePath}`);

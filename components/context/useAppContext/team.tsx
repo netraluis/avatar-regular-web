@@ -221,10 +221,7 @@ export const useExistSubdomain = () => {
       );
       const teamSelected = await teamSelectedResponse.json();
 
-      console.log({ teamSelected });
-
       if (!teamSelectedResponse.ok) {
-        console.log({ teamSelected });
         return setError({ error: teamSelected.errorCode });
       }
 
