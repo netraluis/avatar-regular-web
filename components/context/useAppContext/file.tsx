@@ -23,7 +23,7 @@ export const useFileVectorStoreAssistant = () => {
     fileInput,
     assistantId,
     fileType,
-    teamId
+    teamId,
   }: {
     fileInput: FileList | null;
     assistantId: string;
@@ -60,7 +60,7 @@ export const useFileVectorStoreAssistant = () => {
         requestOptions,
       );
 
-      console.log({response});
+      console.log({ response });
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -83,7 +83,7 @@ export const useFileVectorStoreAssistant = () => {
   async function getFileVectorStore({
     assistantId,
     fileType,
-    teamId
+    teamId,
   }: {
     assistantId: string;
     fileType: FileType;
@@ -112,7 +112,15 @@ export const useFileVectorStoreAssistant = () => {
     }
   }
 
-  async function deleteFileVectorStore({ fileId, teamId, assistantId }: { fileId: string, teamId: string, assistantId: string }) {
+  async function deleteFileVectorStore({
+    fileId,
+    teamId,
+    assistantId,
+  }: {
+    fileId: string;
+    teamId: string;
+    assistantId: string;
+  }) {
     try {
       setFileData((pre) => {
         const res = pre.map((file) => {
@@ -123,9 +131,12 @@ export const useFileVectorStoreAssistant = () => {
         });
         return res;
       });
-      const response = await fetch(`/api/protected/team/${teamId}/assistants/${assistantId}/file/${fileId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `/api/protected/team/${teamId}/assistants/${assistantId}/file/${fileId}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -182,7 +193,7 @@ export const useSupabaseFile = () => {
     userId,
     teamId,
     fileUserImageType,
-    assistantId
+    assistantId,
     // fileType,
   }: {
     fileInput: FileList | null;

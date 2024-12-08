@@ -119,7 +119,11 @@ export default function Component() {
   }, [params.assistantId]);
 
   const handleDelete = async (fileId: string) => {
-    await deleteFileVectorStore({ fileId, teamId: params.teamId as string, assistantId: params.assistantId as string });
+    await deleteFileVectorStore({
+      fileId,
+      teamId: params.teamId as string,
+      assistantId: params.assistantId as string,
+    });
   };
 
   const openNotionAuthPopup = () => {

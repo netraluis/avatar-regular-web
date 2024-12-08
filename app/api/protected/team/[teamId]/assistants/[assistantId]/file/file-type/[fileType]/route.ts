@@ -38,7 +38,7 @@ export async function POST(
 ) {
   try {
     const formData = await req.formData();
-    const files = formData.getAll("files") as {name: string, stream: any}[];
+    const files = formData.getAll("files") as { name: string; stream: any }[];
     const assistantId = formData.get("assistantId") as string;
     const purpose = formData.get("purpose") as FilePurpose;
 

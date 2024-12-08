@@ -53,7 +53,7 @@ export default function Component() {
     state: { user, teamSelected },
   } = useAppContext();
 
-  const {assistantId} = useParams();
+  const { assistantId } = useParams();
 
   const { data, setData } = useTeamSettingsContext();
 

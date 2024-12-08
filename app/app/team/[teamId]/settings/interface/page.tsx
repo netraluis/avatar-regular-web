@@ -114,7 +114,7 @@ export default function Interface() {
   const [welType, setWelType] = useState<WelcomeType>(WelcomeType.PLAIN);
   const [menuHeaderId, setMenuHeaderId] = useState<string | null>(null);
 
-  const {assistantId} = useParams();
+  const { assistantId } = useParams();
 
   useEffect(() => {
     setMenuHeaderId(

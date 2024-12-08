@@ -13,7 +13,6 @@ export default function Avatar({ imageUrl, roleName }: any) {
     return () => clearInterval(interval);
   }, [imageUrl]);
 
-
   return (
     <div className="group block flex-shrink-0 m-2">
       <div className="flex items-center">
