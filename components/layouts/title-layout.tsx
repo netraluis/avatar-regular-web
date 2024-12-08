@@ -7,6 +7,10 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
+const titleLayout = {
+  preview : 'Previsualitza'
+}
+
 export interface TitleLayoutProps {
   children: React.ReactNode;
   cardTitle: string;
@@ -58,7 +62,7 @@ export const TitleLayout = ({
               className="flex items-center"
             >
               <Eye className="w-3.5 h-3.5 mr-2" />
-              Preview
+              {titleLayout.preview}
             </Link>
           </Button>
           <Button

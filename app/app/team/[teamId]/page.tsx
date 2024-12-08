@@ -30,10 +30,15 @@ import {
 import { TitleLayout } from "@/components/layouts/title-layout";
 
 const teamIdText = {
-  cardTitle: "Assistant",
-  cardDescription: "Visio global dels teus assistents",
-  createAssistant: "Create Assistant",
+  cardTitle: "Tauler d’Assistents ",
+  cardDescription: "Crea i gestiona els assistents del teu equip",
+  createAssistant: "Crear Assistent",
   errorGettingAssistants: "Error obtenint els assistents",
+  name: "Nom",
+  link: "Enllaç",
+  visibility: "Visibilitat",
+  edit: "Editar",
+  delete: "Eliminar",
 };
 
 export default function Dashboard() {
@@ -93,10 +98,10 @@ export default function Dashboard() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
+                  <TableHead>{teamIdText.name}</TableHead>
                   {/* <TableHead>type</TableHead> */}
-                  <TableHead className="hidden md:table-cell">link</TableHead>
-                  <TableHead className="hidden md:table-cell">status</TableHead>
+                  <TableHead className="hidden md:table-cell">{teamIdText.link}</TableHead>
+                  <TableHead className="hidden md:table-cell">{teamIdText.visibility}</TableHead>
                   <TableHead>
                     <span className="sr-only">Actions</span>
                   </TableHead>
@@ -130,7 +135,7 @@ export default function Dashboard() {
                         </Link>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
-                        {assistant.status}
+                        {assistant.status.charAt(0).toUpperCase() + assistant.status.slice(1).toLowerCase()}
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>
@@ -149,7 +154,7 @@ export default function Dashboard() {
                               href={`/team/${teamId}/assistant/${assistant.id}`}
                               passHref
                             >
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
+                              <DropdownMenuItem>{teamIdText.edit}</DropdownMenuItem>
                             </Link>
 
                             {/* <DropdownMenuItem
@@ -166,7 +171,7 @@ export default function Dashboard() {
                                 handleDeleteAssistant(assistant.id);
                               }}
                             >
-                              Delete
+                              {teamIdText.delete}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
