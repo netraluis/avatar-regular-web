@@ -35,11 +35,23 @@ type Action =
   | { type: "SET_USER"; payload: UserData }
   | { type: "SET_ASSISTANT_CREATION"; payload: { newAssistant: Assistant } }
   | { type: "SET_ASSISTANT_DELETE"; payload: { assistantId: string } }
-  | { type: "SET_USER_LOGOUT" };
+  | { type: "SET_USER_LOGOUT" }
+  | {
+    type: "SET_TEAM";
+    payload: {
+      teamSelected: GetTeamByTeamId | null;
+    };
+  }
 
 // Reducer que actualizará el estado basado en las acciones
 const appReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
+    case "SET_TEAM":
+      return {
+        ...state,
+        teamSelected: action.payload.teamSelected,
+      };
+
     case "SET_TEAMS":
       return {
         ...state,

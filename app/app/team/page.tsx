@@ -8,9 +8,7 @@ import FullScreenLoader from "@/components/full-screen-loader";
 const RedirectComponent = () => {
   const router = useRouter();
   const { fetchTeamsByUserId } = useFetchTeamsByUserId();
-  const {
-    state: { user },
-  } = useAppContext();
+  const { state: { user } } = useAppContext();
 
   useEffect(() => {
     const fetchData = async () => {

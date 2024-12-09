@@ -54,6 +54,59 @@ export const useFetchTeamsByUserId = () => {
   };
 };
 
+export const useFetchTeamsByUserIdAndTeamId = () => {
+  const { dispatch } = useAppContext();
+
+  const [loadingTeamsByUserIdAndTeamId, setLoadingTeamsByUserIdAndTeamId] = useState(false);
+  const [errorTeamsByUserIdAndTeamId, setErrorTeamsByUserIdAndTeamId] = useState<any>(null);
+  const [dataTeamsByUserIdAndTeamId, setDataTeamsByUserIdAndTeamId] = useState<Team[]>([]);
+
+  async function fetchTeamsByUserIdAndTeamId(userId: string, teamId: string) {
+    if (!userId) return setErrorTeamsByUserIdAndTeamId("No user id provided");
+    try {
+      setLoadingTeamsByUserIdAndTeamId(true);
+      const response = await fetch(`/api/protected/team/${teamId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId, // Aquí enviamos el userId en los headers
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+
+      // const teamSelected = responseData.length > 0 ? responseData[0] : {};
+      dispatch({
+        type: "SET_TEAM",
+        payload: {
+          // teams: 
+          // teams: responseData.teams,
+          teamSelected: responseData,
+        },
+      });
+      setDataTeamsByUserIdAndTeamId(responseData);
+      return {
+        teams: responseData.teams,
+        teamSelected: responseData.teamSelected,
+      };
+    } catch (error: any) {
+      setErrorTeamsByUserIdAndTeamId({ error });
+    } finally {
+      setLoadingTeamsByUserIdAndTeamId(false);
+    }
+  }
+
+  return {
+    loadingTeamsByUserIdAndTeamId,
+    errorTeamsByUserIdAndTeamId,
+    dataTeamsByUserIdAndTeamId,
+    fetchTeamsByUserIdAndTeamId,
+  };
+};
+
 export const useCreateTeam = () => {
   const { dispatch } = useAppContext();
 

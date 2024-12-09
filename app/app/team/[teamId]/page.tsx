@@ -30,6 +30,7 @@ import {
 import { TitleLayout } from "@/components/layouts/title-layout";
 import OnboardingBase from "@/components/onboarding/onboarding-base";
 import { Bot } from "lucide-react";
+import { useFetchTeamsByUserIdAndTeamId } from "@/components/context/useAppContext/team";
 
 const teamIdText = {
   cardTitle: "Tauler d’Assistents ",
@@ -49,6 +50,7 @@ const teamIdText = {
 
 export default function Dashboard() {
   const router = useRouter();
+  const { fetchTeamsByUserIdAndTeamId } = useFetchTeamsByUserIdAndTeamId();
   const {
     state: { teamSelected, assistantsByTeam, user },
   } = useAppContext();
@@ -77,11 +79,26 @@ export default function Dashboard() {
     });
   };
 
+
   useEffect(() => {
-    if (!teamSelected) {
-      router.push("/team");
+    const fetchData = async () => {
+      try {
+        if (user?.user.id && teamId) {
+          await fetchTeamsByUserIdAndTeamId(user.user.id, teamId as string);
+
+        } else {
+          router.push(`/login`);
+        }
+      } catch (error) {
+        console.error("Error fetching teams:", error);
+      }
+    };
+
+
+    if(!teamSelected){
+      fetchData();
     }
-  }, [teamSelected]);
+  }, [user?.user.id, teamSelected]);
 
   return (
     // <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
