@@ -37,9 +37,6 @@ export const TitleLayout = ({
   actionError,
 }: TitleLayoutProps) => {
   const router = useRouter();
-  const handlePreview = () => {
-    router.push(urlPreview);
-  };
 
   return (
     <div className="flex flex-col overflow-auto p-2 w-full h-full">
@@ -54,7 +51,7 @@ export const TitleLayout = ({
               {actionErrorText}
             </Button>
           )}
-          <Button variant="secondary" size="sm" onClick={handlePreview}>
+          <Button variant="secondary" size="sm">
             <Link
               href={urlPreview}
               target="_blank"
