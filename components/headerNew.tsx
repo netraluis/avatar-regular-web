@@ -13,6 +13,8 @@ import { basePublicUrl } from "@/lib/helper/images";
 import { MenuHeaderType } from "@prisma/client";
 import { Button } from "./ui/button";
 import { House, MessageCircle } from "lucide-react";
+import Disclaimer from "./disclaimer";
+import { HeaderDisclaimer } from "./context/globalContext";
 
 export default function Header() {
   const { data, useAssistantResponse } = useTeamAssistantContext();
@@ -39,10 +41,8 @@ export default function Header() {
     ?.find((menu) => menu.type === MenuHeaderType.BODY)
     ?.textHref?.sort((a, b) => a.numberOrder - b.numberOrder);
   const menuFooter = data?.menuFooter[0]?.text;
+  const headerButton = data?.headerButton[0];
 
-  console.log("menuHeader", menuHeader);
-  console.log("menuBody", menuBody);
-  console.log("menuFooter", menuFooter);
   return (
     <div className="bg-white pt-4 fixed top-0 z-10 w-full">
       <nav
@@ -70,7 +70,7 @@ export default function Header() {
           )}
         </div>
         <div className="flex lg:hidden my-3">
-          {/* <Disclaimer data={domainData?.headerDisclaimer} /> */}
+          {headerButton && <Disclaimer data={headerButton as unknown as HeaderDisclaimer} />}
           {/* Botón mejorado con mayor área táctil y color de fondo para mayor visibilidad */}
           <button
             type="button"
@@ -97,7 +97,7 @@ export default function Header() {
                 Nova conversa
               </Button>
             )}
-          {/* <Disclaimer data={domainData?.headerDisclaimer} /> */}
+          {headerButton && <Disclaimer data={headerButton as unknown as HeaderDisclaimer} />}
           <Popover className="relative">
             <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-8 text-gray-900">
               <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />

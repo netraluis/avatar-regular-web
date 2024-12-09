@@ -44,6 +44,7 @@ export type GetTeamDataByDomainOrCustomDomainPage = Prisma.TeamGetPayload<{
         description: true;
       };
     };
+    headerButton: true;
     menuHeader: {
       select: {
         type: true;
@@ -148,6 +149,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
           },
         },
       },
+      headerButton: true,
       menuFooter: {
         where: {
           language: language,
