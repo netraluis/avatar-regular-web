@@ -1,6 +1,5 @@
 import { Eye, LoaderCircle } from "lucide-react";
 
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
@@ -36,8 +35,6 @@ export const TitleLayout = ({
   actionErrorText,
   actionError,
 }: TitleLayoutProps) => {
-  const router = useRouter();
-
   return (
     <div className="flex flex-col overflow-auto p-2 w-full h-full">
       <div className="flex items-center gap-4 py-1.5 px-1.5">
