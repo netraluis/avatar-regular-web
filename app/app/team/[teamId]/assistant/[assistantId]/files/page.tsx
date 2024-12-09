@@ -38,6 +38,19 @@ const newInstructions = {
   errorText: "Error al crear les instruccions",
   placeholder: "Escriu les instruccions aquí",
 };
+const archives = {
+  title: "Fitxers",
+  description:
+    "Sel·lecciona els  arxius per entrenar l’assistent. (Tipus de fitxers compatibles: .pdf, .doc, .docx, .txt)",
+  actionButton: "Carrega un fitxer",
+  name: "Nom",
+  characters: "Caràcters",
+  status: "Estat",
+  textDragAndDrop: "Arrossega i deixa anar els fitxers aquí o",
+  browser: "explora",
+  supportedFiles: "Fitxers admesos: PDF, DOC, DOCX, TXT",
+};
+
 
 export default function Component() {
   const router = useRouter();
@@ -125,7 +138,7 @@ export default function Component() {
       nextActionText={newInstructions.nextActionText}
       loading={false}
       backActionActive={true}
-      nextActionActive={true}
+      nextActionActive={fileData.length > 0}
       error={false}
       errorText={newInstructions.errorText}
     >
@@ -148,9 +161,9 @@ export default function Component() {
                       {/* <TableHead className="w-[30px]">
                 <Input type="checkbox" />
               </TableHead> */}
-                      <TableHead>Name</TableHead>
+                      <TableHead>{archives.name}</TableHead>
                       {/* <TableHead>Bytes</TableHead> */}
-                      <TableHead>Status</TableHead>
+                      <TableHead>{archives.status}</TableHead>
                       {/* <TableHead className="text-right"></TableHead> */}
                     </TableRow>
                   </TableHeader>
@@ -212,7 +225,7 @@ export default function Component() {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Upload Files</DialogTitle>
+            <DialogTitle>{archives.actionButton}</DialogTitle>
           </DialogHeader>
           {upLoadFileError && <>{upLoadFileError.message}</>}
           {upLoadFileloading ? (
@@ -231,7 +244,7 @@ export default function Component() {
               <div className="flex flex-col items-center gap-2">
                 <Upload className="h-8 w-8 text-gray-400" />
                 <p className="text-sm text-gray-600">
-                  Drag and drop your files here, or{" "}
+                  {archives.textDragAndDrop}{" "}
                   <label className="text-primary hover:underline cursor-pointer">
                     browse
                     <input
@@ -253,7 +266,7 @@ export default function Component() {
                   </label>
                 </p>
                 <p className="text-xs text-gray-400">
-                  Supported files: PDF, DOC, DOCX, TXT
+                  {archives.supportedFiles}
                 </p>
               </div>
             </div>
