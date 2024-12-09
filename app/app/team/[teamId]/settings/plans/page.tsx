@@ -138,7 +138,8 @@ export default function Component() {
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4" />
                     <span>
-                      40.000 crèdits de missatges/mes (els missatges que superin aquest límit utilitzaran la teva clau d’API d’OpenAI)
+                      40.000 crèdits de missatges/mes (els missatges que superin
+                      aquest límit utilitzaran la teva clau d’API d’OpenAI)
                     </span>
                   </li>
                   <li className="flex items-center gap-2">

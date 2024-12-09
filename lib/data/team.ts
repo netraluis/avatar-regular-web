@@ -53,7 +53,7 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
     assistants: {
       where: {
         isActive: true;
-      },
+      };
       select: {
         id: true;
         name: true;
@@ -201,9 +201,9 @@ export const getAssistantsByTeam = async (teamId: string, userId: string) => {
     },
     include: {
       assistants: {
-        where:{
-          isActive: true
-        }
+        where: {
+          isActive: true,
+        },
       }, // Incluye todos los asistentes relacionados
     },
   });
@@ -371,7 +371,7 @@ export const deleteTeam = async ({ teamId }: { teamId: string }) => {
     data: {
       isActive: false,
       subDomain: `${teamId}-deleted`,
-    }
+    },
   });
 
   await prisma.assistant.updateMany({

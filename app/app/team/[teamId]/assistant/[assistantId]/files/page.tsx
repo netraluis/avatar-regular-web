@@ -51,7 +51,6 @@ const archives = {
   supportedFiles: "Fitxers admesos: PDF, DOC, DOCX, TXT",
 };
 
-
 export default function Component() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -123,9 +122,7 @@ export default function Component() {
   };
 
   const backAction = () => {
-    router.push(
-      `/team/${params.teamId}/assistant/${params.assistantId}/playground`,
-    );
+    router.push(`/team/${params.teamId}/assistant/${params.assistantId}/files`);
   };
 
   return (

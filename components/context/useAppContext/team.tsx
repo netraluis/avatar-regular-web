@@ -57,9 +57,13 @@ export const useFetchTeamsByUserId = () => {
 export const useFetchTeamsByUserIdAndTeamId = () => {
   const { dispatch } = useAppContext();
 
-  const [loadingTeamsByUserIdAndTeamId, setLoadingTeamsByUserIdAndTeamId] = useState(false);
-  const [errorTeamsByUserIdAndTeamId, setErrorTeamsByUserIdAndTeamId] = useState<any>(null);
-  const [dataTeamsByUserIdAndTeamId, setDataTeamsByUserIdAndTeamId] = useState<Team[]>([]);
+  const [loadingTeamsByUserIdAndTeamId, setLoadingTeamsByUserIdAndTeamId] =
+    useState(false);
+  const [errorTeamsByUserIdAndTeamId, setErrorTeamsByUserIdAndTeamId] =
+    useState<any>(null);
+  const [dataTeamsByUserIdAndTeamId, setDataTeamsByUserIdAndTeamId] = useState<
+    Team[]
+  >([]);
 
   async function fetchTeamsByUserIdAndTeamId(userId: string, teamId: string) {
     if (!userId) return setErrorTeamsByUserIdAndTeamId("No user id provided");
@@ -82,7 +86,7 @@ export const useFetchTeamsByUserIdAndTeamId = () => {
       dispatch({
         type: "SET_TEAM",
         payload: {
-          // teams: 
+          // teams:
           // teams: responseData.teams,
           teamSelected: responseData,
         },

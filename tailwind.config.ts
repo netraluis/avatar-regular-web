@@ -74,6 +74,7 @@ const config = {
       },
       width: {
         redirect: "375px",
+        onboarding: "550px",
       },
     },
   },

@@ -79,13 +79,11 @@ export default function Dashboard() {
     });
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (user?.user.id && teamId) {
           await fetchTeamsByUserIdAndTeamId(user.user.id, teamId as string);
-
         } else {
           router.push(`/login`);
         }
@@ -94,8 +92,7 @@ export default function Dashboard() {
       }
     };
 
-
-    if(!teamSelected){
+    if (!teamSelected) {
       fetchData();
     }
   }, [user?.user.id, teamSelected]);
@@ -158,8 +155,8 @@ export default function Dashboard() {
                           >
                             {teamSelected?.subDomain}.
                             {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/
-                            {teamSelected?.defaultLanguage?.toLocaleLowerCase()}/
-                            {assistant.url}
+                            {teamSelected?.defaultLanguage?.toLocaleLowerCase()}
+                            /{assistant.url}
                           </Link>
                         </TableCell>
                         <TableCell className="hidden md:table-cell">

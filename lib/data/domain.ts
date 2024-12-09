@@ -12,8 +12,8 @@ export async function getTeamDataByDomainOrCustomDomainMetadata(
 
   const team = await prisma.team.findFirst({
     where: subdomain
-      ? { subDomain: subdomain, isActive: true  } // If subdomain is true, filter by subdomain
-      : { customDomain: domain, isActive: true  }, // Otherwise, filter by customDomain
+      ? { subDomain: subdomain, isActive: true } // If subdomain is true, filter by subdomain
+      : { customDomain: domain, isActive: true }, // Otherwise, filter by customDomain
     select: {
       name: true,
       logoUrl: true,
@@ -62,7 +62,7 @@ export type GetTeamDataByDomainOrCustomDomainPage = Prisma.TeamGetPayload<{
     assistants: {
       where: {
         isActive: true;
-      },
+      };
       select: {
         id: true;
         name: true;
@@ -107,8 +107,8 @@ export async function getTeamDataByDomainOrCustomDomainPage({
 
   const team = await prisma.team.findFirst({
     where: subdomain
-      ? { subDomain: subdomain, isActive: true  } // If subdomain is true, filter by subdomain
-      : { customDomain: domain, isActive: true  }, // Otherwise, filter by customDomain
+      ? { subDomain: subdomain, isActive: true } // If subdomain is true, filter by subdomain
+      : { customDomain: domain, isActive: true }, // Otherwise, filter by customDomain
     select: {
       id: true,
       welcomeType: true,
@@ -156,7 +156,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
       customDomain: true,
       assistants: {
         where: {
-          isActive: true
+          isActive: true,
         },
         select: {
           id: true,

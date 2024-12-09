@@ -33,7 +33,8 @@ export default function Component() {
         <CardHeader>
           <CardTitle>Convida membres</CardTitle>
           <CardDescription>
-            Comparteix l’enllaç perquè qualsevol persona amb accés pugui unir-se a l’equip.
+            Comparteix l’enllaç perquè qualsevol persona amb accés pugui unir-se
+            a l’equip.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

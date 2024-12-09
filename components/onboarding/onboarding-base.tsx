@@ -33,7 +33,7 @@ export default function OnboardingBase({
   logo: Logo,
 }: ConfirmationScreenProps) {
   return (
-    <div className="flex grow items-center justify-center p-4 w-full w-redirect">
+    <div className="flex grow items-center justify-center p-4 w-full w-onboarding">
       <div className="grow flex flex-col items-start text-start space-y-6">
         {Logo && (
           <div className="border-2 rounded-lg p-3 w-16 h-16">

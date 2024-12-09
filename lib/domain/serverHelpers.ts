@@ -21,4 +21,3 @@ export const getPublicLimitedUrlImageimport = async (fileName: string) => {
     console.error(error);
   }
 };
-

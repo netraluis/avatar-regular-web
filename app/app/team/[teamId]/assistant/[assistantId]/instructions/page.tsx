@@ -71,7 +71,7 @@ export default function Page() {
   }, [getAssistantData]);
 
   const backAction = () => {
-    router.push("/team");
+    router.push(`/team/${teamId}/assistant/${assistantId}/playground`);
   };
 
   const nextAction = async () => {

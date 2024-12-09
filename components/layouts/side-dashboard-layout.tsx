@@ -5,7 +5,7 @@ export interface NavItemsProps {
   name: string;
   href: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-  alpha?:boolean;
+  alpha?: boolean;
 }
 
 export interface SideDashboardLayoutProps {
@@ -33,7 +33,17 @@ export const SideDashboardLayout = ({
           >
             <item.icon className="mr-2 h-4 w-4" />
             <div className="flex grow ">
-              {item.name} {item.alpha && <span><Badge variant="outline" className="text-[0.65rem] px-1.5 py-0 leading-4 ml-2">Alpha</Badge></span>}
+              {item.name}{" "}
+              {item.alpha && (
+                <span>
+                  <Badge
+                    variant="outline"
+                    className="text-[0.65rem] px-1.5 py-0 leading-4 ml-2"
+                  >
+                    Alpha
+                  </Badge>
+                </span>
+              )}
             </div>
           </Link>
         ))}

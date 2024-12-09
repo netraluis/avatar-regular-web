@@ -16,7 +16,7 @@ const newAssistant = {
     "Personalitza el teu assistent en pocs passos: defineix les instruccions, afegeix fonts d’informació i ajusta el seu to de veu.",
   backActionText: "Cancela",
   nextActionText: "Continuar i Crear assistent",
-  name: "Nom del teu equip",
+  name: "Nom del teu assistent",
   errorText: "Error al crear l'assistent",
 };
 
@@ -35,7 +35,7 @@ export default function Page() {
   const [assistantName, setAssistantName] = useState("");
 
   const backAction = () => {
-    router.push("/team");
+    router.push(`/team/${teamId}`);
   };
 
   const nextAction = async () => {

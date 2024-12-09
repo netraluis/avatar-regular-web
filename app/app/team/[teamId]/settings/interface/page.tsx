@@ -452,7 +452,11 @@ export default function Interface() {
           )}
         </div>
         <UploadImage
-          src={typeof data?.avatarUrl === 'string' ? data.avatarUrl : teamSelected?.avatarUrl || undefined} 
+          src={
+            typeof data?.avatarUrl === "string"
+              ? data.avatarUrl
+              : teamSelected?.avatarUrl || undefined
+          }
           description={interfaceText.avatar.uploadLogo}
           alt="avatar"
           recommendedSize={interfaceText.avatar.recommendedSize}
