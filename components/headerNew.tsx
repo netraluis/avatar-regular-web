@@ -70,7 +70,9 @@ export default function Header() {
           )}
         </div>
         <div className="flex lg:hidden my-3">
-          {headerButton && <Disclaimer data={headerButton as unknown as HeaderDisclaimer} />}
+          {headerButton && (
+            <Disclaimer data={headerButton as unknown as HeaderDisclaimer} />
+          )}
           {/* Botón mejorado con mayor área táctil y color de fondo para mayor visibilidad */}
           <button
             type="button"
@@ -97,7 +99,9 @@ export default function Header() {
                 Nova conversa
               </Button>
             )}
-          {headerButton && <Disclaimer data={headerButton as unknown as HeaderDisclaimer} />}
+          {headerButton && (
+            <Disclaimer data={headerButton as unknown as HeaderDisclaimer} />
+          )}
           <Popover className="relative">
             <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-8 text-gray-900">
               <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />
