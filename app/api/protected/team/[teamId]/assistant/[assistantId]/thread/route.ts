@@ -5,6 +5,8 @@ import { ModeMessageType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
+export const maxDuration = 60;
+
 export async function POST(request: NextRequest) {
   try {
     const userId = request.headers.get("x-user-id");
@@ -45,13 +47,18 @@ export async function POST(request: NextRequest) {
           // Cerramos el stream cuando se hayan procesado todos los eventos
           controller.close();
         } catch (error) {
+          console.error("Error creating thread and run :", error);
           controller.error(error); // En caso de error, notificamos al cliente
         }
       },
     });
 
     return new NextResponse(stream, {
-      headers: { "Content-Type": "text/event-stream" },
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive", 
+      },
     });
   } catch (error) {
     console.error("Error creating thread and run :", error);

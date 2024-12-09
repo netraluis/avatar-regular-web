@@ -5,6 +5,8 @@ import { ModeMessageType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 
+export const maxDuration = 60;
+
 export async function POST(
   request: NextRequest,
   { params }: { params: { threadId: string; assistantId: string } },
