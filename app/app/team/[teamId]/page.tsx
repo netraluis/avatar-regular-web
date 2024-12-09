@@ -147,7 +147,7 @@ export default function Dashboard() {
                         {/* <TableCell>
                           <Badge variant="outline">GPT-4</Badge>
                         </TableCell> */}
-                        <TableCell className="hidden md:table-cell">
+                        <TableCell className="hidden md:table-cell truncate">
                           <Link
                             href={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistant.url}`}
                             target="_blank"
