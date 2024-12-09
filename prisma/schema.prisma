@@ -73,29 +73,6 @@ model Message {
   assistant   Assistant        @relation(fields: [assistantId], references: [id])
 }
 
-model Domains {
-  id               String   @id @default(cuid())
-  name             String
-  subDomain        String
-  customDomain     String
-  welcome          String
-  logo             String?
-  description      String?
-  symbol           String?
-  assistantId      String
-  assistantName    String
-  menuHeader       Json
-  menuBody         Json
-  menufooter       String
-  avatarId         String   @default("")
-  voiceAvatarId    String   @default("")
-  headerDisclaimer Json?
-  welcomeCards     Json?     
-  footerText       String?
-  welcomeDesign    Json?
-  createdAt        DateTime @default(now())
-}
-
 model User {
   id          String    @id @default(uuid())
   email       String    // No uses @unique aquí porque vamos a crear una clave compuesta
@@ -123,10 +100,11 @@ model Team {
   headerButton    HeaderButton[]
   defaultLanguage LanguageType
   selectedLanguages LanguageType[]
-  footer      Footer[]
+  footer          Footer[]
   teamDescription TeamDescription[]
-  menuFooter  MenuFooter[]
-  welcomeType WelcomeType
+  menuFooter      MenuFooter[]
+  welcomeType     WelcomeType
+  isActive        Boolean   @default(true) 
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
@@ -235,7 +213,8 @@ model Assistant {
   url                       String    @unique 
   message                   Message[]
   assistantCard             AssistantCard[]
-  emoji                     String?             
+  emoji                     String?     
+  isActive                  Boolean   @default(true)        
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   files       File[]

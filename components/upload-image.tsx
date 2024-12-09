@@ -10,7 +10,7 @@ import { useSupabaseFile } from "./context/useAppContext/file";
 import { FileUserImageType } from "@/types/types";
 
 export interface UploadImageProps {
-  src: string;
+  src?: string;
   description: string;
   alt: string;
   recommendedSize: string;
@@ -66,7 +66,7 @@ export const UploadImage = ({
         ) : src ? (
           <div className="w-10 h-10 rounded-full flex items-center justify-center relative">
             <Image
-              src={src}
+              src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${src}?timestamp=${new Date().getTime()}`}
               alt={alt}
               width={30}
               height={30}

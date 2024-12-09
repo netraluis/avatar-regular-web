@@ -99,102 +99,104 @@ export default function Dashboard() {
       {loading ? (
         <Loader />
       ) : assistantsByTeam.length > 0 ? (
-        <Card className="w-full">
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>{teamIdText.name}</TableHead>
-                  {/* <TableHead>type</TableHead> */}
-                  <TableHead className="hidden md:table-cell">
-                    {teamIdText.link}
-                  </TableHead>
-                  <TableHead className="hidden md:table-cell">
-                    {teamIdText.visibility}
-                  </TableHead>
-                  <TableHead>
-                    <span className="sr-only">Actions</span>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {assistantsByTeam &&
-                  assistantsByTeam.map((assistant) => (
-                    <TableRow key={assistant.id}>
-                      <TableCell className="font-medium">
-                        <Link
-                          href={`/team/${teamId}/assistant/${assistant.id}`}
-                          passHref
-                        >
-                          {assistant.name}
-                        </Link>
-                      </TableCell>
-                      {/* <TableCell>
-                        <Badge variant="outline">GPT-4</Badge>
-                      </TableCell> */}
-                      <TableCell className="hidden md:table-cell">
-                        <Link
-                          href={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistant.url}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {teamSelected?.subDomain}.
-                          {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/
-                          {teamSelected?.defaultLanguage?.toLocaleLowerCase()}/
-                          {assistant.url}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        {assistant.status.charAt(0).toUpperCase() +
-                          assistant.status.slice(1).toLowerCase()}
-                      </TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              aria-haspopup="true"
-                              size="icon"
-                              variant="ghost"
-                            >
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Toggle menu</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <Link
-                              href={`/team/${teamId}/assistant/${assistant.id}`}
-                              passHref
-                            >
-                              <DropdownMenuItem>
-                                {teamIdText.edit}
-                              </DropdownMenuItem>
-                            </Link>
+        <div className="w-full">
+          <Card className="w-full">
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>{teamIdText.name}</TableHead>
+                    {/* <TableHead>type</TableHead> */}
+                    <TableHead className="hidden md:table-cell">
+                      {teamIdText.link}
+                    </TableHead>
+                    <TableHead className="hidden md:table-cell">
+                      {teamIdText.visibility}
+                    </TableHead>
+                    <TableHead>
+                      <span className="sr-only">Actions</span>
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {assistantsByTeam &&
+                    assistantsByTeam.map((assistant) => (
+                      <TableRow key={assistant.id}>
+                        <TableCell className="font-medium">
+                          <Link
+                            href={`/team/${teamId}/assistant/${assistant.id}`}
+                            passHref
+                          >
+                            {assistant.name}
+                          </Link>
+                        </TableCell>
+                        {/* <TableCell>
+                          <Badge variant="outline">GPT-4</Badge>
+                        </TableCell> */}
+                        <TableCell className="hidden md:table-cell">
+                          <Link
+                            href={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistant.url}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {teamSelected?.subDomain}.
+                            {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/
+                            {teamSelected?.defaultLanguage?.toLocaleLowerCase()}/
+                            {assistant.url}
+                          </Link>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                          {assistant.status.charAt(0).toUpperCase() +
+                            assistant.status.slice(1).toLowerCase()}
+                        </TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                aria-haspopup="true"
+                                size="icon"
+                                variant="ghost"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                                <span className="sr-only">Toggle menu</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <Link
+                                href={`/team/${teamId}/assistant/${assistant.id}`}
+                                passHref
+                              >
+                                <DropdownMenuItem>
+                                  {teamIdText.edit}
+                                </DropdownMenuItem>
+                              </Link>
 
-                            {/* <DropdownMenuItem
-                              onClick={() => {
-                                console.log("Clone clicando");
-                              }}
-                            >
-                              Clone
-                            </DropdownMenuItem> */}
-                            {/* <DropdownMenuItem>Favorite</DropdownMenuItem> */}
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={() => {
-                                handleDeleteAssistant(assistant.id);
-                              }}
-                            >
-                              {teamIdText.delete}
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+                              {/* <DropdownMenuItem
+                                onClick={() => {
+                                  console.log("Clone clicando");
+                                }}
+                              >
+                                Clone
+                              </DropdownMenuItem> */}
+                              {/* <DropdownMenuItem>Favorite</DropdownMenuItem> */}
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  handleDeleteAssistant(assistant.id);
+                                }}
+                              >
+                                {teamIdText.delete}
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </div>
       ) : (
         <div className="w-full flex items-center justify-center">
           <div className="flex flex-col justify-center">

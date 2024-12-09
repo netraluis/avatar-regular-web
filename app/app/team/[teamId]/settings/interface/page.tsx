@@ -452,7 +452,7 @@ export default function Interface() {
           )}
         </div>
         <UploadImage
-          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.avatarUrl || teamSelected?.avatarUrl}?timestamp=${new Date().getTime()}`}
+          src={typeof data?.avatarUrl === 'string' ? data.avatarUrl : teamSelected?.avatarUrl || undefined} 
           description={interfaceText.avatar.uploadLogo}
           alt="avatar"
           recommendedSize={interfaceText.avatar.recommendedSize}

@@ -51,6 +51,9 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
     menuFooter: true;
     customDomain: true;
     assistants: {
+      where: {
+        isActive: true;
+      },
       select: {
         id: true;
         name: true;
@@ -87,13 +90,14 @@ export const getTeamsByUser = async (userId: string) => {
             id: true,
             name: true,
             subDomain: true,
+            isActive: true,
           },
         },
       },
     })
     .then((data) => data.map((team) => team.team));
 
-  return subdomainInfo;
+  return subdomainInfo.filter((team) => team.isActive);
 };
 
 export const getTeamByTeamId = async (
@@ -105,6 +109,7 @@ export const getTeamByTeamId = async (
   const subdomainInfo = await prisma.team.findFirst({
     where: {
       id: teamId,
+      isActive: true,
       users: {
         some: {
           userId: userId, // Verificar que el usuario está relacionado con el equipo
@@ -160,6 +165,9 @@ export const getTeamByTeamId = async (
       menuFooter: true,
       customDomain: true,
       assistants: {
+        where: {
+          isActive: true,
+        },
         select: {
           id: true,
           name: true,
@@ -184,6 +192,7 @@ export const getAssistantsByTeam = async (teamId: string, userId: string) => {
   const subdomainInfo = await prisma.team.findFirst({
     where: {
       id: teamId,
+      isActive: true,
       users: {
         some: {
           userId: userId, // Verificar que el usuario está relacionado con el equipo
@@ -191,7 +200,11 @@ export const getAssistantsByTeam = async (teamId: string, userId: string) => {
       },
     },
     include: {
-      assistants: true, // Incluye todos los asistentes relacionados
+      assistants: {
+        where:{
+          isActive: true
+        }
+      }, // Incluye todos los asistentes relacionados
     },
   });
 
@@ -309,6 +322,9 @@ export const updateTeam = async ({
         menuFooter: true,
         customDomain: true,
         assistants: {
+          where: {
+            isActive: true,
+          },
           select: {
             id: true,
             name: true,
@@ -348,9 +364,22 @@ export const updateTeam = async ({
 };
 
 export const deleteTeam = async ({ teamId }: { teamId: string }) => {
-  const team = await prisma.team.delete({
+  const team = await prisma.team.update({
     where: {
       id: teamId,
+    },
+    data: {
+      isActive: false,
+      subDomain: `${teamId}-deleted`,
+    }
+  });
+
+  await prisma.assistant.updateMany({
+    where: {
+      teamId: teamId,
+    },
+    data: {
+      isActive: false,
     },
   });
 

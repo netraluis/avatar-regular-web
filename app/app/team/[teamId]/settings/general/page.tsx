@@ -127,7 +127,7 @@ export default function Component() {
         description={setting.logo.description}
       >
         <UploadImage
-          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.logoUrl || teamSelected?.logoUrl}?timestamp=${new Date().getTime()}`}
+          src={typeof data?.logoUrl === 'string' ? data.logoUrl : teamSelected?.logoUrl || undefined}
           description={setting.logo.uploadLogo}
           alt="logo"
           recommendedSize={setting.logo.recommendedSize}
@@ -137,7 +137,7 @@ export default function Component() {
           assistantId={assistantId as string}
         />
         <UploadImage
-          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.symbolUrl || teamSelected?.symbolUrl}?timestamp=${new Date().getTime()}`}
+          src={typeof data?.symbolUrl === 'string' ? data.symbolUrl : teamSelected?.symbolUrl || undefined} 
           description={setting.favicon.uploadFavicon}
           alt="favicon"
           recommendedSize={setting.favicon.recommendedSize}

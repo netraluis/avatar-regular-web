@@ -124,7 +124,6 @@ export async function DELETE(
 
   try {
     const assitantsTeams = await getAssistantsByTeam(teamId, userId);
-    console.log({ getAssistantsByTeam });
 
     if (assitantsTeams && assitantsTeams.assistants) {
       for (const assistants of assitantsTeams.assistants) {

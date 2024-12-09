@@ -12,6 +12,7 @@ export const getAssistantsByTeam = async (teamId: string) => {
   const teamInfo = await prisma.assistant.findMany({
     where: {
       teamId: teamId,
+      isActive: true,
     },
   });
   return teamInfo;
@@ -22,7 +23,6 @@ export const createAssistantByTeam = async (
   url: string,
   assistantCreateParams: AssistantCreateParams,
 ) => {
-  console.log({ assistantCreateParams, url, teamId });
   if (!assistantCreateParams.name) {
     throw new Error("name is required");
   }
@@ -62,9 +62,13 @@ export const createAssistantByTeam = async (
 };
 
 export const deleteAssistant = async (assistantId: string) => {
-  const assistant = await prisma.assistant.delete({
+  const assistant = await prisma.assistant.update({
     where: {
       id: assistantId,
+    },
+    data: {
+      isActive: false,
+      url: `${assistantId}-deleted`,
     },
   });
   await deleteAssistantById(assistant.openAIId);
@@ -81,6 +85,7 @@ export const getAssistant = async (
   return await prisma.assistant.findUnique({
     where: {
       id: assistantId,
+      isActive: true,
     },
     include: {
       assistantCard: true,
@@ -95,6 +100,7 @@ export const updateAssistant = async (
   return await prisma.assistant.update({
     where: {
       id: assistantId,
+      isActive: true,
     },
     data,
   });
