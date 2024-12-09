@@ -56,7 +56,7 @@ export const useFileVectorStoreAssistant = () => {
       const requestOptions = { method: "POST", body: formData };
 
       const response = await fetch(
-        `/api/protected/team/${teamId}/assistants/${assistantId}/file/file-type/${fileType}`,
+        `/api/protected/team/${teamId}/assistant/${assistantId}/file/file-type/${fileType}`,
         requestOptions,
       );
 
@@ -92,7 +92,7 @@ export const useFileVectorStoreAssistant = () => {
     try {
       setGetFileloading(true);
       const response = await fetch(
-        `/api/protected/team/${teamId}/assistants/${assistantId}/file/file-type/${fileType}`,
+        `/api/protected/team/${teamId}/assistant/${assistantId}/file/file-type/${fileType}`,
         {
           method: "GET",
         },
@@ -132,7 +132,7 @@ export const useFileVectorStoreAssistant = () => {
         return res;
       });
       const response = await fetch(
-        `/api/protected/team/${teamId}/assistants/${assistantId}/file/${fileId}`,
+        `/api/protected/team/${teamId}/assistant/${assistantId}/file/${fileId}`,
         {
           method: "DELETE",
         },
@@ -227,7 +227,7 @@ export const useSupabaseFile = () => {
       };
 
       const response = await fetch(
-        `/api/protected/team/${teamId}/assistants/${assistantId}/file/supabase`,
+        `/api/protected/team/${teamId}/assistant/${assistantId}/file/supabase`,
         requestOptions,
       );
 

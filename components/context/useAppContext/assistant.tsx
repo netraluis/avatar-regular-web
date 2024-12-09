@@ -19,7 +19,7 @@ export const useFetchAssistantsByTeamId = () => {
     if (!teamId) return setError("No team id provided");
     try {
       setLoading(true);
-      const response = await fetch(`/api/protected/team/${teamId}/assistants`, {
+      const response = await fetch(`/api/protected/team/${teamId}/assistant`, {
         method: "GET",
       });
 
@@ -82,7 +82,7 @@ export const useCreateAssistant = () => {
   }) {
     try {
       setLoadingCreateAssistant(true);
-      const response = await fetch(`/api/protected/team/${teamId}/assistants`, {
+      const response = await fetch(`/api/protected/team/${teamId}/assistant`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -139,7 +139,7 @@ export const useDeleteAssistant = () => {
     try {
       setLoadingDeleteAssistant(true);
       const response = await fetch(
-        `/api/protected/team/${teamId}/assistants/${assistantId}`,
+        `/api/protected/team/${teamId}/assistant/${assistantId}`,
         {
           method: "DELETE",
           headers: {
@@ -193,7 +193,7 @@ export const useGetAssistant = () => {
     try {
       setLoadingGetAssistant(true);
       const response = await fetch(
-        `/api/protected/team/${teamId}/assistants/${assistantId}`,
+        `/api/protected/team/${teamId}/assistant/${assistantId}`,
         {
           method: "GET",
           headers: {
@@ -249,7 +249,7 @@ export const useUpdateAssistant = () => {
     try {
       setLoadingUpdateAssistant(true);
       const response = await fetch(
-        `/api/protected/team/${teamId}/assistants/${assistantId}`,
+        `/api/protected/team/${teamId}/assistant/${assistantId}`,
         {
           method: "PATCH",
           headers: {
@@ -331,7 +331,7 @@ export const useAssistant = ({
       console.log({ internatlThreadId, message, assistantId });
       if (!internatlThreadId) {
         const response = await fetch(
-          `/api/protected/team/${teamId}/assistants/${assistantId}/thread/`,
+          `/api/protected/team/${teamId}/assistant/${assistantId}/thread/`,
           {
             method: "POST",
             headers,
@@ -411,7 +411,7 @@ export const useAssistant = ({
         }
       } else {
         await fetch(
-          `/api/protected/team/${teamId}/assistants/${assistantId}/thread/${internatlThreadId}/message`,
+          `/api/protected/team/${teamId}/assistant/${assistantId}/thread/${internatlThreadId}/message`,
           {
             method: "POST",
             headers,
@@ -420,7 +420,7 @@ export const useAssistant = ({
         );
 
         const response = await fetch(
-          `/api/protected/team/${teamId}/assistants/${assistantId}/thread/${internatlThreadId}/run`,
+          `/api/protected/team/${teamId}/assistant/${assistantId}/thread/${internatlThreadId}/run`,
           {
             method: "POST",
             headers,

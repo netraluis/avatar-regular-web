@@ -107,7 +107,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   }, [assistantsByTeam, assistantId]);
 
   const handleAssistantRouteChange = (assistantId: string) => {
-    router.push(`/team/${teamId}/assistants/${assistantId}`);
+    router.push(`/team/${teamId}/assistant/${assistantId}`);
   };
 
   const handleTeamRouteChange = (teamId: string) => {
@@ -124,7 +124,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   };
 
   const handleAssistantsSettingsRoute = (subMenu: string) => {
-    const newPath = `/team/${teamId}/assistants/${assistantId}/${subMenu}`;
+    const newPath = `/team/${teamId}/assistant/${assistantId}/${subMenu}`;
     router.push(newPath);
   };
 

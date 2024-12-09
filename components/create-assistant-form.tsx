@@ -65,7 +65,7 @@ function CreateAssistantForm() {
 
   useEffect(() => {
     if (createAssistantData) {
-      router.push(`/team/${teamId}/assistants/${createAssistantData?.id}`);
+      router.push(`/team/${teamId}/assistant/${createAssistantData?.id}`);
     }
   }, [createAssistantData]);
 

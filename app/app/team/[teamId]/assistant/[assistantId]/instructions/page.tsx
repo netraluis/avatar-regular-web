@@ -90,7 +90,7 @@ export default function Page() {
 
   useEffect(() => {
     if (updateAssistantData) {
-      router.push(`/team/${teamId}/assistants/${assistantId}/files`);
+      router.push(`/team/${teamId}/assistant/${assistantId}/files`);
     }
   }, [updateAssistantData]);
 
