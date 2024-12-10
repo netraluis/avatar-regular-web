@@ -1,6 +1,6 @@
 "use client";
 import { useAppContext } from "@/components/context/appContext";
-import { useCreateTeam } from "@/components/context/useAppContext/team";
+import { useCreateTeam, useFetchTeamsByUserId } from "@/components/context/useAppContext/team";
 import OnboardingBase from "@/components/onboarding/onboarding-base";
 import { Input } from "@/components/ui/input";
 import {
@@ -40,10 +40,12 @@ export default function Page() {
   const {
     state: { user, teams },
   } = useAppContext();
+  const { fetchTeamsByUserId } = useFetchTeamsByUserId();
   const { loadingCreateTeam, createTeamData, createTeam, errorCreateTeam } =
     useCreateTeam();
   const [teamName, setTeamName] = useState("");
   const [language, setLanguage] = useState<LanguageType>(LanguageType.CA);
+
 
   const backAction = () => {
     router.push("/team");
@@ -53,19 +55,20 @@ export default function Page() {
     const uuid = uuidv4();
     if (!user?.user.id) {
       router.push("/login");
+    }else{
+      const slug = slugify(teamName, { lower: true, strict: true });
+      await createTeam({
+        data: {
+          welcomeType: WelcomeType.PLAIN,
+          name: teamName,
+          subDomain: `${slug}-${uuid}`,
+          defaultLanguage: language,
+          selectedLanguages: [language],
+        },
+        userId: user!.user.id,
+      });
+      await fetchTeamsByUserId(user.user.id);
     }
-
-    const slug = slugify(teamName, { lower: true, strict: true });
-    await createTeam({
-      data: {
-        welcomeType: WelcomeType.PLAIN,
-        name: teamName,
-        subDomain: `${slug}-${uuid}`,
-        defaultLanguage: language,
-        selectedLanguages: [language],
-      },
-      userId: user!.user.id,
-    });
   };
 
   useEffect(() => {
