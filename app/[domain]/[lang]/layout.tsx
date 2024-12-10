@@ -37,9 +37,9 @@ export const generateMetadata = async ({
     icons: {
       icon: [
         {
-          url:
-              data?.symbolUrl  ?`${basePublicUrl}/${typeof data?.symbolUrl === "string" && data?.symbolUrl}` :
-              "/chatbotforSymbol.svg",
+          url: data?.symbolUrl
+            ? `${basePublicUrl}/${typeof data?.symbolUrl === "string" && data?.symbolUrl}`
+            : "/chatbotforSymbol.svg",
         },
       ],
     },

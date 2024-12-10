@@ -9,7 +9,6 @@ import { useState } from "react";
 export const useFileVectorStoreAssistant = () => {
   const [upLoadFileloading, setUpLoadFileloading] = useState(false);
   const [upLoadFileError, setUpLoadFileError] = useState<any>(null);
-  const [upLoadFiledata, setUpLoadFiledata] = useState<any>(null);
 
   const [getFileloading, setGetFileloading] = useState(false);
   const [getFileError, setGetFileError] = useState<any>(null);
@@ -31,52 +30,77 @@ export const useFileVectorStoreAssistant = () => {
     teamId: string;
   }) {
     if (!fileInput || fileInput.length === 0) return;
+
     try {
       setUpLoadFileloading(true);
 
-      const upLoadingFile: any[] = [
-        ...Array.from(fileInput).map((file) => {
-          return {
-            filename: file.name,
-            isCharging: true,
-            status: "loading",
-          };
-        }),
-      ];
+      // Add all files to the state with an initial 'loading' status
+      const initialFiles = Array.from(fileInput).map((file) => ({
+        id: file.name, // Unique identifier (use name, size, or a custom UUID)
+        filename: file.name,
+        isCharging: true,
+        status: "loading",
+      }));
 
-      setFileData((prev) => [...prev, ...upLoadingFile]);
-      const formData = new FormData();
-      Array.from(fileInput).forEach((file) => {
-        formData.append("files", file); // Usa el mismo nombre "files" para todos los archivos
+      setFileData((prev: any) => [...prev, ...initialFiles]);
+
+      // Process each file independently
+      const uploadPromises = Array.from(fileInput).map(async (file) => {
+        const formData = new FormData();
+        formData.append("files", file);
+        formData.append("assistantId", assistantId);
+        formData.append("purpose", "assistants");
+
+        try {
+          const response = await fetch(
+            `/api/protected/team/${teamId}/assistant/${assistantId}/file/file-type/${fileType}`,
+            {
+              method: "POST",
+              body: formData,
+            },
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              `Error uploading ${file.name}: ${response.statusText}`,
+            );
+          }
+
+          const responseData = await response.json();
+
+          // Update the specific file's state on success
+          setFileData((prev) =>
+            prev.map((f) =>
+              f.id === file.name
+                ? {
+                    ...f,
+                    isCharging: false,
+                    status: "success",
+                    ...responseData.data,
+                  }
+                : f,
+            ),
+          );
+        } catch (error) {
+          // Update the specific file's state on failure
+          setFileData((prev) =>
+            prev.map((f) =>
+              f.id === file.name
+                ? { ...f, isCharging: false, status: "error" }
+                : f,
+            ),
+          );
+        }
       });
 
-      formData.append("assistantId", assistantId);
-      formData.append("purpose", "assistants");
+      // Wait for all uploads to complete
+      await Promise.all(uploadPromises);
 
-      const requestOptions = { method: "POST", body: formData };
-
-      const response = await fetch(
-        `/api/protected/team/${teamId}/assistant/${assistantId}/file/file-type/${fileType}`,
-        requestOptions,
-      );
-
-      console.log({ response });
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-      const responseData = await response.json();
-      setUpLoadFileError(null);
-      setUpLoadFiledata(responseData);
-      setFileData((prev) => prev.filter((file) => !file.isCharging));
-      return setFileData((prev) => [
-        ...prev.filter((file) => !file.isCharging),
-        ...responseData.data,
-      ]);
-    } catch (error: any) {
-      return setUpLoadFileError({ error });
+      setUpLoadFileError(null); // Reset error if all succeeded
+    } catch (error) {
+      setUpLoadFileError(error);
     } finally {
-      setUpLoadFileloading(false);
+      setUpLoadFileloading(false); // End loading state
     }
   }
 
@@ -169,7 +193,6 @@ export const useFileVectorStoreAssistant = () => {
   return {
     upLoadFileloading,
     upLoadFileError,
-    upLoadFiledata,
     uploadFileVectorStore,
     getFileloading,
     getFileError,

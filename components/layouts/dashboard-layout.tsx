@@ -26,7 +26,10 @@ import { Combobox } from "../combo-box";
 import React, { useEffect } from "react";
 import { useAppContext } from "../context/appContext";
 import { Option } from "@/types/types";
-import { useFetchTeamsByUserId, useFetchTeamsByUserIdAndTeamId } from "../context/useAppContext/team";
+import {
+  useFetchTeamsByUserId,
+  useFetchTeamsByUserIdAndTeamId,
+} from "../context/useAppContext/team";
 import { useFetchAssistantsByTeamId } from "../context/useAppContext/assistant";
 import { useUserLogout } from "../context/useAppContext/user";
 import { assistantSettingsNav, teamsSettingsNav } from "@/lib/helper/navbar";
@@ -83,10 +86,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (user?.user?.id ) {
-      if(teamId) {
+    if (user?.user?.id) {
+      if (teamId) {
         fetchTeamsByUserIdAndTeamId(user.user.id, teamId as string);
-      }else{
+      } else {
         fetchTeamsByUserId(user.user.id);
       }
     }

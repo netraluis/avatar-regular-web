@@ -1,6 +1,12 @@
 "use client";
 
-import { Archive, CloudUpload, HardDrive, MessageSquare, BookOpen } from "lucide-react";
+import {
+  Archive,
+  CloudUpload,
+  HardDrive,
+  MessageSquare,
+  BookOpen,
+} from "lucide-react";
 
 import { usePathname } from "next/navigation";
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
@@ -19,7 +25,12 @@ const navItems = [
   // { name: "Emails", href: "emails", icon: Mail },
   // { name: "Q&A", href: "qna", icon: MessageSquare },
   { name: "Notion", href: "notion", icon: BookOpen },
-  { name: "Google Drive", href: "google-drive", icon: HardDrive, commingSoon: true },
+  {
+    name: "Google Drive",
+    href: "google-drive",
+    icon: HardDrive,
+    commingSoon: true,
+  },
   { name: "OneDrive", href: "one-drive", icon: CloudUpload, commingSoon: true },
   { name: "teams", href: "teams", icon: MessageSquare, commingSoon: true },
 ];

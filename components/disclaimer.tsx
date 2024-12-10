@@ -17,11 +17,11 @@ const Disclaimer = ({ data }: { data: HeaderDisclaimer | null }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger className="text-slate-400 hover:text-slate-500">
-        {data?.buttonText || ''}
+        {data?.buttonText || ""}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{data?.title || ''}</AlertDialogTitle>
+          <AlertDialogTitle>{data?.title || ""}</AlertDialogTitle>
           <AlertDialogDescription className="max-h-80 overflow-auto p-2">
             <div
               dangerouslySetInnerHTML={{ __html: data?.description || "" }}

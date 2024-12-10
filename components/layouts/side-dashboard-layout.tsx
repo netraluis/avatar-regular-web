@@ -10,8 +10,8 @@ export interface NavItemsProps {
 }
 
 const commingSoon = {
-  title: 'Proximament'
-}
+  title: "Proximament",
+};
 
 export interface SideDashboardLayoutProps {
   navItems: NavItemsProps[];
@@ -33,7 +33,7 @@ export const SideDashboardLayout = ({
           <Link
             onClick={actionButtonOnClick}
             key={index}
-            href={item.commingSoon ? '' : `/${absolutePath}/${item.href}`}
+            href={item.commingSoon ? "" : `/${absolutePath}/${item.href}`}
             className={`flex items-center p-2 hover:bg-slate-100 rounded gap-1.5 px-2 py-1.5 ${comparatePathName === item.href ? "bg-slate-100" : ""}`}
           >
             <item.icon className="mr-2 h-4 w-4" />
