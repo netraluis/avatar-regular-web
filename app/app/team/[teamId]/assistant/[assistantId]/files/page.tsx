@@ -135,7 +135,9 @@ export default function Component() {
       nextActionText={newInstructions.nextActionText}
       loading={false}
       backActionActive={true}
-      nextActionActive={fileData.length > 0}
+      nextActionActive={
+        fileData.length > 0 && fileData.every((file) => !file.isCharging)
+      }
       error={false}
       errorText={newInstructions.errorText}
     >
