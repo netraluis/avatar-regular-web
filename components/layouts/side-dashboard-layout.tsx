@@ -6,6 +6,11 @@ export interface NavItemsProps {
   href: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   alpha?: boolean;
+  commingSoon?: boolean;
+}
+
+const commingSoon = {
+  title: 'Proximament'
 }
 
 export interface SideDashboardLayoutProps {
@@ -28,7 +33,7 @@ export const SideDashboardLayout = ({
           <Link
             onClick={actionButtonOnClick}
             key={index}
-            href={`/${absolutePath}/${item.href}`}
+            href={item.commingSoon ? '' : `/${absolutePath}/${item.href}`}
             className={`flex items-center p-2 hover:bg-slate-100 rounded gap-1.5 px-2 py-1.5 ${comparatePathName === item.href ? "bg-slate-100" : ""}`}
           >
             <item.icon className="mr-2 h-4 w-4" />
@@ -41,6 +46,16 @@ export const SideDashboardLayout = ({
                     className="text-[0.65rem] px-1.5 py-0 leading-4 ml-2"
                   >
                     Alpha
+                  </Badge>
+                </span>
+              )}
+              {item.commingSoon && (
+                <span>
+                  <Badge
+                    variant="outline"
+                    className="text-[0.65rem] px-1.5 py-0 leading-4 ml-2"
+                  >
+                    {commingSoon.title}
                   </Badge>
                 </span>
               )}

@@ -15,6 +15,7 @@ import { Button } from "./ui/button";
 import { House, MessageCircle } from "lucide-react";
 import Disclaimer from "./disclaimer";
 import { HeaderDisclaimer } from "./context/globalContext";
+import Link from "next/link";
 
 export default function Header() {
   const { data, useAssistantResponse } = useTeamAssistantContext();
@@ -124,29 +125,33 @@ export default function Header() {
                       className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-base leading-6 hover:bg-gray-50"
                     >
                       <div className="flex-auto">
-                        <a
-                          href={item.hrefLanguages[0].href}
+                        <Link
+                          href= {`${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ''}`}
                           className="block font-semibold text-gray-900"
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
-                          {item.hrefLanguages[0].text}
+                          {item.hrefLanguages[0]?.text}
                           <span className="absolute inset-0" />
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   ))}
                   <div className="mt-5">
                     {menuBody?.map((item) => (
-                      <a
-                        href={item.hrefLanguages[0].href}
+                      <Link
+                        href= {`${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ''}`}
                         key={item.numberOrder}
                         className="group relative flex items-center gap-x-4 rounded-lg px-4 py-2 text-xs leading-3 hover:bg-gray-50"
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         <div className="flex-auto">
                           <p className=" text-gray-600">
-                            {item.hrefLanguages[0].text}
+                            {item.hrefLanguages[0]?.text}
                           </p>
                         </div>
-                      </a>
+                      </Link>
                     ))}
                   </div>
                   <div className="mt-5 pt-3 border-t-2 w-full">
@@ -196,17 +201,19 @@ export default function Header() {
           <div className="flex-grow space-y-6">
             <div className="py-4 flex flex-col">
               {menuHeader?.map((item, index) => (
-                <a
+                <Link
                   key={index}
-                  href={item.hrefLanguages[0].href}
+                  href= {`${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ''}`}
                   className="font-semibold text-gray-900"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <div className="w-full group flex items-center gap-x-6 rounded-lg px-4 py-2 text-lg leading-6 hover:bg-gray-50">
                     <div className="flex-auto">
-                      {item.hrefLanguages[0].text}
+                      {item.hrefLanguages[0]?.text}
                     </div>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
             <div>
@@ -238,17 +245,19 @@ export default function Header() {
             </div>
             <div className="mt-7 pt-6 ">
               {menuBody?.map((item) => (
-                <a
-                  href={item.hrefLanguages[0].href}
+                <Link
+                  href= {`${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ''}`}
                   key={item.numberOrder}
                   className="group relative flex items-center gap-x-4 rounded-lg text-xs leading-4 hover:bg-gray-50 my-3"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <div className="flex-auto">
                     <p className="text-gray-600">
-                      {item.hrefLanguages[0].text}
+                      {item.hrefLanguages[0]?.text}
                     </p>
                   </div>
-                </a>
+                </Link>
               ))}
             </div>
           </div>

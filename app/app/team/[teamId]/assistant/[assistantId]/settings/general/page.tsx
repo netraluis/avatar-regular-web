@@ -139,7 +139,7 @@ export default function Component() {
       </CustomCard>
       {/* </Card> */}
 
-      <Card className="border-destructive">
+      <Card>
         <CardHeader>
           <CardTitle>{assistantGeneral.delete.title}</CardTitle>
           <CardDescription>

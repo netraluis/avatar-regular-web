@@ -26,7 +26,7 @@ import { Combobox } from "../combo-box";
 import React, { useEffect } from "react";
 import { useAppContext } from "../context/appContext";
 import { Option } from "@/types/types";
-import { useFetchTeamsByUserId } from "../context/useAppContext/team";
+import { useFetchTeamsByUserId, useFetchTeamsByUserIdAndTeamId } from "../context/useAppContext/team";
 import { useFetchAssistantsByTeamId } from "../context/useAppContext/assistant";
 import { useUserLogout } from "../context/useAppContext/user";
 import { assistantSettingsNav, teamsSettingsNav } from "@/lib/helper/navbar";
@@ -64,6 +64,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
 
   const [assistantSelected, setAssistantSelected] = React.useState(null);
   const { fetchTeamsByUserId } = useFetchTeamsByUserId();
+  const { fetchTeamsByUserIdAndTeamId } = useFetchTeamsByUserIdAndTeamId();
   const { fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
   const { userLogout } = useUserLogout();
   const pathname = usePathname();
@@ -82,8 +83,12 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (user?.user?.id) {
-      fetchTeamsByUserId(user.user.id);
+    if (user?.user?.id ) {
+      if(teamId) {
+        fetchTeamsByUserIdAndTeamId(user.user.id, teamId as string);
+      }else{
+        fetchTeamsByUserId(user.user.id);
+      }
     }
   }, [user?.user?.id]);
 
