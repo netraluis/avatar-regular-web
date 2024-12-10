@@ -24,7 +24,7 @@ const navItems = [
   // { name: "Texts", href: "texts", icon: FileText },
   // { name: "Emails", href: "emails", icon: Mail },
   // { name: "Q&A", href: "qna", icon: MessageSquare },
-  { name: "Notion", href: "notion", icon: BookOpen },
+  { name: "Notion", href: "notion", icon: BookOpen,  commingSoon: true },
   {
     name: "Google Drive",
     href: "google-drive",
