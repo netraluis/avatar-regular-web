@@ -870,7 +870,7 @@ export default function Interface() {
               placeholder={interfaceText.banner.textDescriptionPlaceholder}
               id="banner-text"
               className="min-h-[100px]"
-              value={(headerButtonText && headerButtonText[0]) || ""}
+              value={(headerButtonText && headerButtonText[0] ? headerButtonText[0] : "")}
               onChange={(e) => {
                 if (!teamSelected?.id) return;
                 setHeaderButtonText([e.target.value]);

@@ -17,7 +17,7 @@ export interface MenuBody {
 export interface HeaderDisclaimer {
   buttonText: string;
   title: string;
-  description: string;
+  text: string;
 }
 
 export interface Question {
