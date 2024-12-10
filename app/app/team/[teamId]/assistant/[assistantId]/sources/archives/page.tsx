@@ -127,7 +127,7 @@ export default function Component() {
                 <Input type="checkbox" />
               </TableHead>
               <TableHead>{archives.name}</TableHead>
-              <TableHead>{archives.characters}</TableHead>
+              {/* <TableHead>{archives.characters}</TableHead> */}
               <TableHead>{archives.status}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
@@ -153,7 +153,7 @@ export default function Component() {
                     <Input type="checkbox" />
                   </TableCell>
                   <TableCell>{file.filename}</TableCell>
-                  <TableCell>{file.bytes}</TableCell>
+                  {/* <TableCell>{file.bytes}</TableCell> */}
                   <TableCell>
                     <span
                       className={`px-2 py-1 ${!file.isCharging ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"} rounded-full text-xs`}
