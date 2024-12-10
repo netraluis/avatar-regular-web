@@ -166,7 +166,7 @@ export default function Component() {
                       <Button
                         aria-haspopup="true"
                         size="icon"
-                        variant="alert"
+                        variant="outline"
                         onClick={() => {
                           handleDelete(file.id);
                         }}
