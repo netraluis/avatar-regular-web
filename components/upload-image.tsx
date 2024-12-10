@@ -66,7 +66,7 @@ export const UploadImage = ({
         ) : src ? (
           <div className="w-10 h-10 rounded-full flex items-center justify-center relative">
             <Image
-              src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${src}?timestamp=${new Date().getTime()}`}
+              src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${src}}`}
               alt={alt}
               width={30}
               height={30}
