@@ -56,7 +56,7 @@ export default function Header() {
         >
           {data?.logoUrl ? (
             <Image
-              src={`${basePublicUrl}${typeof data.logoUrl === "string" && data.logoUrl}`}
+              src={`${basePublicUrl}${typeof data.logoUrl === "string" && data.logoUrl}?timestamp=${new Date().getTime()}`}
               alt={""}
               fill
               className="object-contain object-left"
