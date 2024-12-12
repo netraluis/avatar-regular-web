@@ -1,16 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { usePathname, useParams } from "next/navigation";
-import {
-  TeamSettingsProvider,
-  useTeamSettingsContext,
-} from "@/components/context/teamSettingsContext";
-
+import { usePathname } from "next/navigation";
+import { TeamSettingsProvider } from "@/components/context/teamSettingsContext";
 import { Save } from "lucide-react";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useAppContext } from "@/components/context/appContext";
-
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
 import { TitleLayout } from "@/components/layouts/title-layout";
 import { teamsSettingsNav } from "@/lib/helper/navbar";
@@ -33,9 +28,7 @@ function Layout({
   const absolutePath = pathname.split("/").slice(1, 4).join("/");
 
   const { state } = useAppContext();
-  const { teamId } = useParams();
-  const { data } = useTeamSettingsContext();
-  const { updateTeam, loading, error } = useUpdateTeam();
+  const { loading, error } = useUpdateTeam();
 
   const saveHandler = async () => {
     // if (state.user?.user.id) {
