@@ -71,13 +71,6 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
   };
 }> | null;
 
-export type UpdateTeamByTeamIdResponse =
-  | {
-      success: true;
-      data: GetTeamByTeamId;
-    }
-  | { success: false; errorCode: string; errorMessage: string };
-
 export const getTeamsByUser = async (userId: string) => {
   const subdomainInfo = await prisma.userTeam
     .findMany({

@@ -3,16 +3,15 @@ import { useAppContext } from "@/components/context/appContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect } from "react";
-import slugify from "slugify";
-
+import { useEffect, useState } from "react";
 import { FileUserImageType } from "@/types/types";
-import { useTeamSettingsContext } from "@/components/context/teamSettingsContext";
 import { useDeleteTeam } from "@/components/context/useAppContext/team";
 import { useRouter } from "next/navigation";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import { UploadImage } from "@/components/upload-image";
 import { CustomCard } from "@/components/custom-card";
+import { SaveButton } from "@/components/save-button";
+import { useUpdateTeam } from "@/components/context/useAppContext/team";
 
 const setting = {
   title: "Configuració de l’equip",
@@ -21,6 +20,7 @@ const setting = {
   name: "Nom de l'equip",
   nameDescription:
     "Pots utilitzar el teu nom real, un pseudònim o un nom que representi la teva organització. Tingues en compte que només podràs canviar-lo cada 30 dies.",
+  saveName: "Desa",
   url: "URL de l'equip",
   urlDescription:
     "La propera URL de l'equip causarà una redirecció a la nova URL.",
@@ -54,22 +54,25 @@ export default function Component() {
   const {
     state: { user, teamSelected },
   } = useAppContext();
+  const updateTeam = useUpdateTeam();
 
-  const { data, setData } = useTeamSettingsContext();
+  const [name, setName] = useState<string | undefined>(undefined);
 
   const router = useRouter();
 
   const { loading, deleteTeam } = useDeleteTeam();
 
-  useEffect(() => {
-    if (data.name) {
-      const slug = slugify(typeof data?.name === "string" ? data?.name : "", {
-        lower: true,
-        strict: true,
-      });
-      setData({ ...data, subDomain: slug });
+  const saveHandler = async () => {
+    if (user?.user.id && teamSelected?.id) {
+      await updateTeam.updateTeam(teamSelected.id, { name }, user.user.id);
     }
-  }, [data.name]);
+  };
+
+  useEffect(() => {
+    if (teamSelected) {
+      setName(teamSelected.name);
+    }
+  }, [teamSelected]);
 
   return (
     <div>
@@ -79,13 +82,9 @@ export default function Component() {
           {teamSelected?.name ? (
             <Input
               id="team-name"
-              value={
-                (typeof data?.name === "string" && data?.name) ||
-                teamSelected?.name ||
-                ""
-              }
+              value={name}
               onChange={(e) => {
-                setData({ ...data, name: e.target.value });
+                setName(e.target.value);
               }}
               placeholder="Acme Inc."
             />
@@ -96,6 +95,12 @@ export default function Component() {
             {setting.nameDescription}
           </p>
         </div>
+        <SaveButton
+          action={saveHandler}
+          loading={updateTeam.loading || !name}
+          actionButtonText={setting.saveName}
+          valueChange={teamSelected?.name === name}
+        />
       </CustomCard>
 
       <CustomCard
