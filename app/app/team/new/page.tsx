@@ -1,6 +1,9 @@
 "use client";
 import { useAppContext } from "@/components/context/appContext";
-import { useCreateTeam, useFetchTeamsByUserId } from "@/components/context/useAppContext/team";
+import {
+  useCreateTeam,
+  useFetchTeamsByUserId,
+} from "@/components/context/useAppContext/team";
 import OnboardingBase from "@/components/onboarding/onboarding-base";
 import { Input } from "@/components/ui/input";
 import {
@@ -46,7 +49,6 @@ export default function Page() {
   const [teamName, setTeamName] = useState("");
   const [language, setLanguage] = useState<LanguageType>(LanguageType.CA);
 
-
   const backAction = () => {
     router.push("/team");
   };
@@ -55,7 +57,7 @@ export default function Page() {
     const uuid = uuidv4();
     if (!user?.user.id) {
       router.push("/login");
-    }else{
+    } else {
       const slug = slugify(teamName, { lower: true, strict: true });
       await createTeam({
         data: {

@@ -261,18 +261,6 @@ export const updateTeam = async ({
         id: teamId,
       },
       data,
-      // include: {
-      //   assistants: true,
-      //   welcome: true,
-      //   menuHeader: {
-      //     include: {
-      //       textHref: true,
-      //     },
-      //   },
-      //   footer: true,
-      //   menuFooter: true,
-      //   headerButton: true,
-      // },
       select: {
         selectedLanguages: true,
         headerButton: true,
@@ -398,6 +386,36 @@ export const getDuplicateTeamBySubdomain = async (subDomain: string) => {
       data: !!team,
     };
   } catch (error) {
+    return {
+      success: false,
+      errorCode: "UNKNOWN_ERROR",
+      errorMessage: "An unexpected error occurred.",
+    };
+  }
+};
+
+export const updateTeamByField = async ({
+  teamId,
+  field,
+  value,
+}: {
+  teamId: string;
+  field: string;
+  value: string;
+}) => {
+  try {
+    const team = await prisma.team.update({
+      where: {
+        id: teamId,
+      },
+      data: {
+        [field]: value,
+      },
+    });
+
+    return team;
+  } catch (error) {
+    console.log({ error });
     return {
       success: false,
       errorCode: "UNKNOWN_ERROR",

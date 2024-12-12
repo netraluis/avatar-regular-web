@@ -1,42 +1,37 @@
 import Image from "next/image";
-
 import { Label } from "./ui/label";
-import { useTeamSettingsContext } from "./context/teamSettingsContext";
 import { useAppContext } from "./context/appContext";
 import { Button } from "./ui/button";
 import { useRef, useState } from "react";
 import { LogoCharging } from "./loaders/loadersSkeleton";
 import { useSupabaseFile } from "./context/useAppContext/file";
 import { FileUserImageType } from "@/types/types";
+import { field } from "@/lib/helper/images";
 
 export interface UploadImageProps {
-  src?: string;
   description: string;
   alt: string;
   recommendedSize: string;
   fileUserImageType: FileUserImageType;
   accept: string;
   choose: string;
-  assistantId: string;
+  assistantId?: string;
 }
 
 export const UploadImage = ({
-  src,
   description,
   alt,
   recommendedSize,
   fileUserImageType,
   accept,
   choose,
-  assistantId,
 }: UploadImageProps) => {
   const {
     state: { user, teamSelected },
   } = useAppContext();
-
-  const { data, setData } = useTeamSettingsContext();
-
   const { uploadSupaseFile } = useSupabaseFile();
+
+  const imageField = field(fileUserImageType);
 
   const fileInputLogoRef = useRef<HTMLInputElement | null>(null);
   const [logoLoading, setLogoLoading] = useState(false);
@@ -46,32 +41,23 @@ export const UploadImage = ({
     fileInputLogoRef.current?.click();
   };
 
-  const field = (fileUserImageType: FileUserImageType) => {
-    switch (fileUserImageType) {
-      case FileUserImageType.LOGO:
-        return "logoUrl";
-      case FileUserImageType.AVATAR:
-        return "avatarUrl";
-      case FileUserImageType.SYMBOL:
-        return "symbolUrl";
-    }
-  };
-
   return (
     <div className="space-y-2 mb-3">
       <Label>{description}</Label>
       <div className="flex items-center space-x-2">
         {logoLoading || imageLoading || !teamSelected ? (
           <LogoCharging />
-        ) : src ? (
+        ) : teamSelected && imageField ? (
           <div className="w-10 h-10 rounded-full flex items-center justify-center relative">
             <Image
-              src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${src}}`}
+              src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${teamSelected[imageField]}`}
               alt={alt}
               width={30}
               height={30}
               onLoad={() => setImageLoading(false)}
-              onError={() => setImageLoading(false)}
+              onError={() => {
+                setImageLoading(false);
+              }}
             />
           </div>
         ) : (
@@ -94,15 +80,20 @@ export const UploadImage = ({
             accept={accept}
             onChange={async (e) => {
               setLogoLoading(true);
-              if (e.target.files && teamSelected?.id && user?.user.id) {
-                const url = await uploadSupaseFile({
+
+              if (
+                e.target.files &&
+                teamSelected?.id &&
+                user?.user.id &&
+                fileUserImageType
+              ) {
+                await uploadSupaseFile({
                   fileInput: e.target.files as unknown as FileList,
                   userId: user.user.id,
                   teamId: teamSelected.id as string,
                   fileUserImageType,
-                  assistantId,
+                  oldUrl: teamSelected[imageField] || "",
                 });
-                setData({ ...data, [field(fileUserImageType)]: url.data });
               }
               setLogoLoading(false);
             }}

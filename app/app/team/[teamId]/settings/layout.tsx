@@ -38,9 +38,9 @@ function Layout({
   const { updateTeam, loading, error } = useUpdateTeam();
 
   const saveHandler = async () => {
-    if (state.user?.user.id) {
-      await updateTeam(teamId as string, data, state.user.user.id);
-    }
+    // if (state.user?.user.id) {
+    //   await updateTeam(teamId as string, data, state.user.user.id);
+    // }
   };
   return (
     <TitleLayout

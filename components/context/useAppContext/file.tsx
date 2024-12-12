@@ -5,6 +5,7 @@ import {
 } from "@/types/types";
 import { FileType } from "@prisma/client";
 import { useState } from "react";
+import { useAppContext } from "../appContext";
 
 export const useFileVectorStoreAssistant = () => {
   const [upLoadFileloading, setUpLoadFileloading] = useState(false);
@@ -204,6 +205,8 @@ export const useFileVectorStoreAssistant = () => {
 };
 
 export const useSupabaseFile = () => {
+  const { dispatch } = useAppContext();
+
   const [upLoadSupabaseFileloading, setUpLoadSupabaseFileloading] =
     useState(false);
   const [upLoadSupabaseFileError, setUpLoadSupabaseFileError] =
@@ -216,16 +219,18 @@ export const useSupabaseFile = () => {
     userId,
     teamId,
     fileUserImageType,
-    assistantId,
+    oldUrl,
     // fileType,
   }: {
     fileInput: FileList | null;
     userId: string;
     teamId: string;
     fileUserImageType: FileUserImageType;
-    assistantId: string;
+    assistantId?: string;
+    oldUrl: string;
     // fileType: FileType;
   }) {
+    const name = oldUrl.split("/")[oldUrl.split("/").length - 1];
     if (!fileInput || fileInput.length === 0) return;
     try {
       setUpLoadSupabaseFileloading(true);
@@ -237,6 +242,7 @@ export const useSupabaseFile = () => {
 
       formData.append("teamId", teamId);
       formData.append("fileUserImageType", fileUserImageType);
+      formData.append("oldNameDoc", name);
 
       // formData.append("purpose", "assistants");
 
@@ -250,16 +256,21 @@ export const useSupabaseFile = () => {
       };
 
       const response = await fetch(
-        `/api/protected/team/${teamId}/assistant/${assistantId}/file/supabase`,
+        `/api/protected/team/${teamId}/file/supabase`,
         requestOptions,
       );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
+
       const responseData = await response.json();
       setUpLoadSupabaseFileError(null);
-      setUpLoadSupabaseFileData(responseData);
+      setUpLoadSupabaseFileData(responseData.data);
+      dispatch({
+        type: "SET_TEAM_SELECTED",
+        payload: responseData.data,
+      });
       return responseData;
     } catch (error: any) {
       return setUpLoadSupabaseFileError({ error });

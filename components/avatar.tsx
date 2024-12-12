@@ -1,8 +1,6 @@
 import Image from "next/image";
 
 export default function Avatar({ imageUrl, roleName }: any) {
-
-
   return (
     <div className="group block flex-shrink-0 m-2">
       <div className="flex items-center">

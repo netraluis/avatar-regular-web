@@ -19,7 +19,6 @@ import Link from "next/link";
 
 export default function Header() {
   const { data, useAssistantResponse } = useTeamAssistantContext();
-  
 
   const { lang, assistantUrl } = useParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

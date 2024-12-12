@@ -9,7 +9,7 @@ import slugify from "slugify";
 import { FileUserImageType } from "@/types/types";
 import { useTeamSettingsContext } from "@/components/context/teamSettingsContext";
 import { useDeleteTeam } from "@/components/context/useAppContext/team";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import { UploadImage } from "@/components/upload-image";
 import { CustomCard } from "@/components/custom-card";
@@ -55,8 +55,6 @@ export default function Component() {
     state: { user, teamSelected },
   } = useAppContext();
 
-  const { assistantId } = useParams();
-
   const { data, setData } = useTeamSettingsContext();
 
   const router = useRouter();
@@ -98,28 +96,6 @@ export default function Component() {
             {setting.nameDescription}
           </p>
         </div>
-        {/* <div className="space-y-2">
-          <Label htmlFor="team-url">{setting.url}</Label>
-          <div className="flex items-center space-x-2">
-            {teamSelected?.subDomain ? (
-              <Input
-                disabled
-                id="team-url"
-                value={
-                  (typeof data?.subDomain === "string" && data?.subDomain) ||
-                  teamSelected?.subDomain ||
-                  ""
-                }
-              />
-            ) : (
-              <InputCharging />
-            )}
-            <span className="text-muted-foreground">.chatbotfor.com</span>
-          </div>
-          <p className="text-sm text-muted-foreground">
-            {setting.urlDescription}
-          </p>
-        </div> */}
       </CustomCard>
 
       <CustomCard
@@ -127,32 +103,20 @@ export default function Component() {
         description={setting.logo.description}
       >
         <UploadImage
-          src={
-            typeof data?.logoUrl === "string"
-              ? data.logoUrl
-              : teamSelected?.logoUrl || undefined
-          }
           description={setting.logo.uploadLogo}
           alt="logo"
           recommendedSize={setting.logo.recommendedSize}
           fileUserImageType={FileUserImageType.LOGO}
           accept=".png,.jpg,.jpeg"
           choose={setting.logo.choose}
-          assistantId={assistantId as string}
         />
         <UploadImage
-          src={
-            typeof data?.symbolUrl === "string"
-              ? data.symbolUrl
-              : teamSelected?.symbolUrl || undefined
-          }
           description={setting.favicon.uploadFavicon}
           alt="favicon"
           recommendedSize={setting.favicon.recommendedSize}
           fileUserImageType={FileUserImageType.SYMBOL}
           accept=".svg"
           choose={setting.favicon.choose}
-          assistantId={assistantId as string}
         />
       </CustomCard>
 

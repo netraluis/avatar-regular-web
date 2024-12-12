@@ -23,9 +23,7 @@ const Disclaimer = ({ data }: { data: HeaderDisclaimer | null }) => {
         <AlertDialogHeader>
           <AlertDialogTitle>{data?.title || ""}</AlertDialogTitle>
           <AlertDialogDescription className="max-h-80 overflow-auto p-2">
-            <div
-              dangerouslySetInnerHTML={{ __html: data?.text[0] || "" }}
-            />
+            <div dangerouslySetInnerHTML={{ __html: data?.text[0] || "" }} />
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
