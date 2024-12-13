@@ -4,7 +4,10 @@ import { useAppContext } from "@/components/context/appContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useExistSubdomain, useUpdateTeam } from "@/components/context/useAppContext/team";
+import {
+  useExistSubdomain,
+  useUpdateTeam,
+} from "@/components/context/useAppContext/team";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import { CustomCard } from "@/components/custom-card";
 import { useEffect, useState } from "react";
@@ -47,20 +50,24 @@ export default function Component() {
   }, [teamSelected]);
 
   const handleValidation = async () => {
-    if(teamSelected && user?.user.id) {
+    if (teamSelected && user?.user.id) {
       const slug = slugify(subDomainUrl, {
         lower: true,
         strict: true,
       });
-  
+
       setSubDomainUrl(slug);
-  
+
       const exist = await useExist.existSubdomain(slug);
-  
+
       if (exist !== null && !exist) {
-        await updateTeam.updateTeam(teamSelected.id, { subDomain: slug }, user.user.id);
+        await updateTeam.updateTeam(
+          teamSelected.id,
+          { subDomain: slug },
+          user.user.id,
+        );
       }
-    } 
+    }
   };
 
   return (

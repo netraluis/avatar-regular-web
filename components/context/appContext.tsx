@@ -11,7 +11,10 @@ type AppState = {
   teams: Team[];
   teamSelected: GetTeamByTeamId | null;
   assistantsByTeam: Assistant[];
-  assistantSelected: {localAssistant: Assistant, openAIassistant: OpenAI.Beta.Assistants.Assistant} | null;
+  assistantSelected: {
+    localAssistant: Assistant;
+    openAIassistant: OpenAI.Beta.Assistants.Assistant;
+  } | null;
   user: UserData | null;
 };
 
@@ -32,7 +35,10 @@ type Action =
     }
   | {
       type: "SET_ASSISTANT";
-      payload: {localAssistant: Assistant, openAIassistant: OpenAI.Beta.Assistants.Assistant} | null;
+      payload: {
+        localAssistant: Assistant;
+        openAIassistant: OpenAI.Beta.Assistants.Assistant;
+      } | null;
     }
   | { type: "SET_TEAM_CREATION"; payload: { newTeam: any } }
   | { type: "SET_TEAM_DELETE"; payload: { teamId: string } }

@@ -65,7 +65,7 @@ export const useFetchTeamsByUserIdAndTeamId = () => {
     Team[]
   >([]);
 
-  async function fetchTeamsByUserIdAndTeamId(teamId: string,userId: string) {
+  async function fetchTeamsByUserIdAndTeamId(teamId: string, userId: string) {
     if (!userId) return setErrorTeamsByUserIdAndTeamId("No user id provided");
     try {
       setLoadingTeamsByUserIdAndTeamId(true);

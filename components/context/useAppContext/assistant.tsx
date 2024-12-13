@@ -54,16 +54,23 @@ export const useFetchAssistantSelected = () => {
   const [error, setError] = useState<any>(null);
   const [data, setData] = useState([]);
 
-  async function fetchAssistantsByAssistantSelected(teamId: string,assistantId: string, userId: string) {
+  async function fetchAssistantsByAssistantSelected(
+    teamId: string,
+    assistantId: string,
+    userId: string,
+  ) {
     if (!teamId) return setError("No team id provided");
     try {
       setLoading(true);
-      const response = await fetch(`/api/protected/team/${teamId}/assistant/${assistantId}`, {
-        method: "GET",
-        headers: {
-          "x-user-id": userId,
+      const response = await fetch(
+        `/api/protected/team/${teamId}/assistant/${assistantId}`,
+        {
+          method: "GET",
+          headers: {
+            "x-user-id": userId,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -72,10 +79,10 @@ export const useFetchAssistantSelected = () => {
 
       dispatch({
         type: "SET_ASSISTANT",
-        payload: responseData ,
+        payload: responseData,
       });
 
-      console.log({responseData})
+      console.log({ responseData });
 
       setData(responseData);
     } catch (error: any) {
