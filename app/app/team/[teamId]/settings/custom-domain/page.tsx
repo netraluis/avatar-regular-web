@@ -4,9 +4,7 @@ import { useAppContext } from "@/components/context/appContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-import { useTeamSettingsContext } from "@/components/context/teamSettingsContext";
-import { useExistSubdomain } from "@/components/context/useAppContext/team";
+import { useExistSubdomain, useUpdateTeam } from "@/components/context/useAppContext/team";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import { CustomCard } from "@/components/custom-card";
 import { useEffect, useState } from "react";
@@ -17,7 +15,7 @@ const customDomain = {
     title: "Domini personalitzat",
     description:
       "Personalitza com els altres veuen el teu equip al lloc web configurant l’URL del teu equip o connectant un domini personalitzat.",
-    validation: "Validar",
+    validation: "Validar i desar",
     urlTitle: "URL de l'equip",
     urlDescription:
       "Quant possis una url i li donis a validar, farem un control per veure que no s`hagin fet servir caracters no permesos, els canviarem per tu si és aquest el cas, i també mirarem si esta ocupat, en el cas que ho estigui hauras de canviar el teu texte.",
@@ -31,34 +29,38 @@ const customDomain = {
 
 export default function Component() {
   const {
-    state: { teamSelected },
+    state: { teamSelected, user },
   } = useAppContext();
 
-  const { data, setData } = useTeamSettingsContext();
+  const updateTeam = useUpdateTeam();
+
   const useExist = useExistSubdomain();
 
   const [subDomainUrl, setSubDomainUrl] = useState("");
+  const [subDomainUrlSave, setSubDomainUrlSave] = useState("");
 
   useEffect(() => {
     if (teamSelected?.subDomain) {
       setSubDomainUrl(teamSelected.subDomain);
+      setSubDomainUrlSave(teamSelected.subDomain);
     }
   }, [teamSelected]);
 
   const handleValidation = async () => {
-    console.log(subDomainUrl);
-    const slug = slugify(subDomainUrl, {
-      lower: true,
-      strict: true,
-    });
-
-    setSubDomainUrl(slug);
-
-    const exist = await useExist.existSubdomain(slug);
-
-    if (exist !== null && !exist) {
-      setData({ ...data, subDomain: slug });
-    }
+    if(teamSelected && user?.user.id) {
+      const slug = slugify(subDomainUrl, {
+        lower: true,
+        strict: true,
+      });
+  
+      setSubDomainUrl(slug);
+  
+      const exist = await useExist.existSubdomain(slug);
+  
+      if (exist !== null && !exist) {
+        await updateTeam.updateTeam(teamSelected.id, { subDomain: slug }, user.user.id);
+      }
+    } 
   };
 
   return (
@@ -85,6 +87,7 @@ export default function Component() {
             <Button
               size="sm"
               onClick={handleValidation}
+              disabled={subDomainUrlSave === subDomainUrl || updateTeam.loading}
               variant={
                 !useExist.loading && useExist.data !== null
                   ? !useExist.data
