@@ -2,7 +2,13 @@ import { CustomCard } from "@/components/custom-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { WelcomeType } from "@prisma/client";
 import { Reorder, motion } from "framer-motion";
@@ -12,7 +18,10 @@ import { FileUserImageType } from "@/types/types";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useAppContext } from "@/components/context/appContext";
 import { useEffect, useState } from "react";
-import { TextAreaCharging, SelectCharging } from "@/components/loaders/loadersSkeleton";
+import {
+  TextAreaCharging,
+  SelectCharging,
+} from "@/components/loaders/loadersSkeleton";
 import { SaveButton } from "@/components/save-button";
 import { interfaceText } from "./locale";
 
@@ -21,28 +30,36 @@ export function WelcomeMessage({
 }: {
   texts: typeof interfaceText.welcomeMessage;
 }) {
-
-  const { state: { teamSelected, user } } = useAppContext();
+  const updateTeam = useUpdateTeam();
+  const {
+    state: { teamSelected, user },
+  } = useAppContext();
   const [welcomeText, setWelcomeText] = useState<string[]>([""]);
   const [welcomeDefaultText, setWelcomeDefaultText] = useState<string[]>([""]);
-  const [welcomeType, setWelcomeType] = useState<WelcomeType>(teamSelected?.welcomeType || WelcomeType.PLAIN);
-
-  const updateTeam = useUpdateTeam();
+  const [welcomeType, setWelcomeType] = useState<WelcomeType>(
+    teamSelected?.welcomeType || WelcomeType.PLAIN,
+  );
 
   useEffect(() => {
     if (teamSelected) {
-      const welcome = teamSelected.welcome.find(w => w.language === teamSelected.defaultLanguage)?.text || ['']
+      const welcome = teamSelected.welcome.find(
+        (w) => w.language === teamSelected.defaultLanguage,
+      )?.text || [""];
       setWelcomeDefaultText(welcome);
       setWelcomeText(welcome);
-      setWelcomeType(teamSelected.welcomeType)
+      setWelcomeType(teamSelected.welcomeType);
     }
   }, [teamSelected]);
 
   const onWelcomeTypeChange = async (welcomeType: WelcomeType) => {
     if (teamSelected && user?.user.id) {
-      await updateTeam.updateTeam(teamSelected.id, { welcomeType }, user.user.id);
-    };
-  }
+      await updateTeam.updateTeam(
+        teamSelected.id,
+        { welcomeType },
+        user.user.id,
+      );
+    }
+  };
 
   const updateWelcome = (index: number, value: string) => {
     const updateWelcome = [...welcomeText];
@@ -60,15 +77,13 @@ export function WelcomeMessage({
   };
 
   const saveHandler = async () => {
-
-    if(!teamSelected) return;
+    if (!teamSelected) return;
     const welcome = {
       upsert: {
         where: {
           language_teamId: {
             teamId: teamSelected.id,
-            language:
-              teamSelected?.defaultLanguage,
+            language: teamSelected?.defaultLanguage,
           },
         },
         update: {
@@ -76,23 +91,25 @@ export function WelcomeMessage({
         },
         create: {
           text: welcomeText,
-          language:
-            teamSelected?.defaultLanguage,
-          description: ''
+          language: teamSelected?.defaultLanguage,
+          description: "",
         },
-      }
-    }
+      },
+    };
     if (teamSelected && user?.user.id) {
-      await updateTeam.updateTeam(teamSelected.id,  {welcome} , user.user.id);
+      await updateTeam.updateTeam(teamSelected.id, { welcome }, user.user.id);
     }
-  }
+  };
 
   return (
     <CustomCard title={texts.title} description={texts.description}>
       <div className="space-y-2">
         <Label htmlFor="welcome-type">{texts.linesTitle}</Label>
-        {!updateTeam.loading ? 
-          <Select onValueChange={onWelcomeTypeChange} value={teamSelected?.welcomeType}>
+        {!updateTeam.loading ? (
+          <Select
+            onValueChange={onWelcomeTypeChange}
+            value={teamSelected?.welcomeType}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Selecciona un tipo" />
             </SelectTrigger>
@@ -103,9 +120,10 @@ export function WelcomeMessage({
                 </SelectItem>
               ))}
             </SelectContent>
-          </Select> : 
+          </Select>
+        ) : (
           <SelectCharging />
-        }
+        )}
 
         <UploadImage
           description={interfaceText.avatar.uploadLogo}
@@ -127,7 +145,7 @@ export function WelcomeMessage({
                 placeholder="Type your message here"
                 className="min-h-[100px] w-full"
                 value={welcomeText[0]}
-                onChange={(e)=>{
+                onChange={(e) => {
                   setWelcomeText([e.target.value]);
                 }}
               />
@@ -137,8 +155,6 @@ export function WelcomeMessage({
             <p className="text-sm text-muted-foreground">
               {interfaceText.welcomeMessage.description}
             </p>
-
-   
           </div>
         )}
 
@@ -197,7 +213,6 @@ export function WelcomeMessage({
           actionButtonText={texts.save}
           valueChange={welcomeText === welcomeDefaultText}
         />
-
       </div>
     </CustomCard>
   );
