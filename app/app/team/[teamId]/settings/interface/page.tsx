@@ -18,7 +18,6 @@ import {
   MenuHeaderType,
   Prisma,
   TextHref,
-  WelcomeType,
   MenuFooter,
   HeaderButtonType,
   HrefLanguages,
@@ -26,83 +25,14 @@ import {
 import { GripVertical, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Reorder, motion } from "framer-motion";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { FileUserImageType } from "@/types/types";
 import { CustomCard } from "@/components/custom-card";
-import { UploadImage } from "@/components/upload-image";
 import {
-  SelectCharging,
   TextAreaCharging,
   InputCharging,
 } from "@/components/loaders/loadersSkeleton";
 import { v4 as uuidv4 } from "uuid";
-import { useParams } from "next/navigation";
-
-const interfaceText = {
-  title: "Missatge de benvinguda",
-  description:
-    "Configura com els usuaris veuen el teu missatge de benvinguda al lloc web.",
-  welcomeType: "Selecciona el tema de l’assitent de xat",
-  name: "Nom de l'equip",
-  nameDescription:
-    "Aquest és el teu nom públic. Pot ser el teu nom real o un pseudònim.",
-  avatar: {
-    // title: "Imatges de l'equip",
-    // description: "Així és com et veuran els altres al lloc.",
-    uploadLogo: "Carrega una imatge d’avatar",
-    choose: "Selecciona",
-    recommendedSize:
-      "Puja una imatge d’avatar personalitzada per representar l’assistent.",
-  },
-  welcomeMessage: {
-    title: "El teu missatge",
-    description:
-      "Escriu el missatge de benvinguda que es mostrarà als usuaris.",
-    linesTitle: "Conversa de benvinguda",
-    line: "Missatge",
-    addLine: "Afegir missatge",
-    lineDescription: "Els bubbles simulen una conversa",
-  },
-  menu: {
-    headerTitle: "Menu",
-    headerDescription: "Afegeix enllaços al teu lloc web o blog.",
-    menuHeaderTitle: "Menú principal",
-    menuHeaderTitleDescription:
-      "Aquests valors apareixeran primers i més destacats",
-    menuBodyTitle: "Menu secundari",
-    menuBodyDescription:
-      "Afegeix enllaços addicionals (per exemple: Instagram, LinkedIn o Termes legals).",
-    menuFooterTitle: "Peu de pàgina",
-    menuFooterChangePlan: "Canvia de pla",
-    addItem: "Afegeix un element",
-  },
-  banner: {
-    title: "Banner d’informació",
-    description:
-      "Personalitza un missatge informatiu que es mostrarà al menú del lloc web.",
-    buttonText: "Nom visible al menú",
-    buttonTextPlaceholder: "Exemple: Ajuda",
-    titleText: "Títol del banner",
-    titleTextPlaceholder: "Exemple: Fonts d'informació",
-    text: "Text del banner",
-    textDescription: "Aquest text sera el cos del banner",
-    textDescriptionPlaceholder: "",
-  },
-  footer: {
-    title: "Missatge del peu de pàgina",
-    description:
-      "Escriu aquí un text breu i clar, per exemple, una nota legal, informació sobre intel·ligència artificial o qualsevol avís rellevant.",
-    text: "El teu missatge",
-    textPlaceholder:
-      "Genero respostes amb intel·ligència artificial i puc cometre errors.",
-  },
-};
+import { WelcomeMessage } from "./welcome-message";
+import { interfaceText } from "./locale";
 
 interface ExtendedTextHref extends TextHref {
   hrefLanguages: HrefLanguages[];
@@ -119,10 +49,8 @@ export default function Interface() {
   const [headerButtonTitle, setHeaderButtonTitle] = useState<string>("");
   const [headerButtonText, setHeaderButtonText] = useState<string[]>([""]);
   const [welText, setWelText] = useState<string[]>([""]);
-  const [welType, setWelType] = useState<WelcomeType>(WelcomeType.PLAIN);
   const [menuHeaderId, setMenuHeaderId] = useState<string | null>(null);
 
-  const { assistantId } = useParams();
 
   useEffect(() => {
     setMenuHeaderId(
@@ -144,7 +72,6 @@ export default function Interface() {
     );
 
     setWelText(welcome?.text || [""]);
-    setWelType(teamSelected?.welcomeType || WelcomeType.PLAIN);
     setHeaderFoot(
       teamSelected?.menuFooter?.find(
         (menuFooter: MenuFooter) =>
@@ -224,9 +151,6 @@ export default function Interface() {
     ]);
   };
 
-  const addWelcome = () => {
-    setWelText([...welText, ""]);
-  };
 
   const updatePrimaryMenuItem = (
     id: string,
@@ -277,11 +201,6 @@ export default function Interface() {
     );
   };
 
-  const updateWelcome = (index: number, value: string) => {
-    const updateWelcome = [...welText];
-    updateWelcome[index] = value;
-    setWelText(updateWelcome);
-  };
 
   const deletePrimaryMenuItem = (id: string) => {
     setPrimaryMenu(primaryMenu.filter((item) => item.id !== id));
@@ -291,10 +210,6 @@ export default function Interface() {
     setSecondaryMenu(secondaryMenu.filter((item) => item.id !== id));
   };
 
-  const deleteWelcome = (index: number) => {
-    const newWel = welText.splice(index, 1);
-    setWelText(newWel);
-  };
 
   const menuHandler = (
     menuItem: ExtendedTextHref[],
@@ -416,151 +331,8 @@ export default function Interface() {
   }, [welText]);
   return (
     <div>
-      <CustomCard
-        title={interfaceText.title}
-        description={interfaceText.description}
-      >
-        <div className="space-y-2 mb-2">
-          {teamSelected ? (
-            <>
-              <Label htmlFor="welcome-message-type">
-                {interfaceText.welcomeType}
-              </Label>
-              <Select
-                onValueChange={(value: WelcomeType) => {
-                  setWelType(value);
-                  setData({
-                    ...data,
-                    welcomeType: value,
-                  });
-                }}
-              >
-                <SelectTrigger className="w-[180px]" id="welcome-message-type">
-                  <SelectValue placeholder={welType || "Selecciona un tipo"} />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.values(WelcomeType).map((i, index) => (
-                    <SelectItem key={index} value={i as WelcomeType}>
-                      {i}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </>
-          ) : (
-            <SelectCharging />
-          )}
-        </div>
-        <UploadImage
-          description={interfaceText.avatar.uploadLogo}
-          alt="avatar"
-          recommendedSize={interfaceText.avatar.recommendedSize}
-          fileUserImageType={FileUserImageType.AVATAR}
-          accept=".png,.jpg,.jpeg"
-          choose={interfaceText.avatar.choose}
-          assistantId={assistantId as string}
-        />
-        {welType === WelcomeType.PLAIN && (
-          <div className="space-y-2">
-            <Label htmlFor="welcome-message">
-              {interfaceText.welcomeMessage.title}
-            </Label>
-            {teamSelected ? (
-              <Textarea
-                id="welcome-message"
-                placeholder="Type your message here"
-                className="min-h-[100px] w-full"
-                value={welText[0] || ""}
-                onChange={(e) => {
-                  if (!teamSelected?.id) return;
-                  setWelText([e.target.value]);
-                  setData({
-                    ...data,
-                    welcome: welText
-                      ? {
-                          update: {
-                            where: {
-                              language_teamId: {
-                                teamId: teamSelected.id,
-                                language:
-                                  teamSelected?.defaultLanguage ||
-                                  LanguageType.ES,
-                              },
-                            },
-                            data: {
-                              text: [e.target.value],
-                            },
-                          },
-                        }
-                      : {
-                          create: {
-                            text: [e.target.value],
-                            description: "",
-                            language:
-                              teamSelected?.defaultLanguage || LanguageType.ES,
-                          },
-                        },
-                  });
-                }}
-              />
-            ) : (
-              <TextAreaCharging />
-            )}
-            <p className="text-sm text-muted-foreground">
-              {interfaceText.welcomeMessage.description}
-            </p>
-          </div>
-        )}
+      <WelcomeMessage texts={interfaceText.welcomeMessage}/>
 
-        {welType === WelcomeType.BUBBLE && (
-          <div className="space-y-2">
-            <Label htmlFor="welcome-message">
-              {interfaceText.welcomeMessage.linesTitle}
-            </Label>
-            <Reorder.Group
-              axis="y"
-              values={welText}
-              onReorder={setWelText}
-              className="space-y-2"
-            >
-              {welText.map((item, index) => (
-                <Reorder.Item key={index} value={item}>
-                  <motion.div
-                    className="grid grid-cols-[auto__auto_1fr_auto] gap-2 items-center"
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                  >
-                    <GripVertical className="h-4 text-muted-foreground cursor-grab active:cursor-grabbing" />
-                    <p>
-                      {interfaceText.welcomeMessage.line} {index + 1}
-                    </p>
-                    <Input
-                      value={item}
-                      onChange={(e) => {
-                        updateWelcome(index, e.target.value);
-                      }}
-                      placeholder="Label name"
-                    />
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => deleteWelcome(index)}
-                    >
-                      <Trash2 className="w-4 h-4 text-muted-foreground" />
-                    </Button>
-                  </motion.div>
-                </Reorder.Item>
-              ))}
-            </Reorder.Group>
-            <Button variant="outline" size="sm" onClick={addWelcome}>
-              {interfaceText.welcomeMessage.addLine}
-            </Button>
-            <p className="text-sm text-muted-foreground">
-              {interfaceText.welcomeMessage.lineDescription}
-            </p>
-          </div>
-        )}
-      </CustomCard>
       <CustomCard
         title={interfaceText.menu.headerTitle}
         description={interfaceText.menu.headerDescription}
@@ -748,7 +520,7 @@ export default function Interface() {
                       },
                       update: {
                         text: e.target.value,
-                      },
+                      }, 
                       create: {
                         text: e.target.value,
                         language:
