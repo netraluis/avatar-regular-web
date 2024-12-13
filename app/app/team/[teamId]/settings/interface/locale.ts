@@ -58,5 +58,6 @@ export const interfaceText = {
     text: "El teu missatge",
     textPlaceholder:
       "Genero respostes amb intel·ligència artificial i puc cometre errors.",
+    save: "Desa peu de pàgina",
   },
 };
