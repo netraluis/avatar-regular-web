@@ -31,7 +31,7 @@ export const useFetchTeamsByUserId = () => {
         type: "SET_TEAMS",
         payload: {
           teams: responseData.teams,
-          teamSelected: responseData.teamSelected,
+          // teamSelected: responseData.teamSelected,
         },
       });
       setDataTeamsByUserId(responseData);
@@ -65,7 +65,7 @@ export const useFetchTeamsByUserIdAndTeamId = () => {
     Team[]
   >([]);
 
-  async function fetchTeamsByUserIdAndTeamId(userId: string, teamId: string) {
+  async function fetchTeamsByUserIdAndTeamId(teamId: string,userId: string) {
     if (!userId) return setErrorTeamsByUserIdAndTeamId("No user id provided");
     try {
       setLoadingTeamsByUserIdAndTeamId(true);

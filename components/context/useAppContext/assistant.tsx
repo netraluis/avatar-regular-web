@@ -21,6 +21,9 @@ export const useFetchAssistantsByTeamId = () => {
       setLoading(true);
       const response = await fetch(`/api/protected/team/${teamId}/assistant`, {
         method: "GET",
+        headers: {
+          "x-user-id": userId,
+        },
       });
 
       if (!response.ok) {
@@ -28,26 +31,9 @@ export const useFetchAssistantsByTeamId = () => {
       }
       const responseData = await response.json();
 
-      const teamSelectedResponse = await fetch(
-        `/api/protected/team/${teamId}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "x-user-id": userId, // Aquí enviamos el userId en los headers
-          },
-        },
-      );
-
-      if (!teamSelectedResponse.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-
-      const teamSelected = await teamSelectedResponse.json();
-
       dispatch({
         type: "SET_ASSISTANTS",
-        payload: { assistants: responseData, teamSelected },
+        payload: { assistants: responseData },
       });
 
       setData(responseData);
@@ -59,6 +45,47 @@ export const useFetchAssistantsByTeamId = () => {
   }
 
   return { loading, error, data, fetchAssistantsByTeamId };
+};
+
+export const useFetchAssistantSelected = () => {
+  const { dispatch } = useAppContext();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
+  const [data, setData] = useState([]);
+
+  async function fetchAssistantsByAssistantSelected(teamId: string,assistantId: string, userId: string) {
+    if (!teamId) return setError("No team id provided");
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/protected/team/${teamId}/assistant/${assistantId}`, {
+        method: "GET",
+        headers: {
+          "x-user-id": userId,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      const responseData = await response.json();
+
+      dispatch({
+        type: "SET_ASSISTANT",
+        payload: responseData ,
+      });
+
+      console.log({responseData})
+
+      setData(responseData);
+    } catch (error: any) {
+      setError({ error });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { loading, error, data, fetchAssistantsByAssistantSelected };
 };
 
 export const useCreateAssistant = () => {

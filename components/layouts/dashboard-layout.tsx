@@ -30,7 +30,7 @@ import {
   useFetchTeamsByUserId,
   useFetchTeamsByUserIdAndTeamId,
 } from "../context/useAppContext/team";
-import { useFetchAssistantsByTeamId } from "../context/useAppContext/assistant";
+import { useFetchAssistantsByTeamId, useFetchAssistantSelected } from "../context/useAppContext/assistant";
 import { useUserLogout } from "../context/useAppContext/user";
 import { assistantSettingsNav, teamsSettingsNav } from "@/lib/helper/navbar";
 import {
@@ -41,6 +41,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
+import { SelectCharging } from "../loaders/loadersSkeleton";
 
 const header = {
   userAuth: {
@@ -61,14 +62,14 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const {
-    state: { teams, teamSelected, assistantsByTeam, user },
+    state: { teams, teamSelected, assistantsByTeam, assistantSelected, user },
   } = useAppContext();
   const { teamId, assistantId } = useParams();
 
-  const [assistantSelected, setAssistantSelected] = React.useState(null);
-  const { fetchTeamsByUserId } = useFetchTeamsByUserId();
-  const { fetchTeamsByUserIdAndTeamId } = useFetchTeamsByUserIdAndTeamId();
+  const { fetchTeamsByUserId, loadingTeamsByUserId } = useFetchTeamsByUserId();
+  const { fetchTeamsByUserIdAndTeamId, loadingTeamsByUserIdAndTeamId } = useFetchTeamsByUserIdAndTeamId();
   const { fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
+  const fetchAssistantSelected = useFetchAssistantSelected()
   const { userLogout } = useUserLogout();
   const pathname = usePathname();
 
@@ -80,39 +81,51 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   const isSettingsActive = lastTwoSegments === `team/${teamId}/settings`;
 
   useEffect(() => {
+    const fetchData = async () => {
+      if(assistantId && teamId && user?.user?.id){
+        await fetchTeamsByUserId(user.user.id);
+        await fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id,);
+        await fetchAssistantSelected.fetchAssistantsByAssistantSelected(teamId as string, assistantId as string,user.user.id);
+      }else  if (user?.user?.id && teamId) {
+        await fetchTeamsByUserId(user.user.id);
+        await fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id);
+      } else if (user?.user?.id) {
+        const res = await fetchTeamsByUserId(user.user.id);
+        if (res && res.teamSelected) {
+          await fetchTeamsByUserIdAndTeamId(res.teamSelected.id as string, user.user.id);
+        }
+      }
+    }
+
+    fetchData();
+  }, [ user?.user?.id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user?.user?.id && teamId) {
+        await fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id);
+      } 
+    }
+
+    fetchData();
+  }, [ teamId ]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if(assistantId && teamId && user?.user?.id){
+        await fetchAssistantSelected.fetchAssistantsByAssistantSelected(teamId as string, assistantId as string,user.user.id);
+      }
+    }
+    fetchData();
+  }, [ assistantId]);
+
+
+  useEffect(() => {
     if (user?.user?.id && teamId) {
       fetchAssistantsByTeamId(teamId as string, user.user.id);
     }
   }, []);
-
-  useEffect(() => {
-    if (user?.user?.id) {
-      if (teamId) {
-        fetchTeamsByUserIdAndTeamId(user.user.id, teamId as string);
-      } else {
-        fetchTeamsByUserId(user.user.id);
-      }
-    }
-  }, [user?.user?.id]);
-
-  // useEffect(() => {
-  //   if (userId) {
-  //     fetchTeamsByUserId(userId);
-  //     dispatch({
-  //       type: "SET_USER",
-  //       payload: { user: { id: userId } },
-  //     });
-  //   }
-  // }, [userId]);
-
-  useEffect(() => {
-    const assistantSelected: any =
-      assistantsByTeam &&
-      assistantsByTeam.find((assistant) => assistant.id === assistantId);
-    if (assistantSelected) {
-      setAssistantSelected(assistantSelected);
-    }
-  }, [assistantsByTeam, assistantId]);
 
   const handleAssistantRouteChange = (assistantId: string) => {
     router.push(`/team/${teamId}/assistant/${assistantId}`);
@@ -204,11 +217,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           className="cursor-pointer"
           onClick={() => router.push("/")}
         />
-        {teamSelected && (
           <>
             <Breadcrumb className="flex">
               <BreadcrumbList>
-                {teamSelected && (
+                {!loadingTeamsByUserIdAndTeamId && !loadingTeamsByUserId && teamSelected ? (
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
                       <Combobox
@@ -224,8 +236,8 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                       />
                     </BreadcrumbLink>
                   </BreadcrumbItem>
-                )}
-                {assistantId && assistantSelected && (
+                ): <SelectCharging/>}
+                {assistantId && assistantSelected && !fetchAssistantSelected.loading && (
                   <>
                     <BreadcrumbSeparator>
                       <Slash className="h-4 w-4 text-slate-300" />
@@ -234,7 +246,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                       <BreadcrumbLink asChild>
                         <Combobox
                           options={assistantsByTeam}
-                          optionSelected={assistantSelected}
+                          optionSelected={assistantSelected.localAssistant}
                           subject="assistant"
                           routerHandler={handleAssistantRouteChange}
                           createNewTeamRoute={handleCreateNewTeamRoute}
@@ -247,6 +259,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                     </BreadcrumbItem>
                   </>
                 )}
+                {fetchAssistantSelected.loading && <SelectCharging/>}
               </BreadcrumbList>
             </Breadcrumb>
             <div className="relative ml-auto flex-1 md:grow-0"></div>
@@ -348,7 +361,6 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
               </DropdownMenu>
             )}
           </>
-        )}
       </header>
       <Separator />
       <div className="grow overflow-auto flex flex-col items-center">

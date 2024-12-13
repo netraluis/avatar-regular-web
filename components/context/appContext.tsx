@@ -5,11 +5,13 @@ import { Assistant } from "@prisma/client";
 import { UserData } from "@/types/types";
 import { Team } from "@prisma/client";
 import { GetTeamByTeamId } from "@/lib/data/team";
+import OpenAI from "openai";
 
 type AppState = {
   teams: Team[];
   teamSelected: GetTeamByTeamId | null;
   assistantsByTeam: Assistant[];
+  assistantSelected: {localAssistant: Assistant, openAIassistant: OpenAI.Beta.Assistants.Assistant} | null;
   user: UserData | null;
 };
 
@@ -19,7 +21,6 @@ type Action =
       type: "SET_TEAMS";
       payload: {
         teams: Team[];
-        teamSelected: GetTeamByTeamId | null;
       };
     }
   | { type: "SET_TEAM_SELECTED"; payload: GetTeamByTeamId | null }
@@ -27,8 +28,11 @@ type Action =
       type: "SET_ASSISTANTS";
       payload: {
         assistants: Assistant[];
-        teamSelected: GetTeamByTeamId | null;
       };
+    }
+  | {
+      type: "SET_ASSISTANT";
+      payload: {localAssistant: Assistant, openAIassistant: OpenAI.Beta.Assistants.Assistant} | null;
     }
   | { type: "SET_TEAM_CREATION"; payload: { newTeam: any } }
   | { type: "SET_TEAM_DELETE"; payload: { teamId: string } }
@@ -56,7 +60,6 @@ const appReducer = (state: AppState, action: Action): AppState => {
       return {
         ...state,
         teams: action.payload.teams,
-        teamSelected: action.payload.teamSelected,
       };
     case "SET_TEAM_SELECTED":
       return { ...state, teamSelected: action.payload };
@@ -64,7 +67,11 @@ const appReducer = (state: AppState, action: Action): AppState => {
       return {
         ...state,
         assistantsByTeam: action.payload.assistants,
-        teamSelected: action.payload.teamSelected,
+      };
+    case "SET_ASSISTANT":
+      return {
+        ...state,
+        assistantSelected: action.payload,
       };
     case "SET_TEAM_CREATION":
       return { ...state, teams: [...state.teams, action.payload.newTeam] };
@@ -123,6 +130,7 @@ export const AppProvider = ({
     teams: [],
     teamSelected: null,
     assistantsByTeam: [],
+    assistantSelected: null,
     user,
   };
 
