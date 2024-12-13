@@ -49,6 +49,7 @@ export const interfaceText = {
     text: "Text del banner",
     textDescription: "Aquest text sera el cos del banner",
     textDescriptionPlaceholder: "",
+    save: "Desa banner",
   },
   footer: {
     title: "Missatge del peu de pàgina",

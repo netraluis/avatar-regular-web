@@ -9,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -17,19 +16,16 @@ import {
   MenuHeaderType,
   Prisma,
   TextHref,
-  HeaderButtonType,
   HrefLanguages,
 } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { CustomCard } from "@/components/custom-card";
-import {
-  TextAreaCharging,
-  InputCharging,
-} from "@/components/loaders/loadersSkeleton";
+import { TextAreaCharging } from "@/components/loaders/loadersSkeleton";
 import { WelcomeMessage } from "./welcome-message";
 import { interfaceText } from "./locale";
 import { MenuSettings } from "./menu-settings";
 import { MenuHeaderFooter } from "./menu-footer";
+import { Banner } from "./banner";
 
 interface ExtendedTextHref extends TextHref {
   hrefLanguages: HrefLanguages[];
@@ -41,9 +37,6 @@ export default function Interface() {
   } = useAppContext();
 
   const [foot, setFoot] = useState<string>();
-  const [headerButton, setHeaderButton] = useState<string>("");
-  const [headerButtonTitle, setHeaderButtonTitle] = useState<string>("");
-  const [headerButtonText, setHeaderButtonText] = useState<string[]>([""]);
   const [welText, setWelText] = useState<string[]>([""]);
 
   useEffect(() => {
@@ -58,15 +51,6 @@ export default function Interface() {
     );
 
     setWelText(welcome?.text || [""]);
-
-    const headerButtonResult = teamSelected?.headerButton?.find(
-      (headerButton: any) =>
-        headerButton.language === teamSelected?.defaultLanguage,
-    );
-
-    setHeaderButton(headerButtonResult?.buttonText || "");
-    setHeaderButtonTitle(headerButtonResult?.title || "");
-    setHeaderButtonText(headerButtonResult?.text || [""]);
   }, [teamSelected, teamSelected?.defaultLanguage]);
 
   useEffect(() => {
@@ -210,7 +194,6 @@ export default function Interface() {
   return (
     <div>
       <WelcomeMessage texts={interfaceText.welcomeMessage} />
-
       <CustomCard
         title={interfaceText.menu.headerTitle}
         description={interfaceText.menu.headerDescription}
@@ -225,152 +208,7 @@ export default function Interface() {
         />
         <MenuHeaderFooter texts={interfaceText.menu} />
       </CustomCard>
-
-      <CustomCard
-        title={interfaceText.banner.title}
-        description={interfaceText.banner.description}
-      >
-        <div className="space-y-2">
-          <Label htmlFor="banner-button-text">
-            {interfaceText.banner.buttonText}
-          </Label>
-          {teamSelected ? (
-            <Input
-              id="banner-button-text"
-              placeholder={interfaceText.banner.buttonTextPlaceholder}
-              // className="min-h-[100px]"
-              value={headerButton || ""}
-              onChange={(e) => {
-                if (!teamSelected?.id) return;
-                setHeaderButton(e.target.value);
-                setData({
-                  ...data,
-                  headerButton: {
-                    upsert: {
-                      where: {
-                        language_teamId: {
-                          language:
-                            teamSelected?.defaultLanguage || LanguageType.ES,
-                          teamId: teamSelected.id,
-                        },
-                      },
-                      update: {
-                        buttonText: e.target.value,
-                        title: headerButtonTitle,
-                        text: headerButtonText,
-                      },
-                      create: {
-                        buttonText: e.target.value,
-                        title: headerButtonTitle,
-                        type: HeaderButtonType.PLAIN,
-                        text: headerButtonText,
-                        language:
-                          teamSelected?.defaultLanguage || LanguageType.ES,
-                      },
-                    },
-                  },
-                });
-              }}
-            />
-          ) : (
-            <InputCharging />
-          )}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="banner-title">{interfaceText.banner.titleText}</Label>
-          {teamSelected ? (
-            <Input
-              id="banner-title"
-              value={headerButtonTitle || ""}
-              placeholder={interfaceText.banner.titleTextPlaceholder}
-              onChange={(e) => {
-                if (!teamSelected?.id) return;
-                setHeaderButtonTitle(e.target.value);
-                setData({
-                  ...data,
-                  headerButton: {
-                    upsert: {
-                      where: {
-                        language_teamId: {
-                          language:
-                            teamSelected?.defaultLanguage || LanguageType.ES,
-                          teamId: teamSelected.id,
-                        },
-                      },
-                      update: {
-                        buttonText: headerButtonTitle,
-                        title: e.target.value,
-                        text: headerButtonText,
-                      },
-                      create: {
-                        buttonText: headerButtonTitle,
-                        title: e.target.value,
-                        type: HeaderButtonType.PLAIN,
-                        text: headerButtonText,
-                        language:
-                          teamSelected?.defaultLanguage || LanguageType.ES,
-                      },
-                    },
-                  },
-                });
-              }}
-            />
-          ) : (
-            <InputCharging />
-          )}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="banner-text">{interfaceText.banner.text}</Label>
-          {teamSelected ? (
-            <Textarea
-              placeholder={interfaceText.banner.textDescriptionPlaceholder}
-              id="banner-text"
-              className="min-h-[100px]"
-              value={
-                headerButtonText && headerButtonText[0]
-                  ? headerButtonText[0]
-                  : ""
-              }
-              onChange={(e) => {
-                if (!teamSelected?.id) return;
-                setHeaderButtonText([e.target.value]);
-                setData({
-                  ...data,
-                  headerButton: {
-                    upsert: {
-                      where: {
-                        language_teamId: {
-                          language:
-                            teamSelected?.defaultLanguage || LanguageType.ES,
-                          teamId: teamSelected.id,
-                        },
-                      },
-                      update: {
-                        buttonText: headerButtonTitle,
-                        title: headerButtonTitle,
-                        text: [e.target.value],
-                      },
-                      create: {
-                        buttonText: headerButtonTitle,
-                        title: headerButtonTitle,
-                        type: HeaderButtonType.PLAIN,
-                        text: [e.target.value],
-                        language:
-                          teamSelected?.defaultLanguage || LanguageType.ES,
-                      },
-                    },
-                  },
-                });
-              }}
-            />
-          ) : (
-            <TextAreaCharging />
-          )}
-          <p className="text-sm text-muted-foreground">
-            {interfaceText.banner.textDescription}
-          </p>
-        </div>
-      </CustomCard>
+      <Banner texts={interfaceText.banner} />
 
       <Card>
         <CardHeader>
