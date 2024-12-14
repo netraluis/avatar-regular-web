@@ -96,12 +96,15 @@ export const getAssistant = async (
 export const updateAssistant = async (
   assistantId: string,
   data: Prisma.AssistantUpdateInput,
-) => {
+): Promise<GetAssistantType> => {
   return await prisma.assistant.update({
     where: {
       id: assistantId,
       isActive: true,
     },
     data,
+    include: {
+      assistantCard: true,
+    },
   });
 };

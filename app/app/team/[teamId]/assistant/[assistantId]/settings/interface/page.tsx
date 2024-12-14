@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import EmojiPicker from "@/components/ui/emoji-picker";
-import { useAssistantSettingsContext } from "@/components/context/assistantSettingsContext";
 import { useAppContext } from "@/components/context/appContext";
 import { AssistantCardType, LanguageType } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,6 +12,10 @@ import {
   InputCharging,
   TextAreaCharging,
 } from "@/components/loaders/loadersSkeleton";
+import { useUpdateAssistant } from "@/components/context/useAppContext/assistant";
+import { useParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { SaveButton } from "@/components/save-button";
 
 const assistantInterface = {
   title: "Personalitza la targeta del teu assistent",
@@ -24,33 +27,121 @@ const assistantInterface = {
       "Escriu un títol per al teu assistent (p. ex.: Assistència al client).",
     titleDesciptiontion:
       "Aquest títol serà visible per als usuaris i ha de descriure breument el propòsit del teu assistent.",
+    saveTitle: "Desa títol",
     description: "Descripció de l’assistent",
     descriptionPlaceholder:
       "Escriu una descripció detallada (p. ex.: “Et puc ajudar amb preguntes sobre productes, comandes o problemes tècnics”).",
     descriptionDescription:
       "Explica breument què fa el teu assistent i com pot ajudar als usuaris",
+    saveButton: "Desa descripció",
   },
 };
 
 export default function Interface() {
+  const { teamId, assistantId } = useParams();
   const {
-    state: { teamSelected },
+    state: { teamSelected, assistantSelected, user },
   } = useAppContext();
 
+  const [cardId, setCardId] = useState<string | undefined>(undefined);
   const [selectedEmoji, setSelectedEmoji] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [title, setTitle] = useState<{
+    title: string;
+    loading: boolean;
+    saveTitle: string;
+  } | null>(null);
+  const [description, setDescription] = useState<{
+    description: string;
+    loading: boolean;
+    saveDescription: string;
+  } | null>(null);
 
-  const { data, setData, assistantValues } = useAssistantSettingsContext();
+  // const { assistantValues } = useAssistantSettingsContext();
+  const updateAssistant = useUpdateAssistant();
 
   useEffect(() => {
-    setSelectedEmoji(assistantValues?.emoji || "");
-    const card = assistantValues?.assistantCard.find(
+    console.log({ assistantSelected });
+    setSelectedEmoji(assistantSelected?.localAssistant?.emoji || "");
+    const card = assistantSelected?.localAssistant?.assistantCard?.find(
       (ass) => ass.language === teamSelected?.defaultLanguage,
     );
-    setTitle(card?.title || "");
-    setDescription(card?.description[0] || "");
-  }, [assistantValues]);
+    setTitle({
+      loading: false,
+      title: card?.title || "",
+      saveTitle: card?.title || "",
+    });
+    setDescription({
+      loading: false,
+      description: card?.description[0] || "",
+      saveDescription: card?.description[0] || "",
+    });
+    setCardId(card?.id);
+  }, [assistantSelected?.localAssistant]);
+
+  const titleHandler = async () => {
+    if (!title || !cardId) return;
+    const assistantCard = {
+      upsert: {
+        where: {
+          id: cardId,
+        },
+        update: {
+          title: title.title,
+          type: AssistantCardType.REGULAR,
+        },
+        create: {
+          title: title.title,
+          type: AssistantCardType.REGULAR,
+          language: teamSelected?.defaultLanguage || LanguageType.ES,
+        },
+      },
+    };
+
+    if (user?.user.id && assistantSelected?.localAssistant?.name) {
+      setTitle({ ...title, loading: true });
+      await updateAssistant.updateAssistant({
+        teamId: teamId as string,
+        assistantId: assistantId as string,
+        userId: user.user.id,
+        localAssistantUpdateParams: { assistantCard },
+      });
+      setTitle({ ...title, loading: false });
+    }
+  };
+
+  const descriptionHandler = async () => {
+    if (!description) return;
+    if (user?.user.id && assistantSelected?.localAssistant?.name) {
+      const assistantCard = {
+        upsert: {
+          where: {
+            language_assistantId: {
+              assistantId: assistantSelected?.localAssistant?.id,
+              language: teamSelected?.defaultLanguage || LanguageType.ES,
+            },
+          },
+          update: {
+            description: [description.description],
+            type: AssistantCardType.REGULAR,
+          },
+          create: {
+            description: [description.description],
+            type: AssistantCardType.REGULAR,
+            language: teamSelected?.defaultLanguage || LanguageType.ES,
+          },
+        },
+      };
+
+      setDescription({ ...description, loading: true });
+      await updateAssistant.updateAssistant({
+        teamId: teamId as string,
+        assistantId: assistantId as string,
+        userId: user.user.id,
+        localAssistantUpdateParams: { assistantCard },
+      });
+      setDescription({ ...description, loading: false });
+    }
+  };
 
   return (
     <div className="space-y-8 ">
@@ -62,7 +153,15 @@ export default function Interface() {
           <EmojiPicker
             onEmojiSelect={(emoji) => {
               setSelectedEmoji(emoji);
-              setData({ ...data, emoji: emoji });
+              // setData({ ...data, emoji: emoji });
+              if (user?.user.id) {
+                updateAssistant.updateAssistant({
+                  teamId: teamId as string,
+                  assistantId: assistantId as string,
+                  userId: user.user.id,
+                  localAssistantUpdateParams: { emoji },
+                });
+              }
             }}
             selectedEmoji={selectedEmoji}
           />
@@ -71,40 +170,25 @@ export default function Interface() {
           <Label htmlFor="title-message">
             {assistantInterface.emoji.title}
           </Label>
-          {teamSelected ? (
-            <Input
-              id="title-message"
-              placeholder={assistantInterface.emoji.titlePlaceholder}
-              className=""
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-                setData({
-                  ...data,
-                  assistantCard: {
-                    upsert: {
-                      where: {
-                        language_assistantId: {
-                          assistantId: assistantValues!.id,
-                          language:
-                            teamSelected?.defaultLanguage || LanguageType.ES,
-                        },
-                      },
-                      update: {
-                        title: e.target.value,
-                        type: AssistantCardType.REGULAR,
-                      },
-                      create: {
-                        title: e.target.value,
-                        type: AssistantCardType.REGULAR,
-                        language:
-                          teamSelected?.defaultLanguage || LanguageType.ES,
-                      },
-                    },
-                  },
-                });
-              }}
-            />
+          {title ? (
+            <div className="flex items-center space-x-2">
+              <Input
+                id="title-message"
+                placeholder={assistantInterface.emoji.titlePlaceholder}
+                value={title?.title || ""}
+                onChange={(e) => {
+                  if (!title) return;
+                  setTitle({ ...title, title: e.target.value });
+                }}
+              />
+              <Button
+                onClick={titleHandler}
+                variant="outline"
+                disabled={title?.loading || title?.title === title?.saveTitle}
+              >
+                {assistantInterface.emoji.saveTitle}
+              </Button>
+            </div>
           ) : (
             <InputCharging />
           )}
@@ -121,38 +205,23 @@ export default function Interface() {
               id="description-message"
               placeholder={assistantInterface.emoji.descriptionPlaceholder}
               className="min-h-[100px]"
-              value={description}
+              value={description?.description || ""}
               onChange={(e) => {
-                setDescription(e.target.value);
-                setData({
-                  ...data,
-                  assistantCard: {
-                    upsert: {
-                      where: {
-                        language_assistantId: {
-                          assistantId: assistantValues!.id,
-                          language:
-                            teamSelected?.defaultLanguage || LanguageType.ES,
-                        },
-                      },
-                      update: {
-                        description: [e.target.value],
-                        type: AssistantCardType.REGULAR,
-                      },
-                      create: {
-                        description: [e.target.value],
-                        type: AssistantCardType.REGULAR,
-                        language:
-                          teamSelected?.defaultLanguage || LanguageType.ES,
-                      },
-                    },
-                  },
-                });
+                if (!description) return;
+                setDescription({ ...description, description: e.target.value });
               }}
             />
           ) : (
             <TextAreaCharging />
           )}
+          <SaveButton
+            action={descriptionHandler}
+            loading={description?.loading || false}
+            actionButtonText={assistantInterface.emoji.saveButton}
+            valueChange={
+              description?.description === description?.saveDescription
+            }
+          />
           <p className="text-sm text-muted-foreground">
             {assistantInterface.emoji.descriptionDescription}
           </p>

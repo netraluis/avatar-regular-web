@@ -68,8 +68,8 @@ export default function Component() {
   const updateAssistant = useUpdateAssistant();
 
   useEffect(() => {
-    setUrl({ ...url, url: assistantSelected?.localAssistant.url || "" });
-    setName({ ...name, name: assistantSelected?.localAssistant.name || "" });
+    setUrl({ ...url, url: assistantSelected?.localAssistant?.url || "" });
+    setName({ ...name, name: assistantSelected?.localAssistant?.name || "" });
   }, [assistantSelected?.localAssistant]);
 
   const handleUrl = async () => {

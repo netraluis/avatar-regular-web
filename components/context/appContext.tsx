@@ -6,13 +6,14 @@ import { UserData } from "@/types/types";
 import { Team } from "@prisma/client";
 import { GetTeamByTeamId } from "@/lib/data/team";
 import OpenAI from "openai";
+import { GetAssistantType } from "@/lib/data/assistant";
 
 type AppState = {
   teams: Team[];
   teamSelected: GetTeamByTeamId | null;
   assistantsByTeam: Assistant[];
   assistantSelected: {
-    localAssistant: Assistant;
+    localAssistant: GetAssistantType;
     openAIassistant: OpenAI.Beta.Assistants.Assistant;
   } | null;
   user: UserData | null;
@@ -36,7 +37,7 @@ type Action =
   | {
       type: "SET_ASSISTANT";
       payload: {
-        localAssistant: Assistant;
+        localAssistant: GetAssistantType;
         openAIassistant: OpenAI.Beta.Assistants.Assistant;
       } | null;
     }

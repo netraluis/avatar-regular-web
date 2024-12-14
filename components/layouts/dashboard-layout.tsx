@@ -267,7 +267,9 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                       <BreadcrumbLink asChild>
                         <Combobox
                           options={assistantsByTeam}
-                          optionSelected={assistantSelected.localAssistant}
+                          optionSelected={
+                            assistantSelected?.localAssistant as Option
+                          }
                           subject="assistant"
                           routerHandler={handleAssistantRouteChange}
                           createNewTeamRoute={handleCreateNewTeamRoute}
