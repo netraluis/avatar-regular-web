@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
 import { useTeamAssistantContext } from "@/components/context/teamAssistantContext";
-import { TextAreaForm } from "@/components/textAreaForm";
+import { TextAreaForm } from "@/components/text-area-forms/textAreaForm";
 import { ChatList } from "@/components/chat-list";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
@@ -23,7 +23,7 @@ export default function AssistantUrl() {
     }
   }, [data]);
 
-  if (!useAssistantResponse) return <>No se ha encontrado asistente</>;
+  if (!useAssistantResponse) return <>No assistant found </>;
 
   const { submitMessage, messages, error, loading, status } =
     useAssistantResponse;

@@ -1,9 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -30,12 +28,16 @@ import {
   TextAreaCharging,
 } from "@/components/loaders/loadersSkeleton";
 import { TitleLayout } from "@/components/layouts/title-layout";
+import { AssistantUpdateParams } from "openai/resources/beta/assistants.mjs";
+import { SaveButton } from "@/components/save-button";
+import { SimpleTextAreaForm } from "@/components/text-area-forms/simple-text-area-form";
 
 const playground = {
   title: "Zona de proves",
   description:
     "El Playground et permet experimentar amb diferents configuracions sense afectar el chatbot en viu.",
-  model: "Model",
+  adjustments: {
+    model: "Model",
   instructions: "Instruccions",
   temperature: "Temperatura",
   temperatureDescription:
@@ -48,6 +50,15 @@ const playground = {
   send: "Enviar",
   save: "Desar canvis",
   error: "Hi ha hagut un error en desar els canvis",
+  },
+  playground: {
+    placeholder: "Envia la teva pregunta...",
+    iconText :{
+      sendMessage: "Enviar",
+      voiceRecordStop: "Parar micròfon",
+      voiceRecordStart: "Activar micròfon",
+    },
+  }
 };
 
 export default function Playground() {
@@ -58,43 +69,49 @@ export default function Playground() {
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<any>(undefined);
   const [localError, setLocalError] = React.useState<any>(undefined);
+  const [instructions, setInstructions] = React.useState("");
+  const [loadingInstructions, setLoadingInstructions] = React.useState(false);
 
   const {
-    state: { teamSelected },
+    state: { teamSelected, assistantSelected },
   } = useAppContext();
 
-  const [assistantValues, setAssistantValues] = React.useState({
-    model: "gpt-4",
-    instructions: "",
-    temperature: 0.5,
-    top_p: 0.5,
-  });
+  const [assistantValues, setAssistantValues] = React.useState<{
+    model: ChatModel,
+    instructions: string,
+    temperature: number,
+    top_p: number,
+  } | null>(null);
 
-  const { getAssistantData, getAssistant } = useGetAssistant();
+
+  const { getAssistant } = useGetAssistant();
   const { updateAssistant } = useUpdateAssistant();
 
   React.useEffect(() => {
     if (assistantId && state.user?.user?.id) {
-      getAssistant({
-        assistantId: assistantId as string,
-        userId: state.user.user.id,
-        teamId: teamId as string,
-      });
+      if (!assistantSelected) {
+        getAssistant({
+          assistantId: assistantId as string,
+          userId: state.user.user.id,
+          teamId: teamId as string,
+        });
+      }
     } else {
       router.push("/login");
     }
-  }, []);
+  }, [assistantId, state.user?.user?.id, assistantSelected]);
 
   React.useEffect(() => {
-    if (!getAssistantData?.openAIassistant) return;
+    if (!assistantSelected?.openAIassistant) return;
 
     setAssistantValues({
-      model: getAssistantData.openAIassistant.model || "gpt-4",
-      instructions: getAssistantData.openAIassistant.instructions || "",
-      temperature: getAssistantData.openAIassistant.temperature || 0.5,
-      top_p: getAssistantData.openAIassistant.top_p || 0.5,
+      model: assistantSelected?.openAIassistant.model as ChatModel || ChatModel.GPT3,
+      instructions: assistantSelected?.openAIassistant.instructions || "",
+      temperature: assistantSelected?.openAIassistant.temperature || 0.5,
+      top_p: assistantSelected?.openAIassistant.top_p || 0.5,
     });
-  }, [getAssistantData]);
+    setInstructions(assistantSelected?.openAIassistant.instructions || "");
+  }, [assistantSelected]);
 
   const handleSendMessage = () => {
     if (message.trim()) {
@@ -103,7 +120,7 @@ export default function Playground() {
     }
   };
 
-  const handleUpdate = async () => {
+  const handleUpdate = async (assistantValues: AssistantUpdateParams) => {
     if (assistantValues.instructions === "")
       return setLocalError("Instructions are required");
     setLoading(true);
@@ -124,7 +141,7 @@ export default function Playground() {
     }
   };
 
-  const { submitMessage, messages } = useAssistant({
+  const { submitMessage, messages, status } = useAssistant({
     assistantId: assistantId as string,
     userId: state.user?.user?.id,
     teamId: teamId as string,
@@ -145,29 +162,46 @@ export default function Playground() {
     }
   }, [messages]);
 
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(e.target.value);
+  };
+
+   // eslint-disable-next-line
+   const handleKeyDown = (event: any) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault(); // Prevent the default action to avoid a new line
+      onClickButton(event);
+    }
+  };
+
+  // eslint-disable-next-line
+  const onClickButton = (e: any) => {
+    handleSendMessage();
+  };
+
   return (
     <TitleLayout
       cardTitle={playground.title}
       cardDescription={playground.description}
       urlPreview={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
-      actionButtonText={playground.save}
+      actionButtonText={playground.adjustments.save}
       ActionButtonLogo={Save}
-      actionButtonOnClick={handleUpdate}
+      actionButtonOnClick={() => { console.log("save") }}
       actionButtonLoading={loading}
-      actionErrorText={playground.error}
+      actionErrorText={playground.adjustments.error}
       actionError={error}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden w-full">
-        <Card className="p-6 w-full">
+        <Card className="p-6 w-full h-full border overflow-auto">
           <form className="space-y-6">
             <div>
-              <Label htmlFor="model">{playground.model}</Label>
-              {getAssistantData?.openAIassistant.model ? (
+              <Label htmlFor="model">{playground.adjustments.model}</Label>
+              {assistantValues?.model ? (
                 <Select
                   defaultValue={assistantValues.model}
                   value={assistantValues.model}
                   onValueChange={(value) =>
-                    setAssistantValues((prev) => ({ ...prev, model: value }))
+                    handleUpdate({ model: value })
                   }
                 >
                   <SelectTrigger id="model">
@@ -186,35 +220,46 @@ export default function Playground() {
               )}
             </div>
             <div>
-              <Label htmlFor="instructions">{playground.instructions}</Label>
-              {getAssistantData?.openAIassistant ? (
-                <Textarea
-                  id="instructions"
-                  placeholder="Type your instructions here"
-                  className="h-[100px]"
-                  value={assistantValues.instructions}
-                  onChange={(e) => {
-                    setAssistantValues((prev) => ({
-                      ...prev,
-                      instructions: e.target.value,
-                    }));
-                  }}
-                />
-              ) : (
-                <TextAreaCharging />
-              )}
+              <Label htmlFor="instructions">{playground.adjustments.instructions}</Label>
+              <div className='mb-3'>
+                {assistantValues?.instructions ? (
+                  <Textarea
+                    id="instructions"
+                    placeholder="Type your instructions here"
+                    className="h-[100px] "
+                    value={instructions || ''}
+                    onChange={(e) => {
+                      
+                      setInstructions(e.target.value)
+                    }}
+                  />
+                ) : (
+                  <TextAreaCharging />
+                )}
+              </div>
               {localError && (
                 <p className="text-xs text-red-500 mt-1">{localError}</p>
               )}
+              <SaveButton 
+                action={async(e: any)=>{
+                  e.preventDefault()
+                  setLoadingInstructions(true)
+                  await handleUpdate({ instructions})
+                  setLoadingInstructions(false)
+                }} 
+                loading={loadingInstructions} 
+                actionButtonText={'desa'} 
+                valueChange={!assistantValues?.instructions || assistantValues?.instructions === instructions}
+              />
             </div>
             <div>
               <Label htmlFor="temperature">
-                {playground.temperature}:{" "}
-                {getAssistantData?.openAIassistant.temperature
+                {playground.adjustments.temperature}:{" "}
+                {assistantValues?.temperature
                   ? assistantValues.temperature.toFixed(2)
                   : ""}
               </Label>
-              {getAssistantData?.openAIassistant.temperature ? (
+              {assistantValues?.temperature ? (
                 <Slider
                   className="mt-3"
                   id="temperature"
@@ -222,67 +267,70 @@ export default function Playground() {
                   max={2}
                   step={0.01}
                   value={[assistantValues.temperature]}
-                  onValueChange={(value) =>
-                    setAssistantValues((prev) => ({
-                      ...prev,
-                      temperature: value[0],
-                    }))
+                  onValueChange={(value) => setAssistantValues({ ...assistantValues, temperature: value[0] })}
+                  onValueCommit={(value) => {
+                    handleUpdate({ temperature: value[0] })
+                  }
                   }
                 />
               ) : (
                 <InputCharging />
               )}
               <p className="text-xs text-gray-500 mt-1">
-                {playground.temperatureDescription}
+                {playground.adjustments.temperatureDescription}
               </p>
             </div>
             <div>
               <></>
               <Label htmlFor="top-p">
-                {playground.topP}:{" "}
-                {getAssistantData?.openAIassistant.top_p
-                  ? assistantValues.top_p.toFixed(2)
+                {playground.adjustments.topP}:{" "}
+                {assistantValues?.top_p
+                  ? assistantValues?.top_p.toFixed(2)
                   : ""}
               </Label>
-              {getAssistantData?.openAIassistant.top_p ? (
+              {assistantValues?.top_p ? (
                 <Slider
                   className="mt-3"
                   id="top-p"
-                  min={0}
+                  min={0.01}
                   max={1}
                   step={0.01}
                   value={[assistantValues.top_p]}
-                  onValueChange={(value) =>
-                    setAssistantValues((prev) => ({ ...prev, top_p: value[0] }))
+                  onValueChange={(value) => {
+                    setAssistantValues({ ...assistantValues, top_p: value[0] })
+                  }
+                  }
+                  onValueCommit={(value) => {
+                    handleUpdate({ top_p: value[0] })
+                  }
                   }
                 />
               ) : (
                 <InputCharging />
               )}
               <p className="text-xs text-gray-500 mt-1">
-                {playground.topPDescription}
+                {playground.adjustments.topPDescription}
               </p>
             </div>
           </form>
         </Card>
-        <Card className="flex flex-col relative overflow-hidden w-full grow">
+        <Card className="flex flex-col relative overflow-hidden w-full grow overflow-auto">
           <CardHeader>
-            <CardTitle>{playground.output}</CardTitle>
+            <CardTitle>{playground.adjustments.output}</CardTitle>
           </CardHeader>
           <div
-            className="overflow-y-auto grow scrollbar-hidden"
+            className="overflow-y-auto grow scrollbar-hidden h-full"
             ref={scrollRef}
           >
-            <CardContent className=" space-y-4 " ref={messagesRef}>
+            <CardContent className=" space-y-4 border-t" ref={messagesRef}>
               {messages &&
                 messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`p-2 rounded-lg ${
-                      msg.role === "user"
+                    className={`p-2 rounded-lg ${msg.role === "user"
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted"
-                    }`}
+                      }`}
                   >
                     {msg.message}
                   </div>
@@ -290,19 +338,27 @@ export default function Playground() {
               <div className="w-full h-px" ref={visibilityRef} />
             </CardContent>
           </div>
-          <div className="w-full">
-            <div className="p-4 border-t flex items-center space-x-2">
-              <Input
+          <div className="w-full h-24">
+            <div className=" flex items-center space-x-2 static">
+              {/* <Input
                 placeholder={playground.typeYourMessageHere}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-              />
+              /> */}
               {/* <Button size="icon" variant="ghost">
                 <Mic className="h-4 w-4" />
               </Button> */}
-              {getAssistantData ? (
-                <Button onClick={handleSendMessage}>{playground.send}</Button>
+              {assistantValues ? (
+                // <Button onClick={handleSendMessage}>{playground.send}</Button>
+                <SimpleTextAreaForm
+                  handleInputChange={handleTextareaChange}
+                  handleKeyDown={handleKeyDown}
+                  input={message}
+                  loading={loading}
+                  submitMessage={handleSendMessage}
+                  status={status}
+                />
               ) : (
                 <SelectCharging />
               )}

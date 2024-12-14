@@ -260,6 +260,7 @@ export const useGetAssistant = () => {
 };
 
 export const useUpdateAssistant = () => {
+  const { dispatch } = useAppContext();
   const [loadingUpdateAssistant, setLoadingUpdateAssistant] = useState(false);
   const [errorUpdateAssistant, setErrorUpdateAssistant] = useState<any>(null);
   const [updateAssistantData, setUpdateAssistantData] = useState<{
@@ -301,6 +302,11 @@ export const useUpdateAssistant = () => {
         throw new Error(`Error: ${response.statusText}`);
       }
       const responseData = await response.json();
+
+      dispatch({
+        type: "SET_ASSISTANT",
+        payload: responseData,
+      });
       setUpdateAssistantData(responseData);
     } catch (error: any) {
       setErrorUpdateAssistant({ error });

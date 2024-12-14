@@ -7,7 +7,7 @@ export const SaveButton = ({
   actionButtonText,
   valueChange,
 }: {
-  action: () => void;
+  action: (e: any) => void;
   loading: boolean;
   actionButtonText: string;
   valueChange: boolean;

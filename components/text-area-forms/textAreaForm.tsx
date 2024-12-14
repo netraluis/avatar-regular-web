@@ -9,7 +9,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import Textarea from "react-textarea-autosize";
-import { FooterText } from "./footer";
+import { FooterText } from "../footer";
 import { TextAreaFormProps } from "@/types/types";
 import Recorder from "recorder-js";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
@@ -144,7 +144,7 @@ export const TextAreaForm = ({
   };
 
   return (
-    <div className="fixed inset-x-0 bottom-0 w-full duration-300 ease-in-out animate-in">
+    <div className="absolute inset-x-0 bottom-0 w-full duration-300 ease-in-out animate-in">
       <div className="mx-auto sm:max-w-2xl sm:px-4">
         <div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">
           <form className="relative rounded-xl shadow-sm flex items-center px-4 py-[1.3rem] min-h-[60px]">
