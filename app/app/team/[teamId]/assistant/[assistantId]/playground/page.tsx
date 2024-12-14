@@ -38,27 +38,27 @@ const playground = {
     "El Playground et permet experimentar amb diferents configuracions sense afectar el chatbot en viu.",
   adjustments: {
     model: "Model",
-  instructions: "Instruccions",
-  temperature: "Temperatura",
-  temperatureDescription:
-    "Controla la creativitat de les respostes. Valors més alts generen respostes més creatives, mentre que valors més baixos són més directes.",
-  topP: "Top P",
-  topPDescription:
-    "Ajusta la probabilitat acumulativa per limitar les opcions del model. Mantén-lo baix per respostes més previsibles.",
-  output: "Sortida",
-  typeYourMessageHere: "Escriu el teu missatge aquí...",
-  send: "Enviar",
-  save: "Desar canvis",
-  error: "Hi ha hagut un error en desar els canvis",
+    instructions: "Instruccions",
+    temperature: "Temperatura",
+    temperatureDescription:
+      "Controla la creativitat de les respostes. Valors més alts generen respostes més creatives, mentre que valors més baixos són més directes.",
+    topP: "Top P",
+    topPDescription:
+      "Ajusta la probabilitat acumulativa per limitar les opcions del model. Mantén-lo baix per respostes més previsibles.",
+    output: "Sortida",
+    typeYourMessageHere: "Escriu el teu missatge aquí...",
+    send: "Enviar",
+    save: "Desar canvis",
+    error: "Hi ha hagut un error en desar els canvis",
   },
   playground: {
     placeholder: "Envia la teva pregunta...",
-    iconText :{
+    iconText: {
       sendMessage: "Enviar",
       voiceRecordStop: "Parar micròfon",
       voiceRecordStart: "Activar micròfon",
     },
-  }
+  },
 };
 
 export default function Playground() {
@@ -77,12 +77,11 @@ export default function Playground() {
   } = useAppContext();
 
   const [assistantValues, setAssistantValues] = React.useState<{
-    model: ChatModel,
-    instructions: string,
-    temperature: number,
-    top_p: number,
+    model: ChatModel;
+    instructions: string;
+    temperature: number;
+    top_p: number;
   } | null>(null);
-
 
   const { getAssistant } = useGetAssistant();
   const { updateAssistant } = useUpdateAssistant();
@@ -105,7 +104,9 @@ export default function Playground() {
     if (!assistantSelected?.openAIassistant) return;
 
     setAssistantValues({
-      model: assistantSelected?.openAIassistant.model as ChatModel || ChatModel.GPT3,
+      model:
+        (assistantSelected?.openAIassistant.model as ChatModel) ||
+        ChatModel.GPT3,
       instructions: assistantSelected?.openAIassistant.instructions || "",
       temperature: assistantSelected?.openAIassistant.temperature || 0.5,
       top_p: assistantSelected?.openAIassistant.top_p || 0.5,
@@ -166,8 +167,8 @@ export default function Playground() {
     setMessage(e.target.value);
   };
 
-   // eslint-disable-next-line
-   const handleKeyDown = (event: any) => {
+  // eslint-disable-next-line
+  const handleKeyDown = (event: any) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault(); // Prevent the default action to avoid a new line
       onClickButton(event);
@@ -186,7 +187,9 @@ export default function Playground() {
       urlPreview={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
       actionButtonText={playground.adjustments.save}
       ActionButtonLogo={Save}
-      actionButtonOnClick={() => { console.log("save") }}
+      actionButtonOnClick={() => {
+        console.log("save");
+      }}
       actionButtonLoading={loading}
       actionErrorText={playground.adjustments.error}
       actionError={error}
@@ -200,9 +203,7 @@ export default function Playground() {
                 <Select
                   defaultValue={assistantValues.model}
                   value={assistantValues.model}
-                  onValueChange={(value) =>
-                    handleUpdate({ model: value })
-                  }
+                  onValueChange={(value) => handleUpdate({ model: value })}
                 >
                   <SelectTrigger id="model">
                     <SelectValue placeholder="Select a model" />
@@ -220,17 +221,18 @@ export default function Playground() {
               )}
             </div>
             <div>
-              <Label htmlFor="instructions">{playground.adjustments.instructions}</Label>
-              <div className='mb-3'>
+              <Label htmlFor="instructions">
+                {playground.adjustments.instructions}
+              </Label>
+              <div className="mb-3">
                 {assistantValues?.instructions ? (
                   <Textarea
                     id="instructions"
                     placeholder="Type your instructions here"
                     className="h-[100px] "
-                    value={instructions || ''}
+                    value={instructions || ""}
                     onChange={(e) => {
-                      
-                      setInstructions(e.target.value)
+                      setInstructions(e.target.value);
                     }}
                   />
                 ) : (
@@ -240,16 +242,19 @@ export default function Playground() {
               {localError && (
                 <p className="text-xs text-red-500 mt-1">{localError}</p>
               )}
-              <SaveButton 
-                action={async(e: any)=>{
-                  e.preventDefault()
-                  setLoadingInstructions(true)
-                  await handleUpdate({ instructions})
-                  setLoadingInstructions(false)
-                }} 
-                loading={loadingInstructions} 
-                actionButtonText={'desa'} 
-                valueChange={!assistantValues?.instructions || assistantValues?.instructions === instructions}
+              <SaveButton
+                action={async (e: any) => {
+                  e.preventDefault();
+                  setLoadingInstructions(true);
+                  await handleUpdate({ instructions });
+                  setLoadingInstructions(false);
+                }}
+                loading={loadingInstructions}
+                actionButtonText={"desa"}
+                valueChange={
+                  !assistantValues?.instructions ||
+                  assistantValues?.instructions === instructions
+                }
               />
             </div>
             <div>
@@ -267,11 +272,15 @@ export default function Playground() {
                   max={2}
                   step={0.01}
                   value={[assistantValues.temperature]}
-                  onValueChange={(value) => setAssistantValues({ ...assistantValues, temperature: value[0] })}
+                  onValueChange={(value) =>
+                    setAssistantValues({
+                      ...assistantValues,
+                      temperature: value[0],
+                    })
+                  }
                   onValueCommit={(value) => {
-                    handleUpdate({ temperature: value[0] })
-                  }
-                  }
+                    handleUpdate({ temperature: value[0] });
+                  }}
                 />
               ) : (
                 <InputCharging />
@@ -297,13 +306,11 @@ export default function Playground() {
                   step={0.01}
                   value={[assistantValues.top_p]}
                   onValueChange={(value) => {
-                    setAssistantValues({ ...assistantValues, top_p: value[0] })
-                  }
-                  }
+                    setAssistantValues({ ...assistantValues, top_p: value[0] });
+                  }}
                   onValueCommit={(value) => {
-                    handleUpdate({ top_p: value[0] })
-                  }
-                  }
+                    handleUpdate({ top_p: value[0] });
+                  }}
                 />
               ) : (
                 <InputCharging />
@@ -327,10 +334,11 @@ export default function Playground() {
                 messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`p-2 rounded-lg ${msg.role === "user"
+                    className={`p-2 rounded-lg ${
+                      msg.role === "user"
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted"
-                      }`}
+                    }`}
                   >
                     {msg.message}
                   </div>

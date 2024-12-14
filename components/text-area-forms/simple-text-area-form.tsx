@@ -145,122 +145,116 @@ export const SimpleTextAreaForm = ({
   return (
     <div className="absolute inset-x-0 bottom-0 w-full duration-300 ease-in-out animate-in">
       {/* <div className="mx-auto sm:max-w-2xl sm:px-4"> */}
-        <div className="space-y-4 bg-background px-4 py-2 shadow-lg sm:rounded-xl md:mx-4 md:my-2">
-          <form className="relative rounded-xl shadow-sm flex items-center px-4 ">
-            {!recording ? (
-              <Textarea
-                ref={textAreaRef}
-                tabIndex={0}
-                onKeyDown={(e: any) => {
-                  if (status !== "thread.run.completed") return;
-                  handleKeyDown(e);
-                }}
-                placeholder="Envia la teva pregunta..."
-                className="w-full resize-none bg-transparent focus-within:outline-none sm:text-sm "
-                autoFocus
-                spellCheck={false}
-                autoComplete="off"
-                autoCorrect="off"
-                name="message"
-                rows={1}
-                value={input}
-                onChange={handleInputChange}
-              />
-            ) : (
-              <div className="flex w-full bg-transparent focus-within:outline-none sm:text-sm">
-                <Button
-                  className="bg-background text-primary hover:bg-secondary hover:text-primary"
-                  onClick={(event) => stopRecordingF(event, false)}
-                >
-                  <TrashIcon
-                    className="ml-0.5 h-5 w-5 mr-1"
-                    aria-hidden="true"
-                  />
-                </Button>
-                <div className="flex-1 shrink">
-                  <VoiceVisualizer
-                    controls={recorderControls}
-                    height={"40"}
-                    width={"100%"}
-                    mainBarColor="#0f172a"
-                    secondaryBarColor="#f1f5f9"
-                    speed={3}
-                    barWidth={5}
-                    gap={1}
-                    rounded={5}
-                    isControlPanelShown={false}
-                    isDownloadAudioButtonShown={false}
-                    fullscreen={true}
-                    onlyRecording={true}
-                    isDefaultUIShown={false}
-                  />
-                </div>
-
-                <Button
-                  className="flex-shrink-0 self-end"
-                  onClick={(event) => stopRecordingF(event, true)}
-                >
-                  <CheckIcon
-                    className="ml-0.5 h-5 w-5 mr-1"
-                    aria-hidden="true"
-                  />
-                  {iconText.voiceRecordStop}
-                </Button>
+      <div className="space-y-4 bg-background px-4 py-2 shadow-lg sm:rounded-xl md:mx-4 md:my-2">
+        <form className="relative rounded-xl shadow-sm flex items-center px-4 ">
+          {!recording ? (
+            <Textarea
+              ref={textAreaRef}
+              tabIndex={0}
+              onKeyDown={(e: any) => {
+                if (status !== "thread.run.completed") return;
+                handleKeyDown(e);
+              }}
+              placeholder="Envia la teva pregunta..."
+              className="w-full resize-none bg-transparent focus-within:outline-none sm:text-sm "
+              autoFocus
+              spellCheck={false}
+              autoComplete="off"
+              autoCorrect="off"
+              name="message"
+              rows={1}
+              value={input}
+              onChange={handleInputChange}
+            />
+          ) : (
+            <div className="flex w-full bg-transparent focus-within:outline-none sm:text-sm">
+              <Button
+                className="bg-background text-primary hover:bg-secondary hover:text-primary"
+                onClick={(event) => stopRecordingF(event, false)}
+              >
+                <TrashIcon className="ml-0.5 h-5 w-5 mr-1" aria-hidden="true" />
+              </Button>
+              <div className="flex-1 shrink">
+                <VoiceVisualizer
+                  controls={recorderControls}
+                  height={"40"}
+                  width={"100%"}
+                  mainBarColor="#0f172a"
+                  secondaryBarColor="#f1f5f9"
+                  speed={3}
+                  barWidth={5}
+                  gap={1}
+                  rounded={5}
+                  isControlPanelShown={false}
+                  isDownloadAudioButtonShown={false}
+                  fullscreen={true}
+                  onlyRecording={true}
+                  isDefaultUIShown={false}
+                />
               </div>
-            )}
 
-            {!recording && (
-              <div className="flex-shrink-0 self-end">
-                {!input && status === "thread.run.completed" ? (
-                  <Button onClick={(e) => startRecordingF(e)}>
-                    {!transcribing ? (
-                      <>
-                        <MicrophoneIcon
-                          className="ml-0.5 h-5 w-5 mr-1"
-                          aria-hidden="true"
-                        />
-                        {iconText.voiceRecordStart}
-                      </>
-                    ) : (
-                      <ArrowPathIcon
-                        className="ml-0.5 h-5 w-5 animate-spin mr-1"
+              <Button
+                className="flex-shrink-0 self-end"
+                onClick={(event) => stopRecordingF(event, true)}
+              >
+                <CheckIcon className="ml-0.5 h-5 w-5 mr-1" aria-hidden="true" />
+                {iconText.voiceRecordStop}
+              </Button>
+            </div>
+          )}
+
+          {!recording && (
+            <div className="flex-shrink-0 self-end">
+              {!input && status === "thread.run.completed" ? (
+                <Button onClick={(e) => startRecordingF(e)}>
+                  {!transcribing ? (
+                    <>
+                      <MicrophoneIcon
+                        className="ml-0.5 h-5 w-5 mr-1"
                         aria-hidden="true"
                       />
-                    )}
-                  </Button>
-                ) : (
-                  <Button
-                    disabled={status !== "thread.run.completed" || loading}
-                    onClick={sendMessage}
-                  >
-                    {status === "thread.run.completed" && !loading ? (
-                      <>
-                        <PaperAirplaneIcon
-                          className="ml-0.5 h-5 w-5 mr-1"
-                          aria-hidden="true"
-                        />
-                        {iconText.sendMessage}
-                      </>
-                    ) : (
-                      <ArrowPathIcon
-                        className="ml-0.5 h-5 w-5 animate-spin mr-1"
+                      {iconText.voiceRecordStart}
+                    </>
+                  ) : (
+                    <ArrowPathIcon
+                      className="ml-0.5 h-5 w-5 animate-spin mr-1"
+                      aria-hidden="true"
+                    />
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  disabled={status !== "thread.run.completed" || loading}
+                  onClick={sendMessage}
+                >
+                  {status === "thread.run.completed" && !loading ? (
+                    <>
+                      <PaperAirplaneIcon
+                        className="ml-0.5 h-5 w-5 mr-1"
                         aria-hidden="true"
                       />
-                    )}
-                  </Button>
-                )}
-              </div>
-            )}
+                      {iconText.sendMessage}
+                    </>
+                  ) : (
+                    <ArrowPathIcon
+                      className="ml-0.5 h-5 w-5 animate-spin mr-1"
+                      aria-hidden="true"
+                    />
+                  )}
+                </Button>
+              )}
+            </div>
+          )}
 
-            {/* 
+          {/* 
             motivo principal es para testear el audio
             {audioURL && (
               <audio ref={audioRef} controls src={audioURL}>
                 Tu navegador no soporta el elemento de audio.
               </audio>
             )} */}
-          </form>
-        </div>
+        </form>
+      </div>
       {/* </div> */}
     </div>
   );
