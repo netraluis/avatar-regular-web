@@ -84,19 +84,20 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   const isDashboardActive = lastTwoSegments === `team/${teamId}`;
   const isSettingsActive = lastTwoSegments === `team/${teamId}/settings`;
 
+  // ---- first charge ----
   useEffect(() => {
     const fetchData = async () => {
       if (assistantId && teamId && user?.user?.id) {
         await fetchTeamsByUserId(user.user.id);
         await fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id);
-        await fetchAssistantSelected.fetchAssistantsByAssistantSelected(
-          teamId as string,
-          assistantId as string,
-          user.user.id,
-        );
+        // await fetchAssistantSelected.fetchAssistantsByAssistantSelected(
+        //   teamId as string,
+        //   assistantId as string,
+        //   user.user.id,
+        // );
       } else if (user?.user?.id && teamId) {
         await fetchTeamsByUserId(user.user.id);
-        await fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id);
+        // await fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id);
       } else if (user?.user?.id) {
         const res = await fetchTeamsByUserId(user.user.id);
         if (res && res.teamSelected) {
@@ -111,6 +112,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     fetchData();
   }, [user?.user?.id]);
 
+  // ---- navigation----
   useEffect(() => {
     const fetchData = async () => {
       if (user?.user?.id && teamId) {
