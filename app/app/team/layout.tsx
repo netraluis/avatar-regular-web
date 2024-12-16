@@ -10,7 +10,5 @@ export default async function Layout({
     <DashboardLanguageProvider>
       <DashboardHeader>{children}</DashboardHeader>
     </DashboardLanguageProvider>
-  )
-
+  );
 }
-

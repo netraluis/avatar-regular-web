@@ -61,7 +61,9 @@ export interface AssistantSettingsText {
   settings: string;
 }
 
-export const assistantSettingsMenu = (assistantSettingsText:AssistantSettingsText) => ([
+export const assistantSettingsMenu = (
+  assistantSettingsText: AssistantSettingsText,
+) => [
   {
     name: `${assistantSettingsText.playground}`,
     href: "playground",
@@ -79,4 +81,4 @@ export const assistantSettingsMenu = (assistantSettingsText:AssistantSettingsTex
     href: "settings",
     id: "settings",
   },
-]);
+];

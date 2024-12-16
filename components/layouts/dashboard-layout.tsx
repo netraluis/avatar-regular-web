@@ -35,7 +35,7 @@ import {
   useFetchAssistantSelected,
 } from "../context/useAppContext/assistant";
 import { useUserLogout } from "../context/useAppContext/user";
-import { teamsSettingsNav } from "@/lib/helper/navbar";
+import { assistantSettingsMenu, teamsSettingsNav } from "@/lib/helper/navbar";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -48,10 +48,11 @@ import { SelectCharging } from "../loaders/loadersSkeleton";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
-
-  const {t} = useDashboardLanguage();
-  const dashboard = t('app.TEAM.LAYOUT')
-  const assistantSettingsNav = t('app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.LAYOUT')
+  const { t } = useDashboardLanguage();
+  const dashboard = t("app.TEAM.LAYOUT");
+  const assistantSettingsNav = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.LAYOUT",
+  );
 
   const router = useRouter();
 
@@ -208,7 +209,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                           routerHandler={handleAssistantRouteChange}
                           createNewTeamRoute={handleCreateNewTeamRoute}
                           settingsRouteHandler={handleAssistantsSettingsRoute}
-                          navItems={assistantSettingsNav()}
+                          navItems={assistantSettingsMenu(assistantSettingsNav)}
                           fromColor={"to-[#ff930f]"}
                           toColor={"from-[#fff95b]"}
                         />

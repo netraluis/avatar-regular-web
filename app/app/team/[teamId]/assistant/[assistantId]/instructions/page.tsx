@@ -9,18 +9,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TextAreaCharging } from "@/components/loaders/loadersSkeleton";
 import { Textarea } from "@/components/ui/textarea";
-
-const newInstructions = {
-  title: "Escriu les instruccions del teu assistent",
-  description:
-    "Defineix com vols que el teu assistent funcioni. Escriu les indicacions clares i específiques que guiaran les seves respostes per assegurar una experiència personalitzada i coherent.",
-  backActionText: "Enrere",
-  nextActionText: "Continuar",
-  subName:
-    "Recorda: unes bones instruccions són clau per a un assistent eficaç! ",
-  errorText: "Error al crear les instruccions",
-  placeholder: "Escriu les instruccions aquí",
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 interface AssistantValues {
   model: string;
@@ -30,6 +19,11 @@ interface AssistantValues {
 }
 
 export default function Page() {
+  const { t } = useDashboardLanguage();
+  const newInstructions = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.INSTRUCTIONS.PAGE",
+  );
+
   const { state } = useAppContext();
   const { assistantId, teamId } = useParams();
   const router = useRouter();

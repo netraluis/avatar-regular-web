@@ -1,5 +1,8 @@
-'use client'
-import { UserManagmentLanguageProvider, useUserManagmentLanguage } from "@/components/context/userManagmentContext";
+"use client";
+import {
+  UserManagmentLanguageProvider,
+  useUserManagmentLanguage,
+} from "@/components/context/userManagmentContext";
 import { useRouter, usePathname } from "next/navigation";
 
 import Image from "next/image";
@@ -10,7 +13,6 @@ export default async function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <UserManagmentLanguageProvider>
       <div className="h-screen w-full flex flex-col items-center overflow-hidden border">
@@ -24,7 +26,7 @@ export default async function Layout({
 
 const Header = () => {
   const { t } = useUserManagmentLanguage();
-  const userAuth = t('app.(AUTH).LAYOUT')
+  const userAuth = t("app.(AUTH).LAYOUT");
 
   const router = useRouter();
   const pathname = usePathname();
@@ -71,5 +73,5 @@ const Header = () => {
         )}
       </div>
     </header>
-  )
-}
+  );
+};

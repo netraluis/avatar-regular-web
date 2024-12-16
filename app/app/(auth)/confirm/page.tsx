@@ -13,19 +13,16 @@ import { useAppContext } from "@/components/context/appContext";
 import { UserData } from "@/types/types";
 import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
 
-
-
 export default function Confirmation() {
-  const {t} = useUserManagmentLanguage()
+  const { t } = useUserManagmentLanguage();
 
-  const confirm = t('app.(AUTH).CONFIRM')
+  const confirm = t("app.(AUTH).CONFIRM");
 
   const { userConfirmation, error, data, loading } = useUserConfirmation();
   const useOtpExp = useOtpExpired();
   const router = useRouter();
   const hasCalled = useRef(false);
   const { dispatch } = useAppContext();
-
 
   const searchParams = useSearchParams();
   const email = decodeURIComponent(searchParams.get("email") || "").replace(

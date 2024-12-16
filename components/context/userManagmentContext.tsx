@@ -1,21 +1,31 @@
-'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
-import ca from '@/public/user-managment-translations/ca.json';
+"use client";
+import { createContext, useContext, useState, useEffect } from "react";
+import ca from "@/public/user-managment-translations/ca.json";
 
 enum Language {
-    ca = 'ca'
+  ca = "ca",
 }
 
 // Definimos los idiomas disponibles
-const translations = {ca};
+const translations = { ca };
 
 // Creamos el contexto
 const UserManagmanteLanguageContext = createContext<any>(null);
 
 // Proveedor del idioma
-export const UserManagmentLanguageProvider = ({ children, userLanguage }: { children: React.ReactNode; userLanguage?: Language }) => {
-  const [language, setLanguage] = useState<Language>(userLanguage || Language.ca);
-  const [currentTranslations, setCurrentTranslations] = useState(translations[language]);
+export const UserManagmentLanguageProvider = ({
+  children,
+  userLanguage,
+}: {
+  children: React.ReactNode;
+  userLanguage?: Language;
+}) => {
+  const [language, setLanguage] = useState<Language>(
+    userLanguage || Language.ca,
+  );
+  const [currentTranslations, setCurrentTranslations] = useState(
+    translations[language],
+  );
 
   useEffect(() => {
     setCurrentTranslations(translations[language]); // Cargar traducciones al cambiar el idioma
@@ -26,7 +36,13 @@ export const UserManagmentLanguageProvider = ({ children, userLanguage }: { chil
   };
 
   return (
-    <UserManagmanteLanguageContext.Provider value={{ t: (key: string) => getTranslation(key, currentTranslations), changeLanguage, language }}>
+    <UserManagmanteLanguageContext.Provider
+      value={{
+        t: (key: string) => getTranslation(key, currentTranslations),
+        changeLanguage,
+        language,
+      }}
+    >
       {children}
     </UserManagmanteLanguageContext.Provider>
   );
@@ -34,8 +50,9 @@ export const UserManagmentLanguageProvider = ({ children, userLanguage }: { chil
 
 // Función para obtener la traducción de una clave
 const getTranslation = (key: string, translations: any) => {
-  return key.split('.').reduce((obj, k) => (obj || {})[k], translations) || key;
+  return key.split(".").reduce((obj, k) => (obj || {})[k], translations) || key;
 };
 
 // Hook para usar el contexto
-export const useUserManagmentLanguage = () => useContext(UserManagmanteLanguageContext);
+export const useUserManagmentLanguage = () =>
+  useContext(UserManagmanteLanguageContext);

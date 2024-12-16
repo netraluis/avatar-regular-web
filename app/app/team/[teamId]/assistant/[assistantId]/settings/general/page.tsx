@@ -21,34 +21,14 @@ import { CustomCard } from "@/components/custom-card";
 import { useEffect, useState } from "react";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import slugify from "slugify";
-
-const assistantGeneral = {
-  title: "Configuració de l’assistent",
-  desription:
-    "Personalitza com es mostra el teu assistent dins de la plataforma.",
-  assistantName: {
-    title: "Nom de l’assistent",
-    description:
-      "This is your public display name. It can be your real name or a pseudonym. You can only change this once every 30 days.",
-    save: "Desa nom",
-  },
-  assistantUrl: {
-    title: "Assistant URL",
-    description: "Upcoming Team URL will cause a redirect to the new url.",
-    errorExist: "Aquest subdomini ja existeix",
-    save: "Comprovar i desar",
-    prove: "comprovar i desar",
-    approve: "Validat i desat",
-  },
-  delete: {
-    title: "Elimina l’assistent",
-    description:
-      "Si elimines aquest assistent, no hi haurà manera de recuperar-lo. Totes les dades pujades i els chatbots entrenats es perdran. Aquesta acció és irreversible.",
-    actionButton: "Elimina l’assistent",
-  },
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Component() {
+  const { t } = useDashboardLanguage();
+  const assistantGeneral = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.SETTINGS.GENERAL",
+  );
+
   const { teamId, assistantId } = useParams();
   const { loadingDeleteAssistant, deleteAssistant } = useDeleteAssistant();
   const [name, setName] = useState({ name: "", loading: false });

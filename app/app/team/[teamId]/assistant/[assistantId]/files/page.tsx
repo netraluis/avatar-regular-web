@@ -26,32 +26,14 @@ import { FileType } from "@prisma/client";
 import { VectorStoreFile } from "@/types/types";
 import { useFileVectorStoreAssistant } from "@/components/context/useAppContext/file";
 import OnboardingBase from "@/components/onboarding/onboarding-base";
-
-const newInstructions = {
-  title: "Escriu les instruccions del teu assistent",
-  description:
-    "Defineix com vols que el teu assistent funcioni. Escriu les indicacions clares i específiques que guiaran les seves respostes per assegurar una experiència personalitzada i coherent.",
-  backActionText: "Enrere",
-  nextActionText: "Continuar",
-  subName:
-    "Recorda: unes bones instruccions són clau per a un assistent eficaç! ",
-  errorText: "Error al crear les instruccions",
-  placeholder: "Escriu les instruccions aquí",
-};
-const archives = {
-  title: "Fitxers",
-  description:
-    "Sel·lecciona els  arxius per entrenar l’assistent. (Tipus de fitxers compatibles: .pdf, .doc, .docx, .txt)",
-  actionButton: "Carrega un fitxer",
-  name: "Nom",
-  characters: "Caràcters",
-  status: "Estat",
-  textDragAndDrop: "Arrossega i deixa anar els fitxers aquí o",
-  browser: "explora",
-  supportedFiles: "Fitxers admesos: PDF, DOC, DOCX, TXT",
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Component() {
+  const { t } = useDashboardLanguage();
+  const { newInstructions, archives } = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.FILES.PAGE",
+  );
+
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);

@@ -12,10 +12,10 @@ import Link from "next/link";
 import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
 
 export default function Signup() {
-    const {t} = useUserManagmentLanguage()
-  
-    const forgotPassword = t('app.(AUTH).FORGOT_PASSWORD')
-    
+  const { t } = useUserManagmentLanguage();
+
+  const forgotPassword = t("app.(AUTH).FORGOT_PASSWORD");
+
   const { userForgotPassword, loading, data, error } = useUserForgotPassword();
   const [message, setMesssage] = useState(false);
   const [email, setEmail] = useState("");

@@ -17,9 +17,9 @@ import { Link2Off, PartyPopper } from "lucide-react";
 import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
 
 export default function Confirmation() {
-  const { t } = useUserManagmentLanguage()
-  const resetPassword = t('app.(AUTH).RESET_PASSWORD')
-  
+  const { t } = useUserManagmentLanguage();
+  const resetPassword = t("app.(AUTH).RESET_PASSWORD");
+
   const { dispatch } = useAppContext();
   const router = useRouter();
   const { userResetPassword, error, data, loading } = useUserResetPassword();
@@ -100,15 +100,11 @@ export default function Confirmation() {
             )}
 
             {localError === "same_password" && (
-              <p className="text-red-500">
-                {resetPassword.error.samePassword}
-              </p>
+              <p className="text-red-500">{resetPassword.error.samePassword}</p>
             )}
 
             {localError === "weak_password" && (
-              <p className="text-red-500">
-                {resetPassword.error.weakPassword}
-              </p>
+              <p className="text-red-500">{resetPassword.error.weakPassword}</p>
             )}
 
             {error !== "otp_expired" && (
@@ -149,12 +145,14 @@ export default function Confirmation() {
             <p className="mt-4 text-muted-foreground">
               {resetPassword.genericErrorDescription}{" "}
               <ul className="styled-list">
-                {resetPassword.genericErrorList.map((item: string, index: number) => (
-                  <li key={index}>
-                  {"  - "}
-                  {item}
-                  </li>
-                ))}
+                {resetPassword.genericErrorList.map(
+                  (item: string, index: number) => (
+                    <li key={index}>
+                      {"  - "}
+                      {item}
+                    </li>
+                  ),
+                )}
               </ul>
             </p>
           }

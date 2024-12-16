@@ -26,23 +26,16 @@ import { FileType } from "@prisma/client";
 import { VectorStoreFile } from "@/types/types";
 import { useFileVectorStoreAssistant } from "@/components/context/useAppContext/file";
 import { CustomCard } from "@/components/custom-card";
-
-const archives = {
-  title: "Fitxers",
-  description:
-    "Sel·lecciona els  arxius per entrenar l’assistent. (Tipus de fitxers compatibles: .pdf, .doc, .docx, .txt)",
-  actionButton: "Carrega un fitxer",
-  name: "Nom",
-  characters: "Caràcters",
-  status: "Estat",
-  textDragAndDrop: "Arrossega i deixa anar els fitxers aquí o",
-  browser: "explora",
-  supportedFiles: "Fitxers admesos: PDF, DOC, DOCX, TXT",
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Component() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+
+  const { t } = useDashboardLanguage();
+  const archives = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.SOURCES.ARCHIVES.PAGE",
+  );
 
   const {
     upLoadFileloading,

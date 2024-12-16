@@ -12,7 +12,6 @@ export const getUserById = async (userId: string) => {
   return subdomainInfo;
 };
 
-
 export const updateUser = async ({
   teamId,
   data,

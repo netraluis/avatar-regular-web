@@ -15,20 +15,26 @@ import {
 } from "@/components/context/useAppContext/assistant";
 import { TitleLayout } from "@/components/layouts/title-layout";
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-const assSettings = {
-  cardTitle: "Configuració",
-  cardDescription:
-    "Gestiona la configuració del teu assistent i ajusta les preferències",
-  actionButtonText: "Desa els canvis",
-  actionErrorText: "Hi hagut un error al update",
-  general: "General",
-  interface: "Interficie",
-};
+interface AssistantSettingsLayout {
+  general: string;
+  interface: string;
+}
 
-const navItems = [
-  { name: `${assSettings.general}`, href: "general", icon: Settings },
-  { name: `${assSettings.interface}`, href: "interface", icon: Paintbrush },
+const assistantSettingsLayoutMenu = (
+  activityLayout: AssistantSettingsLayout,
+) => [
+  {
+    name: `${activityLayout.general}`,
+    href: "general",
+    icon: Settings,
+  },
+  {
+    name: `${activityLayout.interface}`,
+    href: "interface",
+    icon: Paintbrush,
+  },
 ];
 
 function Layout({
@@ -36,6 +42,15 @@ function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { t } = useDashboardLanguage();
+  const assSettingsMenu = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.SETTINGS.LAYOUT.menu",
+  );
+  const assSettings = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.SETTINGS.LAYOUT",
+  );
+
+  const navItems = assistantSettingsLayoutMenu(assSettingsMenu);
   const pathname = usePathname();
   const router = useRouter();
   const comparatePathName = pathname.split("/").slice(1)[5];

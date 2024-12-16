@@ -31,37 +31,14 @@ import { TitleLayout } from "@/components/layouts/title-layout";
 import { AssistantUpdateParams } from "openai/resources/beta/assistants.mjs";
 import { SaveButton } from "@/components/save-button";
 import { SimpleTextAreaForm } from "@/components/text-area-forms/simple-text-area-form";
-
-const playground = {
-  title: "Zona de proves",
-  description:
-    "El Playground et permet experimentar amb diferents configuracions sense afectar el chatbot en viu.",
-  adjustments: {
-    model: "Model",
-    instructions: "Instruccions",
-    temperature: "Temperatura",
-    temperatureDescription:
-      "Controla la creativitat de les respostes. Valors més alts generen respostes més creatives, mentre que valors més baixos són més directes.",
-    topP: "Top P",
-    topPDescription:
-      "Ajusta la probabilitat acumulativa per limitar les opcions del model. Mantén-lo baix per respostes més previsibles.",
-    output: "Sortida",
-    typeYourMessageHere: "Escriu el teu missatge aquí...",
-    send: "Enviar",
-    save: "Desar canvis",
-    error: "Hi ha hagut un error en desar els canvis",
-  },
-  playground: {
-    placeholder: "Envia la teva pregunta...",
-    iconText: {
-      sendMessage: "Enviar",
-      voiceRecordStop: "Parar micròfon",
-      voiceRecordStart: "Activar micròfon",
-    },
-  },
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Playground() {
+  const { t } = useDashboardLanguage();
+  const playground = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.PLAYGROUND.PAGE",
+  );
+
   const { state } = useAppContext();
   const { assistantId, teamId } = useParams();
   const router = useRouter();

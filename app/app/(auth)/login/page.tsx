@@ -13,8 +13,8 @@ import ConfirmationScreen from "@/components/user-process/redirect";
 import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
 
 export default function Login() {
-  const { t } = useUserManagmentLanguage()
-  const login = t('app.(AUTH).LOGIN')
+  const { t } = useUserManagmentLanguage();
+  const login = t("app.(AUTH).LOGIN");
 
   const { loginUser, error, loading } = useLoginUser();
 

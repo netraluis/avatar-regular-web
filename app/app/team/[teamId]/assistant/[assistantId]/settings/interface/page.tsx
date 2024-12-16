@@ -16,28 +16,14 @@ import { useUpdateAssistant } from "@/components/context/useAppContext/assistant
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { SaveButton } from "@/components/save-button";
-
-const assistantInterface = {
-  title: "Personalitza la targeta del teu assistent",
-  desription:
-    "Crea una targeta atractiva per al teu assistent afegint un emoji, un títol i una descripció. Aquesta informació ajudarà els usuaris a entendre millor el propòsit i la personalitat del teu assistent.",
-  emoji: {
-    title: "Emoji de l’assistent",
-    titlePlaceholder:
-      "Escriu un títol per al teu assistent (p. ex.: Assistència al client).",
-    titleDesciptiontion:
-      "Aquest títol serà visible per als usuaris i ha de descriure breument el propòsit del teu assistent.",
-    saveTitle: "Desa títol",
-    description: "Descripció de l’assistent",
-    descriptionPlaceholder:
-      "Escriu una descripció detallada (p. ex.: “Et puc ajudar amb preguntes sobre productes, comandes o problemes tècnics”).",
-    descriptionDescription:
-      "Explica breument què fa el teu assistent i com pot ajudar als usuaris",
-    saveButton: "Desa descripció",
-  },
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Interface() {
+  const { t } = useDashboardLanguage();
+  const assistantInterface = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.SETTINGS.INTERFACE",
+  );
+
   const { teamId, assistantId } = useParams();
   const {
     state: { teamSelected, assistantSelected, user },

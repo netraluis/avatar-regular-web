@@ -33,15 +33,12 @@ import {
   InputCharging,
   CustomCardCharging,
 } from "@/components/loaders/loadersSkeleton";
-
-const chatlogs = {
-  filterByData: "Filtrar per data de creació",
-  restartFilters: "Reinicia els filtres",
-  noData: "No hi han dades",
-  filterByDate: "Filtra per data de creació",
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Component() {
+  const { t } = useDashboardLanguage();
+  const chatlogs = t("app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.ACTIVITY.PAGE");
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const { assistantId, teamId } = useParams();

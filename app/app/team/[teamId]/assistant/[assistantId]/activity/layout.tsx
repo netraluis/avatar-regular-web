@@ -1,21 +1,21 @@
 "use client";
 
 import { Inbox } from "lucide-react";
-
 import { usePathname } from "next/navigation";
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
 import { OnlyTitleLayout } from "@/components/layouts/only-title-layout";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-const activityLayout = {
-  title: "Activitat",
-  description:
-    "Gestiona l’activitat del teu assistent i accedeix a registres de converses i analítiques detallades.",
-  chatLogs: "Registres de conversa",
-};
+interface AssistantSettingsText {
+  chatLogs: string;
+}
 
-const navItems = [
-  { name: `${activityLayout.chatLogs}`, href: "chat-logs", icon: Inbox },
-  // { name: "Analytics", href: "analytics", icon: PieChart },
+const activityMenu = (activityLayout: AssistantSettingsText) => [
+  {
+    name: `${activityLayout.chatLogs}`,
+    href: "chat-logs",
+    icon: Inbox,
+  },
 ];
 
 export default function Layout({
@@ -23,6 +23,15 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { t } = useDashboardLanguage();
+  const assistantSettingsNav = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.ACTIVITY.LAYOUT.menu",
+  );
+  const activityLayout = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.ACTIVITY.LAYOUT",
+  );
+
+  const navItems = activityMenu(assistantSettingsNav);
   const pathname = usePathname();
   const comparatePathName = pathname.split("/").slice(1)[5];
   const absolutePath = pathname.split("/").slice(1, 6).join("/");

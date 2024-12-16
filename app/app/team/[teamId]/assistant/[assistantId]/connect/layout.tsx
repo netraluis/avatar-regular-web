@@ -5,17 +5,18 @@ import { ExternalLink } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
 import { OnlyTitleLayout } from "@/components/layouts/only-title-layout";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-const connectLayout = {
-  title: "Connecta",
-  description:
-    "Gestiona com compartir i integrar el teu assistent amb altres eines i plataformes.",
-  share: "Comparteix",
-};
+interface ConnectMenu {
+  share: string;
+}
 
-const navItems = [
-  { name: `${connectLayout.share}`, href: "share", icon: ExternalLink },
-  // { name: "Analytics", href: "analytics", icon: PieChart },
+const connectMenu = (connectLayout: ConnectMenu) => [
+  {
+    name: `${connectLayout.share}`,
+    href: "share",
+    icon: ExternalLink,
+  },
 ];
 
 export default function Layout({
@@ -23,6 +24,15 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { t } = useDashboardLanguage();
+  const connectNav = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.CONNECT.LAYOUT.menu",
+  );
+  const connectLayout = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.CONNECT.LAYOUT",
+  );
+
+  const navItems = connectMenu(connectNav);
   const pathname = usePathname();
   const comparatePathName = pathname.split("/").slice(1)[5];
   const absolutePath = pathname.split("/").slice(1, 6).join("/");

@@ -24,7 +24,7 @@ export default async function Layout({
   // if (!team) return <div>no team</div>;
 
   let userLocal = null;
-  if(user.user?.id) {
+  if (user.user?.id) {
     userLocal = (await getUserById(user.user.id))[0];
   }
 

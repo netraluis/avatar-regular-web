@@ -1,4 +1,4 @@
-'use client';
+"use client";
 // import { CustomCard } from "@/components/custom-card";
 import { useAppContext } from "@/components/context/appContext";
 
@@ -10,15 +10,12 @@ import { useAppContext } from "@/components/context/appContext";
 //   security: "Segure"
 // }
 
+export default function General() {
+  const {
+    state: { teamSelected, assistantsByTeam, user, userLocal },
+  } = useAppContext();
 
-export default function General () {
-
-
-    const {
-      state: { teamSelected, assistantsByTeam, user, userLocal },
-    } = useAppContext();
-
-    console.log({ teamSelected, assistantsByTeam, user, userLocal })
+  console.log({ teamSelected, assistantsByTeam, user, userLocal });
   return (
     <div>
       {/* <CustomCard title={share.title} description={share.desription}>

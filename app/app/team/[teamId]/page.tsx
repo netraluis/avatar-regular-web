@@ -33,10 +33,9 @@ import { Bot } from "lucide-react";
 import { useFetchTeamsByUserIdAndTeamId } from "@/components/context/useAppContext/team";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-
 export default function Dashboard() {
-  const {t} = useDashboardLanguage();  
-  const teamIdText = t('app.TEAM.TEAM_ID.PAGE')
+  const { t } = useDashboardLanguage();
+  const teamIdText = t("app.TEAM.TEAM_ID.PAGE");
 
   const router = useRouter();
   const { fetchTeamsByUserIdAndTeamId } = useFetchTeamsByUserIdAndTeamId();

@@ -9,18 +9,12 @@ import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import { CustomCard } from "@/components/custom-card";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-
-const share = {
-  title: "Comparteix l’enllaç",
-  desription:
-    "Comparteix l’enllaç de la teva pàgina d’equip perquè altres usuaris puguin accedir al teu assistent.",
-  chat: {
-    title: "URL de l’equip",
-    description: "Aquest enllaç permet accedir directament al teu assistent.",
-  },
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Component() {
+  const { t } = useDashboardLanguage();
+  const share = t("app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.CONNECT.SHARE.PAGE");
+
   const [url, setUrl] = useState("");
   const { assistantId } = useParams();
   const {

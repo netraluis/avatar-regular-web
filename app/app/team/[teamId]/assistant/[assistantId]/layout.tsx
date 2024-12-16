@@ -7,13 +7,15 @@ import { useDashboardLanguage } from "@/components/context/dashboardLanguageCont
 import { assistantSettingsMenu } from "@/lib/helper/navbar";
 
 function Header() {
-    const {t} = useDashboardLanguage();  
-    const assistantSettingsNav = t('app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.LAYOUT')
+  const { t } = useDashboardLanguage();
+  const assistantSettingsNav = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.LAYOUT",
+  );
   const pathname = usePathname();
   const comparatePathName = pathname.split("/").slice(1)[4];
   const absolutePath = pathname.split("/").slice(1, 5).join("/");
 
-  const nav = assistantSettingsMenu(assistantSettingsNav) 
+  const nav = assistantSettingsMenu(assistantSettingsNav);
 
   return (
     <nav className="flex space-x-4 border-b py-0 px-4">

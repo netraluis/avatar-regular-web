@@ -9,18 +9,12 @@ import { useEffect, useState } from "react";
 import slugify from "slugify";
 import { v4 as uuidv4 } from "uuid";
 import { ChatModel } from "@/types/types";
-
-const newAssistant = {
-  title: "Crea un assistent",
-  description:
-    "Personalitza el teu assistent en pocs passos: defineix les instruccions, afegeix fonts d’informació i ajusta el seu to de veu.",
-  backActionText: "Cancela",
-  nextActionText: "Continuar i Crear assistent",
-  name: "Nom del teu assistent",
-  errorText: "Error al crear l'assistent",
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Page() {
+  const { t } = useDashboardLanguage();
+  const newAssistant = t("app.TEAM.TEAM_ID.ASSISTANT.NEW.PAGE");
+
   const router = useRouter();
   const { teamId } = useParams();
   const {

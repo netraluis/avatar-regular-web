@@ -25,20 +25,13 @@ import { FileType } from "@prisma/client";
 import { useGetAssistant } from "@/components/context/useAppContext/assistant";
 import { useFileVectorStoreAssistant } from "@/components/context/useAppContext/file";
 import { CustomCard } from "@/components/custom-card";
-
-const notion = {
-  title: "Notion",
-  description: "Connecta’t a la teva base de dades de Notion.",
-  actionButton: "Carrega un fitxer",
-  name: "Nom",
-  characters: "Caràcters",
-  status: "Estat",
-  // textDragAndDrop: 'Arrossega i deixa anar els fitxers aquí o',
-  // browser: 'explora',
-  // supportedFiles: 'Fitxers admesos: PDF, DOC, DOCX, TXT',
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Component() {
+  const { t } = useDashboardLanguage();
+  const notion = t(
+    "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.SOURCES.NOTION.PAGE",
+  );
   const [popup, setPopup] = useState<Window | null>(null);
   const [isModalOpenNotionAuth, setIsModalOpenNotionAuth] = useState(false);
   // const [isModalAddNotionUrl, setIsModalAddNotionUrl] = useState(false);

@@ -130,7 +130,7 @@ const AppContext = createContext<
 export const AppProvider = ({
   children,
   user,
-  userLocal
+  userLocal,
 }: {
   children: React.ReactNode;
   user: UserData;
@@ -142,7 +142,7 @@ export const AppProvider = ({
     assistantsByTeam: [],
     assistantSelected: null,
     user,
-    userLocal
+    userLocal,
   };
 
   const [state, dispatch] = useReducer(appReducer, initialState);

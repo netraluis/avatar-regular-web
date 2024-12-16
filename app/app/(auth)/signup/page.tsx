@@ -12,8 +12,8 @@ import { MailCheck } from "lucide-react";
 import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
 
 export default function Signup() {
-  const { t } = useUserManagmentLanguage()
-  const signUp = t('app.(AUTH).SIGN_UP')
+  const { t } = useUserManagmentLanguage();
+  const signUp = t("app.(AUTH).SIGN_UP");
 
   const { signupUser, loading, data, error } = useSignupUser();
   const [message, setMesssage] = useState(false);

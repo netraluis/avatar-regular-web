@@ -6,23 +6,20 @@
         "signup": "Registra’t",
         "login": "Inicia sessió"
       },
-      "CONFIRM":{
+      "CONFIRM": {
         "successEmail": "Enhorabona! La teva conta ha estat confirmada",
-        "successDescription":
-          "Inicia la sessió per començar a crear el teu assistent personalitzat",
+        "successDescription": "Inicia la sessió per començar a crear el teu assistent personalitzat",
         "successButtonText": "Iniciar sessió",
         "otpError": "Oops! L’enllaç ha caducat",
-        "otpErrorDescription":
-          "Sembla que l’enllaç de confirmació ha caducat. No passa res, et podem enviar un de nou.",
+        "otpErrorDescription": "Sembla que l’enllaç de confirmació ha caducat. No passa res, et podem enviar un de nou.",
         "otpErrorButtonText": "Reenviar un nou enllaç",
-      
+
         "verifyAccount": "Verificant el teu compte…",
         "verifyAccountDescription": "Aquest procés pot tardar uns segons "
       },
       "FORGOT_PASSWORD": {
         "title": "Recupera la teva contrasenya",
-        "description":
-          "Introdueix el correu electrònic amb el qual vas crear el compte i t’enviarem un enllaç per restablir la contrasenya.",
+        "description": "Introdueix el correu electrònic amb el qual vas crear el compte i t’enviarem un enllaç per restablir la contrasenya.",
         "email": "Correu electrònic",
         "send": "Enviar enllaç de recuperació",
         "placeholder": "nom@chatbotfor.ai",
@@ -31,10 +28,8 @@
         },
         "emailSent": "Hem enviat un correu",
         "emailSentDescription1": "Ves a la teva safata d’entrada a ",
-        "emailSentDescription2":
-          ". Allà hi trobaràs un enllaç per crear una nova contrasenya.",
-        "emailSentSubDescription":
-          "Si no el veus, revisa la carpeta de correu no desitjat o promocions.",
+        "emailSentDescription2": ". Allà hi trobaràs un enllaç per crear una nova contrasenya.",
+        "emailSentSubDescription": "Si no el veus, revisa la carpeta de correu no desitjat o promocions.",
         "linkText": "",
         "link": ""
       },
@@ -43,8 +38,7 @@
         "description": "👋 Hola de nou! Accedeix al teu compte ",
         "error": {
           "invalid_credentials": "Les credencials introduïdes no són correctes",
-          "email_not_confirmed":
-            "El teu email no ha estat confirmat, si us plau ves a la teva bústia de correu",
+          "email_not_confirmed": "El teu email no ha estat confirmat, si us plau ves a la teva bústia de correu",
           "unknown_error": "Ho sentim hi ha hagut un error"
         },
         "email": "Correu electrònic",
@@ -56,11 +50,9 @@
       "RESET_PASSWORD": {
         "title": "Crea una nova contrasenya",
         "description": "Introdueix una nova contrasenya per accedir al teu compte.",
-        "subDescription":
-          "Fes servir almenys 6 caràcters i combina lletres, números i algun símbol",
+        "subDescription": "Fes servir almenys 6 caràcters i combina lletres, números i algun símbol",
         "success": "Contrasenya restablerta!",
-        "successDescription":
-          "La teva nova contrasenya s’ha actualitzat correctament. Ja pots accedir al teu compte.",
+        "successDescription": "La teva nova contrasenya s’ha actualitzat correctament. Ja pots accedir al teu compte.",
         "successButtonText": "Accedeix al tauler",
         "password": "Contrasenya nova",
         "passwordRepeat": "Repeteix la nova contrasenya",
@@ -68,21 +60,17 @@
         "error": {
           "samePassword": "La contrasenya ha de ser la mateixa",
           "weakPassword": "La contrasenya ha de tenir almenys 6 caràcters.",
-          "otpExpired":
-            "El teu token ha expirat , no es vàlid, o ja has fet un intent",
+          "otpExpired": "El teu token ha expirat , no es vàlid, o ja has fet un intent",
           "unknown_error": "Ho sentim hi ha hagut un error"
         },
-      
+
         "genericError": "El teu enllaç no és vàlid o ha expirat.",
         "genericErrorDescription": "Això pot passar per diverses raons:",
-        "genericErrorList": [
-          "L’enllaç de verificació ha caducat"
-        ]
+        "genericErrorList": ["L’enllaç de verificació ha caducat"]
       },
       "SIGN_UP": {
         "title": "Crea el teu compte",
-        "description":
-          "Introdueix les teves dades per començar a personalitzar el teu assistent en pocs minuts",
+        "description": "Introdueix les teves dades per començar a personalitzar el teu assistent en pocs minuts",
         "email": "Correu electrònic",
         "emailPlaceholder": "nom@chatbotfor.ai",
         "password": "Contrasenya",
@@ -91,13 +79,10 @@
           "weakPassword": "La contrasenya ha de tenir almenys 6 caràcters.",
           "unknown_error": "Ho sentim hi ha hagut un error"
         },
-        "subDescription":
-          "Fes servir almenys 6 caràcters i combina lletres, números i algun símbol",
+        "subDescription": "Fes servir almenys 6 caràcters i combina lletres, números i algun símbol",
         "emailSent": "Hem enviat un correu",
-        "emailSentDescription1":
-          "Ja gairebé ho tens! Hem enviat un correu electrònic a ",
-        "emailSentDescription2":
-          " perquè confirmis el teu compte. Revisa la carpeta de correu no desitjat o promocions.",
+        "emailSentDescription1": "Ja gairebé ho tens! Hem enviat un correu electrònic a ",
+        "emailSentDescription2": " perquè confirmis el teu compte. Revisa la carpeta de correu no desitjat o promocions.",
         "emailSentSubDescription": "No has rebut el correu electrònic?",
         "linkText": " Contacta’ns!",
         "link": "https://wa.me/376644253?"
