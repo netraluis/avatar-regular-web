@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
-import { Save } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "@/components/context/appContext";
 import { useScrollAnchor } from "@/lib/hooks/use-scroll-anchor";
@@ -44,7 +43,6 @@ export default function Playground() {
   const router = useRouter();
   const [message, setMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<any>(undefined);
   const [localError, setLocalError] = React.useState<any>(undefined);
   const [instructions, setInstructions] = React.useState("");
   const [loadingInstructions, setLoadingInstructions] = React.useState(false);
@@ -113,7 +111,6 @@ export default function Playground() {
         });
     } catch (error) {
       console.error("An error occurred while updating the assistant", error);
-      setError(error);
     } finally {
       setLoading(false);
     }
@@ -162,14 +159,6 @@ export default function Playground() {
       cardTitle={playground.title}
       cardDescription={playground.description}
       urlPreview={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
-      actionButtonText={playground.adjustments.save}
-      ActionButtonLogo={Save}
-      actionButtonOnClick={() => {
-        console.log("save");
-      }}
-      actionButtonLoading={loading}
-      actionErrorText={playground.adjustments.error}
-      actionError={error}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden w-full">
         <Card className="p-6 w-full h-full border overflow-auto">

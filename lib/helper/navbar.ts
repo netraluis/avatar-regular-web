@@ -7,16 +7,25 @@ import {
   Link2,
 } from "lucide-react";
 
-const teamSettingsText = {
-  general: "General",
-  interface: "Interficie",
-  localistaions: "Traduccions",
-  customDomain: "Domini personalitzat",
-  members: "Membres",
-  plans: "Plans",
-};
+interface TeamSettingsText {
+  general: string;
+  interface: string;
+  localistaions: string;
+  customDomain: string;
+  members: string;
+  plans: string;
+}
 
-export const teamsSettingsNav = [
+// const teamSettingsText = {
+//   general: "General",
+//   interface: "Interficie",
+//   localistaions: "Traduccions",
+//   customDomain: "Domini personalitzat",
+//   members: "Membres",
+//   plans: "Plans",
+// };
+
+export const teamsSettingsNav = (teamSettingsText:TeamSettingsText) => ([
   {
     name: `${teamSettingsText.general}`,
     href: "general",
@@ -51,7 +60,7 @@ export const teamsSettingsNav = [
   },
   { name: "Plans", href: "plans", icon: Gem, id: "plans", alpha: true },
   // { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
-];
+]);
 
 export interface AssistantSettingsText {
   playground: string;

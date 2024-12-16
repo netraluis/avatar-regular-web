@@ -3,7 +3,7 @@
 import * as React from "react";
 import { usePathname, useParams, useRouter } from "next/navigation";
 
-import { Settings, Paintbrush, Save } from "lucide-react";
+import { Settings, Paintbrush } from "lucide-react";
 import { useAppContext } from "@/components/context/appContext";
 import {
   AssistantSettingsProvider,
@@ -58,7 +58,7 @@ function Layout({
 
   const { state } = useAppContext();
   const { data, setAssistantValues } = useAssistantSettingsContext();
-  const { updateAssistant, loadingUpdateAssistant, errorUpdateAssistant } =
+  const { updateAssistant } =
     useUpdateAssistant();
   const { assistantId, teamId } = useParams();
 
@@ -97,12 +97,6 @@ function Layout({
       cardTitle={assSettings.cardTitle}
       cardDescription={assSettings.cardDescription}
       urlPreview={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${state.teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${state.teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
-      actionButtonText={assSettings.actionButtonText}
-      ActionButtonLogo={Save}
-      actionButtonOnClick={saveHandler}
-      actionButtonLoading={loadingUpdateAssistant}
-      actionErrorText={assSettings.actionErrorText}
-      actionError={errorUpdateAssistant}
     >
       <>
         <SideDashboardLayout

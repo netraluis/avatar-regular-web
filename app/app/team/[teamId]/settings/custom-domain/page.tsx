@@ -12,25 +12,13 @@ import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import { CustomCard } from "@/components/custom-card";
 import { useEffect, useState } from "react";
 import slugify from "slugify";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-const customDomain = {
-  subdomain: {
-    title: "Domini personalitzat",
-    description:
-      "Personalitza com els altres veuen el teu equip al lloc web configurant l’URL del teu equip o connectant un domini personalitzat.",
-    validation: "Validar i desar",
-    urlTitle: "URL de l'equip",
-    urlDescription:
-      "Quant possis una url i li donis a validar, farem un control per veure que no s`hagin fet servir caracters no permesos, els canviarem per tu si és aquest el cas, i també mirarem si esta ocupat, en el cas que ho estigui hauras de canviar el teu texte.",
-    teamSubdomainDuplicate: "Aquest subdomini ja està en ús",
-  },
-  domain: {
-    title: "Ajusta el teu domini personalitzat",
-    description: "Això és com et veuran els altres al lloc.",
-  },
-};
 
 export default function Component() {
+  const { t } = useDashboardLanguage();
+  const customDomain = t("app.TEAM.TEAM_ID.SETTINGS.CUSTOM_DOMAIN.PAGE");
+
   const {
     state: { teamSelected, user },
   } = useAppContext();

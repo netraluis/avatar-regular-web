@@ -1,5 +1,6 @@
 "use client";
 import { useAppContext } from "@/components/context/appContext";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 import {
   useCreateTeam,
   useFetchTeamsByUserId,
@@ -19,26 +20,17 @@ import { useEffect, useState } from "react";
 import slugify from "slugify";
 import { v4 as uuidv4 } from "uuid";
 
-const newTeam = {
-  title: "Crea el teu equip",
-  description:
-    "Posa-li un nom al teu equip i selecciona l’idioma que farà servir per defecte. Aquest serà el lloc on tu i el teu equip fareu grans coses junts!",
-  backActionText: "Cancela",
-  nextActionText: "Continuar i Crear assistent",
-  name: "Nom del teu equip",
-  subName: "Per exemple: “La Meva Empresa” o “Dream Team”",
-  language: "Idioma per defecte de l’equip",
-  errorText: "Error al crear l'equip",
-};
-
-const languages = {
-  CA: "Català",
-  ES: "Español",
-  EN: "English",
-  FR: "Français",
-};
-
 export default function Page() {
+  const { t } = useDashboardLanguage();
+  const newTeam = t("app.TEAM.NEW.PAGE");
+
+  const languages = {
+    CA: newTeam.CA,
+    ES: newTeam.ES,
+    EN: newTeam.EN,
+    FR: newTeam.FR,
+  };
+
   const router = useRouter();
   const {
     state: { user, teams },

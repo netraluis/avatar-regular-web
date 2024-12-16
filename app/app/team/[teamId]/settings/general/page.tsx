@@ -12,45 +12,12 @@ import { UploadImage } from "@/components/upload-image";
 import { CustomCard } from "@/components/custom-card";
 import { SaveButton } from "@/components/save-button";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
-
-const setting = {
-  title: "Configuració de l’equip",
-  description:
-    "Personalitza la manera com el teu equip es mostra als altres dins la plataforma",
-  name: "Nom de l'equip",
-  nameDescription:
-    "Pots utilitzar el teu nom real, un pseudònim o un nom que representi la teva organització. Tingues en compte que només podràs canviar-lo cada 30 dies.",
-  saveName: "Desa",
-  url: "URL de l'equip",
-  urlDescription:
-    "La propera URL de l'equip causarà una redirecció a la nova URL.",
-  logo: {
-    title: "Logotip i favicon",
-    description: "Puja imatges personalitzades per identificar el teu equip",
-    uploadLogo: "Puja un logotip",
-    choose: "Escollir",
-    recommendedSize:
-      "El logotip es mostra en llocs visibles dins la plataforma",
-  },
-  favicon: {
-    title: "Imatges del favicon",
-    description:
-      "El favicon és la icona que apareix al navegador quan visites el teu domini personalitzat.",
-    choose: "Escollir",
-    uploadFavicon: "Pujar un favicon",
-    recommendedSize:
-      "El favicon és la icona que apareix al navegador quan visites el teu domini personalitzat.",
-  },
-  delete: {
-    title: "Zona perillosa",
-    description:
-      "Un cop eliminis el compte del teu equip, no hi haurà marxa enrere. Si us plau, assegura’t. Totes les teves dades pujades i assistents GPT entrenats seran eliminats. Aquesta acció és irreversible.",
-    delete: "Esborrar l'equip",
-    loading: "Esborrant...",
-  },
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Component() {
+    const { t } = useDashboardLanguage();
+    const setting = t("app.TEAM.TEAM_ID.SETTINGS.GENERAL.PAGE");
+
   const {
     state: { user, teamSelected },
   } = useAppContext();

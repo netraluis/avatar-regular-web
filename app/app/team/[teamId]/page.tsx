@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { MoreHorizontal, PlusCircle } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -43,7 +43,7 @@ export default function Dashboard() {
     state: { teamSelected, assistantsByTeam, user },
   } = useAppContext();
   const { teamId } = useParams();
-  const { loading, fetchAssistantsByTeamId, error } =
+  const { loading, fetchAssistantsByTeamId } =
     useFetchAssistantsByTeamId();
   const { deleteAssistant } = useDeleteAssistant();
 
@@ -91,12 +91,6 @@ export default function Dashboard() {
       cardTitle={teamIdText.cardTitle}
       cardDescription={teamIdText.cardDescription}
       urlPreview={`${process.env.PROTOCOL ? process.env.PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
-      actionButtonText={teamIdText.createAssistant}
-      ActionButtonLogo={PlusCircle}
-      actionButtonOnClick={handleCreateNewAssistantRoute}
-      actionButtonLoading={loading}
-      actionErrorText={teamIdText.errorGettingAssistants}
-      actionError={error}
     >
       {loading ? (
         <Loader />

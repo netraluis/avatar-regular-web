@@ -7,6 +7,24 @@
       "settings": "Configuració"
     },
     "TEAM": {
+      "NEW": {
+        "PAGE": {
+          "title": "Crea el teu equip",
+          "description": "Posa-li un nom al teu equip i selecciona l’idioma que farà servir per defecte. Aquest serà el lloc on tu i el teu equip fareu grans coses junts!",
+          "backActionText": "Cancela",
+          "nextActionText": "Continuar i Crear assistent",
+          "name": "Nom del teu equip",
+          "subName": "Per exemple: “La Meva Empresa” o “Dream Team”",
+          "language": "Idioma per defecte de l’equip",
+          "errorText": "Error al crear l'equip",
+          "languages": {
+            "CA": "Català",
+            "ES": "Español",
+            "EN": "English",
+            "FR": "Français"
+          }
+        }
+      },
       "TEAM_ID": {
         "PAGE": {
           "cardTitle": "Tauler d’Assistents ",
@@ -21,6 +39,137 @@
           "createYourAssistant": "Crea el teu primer assistent",
           "createYourAssistantDescription": "Personalitza el teu assistent en pocs passos: defineix les instruccions, afegeix fonts d’informació i ajusta el seu to de veu.",
           "textActionCreateYourAssistant": "Crear assistent"
+        },
+        "SETTINGS": {
+          "LAYOUT": {
+            "preview": "Previsualització",
+            "cardTitle": "Configuració",
+            "cardDescription": "Gestiona la configuració del teu compte i ajusta les preferències",
+            "actionButtonText": "Desa",
+            "actionErrorText": "Hi hagut un error al update",
+            "menu": {
+              "general": "General",
+              "interface": "Interficie",
+              "localistaions": "Traduccions",
+              "customDomain": "Domini personalitzat",
+              "members": "Membres",
+              "plans": "Plans"
+            }
+          },
+          "CUSTOM_DOMAIN": {
+            "PAGE": {
+              "subdomain": {
+                "title": "Domini personalitzat",
+                "description": "Personalitza com els altres veuen el teu equip al lloc web configurant l’URL del teu equip o connectant un domini personalitzat.",
+                "validation": "Validar i desar",
+                "urlTitle": "URL de l'equip",
+                "urlDescription": "Quant possis una url i li donis a validar, farem un control per veure que no s`hagin fet servir caracters no permesos, els canviarem per tu si és aquest el cas, i també mirarem si esta ocupat, en el cas que ho estigui hauras de canviar el teu texte.",
+                "teamSubdomainDuplicate": "Aquest subdomini ja està en ús"
+              },
+              "domain": {
+                "title": "Ajusta el teu domini personalitzat",
+                "description": "Això és com et veuran els altres al lloc."
+              }
+            }
+          },
+          "GENERAL": {
+            "PAGE": {
+              "title": "Configuració de l’equip",
+              "description": "Personalitza la manera com el teu equip es mostra als altres dins la plataforma",
+              "name": "Nom de l'equip",
+              "nameDescription": "Pots utilitzar el teu nom real, un pseudònim o un nom que representi la teva organització. Tingues en compte que només podràs canviar-lo cada 30 dies.",
+              "saveName": "Desa",
+              "url": "URL de l'equip",
+              "urlDescription": "La propera URL de l'equip causarà una redirecció a la nova URL.",
+              "logo": {
+                "title": "Logotip i favicon",
+                "description": "Puja imatges personalitzades per identificar el teu equip",
+                "uploadLogo": "Puja un logotip",
+                "choose": "Escollir",
+                "recommendedSize": "El logotip es mostra en llocs visibles dins la plataforma"
+              },
+              "favicon": {
+                "title": "Imatges del favicon",
+                "description": "El favicon és la icona que apareix al navegador quan visites el teu domini personalitzat.",
+                "choose": "Escollir",
+                "uploadFavicon": "Pujar un favicon",
+                "recommendedSize": "El favicon és la icona que apareix al navegador quan visites el teu domini personalitzat."
+              },
+              "delete": {
+                "title": "Zona perillosa",
+                "description": "Un cop eliminis el compte del teu equip, no hi haurà marxa enrere. Si us plau, assegura’t. Totes les teves dades pujades i assistents GPT entrenats seran eliminats. Aquesta acció és irreversible.",
+                "delete": "Esborrar l'equip",
+                "loading": "Esborrant..."
+              }
+            }
+          },
+          "INTERFACE": {
+            "PAGE": {
+              "title": "Missatge de benvinguda",
+              "description": "Configura com els usuaris veuen el teu missatge de benvinguda al lloc web.",
+              "welcomeType": "Selecciona el tema de l’assitent de xat",
+              "name": "Nom de l'equip",
+              "nameDescription": "Aquest és el teu nom públic. Pot ser el teu nom real o un pseudònim.",
+              "avatar": {
+                "uploadLogo": "Carrega una imatge d’avatar",
+                "choose": "Selecciona",
+                "recommendedSize": "Puja una imatge d’avatar personalitzada per representar l’assistent."
+              },
+              "welcomeMessage": {
+                "title": "El teu missatge",
+                "description": "Escriu el missatge de benvinguda que es mostrarà als usuaris.",
+                "linesTitle": "Conversa de benvinguda",
+                "line": "Missatge",
+                "addLine": "Afegir missatge",
+                "lineDescription": "Els bubbles simulen una conversa",
+                "save": "Desa missatge"
+              },
+              "menu": {
+                "headerTitle": "Menu",
+                "headerDescription": "Afegeix enllaços al teu lloc web o blog.",
+                "menuHeaderTitle": "Menú principal",
+                "menuHeaderTitleDescription": "Aquests valors apareixeran primers i més destacats",
+                "menuBodyTitle": "Menu secundari",
+                "menuBodyDescription": "Afegeix enllaços addicionals (per exemple: Instagram, LinkedIn o Termes legals).",
+                "menuFooterTitle": "Peu de pàgina",
+                "menuFooterChangePlan": "Canvia de pla",
+                "addItem": "Afegeix un element",
+                "save": "Desa"
+              },
+              "banner": {
+                "title": "Banner d’informació",
+                "description": "Personalitza un missatge informatiu que es mostrarà al menú del lloc web.",
+                "buttonText": "Nom visible al menú",
+                "buttonTextPlaceholder": "Exemple: Ajuda",
+                "titleText": "Títol del banner",
+                "titleTextPlaceholder": "Exemple: Fonts d'informació",
+                "text": "Text del banner",
+                "textDescription": "Aquest text sera el cos del banner",
+                "textDescriptionPlaceholder": "",
+                "save": "Desa banner"
+              },
+              "footer": {
+                "title": "Missatge del peu de pàgina",
+                "description": "Escriu aquí un text breu i clar, per exemple, una nota legal, informació sobre intel·ligència artificial o qualsevol avís rellevant.",
+                "text": "El teu missatge",
+                "textPlaceholder": "Genero respostes amb intel·ligència artificial i puc cometre errors.",
+                "save": "Desa peu de pàgina"
+              }
+            }
+          },
+          "LOCALISATION": {
+            "PAGE": {
+              "activeLanguage": "Idiomas actius",
+              "changeText": "Canviar texte",
+              "translation": "Traduint",
+              "welcomeScreen": "Primera pagina",
+              "footer": "Footer",
+              "headerHeader": "Header del header",
+              "headerBody": "Body del header",
+              "headerFooter": "Footer del header",
+              "assistantTitle": "Títol"
+            }
+          }
         },
         "ASSISTANT": {
           "ASSISTANT_ID": {

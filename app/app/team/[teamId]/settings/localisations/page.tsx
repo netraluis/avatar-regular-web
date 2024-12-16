@@ -29,24 +29,16 @@ import { useEffect, useState } from "react";
 import { useTeamSettingsContext } from "@/components/context/teamSettingsContext";
 import { MultiSelect } from "@/components/multi-select-language";
 import { SelectCharging } from "@/components/loaders/loadersSkeleton";
-
-const localisations = {
-  activeLanguage: "Idiomas actius",
-  changeText: "Canviar texte",
-  translation: "Traduint",
-  welcomeScreen: "Primera pagina",
-  footer: "Footer",
-  headerHeader: "Header del header",
-  headerBody: "Body del header",
-  headerFooter: "Footer del header",
-  assistantTitle: "Títol",
-};
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 interface ExtendedTextHref extends TextHref {
   hrefLanguages: HrefLanguages[];
 }
 
 export default function Component() {
+    const { t } = useDashboardLanguage();
+      const localisations = t("app.TEAM.TEAM_ID.SETTINGS.LOCALISATION.PAGE");
+
   const {
     state: { teamSelected },
   } = useAppContext();

@@ -54,6 +54,8 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.LAYOUT",
   );
 
+  const menu = t("app.TEAM.TEAM_ID.SETTINGS.LAYOUT.menu");
+
   const router = useRouter();
 
   const {
@@ -182,7 +184,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                       routerHandler={handleTeamRouteChange}
                       createNewTeamRoute={handleCreateNewTeamRoute}
                       settingsRouteHandler={handleTeamSettingsRoute}
-                      navItems={teamsSettingsNav}
+                      navItems={teamsSettingsNav(menu)}
                       fromColor={"to-[#f4f269]"}
                       toColor={"from-[#5cb270]"}
                     />
