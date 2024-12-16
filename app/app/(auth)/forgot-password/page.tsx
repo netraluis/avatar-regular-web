@@ -9,28 +9,13 @@ import { useUserForgotPassword } from "@/components/context/useAppContext/user";
 import ConfirmationScreen from "@/components/user-process/redirect";
 import { MailCheck } from "lucide-react";
 import Link from "next/link";
-
-const forgotPassword = {
-  title: "Recupera la teva contrasenya",
-  description:
-    "Introdueix el correu electrònic amb el qual vas crear el compte i t’enviarem un enllaç per restablir la contrasenya.",
-  email: "Correu electrònic",
-  send: "Enviar enllaç de recuperació",
-  placeholder: "nom@chatbotfor.ai",
-  error: {
-    unknown_error: "Ho sentim hi ha hagut un error",
-  },
-  emailSent: "Hem enviat un correu",
-  emailSentDescription1: "Ves a la teva safata d’entrada a ",
-  emailSentDescription2:
-    ". Allà hi trobaràs un enllaç per crear una nova contrasenya.",
-  emailSentSubDescription:
-    "Si no el veus, revisa la carpeta de correu no desitjat o promocions.",
-  linkText: "",
-  link: "",
-};
+import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
 
 export default function Signup() {
+    const {t} = useUserManagmentLanguage()
+  
+    const forgotPassword = t('app.(AUTH).FORGOT_PASSWORD')
+    
   const { userForgotPassword, loading, data, error } = useUserForgotPassword();
   const [message, setMesssage] = useState(false);
   const [email, setEmail] = useState("");
