@@ -1,0 +1,12 @@
+{
+  "app": {
+    "TEAM":{
+      "LAYOUT": {
+        "dashboard": "Assistents",
+        "resources": "Recursos",
+        "help": "Ajuda",
+        "settings": "Configuració"
+      }
+    }
+  }
+}

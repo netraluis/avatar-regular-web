@@ -45,23 +45,28 @@ import {
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
 import { SelectCharging } from "../loaders/loadersSkeleton";
+import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 
-const header = {
-  userAuth: {
-    contact: "Contacta",
-    signup: "Registra’t",
-    login: "Inicia sessió",
-  },
-  dashboard: {
-    dashboard: "Assistents",
-    // history: "Historial",
-    resources: "Recursos",
-    help: "Ajuda",
-    settings: "Configuració",
-  },
-};
+// const header = {
+//   userAuth: {
+//     contact: "Contacta",
+//     signup: "Registra’t",
+//     login: "Inicia sessió",
+//   },
+//   dashboard: {
+//     dashboard: "Assistents",
+//     // history: "Historial",
+//     resources: "Recursos",
+//     help: "Ajuda",
+//     settings: "Configuració",
+//   },
+// };
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
+
+  const {t} = useDashboardLanguage();
+  const dashboard = t('app.TEAM.LAYOUT')
+
   const router = useRouter();
 
   const {
@@ -247,7 +252,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                     <span
                       className={`${isDashboardActive ? "text-foreground" : "text-muted-foreground"}`}
                     >
-                      {header.dashboard.dashboard}
+                      {dashboard.dashboard}
                     </span>
                   </NavigationMenuLink>
                 </Link>
@@ -263,7 +268,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {header.dashboard.resources}
+                    {dashboard.resources}
                   </a>
                 </NavigationMenuLink>
               </NavigationMenuItem>
@@ -278,7 +283,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {header.dashboard.help}
+                    {dashboard.help}
                   </a>
                 </NavigationMenuLink>
               </NavigationMenuItem>
