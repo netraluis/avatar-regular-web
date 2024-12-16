@@ -3,16 +3,21 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { assistantSettingsNav } from "@/lib/helper/navbar";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
+import { assistantSettingsMenu } from "@/lib/helper/navbar";
 
 function Header() {
+    const {t} = useDashboardLanguage();  
+    const assistantSettingsNav = t('app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.LAYOUT')
   const pathname = usePathname();
   const comparatePathName = pathname.split("/").slice(1)[4];
   const absolutePath = pathname.split("/").slice(1, 5).join("/");
 
+  const nav = assistantSettingsMenu(assistantSettingsNav) 
+
   return (
     <nav className="flex space-x-4 border-b py-0 px-4">
-      {assistantSettingsNav.map((item) => (
+      {nav.map((item) => (
         <Link
           key={item.name}
           href={`/${absolutePath}/${item.href}`}

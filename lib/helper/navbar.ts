@@ -53,15 +53,15 @@ export const teamsSettingsNav = [
   // { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
 ];
 
-const assistantSettingsText = {
-  playground: "Playground",
-  activity: "Activitat",
-  sources: "Fonts",
-  connect: "Connecta",
-  settings: "Configuració",
-};
+export interface AssistantSettingsText {
+  playground: string;
+  activity: string;
+  sources: string;
+  connect: string;
+  settings: string;
+}
 
-export const assistantSettingsNav = [
+export const assistantSettingsMenu = (assistantSettingsText:AssistantSettingsText) => ([
   {
     name: `${assistantSettingsText.playground}`,
     href: "playground",
@@ -79,4 +79,4 @@ export const assistantSettingsNav = [
     href: "settings",
     id: "settings",
   },
-];
+]);

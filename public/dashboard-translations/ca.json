@@ -8,7 +8,8 @@
     },
     "TEAM":{
       "TEAM_ID": {
-        "PAGE":{
+        "PAGE":
+        {
           "cardTitle": "Tauler d’Assistents ",
           "cardDescription": "Crea i gestiona els assistents del teu equip",
           "createAssistant": "Crear Assistent",
@@ -22,6 +23,23 @@
           "createYourAssistantDescription":
             "Personalitza el teu assistent en pocs passos: defineix les instruccions, afegeix fonts d’informació i ajusta el seu to de veu.",
           "textActionCreateYourAssistant": "Crear assistent"
+        },
+        "ASSISTANT": {
+          "ASSISTANT_ID": {
+            "LAYOUT":{
+              "playground": "Playground",
+              "activity": "Activitat",
+              "sources": "Fonts",
+              "connect": "Connecta",
+              "settings": "Configuració"
+            },
+            "ACTIVITY": {
+              
+            }
+          },
+          "SETTINGS": {
+
+          }
         }
       }
    
