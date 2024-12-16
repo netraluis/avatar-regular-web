@@ -171,54 +171,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     pathname === "/forgot-password" ||
     pathname === "/reset-password"
   ) {
-    return (
-      <div className="h-screen w-full flex flex-col overflow-hidden">
-        <header className="justify-between flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 p-4 flex">
-          <Image
-            src="/chatbotforLogo.svg"
-            alt="Logo"
-            width={170}
-            height={170}
-            className="cursor-pointer"
-            onClick={() => router.push("/")}
-          />
-          <div>
-            <Button asChild variant="link">
-              <a
-                href="https://wa.me/376644253?"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {header.userAuth.contact}
-              </a>
-            </Button>
-            {pathname === "/login" && (
-              <Button
-                onClick={() => {
-                  router.push("/signup");
-                }}
-                variant="secondary"
-              >
-                {header.userAuth.signup}
-              </Button>
-            )}
-            {pathname === "/signup" && (
-              <Button
-                onClick={() => {
-                  router.push("/login");
-                }}
-                variant="secondary"
-              >
-                {header.userAuth.login}
-              </Button>
-            )}
-          </div>
-        </header>
-        <div className="grow overflow-auto flex flex-col items-center">
-          {children}
-        </div>
-      </div>
-    );
+    return <>{children}</>;
   }
 
   return (

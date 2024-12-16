@@ -10,25 +10,12 @@ import { useEffect } from "react";
 import { useLoginUser } from "@/components/context/useAppContext/user";
 import { useAppContext } from "@/components/context/appContext";
 import ConfirmationScreen from "@/components/user-process/redirect";
-
-const login = {
-  title: "Inicia sessió",
-  description: "👋 Hola de nou! Accedeix al teu compte ",
-  error: {
-    invalid_credentials: "Les credencials introduïdes no són correctes",
-    email_not_confirmed:
-      "El teu email no ha estat confirmat, si us plau ves a la teva bústia de correu",
-    unknown_error: "Ho sentim hi ha hagut un error",
-  },
-
-  email: "Correu electrònic",
-  password: "Contrasenya",
-  forgotPassword: "Has oblidat la teva contrasenya?",
-  forgotPasswordLinkText: " Recupera-la aquí",
-  login: "Inicia sessió",
-};
+import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
 
 export default function Login() {
+  const { t } = useUserManagmentLanguage()
+  const login = t('app.(AUTH).LOGIN')
+
   const { loginUser, error, loading } = useLoginUser();
 
   const {

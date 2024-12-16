@@ -14,42 +14,12 @@ import { useAppContext } from "@/components/context/appContext";
 import { UserData } from "@/types/types";
 import ConfirmationScreen from "@/components/user-process/redirect";
 import { Link2Off, PartyPopper } from "lucide-react";
-
-const resetPassword = {
-  title: "Crea una nova contrasenya",
-  description: "Introdueix una nova contrasenya per accedir al teu compte.",
-  subDescription:
-    "Fes servir almenys 6 caràcters i combina lletres, números i algun símbol",
-  success: "Contrasenya restablerta!",
-  successDescription:
-    "La teva nova contrasenya s’ha actualitzat correctament. Ja pots accedir al teu compte.",
-  successButtonText: "Accedeix al tauler",
-  password: "Contrasenya nova",
-  password_repeat: "Repeteix la nova contrasenya",
-  password_updating: "Actualitzant contrasenya",
-  send: "Enviar",
-
-  error: {
-    same_password: "La contrasenya ha de ser la mateixa",
-    weak_password: "La contrasenya ha de tenir almenys 6 caràcters.",
-    otp_expired:
-      "El teu token ha expirat , no es vàlid, o ja has fet un intent",
-    unknown_error: "Ho sentim hi ha hagut un error",
-  },
-  otp_expired: "",
-  otp_send: "Enviat nou token",
-  otp_sended: "Token enviat",
-
-  genericError: "El teu enllaç no és vàlid o ha expirat.",
-  genericErrorDescription: "Això pot passar per diverses raons:",
-  genericErrorList: [
-    "L’enllaç de verificació ha caducat",
-    // "L’adreça de correu no és correcta",
-    // "El teu compte ja ha estat confirmat",
-  ],
-};
+import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
 
 export default function Confirmation() {
+  const { t } = useUserManagmentLanguage()
+  const resetPassword = t('app.(AUTH).RESET_PASSWORD')
+  
   const { dispatch } = useAppContext();
   const router = useRouter();
   const { userResetPassword, error, data, loading } = useUserResetPassword();
@@ -107,7 +77,7 @@ export default function Confirmation() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="repeatPassword">
-                {resetPassword.password_repeat}
+                {resetPassword.passwordRepeat}
               </Label>
               <Input
                 id="repeatPassword"
@@ -131,13 +101,13 @@ export default function Confirmation() {
 
             {localError === "same_password" && (
               <p className="text-red-500">
-                {resetPassword.error.same_password}
+                {resetPassword.error.samePassword}
               </p>
             )}
 
             {localError === "weak_password" && (
               <p className="text-red-500">
-                {resetPassword.error.weak_password}
+                {resetPassword.error.weakPassword}
               </p>
             )}
 
@@ -154,7 +124,7 @@ export default function Confirmation() {
                     aria-hidden="true"
                   />
                 )}
-                {resetPassword.password_updating}
+                {resetPassword.passwordUpdating}
               </Button>
             )}
           </form>
@@ -179,10 +149,10 @@ export default function Confirmation() {
             <p className="mt-4 text-muted-foreground">
               {resetPassword.genericErrorDescription}{" "}
               <ul className="styled-list">
-                {resetPassword.genericErrorList.map((item, index) => (
+                {resetPassword.genericErrorList.map((item: string, index: number) => (
                   <li key={index}>
-                    {"  - "}
-                    {item}
+                  {"  - "}
+                  {item}
                   </li>
                 ))}
               </ul>
