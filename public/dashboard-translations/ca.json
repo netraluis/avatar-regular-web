@@ -1,12 +1,30 @@
 {
   "app": {
+    "LAYOUT": {
+      "dashboard": "Assistents",
+      "resources": "Recursos",
+      "help": "Ajuda",
+      "settings": "Configuració"
+    },
     "TEAM":{
-      "LAYOUT": {
-        "dashboard": "Assistents",
-        "resources": "Recursos",
-        "help": "Ajuda",
-        "settings": "Configuració"
+      "TEAM_ID": {
+        "PAGE":{
+          "cardTitle": "Tauler d’Assistents ",
+          "cardDescription": "Crea i gestiona els assistents del teu equip",
+          "createAssistant": "Crear Assistent",
+          "errorGettingAssistants": "Error obtenint els assistents",
+          "name": "Nom",
+          "link": "Enllaç",
+          "visibility": "Visibilitat",
+          "edit": "Editar",
+          "delete": "Eliminar",
+          "createYourAssistant": "Crea el teu primer assistent",
+          "createYourAssistantDescription":
+            "Personalitza el teu assistent en pocs passos: defineix les instruccions, afegeix fonts d’informació i ajusta el seu to de veu.",
+          "textActionCreateYourAssistant": "Crear assistent"
+        }
       }
-    }
+   
+  }
   }
 }

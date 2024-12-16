@@ -1,6 +1,6 @@
 "use server";
 import { AppProvider } from "@/components/context/appContext";
-import DashboardHeader from "@/components/layouts/dashboard-layout";
+
 import { getUserById } from "@/lib/data/user";
 import { headers } from "next/headers";
 
@@ -30,7 +30,7 @@ export default async function Layout({
 
   return (
     <AppProvider user={user} userLocal={userLocal}>
-      <DashboardHeader>{children}</DashboardHeader>
+      {children}
     </AppProvider>
   );
 }

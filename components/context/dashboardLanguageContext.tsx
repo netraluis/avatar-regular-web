@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState, useEffect } from 'react';
-import ca from '@/public/user-managment-translations/ca.json';
+import ca from '@/public/dashboard-translations/ca.json';
 
 enum Language {
     ca = 'ca'

@@ -31,24 +31,13 @@ import { TitleLayout } from "@/components/layouts/title-layout";
 import OnboardingBase from "@/components/onboarding/onboarding-base";
 import { Bot } from "lucide-react";
 import { useFetchTeamsByUserIdAndTeamId } from "@/components/context/useAppContext/team";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-const teamIdText = {
-  cardTitle: "Tauler d’Assistents ",
-  cardDescription: "Crea i gestiona els assistents del teu equip",
-  createAssistant: "Crear Assistent",
-  errorGettingAssistants: "Error obtenint els assistents",
-  name: "Nom",
-  link: "Enllaç",
-  visibility: "Visibilitat",
-  edit: "Editar",
-  delete: "Eliminar",
-  createYourAssistant: "Crea el teu primer assistent",
-  createYourAssistantDescription:
-    "Personalitza el teu assistent en pocs passos: defineix les instruccions, afegeix fonts d’informació i ajusta el seu to de veu.",
-  textActionCreateYourAssistant: "Crear assistent",
-};
 
 export default function Dashboard() {
+  const {t} = useDashboardLanguage();  
+  const teamIdText = t('app.TEAM.TEAM_ID.PAGE')
+
   const router = useRouter();
   const { fetchTeamsByUserIdAndTeamId } = useFetchTeamsByUserIdAndTeamId();
   const {

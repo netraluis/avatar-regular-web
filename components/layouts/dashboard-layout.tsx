@@ -47,25 +47,20 @@ import Link from "next/link";
 import { SelectCharging } from "../loaders/loadersSkeleton";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 
-// const header = {
-//   userAuth: {
-//     contact: "Contacta",
-//     signup: "Registra’t",
-//     login: "Inicia sessió",
-//   },
-//   dashboard: {
-//     dashboard: "Assistents",
-//     // history: "Historial",
-//     resources: "Recursos",
-//     help: "Ajuda",
-//     settings: "Configuració",
-//   },
-// };
+const dashboard = {
+
+    dashboard: "Assistents",
+    // history: "Historial",
+    resources: "Recursos",
+    help: "Ajuda",
+    settings: "Configuració",
+}
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
 
-  const {t} = useDashboardLanguage();
-  const dashboard = t('app.TEAM.LAYOUT')
+  const use = useDashboardLanguage();
+  console.log({use})
+  // const dashboard = t('app.TEAM.LAYOUT')
 
   const router = useRouter();
 
@@ -168,16 +163,6 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     const newPath = `/team/${teamId}/assistant/${assistantId}/${subMenu}`;
     router.push(newPath);
   };
-
-  if (
-    pathname === "/login" ||
-    pathname === "/signup" ||
-    pathname === "/confirm" ||
-    pathname === "/forgot-password" ||
-    pathname === "/reset-password"
-  ) {
-    return <>{children}</>;
-  }
 
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden">
