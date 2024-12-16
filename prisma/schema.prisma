@@ -78,6 +78,10 @@ model User {
   email       String    // No uses @unique aquí porque vamos a crear una clave compuesta
   teams       UserTeam[]  
   status      UserStatus
+  name        String?
+  surname     String?
+  imageUrl    String?
+  language    LanguageType @default(CA)
   
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

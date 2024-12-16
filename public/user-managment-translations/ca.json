@@ -1,0 +1,20 @@
+{
+  "app": {
+    "(AUTH)": {
+      "CONFIRM":{
+        "successEmail": "Enhorabona! La teva conta ha estat confirmada",
+        "successDescription":
+          "Inicia la sessió per començar a crear el teu assistent personalitzat",
+        "successButtonText": "Iniciar sessió",
+        "otpError": "Oops! L’enllaç ha caducat",
+        "otpErrorDescription":
+          "Sembla que l’enllaç de confirmació ha caducat. No passa res, et podem enviar un de nou.",
+        "otpErrorButtonText": "Reenviar un nou enllaç",
+      
+        "verifyAccount": "Verificant el teu compte…",
+        "verifyAccountDescription": "Aquest procés pot tardar uns segons "
+      }
+      
+    }
+  }
+}

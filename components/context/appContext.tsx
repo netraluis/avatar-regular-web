@@ -1,7 +1,7 @@
 "use client"; // Este archivo debe ser un cliente porque usará hooks
 import { createContext, useContext, useReducer } from "react";
 
-import { Assistant } from "@prisma/client";
+import { Assistant, User } from "@prisma/client";
 import { UserData } from "@/types/types";
 import { Team } from "@prisma/client";
 import { GetTeamByTeamId } from "@/lib/data/team";
@@ -17,6 +17,7 @@ type AppState = {
     openAIassistant: OpenAI.Beta.Assistants.Assistant;
   } | null;
   user: UserData | null;
+  userLocal: User | null;
 };
 
 // Acciones que el reducer manejará
@@ -129,9 +130,11 @@ const AppContext = createContext<
 export const AppProvider = ({
   children,
   user,
+  userLocal
 }: {
   children: React.ReactNode;
-  user: UserData | null;
+  user: UserData;
+  userLocal: User | null;
 }) => {
   const initialState: AppState = {
     teams: [],
@@ -139,6 +142,7 @@ export const AppProvider = ({
     assistantsByTeam: [],
     assistantSelected: null,
     user,
+    userLocal
   };
 
   const [state, dispatch] = useReducer(appReducer, initialState);

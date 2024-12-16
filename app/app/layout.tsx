@@ -1,6 +1,7 @@
 "use server";
 import { AppProvider } from "@/components/context/appContext";
 import DashboardHeader from "@/components/layouts/dashboard-layout";
+import { getUserById } from "@/lib/data/user";
 import { headers } from "next/headers";
 
 export default async function Layout({
@@ -22,8 +23,13 @@ export default async function Layout({
   // console.log({ team });
   // if (!team) return <div>no team</div>;
 
+  let userLocal = null;
+  if(user.user?.id) {
+    userLocal = (await getUserById(user.user.id))[0];
+  }
+
   return (
-    <AppProvider user={user}>
+    <AppProvider user={user} userLocal={userLocal}>
       <DashboardHeader>{children}</DashboardHeader>
     </AppProvider>
   );
