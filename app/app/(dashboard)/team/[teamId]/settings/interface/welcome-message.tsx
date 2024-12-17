@@ -42,7 +42,7 @@ export function WelcomeMessage({
 
   useEffect(() => {
     if (teamSelected) {
-      const welcome = teamSelected.welcome.find(
+      const welcome = teamSelected?.welcome?.find(
         (w) => w.language === teamSelected.defaultLanguage,
       )?.text || [""];
       setWelcomeDefaultText(welcome);

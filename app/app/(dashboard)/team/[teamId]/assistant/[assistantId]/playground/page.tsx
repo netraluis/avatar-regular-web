@@ -191,7 +191,7 @@ export default function Playground() {
                 {playground.adjustments.instructions}
               </Label>
               <div className="mb-3">
-                {assistantValues?.instructions ? (
+                {assistantValues ? (
                   <Textarea
                     id="instructions"
                     placeholder="Type your instructions here"

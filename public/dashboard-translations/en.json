@@ -8,6 +8,8 @@
     },
     "USER": {
       "LAYOUT": {
+        "title": "Settings",
+        "description": "Manage your account settings and adjust preferences",
         "profile": "Profile",
         "logout": "Log Out",
         "menu": {

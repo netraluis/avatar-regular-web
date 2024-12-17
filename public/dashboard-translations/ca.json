@@ -8,6 +8,8 @@
     },
     "USER": {
       "LAYOUT": {
+        "title": "Configuració",
+        "description": "Gestiona la configuració del teu compte i ajusta les preferències",
         "profile": "Perfil",
         "logout": "Sortir",
         "menu": {
@@ -27,15 +29,14 @@
               "title": "Cognoms"
             }
           },
-"language": {
-  "title": "Idioma",
-  "description": "Aquest és l'idioma que s'utilitzarà al tauler de control.",
-  "select": {
-    "title": "Tria l'idioma",
-    "description": "Aquest és l'idioma que s'utilitzarà al tauler de control."
-  }
-}
-
+          "language": {
+            "title": "Idioma",
+            "description": "Aquest és l'idioma que s'utilitzarà al tauler de control.",
+            "select": {
+              "title": "Tria l'idioma",
+              "description": "Aquest és l'idioma que s'utilitzarà al tauler de control."
+            }
+          }
         }
       }
     },

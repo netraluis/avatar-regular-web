@@ -149,7 +149,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   };
 
   const handleTeamSettingsRoute = (subMenu: string) => {
-    const newPath = `/team/${teamId}/settings/${subMenu}`;
+    const newPath = `/team/${teamSelected?.id}/settings/${subMenu}`;
     router.push(newPath);
   };
 
@@ -267,7 +267,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                 </NavigationMenuLink>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href={`/team/${teamId}/settings`} legacyBehavior passHref>
+                <Link href={`/team/${teamSelected?.id}/settings`} legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     {/* <span className="text-muted-foreground">{header.dashboard.settings}</span> */}
                     <Settings

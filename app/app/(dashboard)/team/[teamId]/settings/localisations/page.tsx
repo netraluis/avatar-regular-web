@@ -72,21 +72,21 @@ export default function Component() {
   }, [teamSelected]);
 
   useEffect(() => {
-    const welcome = teamSelected?.welcome.find(
+    const welcome = teamSelected?.welcome?.find(
       (lang) => lang.language === languageToTranslate,
     )?.text;
     setWel(welcome ? welcome : []);
   }, [teamSelected, languageToTranslate]);
 
   useEffect(() => {
-    const footer = teamSelected?.footer.find(
+    const footer = teamSelected?.footer?.find(
       (lang) => lang.language === languageToTranslate,
     )?.text;
     setFooter(footer ? footer : "");
   }, [teamSelected]);
 
   useEffect(() => {
-    const menuFooter = teamSelected?.menuFooter.find(
+    const menuFooter = teamSelected?.menuFooter?.find(
       (lang) => lang.language === languageToTranslate,
     )?.text;
     setMenuFooter(menuFooter ? menuFooter : "");
@@ -94,11 +94,11 @@ export default function Component() {
 
   useEffect(() => {
     const menuHeaderDefaultLanguage =
-      teamSelected?.menuHeader.find((type) => type.type === "HEADER")
+      teamSelected?.menuHeader?.find((type) => type.type === "HEADER")
         ?.textHref || [];
 
     const menuBodyDefaultLanguage =
-      teamSelected?.menuHeader.find((type) => type.type === "BODY")?.textHref ||
+      teamSelected?.menuHeader?.find((type) => type.type === "BODY")?.textHref ||
       [];
 
     setMenuHeaderDefaultLanguage(menuHeaderDefaultLanguage);
@@ -277,7 +277,7 @@ export default function Component() {
               <TableRow>
                 <TableCell>
                   {
-                    teamSelected?.footer.find(
+                    teamSelected?.footer?.find(
                       (lang) => lang.language === teamSelected?.defaultLanguage,
                     )?.text
                   }
@@ -330,11 +330,11 @@ export default function Component() {
 
               {menuHeaderDefaultLanguage?.map((textHref, index) => {
                 const defaultText =
-                  textHref.hrefLanguages.find(
+                  textHref.hrefLanguages?.find(
                     (lan) => lan.language === teamSelected?.defaultLanguage,
                   )?.text || "";
                 const language =
-                  textHref.hrefLanguages.find(
+                  textHref.hrefLanguages?.find(
                     (lan) => lan.language === languageToTranslate,
                   )?.text || "";
 
@@ -416,11 +416,11 @@ export default function Component() {
 
               {menuBodyDefaultLanguage?.map((textHref, index) => {
                 const defaultText =
-                  textHref.hrefLanguages.find(
+                  textHref.hrefLanguages?.find(
                     (lan) => lan.language === teamSelected?.defaultLanguage,
                   )?.text || "";
                 const language =
-                  textHref.hrefLanguages.find(
+                  textHref.hrefLanguages?.find(
                     (lan) => lan.language === languageToTranslate,
                   )?.text || "";
 
@@ -501,7 +501,7 @@ export default function Component() {
               <TableRow>
                 <TableCell>
                   {
-                    teamSelected?.menuFooter.find(
+                    teamSelected?.menuFooter?.find(
                       (lang) => lang.language === teamSelected?.defaultLanguage,
                     )?.text
                   }
@@ -593,7 +593,7 @@ export default function Component() {
                                             languageToTranslate ||
                                             LanguageType.ES,
                                           assistantId:
-                                            teamSelected?.assistants.find(
+                                            teamSelected?.assistants?.find(
                                               (ass) => ass.name === showArea,
                                             )?.id || "",
                                         },
@@ -654,7 +654,7 @@ export default function Component() {
                                             languageToTranslate ||
                                             LanguageType.ES,
                                           assistantId:
-                                            teamSelected?.assistants.find(
+                                            teamSelected?.assistants?.find(
                                               (ass) => ass.name === showArea,
                                             )?.id || "",
                                         },

@@ -7,13 +7,6 @@ import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout"
 import { OnlyTitleLayout } from "@/components/layouts/only-title-layout";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-const userLayout = {
-  title: "Configuració",
-  description:
-    "Gestiona la configuració del teu compte i ajusta les preferències",
-  general: "General",
-  security: "Seguretat",
-};
 
 interface UserMenu {
   general: string;
@@ -35,6 +28,9 @@ export default function Layout({
     const { t } = useDashboardLanguage();
     const userNav = t(
       "app.USER.LAYOUT.menu",
+    );
+    const userLayout = t(
+      "app.USER.LAYOUT",
     );
 
   const navItems = userMenu(userNav);
