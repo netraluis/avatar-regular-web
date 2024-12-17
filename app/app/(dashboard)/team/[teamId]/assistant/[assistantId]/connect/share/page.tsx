@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import { CustomCard } from "@/components/custom-card";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Component() {
@@ -16,19 +15,15 @@ export default function Component() {
   const share = t("app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.CONNECT.SHARE.PAGE");
 
   const [url, setUrl] = useState("");
-  const { assistantId } = useParams();
   const {
-    state: { teamSelected },
+    state: { teamSelected, assistantSelected },
   } = useAppContext();
 
   useEffect(() => {
-    const assistantUrl = teamSelected?.assistants.find(
-      (ass) => ass.id === assistantId,
-    )?.url;
     setUrl(
-      `https://${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantUrl}`,
+      `https://${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantSelected?.localAssistant?.url}`,
     );
-  }, [teamSelected]);
+  }, [teamSelected, assistantSelected]);
 
   const handleRedirect = () => {
     window.open(url, "_blank");
