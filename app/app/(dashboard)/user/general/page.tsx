@@ -2,7 +2,7 @@
 // import { CustomCard } from "@/components/custom-card";
 import { useAppContext } from "@/components/context/appContext";
 import { Language, useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
-import { useFetchUserByUserId, useUpdateUserLocal } from "@/components/context/useAppContext/userLocal";
+import { useUpdateUserLocal } from "@/components/context/useAppContext/userLocal";
 import { CustomCard } from "@/components/custom-card";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import { Button } from "@/components/ui/button";

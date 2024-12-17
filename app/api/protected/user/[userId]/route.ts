@@ -1,14 +1,3 @@
-import { getFiles } from "@/lib/data/file";
-import { deleteFile } from "@/lib/openAI/file";
-import { deleteAssistant } from "@/lib/data/assistant";
-import { deleteFile as deleteFileLocally } from "@/lib/data/file";
-import { deleteVectorStoreFile } from "@/lib/openAI/vector-store";
-import {
-  deleteTeam,
-  getAssistantsByTeam,
-  getTeamByTeamId,
-  updateTeam,
-} from "@/lib/data/team";
 import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { getUserById, updateUser } from "@/lib/data/user";

@@ -1,6 +1,6 @@
 "use client";
 
-import { User, Key } from "lucide-react";
+import { User } from "lucide-react";
 
 import { usePathname } from "next/navigation";
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
