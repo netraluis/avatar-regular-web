@@ -24,11 +24,13 @@ export default function Page() {
   const { t } = useDashboardLanguage();
   const newTeam = t("app.TEAM.NEW.PAGE");
 
+  console.log({ newTeam });
+
   const languages = {
-    CA: newTeam.CA,
-    ES: newTeam.ES,
-    EN: newTeam.EN,
-    FR: newTeam.FR,
+    CA: newTeam.languages.CA,
+    ES: newTeam.languages.ES,
+    EN: newTeam.languages.EN,
+    FR: newTeam.languages.FR,
   };
 
   const router = useRouter();
