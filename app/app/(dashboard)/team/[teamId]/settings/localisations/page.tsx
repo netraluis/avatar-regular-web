@@ -98,8 +98,8 @@ export default function Component() {
         ?.textHref || [];
 
     const menuBodyDefaultLanguage =
-      teamSelected?.menuHeader?.find((type) => type.type === "BODY")?.textHref ||
-      [];
+      teamSelected?.menuHeader?.find((type) => type.type === "BODY")
+        ?.textHref || [];
 
     setMenuHeaderDefaultLanguage(menuHeaderDefaultLanguage);
 

@@ -7,6 +7,14 @@ import { useRouter, usePathname } from "next/navigation";
 
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { Language } from "@/components/context/dashboardLanguageContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default async function Layout({
   children,
@@ -25,8 +33,9 @@ export default async function Layout({
 }
 
 const Header = () => {
-  const { t } = useUserManagmentLanguage();
+  const { t, changeLanguage, language } = useUserManagmentLanguage();
   const userAuth = t("app.(AUTH).LAYOUT");
+  console.log({ userAuth });
 
   const router = useRouter();
   const pathname = usePathname();
@@ -41,7 +50,26 @@ const Header = () => {
         className="cursor-pointer"
         onClick={() => router.push("/")}
       />
-      <div>
+      <div className="flex gap-4 items-center">
+        <Select
+          // defaultValue={language}
+          value={language}
+          onValueChange={(value) => {
+            console.log({ value });
+            changeLanguage(value as Language);
+          }}
+        >
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select a model" />
+          </SelectTrigger>
+          <SelectContent>
+            {Object.values(Language).map((lan) => (
+              <SelectItem key={lan} value={lan}>
+                {lan}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Button asChild variant="link">
           <a
             href="https://wa.me/376644253?"

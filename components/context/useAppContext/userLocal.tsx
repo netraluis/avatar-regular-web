@@ -5,9 +5,12 @@ import { Prisma, User } from ".prisma/client";
 export const useFetchUserByUserId = () => {
   const { dispatch } = useAppContext();
 
-  const [loadingUserLocalByUserId, setLoadingUserLocalByUserId] = useState(false);
-  const [errorUserLocalByUserId, setErrorUserLocalByUserId] = useState<any>(null);
-  const [dataUserLocalByUserId, setDataUserLocalByUserId] = useState<User|null>(null);
+  const [loadingUserLocalByUserId, setLoadingUserLocalByUserId] =
+    useState(false);
+  const [errorUserLocalByUserId, setErrorUserLocalByUserId] =
+    useState<any>(null);
+  const [dataUserLocalByUserId, setDataUserLocalByUserId] =
+    useState<User | null>(null);
 
   async function fetchUserLocalByUserId(userId: string) {
     if (!userId) return setErrorUserLocalByUserId("No user id provided");
@@ -51,7 +54,6 @@ export const useFetchUserByUserId = () => {
   };
 };
 
-
 export const useUpdateUserLocal = () => {
   const { dispatch } = useAppContext();
 
@@ -61,7 +63,7 @@ export const useUpdateUserLocal = () => {
 
   async function updateUserLocal(
     userLocalId: string,
-    data: Prisma.UserUpdateInput
+    data: Prisma.UserUpdateInput,
   ) {
     if (!userLocalId) return setError("No userLocal id provided");
     try {

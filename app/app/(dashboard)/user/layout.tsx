@@ -7,7 +7,6 @@ import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout"
 import { OnlyTitleLayout } from "@/components/layouts/only-title-layout";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-
 interface UserMenu {
   general: string;
 }
@@ -25,13 +24,9 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    const { t } = useDashboardLanguage();
-    const userNav = t(
-      "app.USER.LAYOUT.menu",
-    );
-    const userLayout = t(
-      "app.USER.LAYOUT",
-    );
+  const { t } = useDashboardLanguage();
+  const userNav = t("app.USER.LAYOUT.menu");
+  const userLayout = t("app.USER.LAYOUT");
 
   const navItems = userMenu(userNav);
   const pathname = usePathname();

@@ -1,0 +1,92 @@
+{
+  "app": {
+    "(AUTH)": {
+      "LAYOUT": {
+        "contact": "Contact",
+        "signup": "Sign Up",
+        "login": "Log In"
+      },
+      "CONFIRM": {
+        "successEmail": "Congratulations! Your account has been confirmed",
+        "successDescription": "Log in to start creating your personalized assistant",
+        "successButtonText": "Log In",
+        "otpError": "Oops! The link has expired",
+        "otpErrorDescription": "It looks like the confirmation link has expired. Don’t worry, we can send you a new one.",
+        "otpErrorButtonText": "Resend a new link",
+
+        "verifyAccount": "Verifying your account…",
+        "verifyAccountDescription": "This process may take a few seconds"
+      },
+      "FORGOT_PASSWORD": {
+        "title": "Recover Your Password",
+        "description": "Enter the email address you used to create your account, and we’ll send you a link to reset your password.",
+        "email": "Email",
+        "send": "Send Recovery Link",
+        "placeholder": "name@chatbotfor.ai",
+        "error": {
+          "unknown_error": "Sorry, an error has occurred"
+        },
+        "emailSent": "We’ve sent an email",
+        "emailSentDescription1": "Go to your inbox at ",
+        "emailSentDescription2": ". There you’ll find a link to create a new password.",
+        "emailSentSubDescription": "If you don’t see it, check your spam or promotions folder.",
+        "linkText": "",
+        "link": ""
+      },
+      "LOGIN": {
+        "title": "Log In",
+        "description": "👋 Welcome back! Access your account",
+        "error": {
+          "invalid_credentials": "The credentials you entered are incorrect",
+          "email_not_confirmed": "Your email has not been confirmed, please check your inbox",
+          "unknown_error": "Sorry, an error has occurred"
+        },
+        "email": "Email",
+        "password": "Password",
+        "forgotPassword": "Forgot your password?",
+        "forgotPasswordLinkText": " Recover it here",
+        "login": "Log In"
+      },
+      "RESET_PASSWORD": {
+        "title": "Create a New Password",
+        "description": "Enter a new password to access your account.",
+        "subDescription": "Use at least 6 characters and combine letters, numbers, and symbols.",
+        "success": "Password Reset!",
+        "successDescription": "Your new password has been successfully updated. You can now access your account.",
+        "successButtonText": "Access Dashboard",
+        "password": "New Password",
+        "passwordRepeat": "Repeat New Password",
+        "passwordUpdating": "Updating Password",
+        "error": {
+          "samePassword": "Passwords must match",
+          "weakPassword": "Password must be at least 6 characters long.",
+          "otpExpired": "Your token has expired, is invalid, or has already been used",
+          "unknown_error": "Sorry, an error has occurred"
+        },
+
+        "genericError": "Your link is invalid or has expired.",
+        "genericErrorDescription": "This may happen for several reasons:",
+        "genericErrorList": ["The verification link has expired"]
+      },
+      "SIGN_UP": {
+        "title": "Create Your Account",
+        "description": "Enter your details to start personalizing your assistant in just a few minutes",
+        "email": "Email",
+        "emailPlaceholder": "name@chatbotfor.ai",
+        "password": "Password",
+        "action": "Create My Account",
+        "error": {
+          "weakPassword": "Password must be at least 6 characters long.",
+          "unknown_error": "Sorry, an error has occurred"
+        },
+        "subDescription": "Use at least 6 characters and combine letters, numbers, and symbols.",
+        "emailSent": "We’ve sent an email",
+        "emailSentDescription1": "You’re almost there! We’ve sent an email to ",
+        "emailSentDescription2": " to confirm your account. Check your spam or promotions folder.",
+        "emailSentSubDescription": "Didn’t receive the email?",
+        "linkText": " Contact us!",
+        "link": "https://wa.me/376644253?"
+      }
+    }
+  }
+}

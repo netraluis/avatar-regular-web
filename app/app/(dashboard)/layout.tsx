@@ -1,6 +1,9 @@
-'use client'
+"use client";
 import { useAppContext } from "@/components/context/appContext";
-import { DashboardLanguageProvider, Language } from "@/components/context/dashboardLanguageContext";
+import {
+  DashboardLanguageProvider,
+  Language,
+} from "@/components/context/dashboardLanguageContext";
 import DashboardHeader from "@/components/layouts/dashboard-layout";
 
 export default function Layout({
@@ -8,12 +11,11 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const {
-    state: { userLocal},
+    state: { userLocal },
   } = useAppContext();
 
-  const language: Language = userLocal?.language as Language || Language.EN;
+  const language: Language = (userLocal?.language as Language) || Language.EN;
 
   return (
     <DashboardLanguageProvider userLanguage={language}>

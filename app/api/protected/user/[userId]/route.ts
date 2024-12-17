@@ -43,7 +43,6 @@ export async function PATCH(
   { params }: { params: { userId: string } },
 ) {
   try {
-
     // Extraer los parámetros de la ruta
     const { userId } = params;
 
