@@ -58,6 +58,7 @@ export const UploadImage = ({
               onError={() => {
                 setImageLoading(false);
               }}
+              unoptimized
             />
           </div>
         ) : (
