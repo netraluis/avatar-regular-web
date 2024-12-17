@@ -10,6 +10,7 @@ export function Loader() {
           height={36}
           alt="chatbotfor logo"
           className="w-6 animate-pulse text-slate-400"
+          unoptimized
         />
       </div>
     </div>

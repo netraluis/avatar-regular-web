@@ -11,6 +11,7 @@ export default function Avatar({ imageUrl, roleName }: any) {
             alt="avatar"
             width={30}
             height={30}
+            unoptimized
           />
         </div>
         <div className="ml-3">

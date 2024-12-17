@@ -97,6 +97,7 @@ export default function Header({ domain }: { domain: Domain }) {
                 alt={domainData?.description || ""}
                 width={209}
                 height={74}
+                unoptimized
               />
             ) : (
               <div className="w-[209px] h-[74px] flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">
@@ -127,6 +128,7 @@ export default function Header({ domain }: { domain: Domain }) {
                 alt={domainData?.description || ""}
                 width={109}
                 height={44}
+                unoptimized
               />
             ) : (
               <div className="w-[209px] h-[74px] flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">
@@ -159,6 +161,7 @@ export default function Header({ domain }: { domain: Domain }) {
               alt={domainData?.description || ""}
               width={209}
               height={74}
+              unoptimized
             />
           ) : (
             <div className="w-[209px] h-[74px] flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">

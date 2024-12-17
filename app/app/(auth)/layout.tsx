@@ -49,6 +49,7 @@ const Header = () => {
         height={170}
         className="cursor-pointer"
         onClick={() => router.push("/")}
+        unoptimized
       />
       <div className="flex gap-4 items-center">
         <Select

@@ -60,6 +60,7 @@ export default function Header() {
               alt={""}
               fill
               className="object-contain object-left"
+              unoptimized
             />
           ) : (
             <div className="h-[74px] aspect-video  flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">

@@ -168,6 +168,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           height={32}
           className="cursor-pointer"
           onClick={() => router.push("/")}
+          unoptimized
         />
         <>
           <Breadcrumb className="flex">
