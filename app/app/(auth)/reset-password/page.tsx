@@ -14,7 +14,7 @@ import { useAppContext } from "@/components/context/appContext";
 import { UserData } from "@/types/types";
 import ConfirmationScreen from "@/components/user-process/redirect";
 import { Link2Off, PartyPopper } from "lucide-react";
-import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
+import { useUserManagmentLanguage } from "@/components/context/userManagmentLanguageContext";
 
 export default function Confirmation() {
   const { t } = useUserManagmentLanguage();

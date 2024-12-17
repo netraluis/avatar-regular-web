@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useLoginUser } from "@/components/context/useAppContext/user";
 import { useAppContext } from "@/components/context/appContext";
 import ConfirmationScreen from "@/components/user-process/redirect";
-import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
+import { useUserManagmentLanguage } from "@/components/context/userManagmentLanguageContext";
 
 export default function Login() {
   const { t } = useUserManagmentLanguage();

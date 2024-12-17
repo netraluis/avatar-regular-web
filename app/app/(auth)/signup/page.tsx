@@ -9,7 +9,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useSignupUser } from "@/components/context/useAppContext/user";
 import ConfirmationScreen from "@/components/user-process/redirect";
 import { MailCheck } from "lucide-react";
-import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
+import { useUserManagmentLanguage } from "@/components/context/userManagmentLanguageContext";
 
 export default function Signup() {
   const { t } = useUserManagmentLanguage();

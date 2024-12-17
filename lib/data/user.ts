@@ -13,16 +13,16 @@ export const getUserById = async (userId: string) => {
 };
 
 export const updateUser = async ({
-  teamId,
+  userId,
   data,
 }: {
-  teamId: string;
+  userId: string;
   data: Prisma.UserUpdateInput;
 }) => {
   try {
     const updateData = await prisma.user.update({
       where: {
-        id: teamId,
+        id: userId,
       },
       data,
     });

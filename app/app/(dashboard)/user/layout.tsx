@@ -5,6 +5,7 @@ import { User, Key } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
 import { OnlyTitleLayout } from "@/components/layouts/only-title-layout";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 const userLayout = {
   title: "Configuració",
@@ -14,9 +15,16 @@ const userLayout = {
   security: "Seguretat",
 };
 
-const navItems = [
-  { name: `${userLayout.general}`, href: "general", icon: User },
-  { name: `${userLayout.security}`, href: "security", icon: Key },
+interface UserMenu {
+  general: string;
+}
+
+const userMenu = (connectLayout: UserMenu) => [
+  {
+    name: `${connectLayout.general}`,
+    href: "general",
+    icon: User,
+  },
 ];
 
 export default function Layout({
@@ -24,6 +32,12 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+    const { t } = useDashboardLanguage();
+    const userNav = t(
+      "app.USER.LAYOUT.menu",
+    );
+
+  const navItems = userMenu(userNav);
   const pathname = usePathname();
   const comparatePathName = pathname.split("/").slice(1)[5];
   const absolutePath = pathname.split("/").slice(1, 6).join("/");

@@ -9,7 +9,7 @@ import { useUserForgotPassword } from "@/components/context/useAppContext/user";
 import ConfirmationScreen from "@/components/user-process/redirect";
 import { MailCheck } from "lucide-react";
 import Link from "next/link";
-import { useUserManagmentLanguage } from "@/components/context/userManagmentContext";
+import { useUserManagmentLanguage } from "@/components/context/userManagmentLanguageContext";
 
 export default function Signup() {
   const { t } = useUserManagmentLanguage();

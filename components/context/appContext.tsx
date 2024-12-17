@@ -52,8 +52,9 @@ type Action =
       type: "SET_TEAM";
       payload: {
         teamSelected: GetTeamByTeamId | null;
-      };
-    };
+      }
+    }
+  | { type: "SET_USER_LOCAL"; payload: User | null };
 
 // Reducer que actualizará el estado basado en las acciones
 const appReducer = (state: AppState, action: Action): AppState => {
@@ -113,6 +114,12 @@ const appReducer = (state: AppState, action: Action): AppState => {
         assistantsByTeam: [],
         user: null,
       };
+    
+    case "SET_USER_LOCAL":
+      return {
+        ...state,
+        userLocal: action.payload,
+      }
 
     default:
       return state;

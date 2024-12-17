@@ -2,7 +2,7 @@
 import {
   UserManagmentLanguageProvider,
   useUserManagmentLanguage,
-} from "@/components/context/userManagmentContext";
+} from "@/components/context/userManagmentLanguageContext";
 import { useRouter, usePathname } from "next/navigation";
 
 import Image from "next/image";

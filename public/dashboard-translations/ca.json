@@ -6,6 +6,39 @@
       "help": "Ajuda",
       "settings": "Configuració"
     },
+    "USER": {
+      "LAYOUT": {
+        "profile": "Perfil",
+        "logout": "Sortir",
+        "menu": {
+          "general": "General",
+          "security": "Seguretat"
+        }
+      },
+      "GENERAL": {
+        "PAGE": {
+          "teamSettings": {
+            "title": "Configuració",
+            "description": "Gestiona la configuració del teu compte i ajusta les preferències",
+            "name": {
+              "title": "Nom"
+            },
+            "surname": {
+              "title": "Cognoms"
+            }
+          },
+"language": {
+  "title": "Idioma",
+  "description": "Aquest és l'idioma que s'utilitzarà al tauler de control.",
+  "select": {
+    "title": "Tria l'idioma",
+    "description": "Aquest és l'idioma que s'utilitzarà al tauler de control."
+  }
+}
+
+        }
+      }
+    },
     "TEAM": {
       "NEW": {
         "PAGE": {
