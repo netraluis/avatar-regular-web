@@ -1,13 +1,15 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
-import ca from "@/public/dashboard-translations/ca.json";
+import CA from "@/public/dashboard-translations/ca.json";
+import EN from "@/public/dashboard-translations/en.json";
 
-enum Language {
-  ca = "ca",
+export enum Language {
+  CA = "CA",
+  EN = "EN",
 }
 
 // Definimos los idiomas disponibles
-const translations = { ca };
+const translations = { CA, EN };
 
 // Creamos el contexto
 const DashboardLanguageContext = createContext<any>(null);
@@ -21,7 +23,7 @@ export const DashboardLanguageProvider = ({
   userLanguage?: Language;
 }) => {
   const [language, setLanguage] = useState<Language>(
-    userLanguage || Language.ca,
+    userLanguage || Language.EN,
   );
   const [currentTranslations, setCurrentTranslations] = useState(
     translations[language],
