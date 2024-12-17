@@ -43,8 +43,7 @@ export default function Dashboard() {
     state: { teamSelected, assistantsByTeam, user },
   } = useAppContext();
   const { teamId } = useParams();
-  const { loading, fetchAssistantsByTeamId } =
-    useFetchAssistantsByTeamId();
+  const { loading, fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
   const { deleteAssistant } = useDeleteAssistant();
 
   useEffect(() => {

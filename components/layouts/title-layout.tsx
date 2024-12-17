@@ -32,8 +32,8 @@ export const TitleLayout = ({
   // actionErrorText,
   // actionError,
 }: TitleLayoutProps) => {
-    const { t } = useDashboardLanguage();
-    const {preview} = t("app.TEAM.TEAM_ID.SETTINGS.LAYOUT");
+  const { t } = useDashboardLanguage();
+  const { preview } = t("app.TEAM.TEAM_ID.SETTINGS.LAYOUT");
   return (
     <div className="flex flex-col overflow-auto p-2 w-full h-full">
       <div className="flex items-center gap-4 py-1.5 px-1.5">

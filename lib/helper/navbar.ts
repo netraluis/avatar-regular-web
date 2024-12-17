@@ -25,7 +25,7 @@ interface TeamSettingsText {
 //   plans: "Plans",
 // };
 
-export const teamsSettingsNav = (teamSettingsText:TeamSettingsText) => ([
+export const teamsSettingsNav = (teamSettingsText: TeamSettingsText) => [
   {
     name: `${teamSettingsText.general}`,
     href: "general",
@@ -60,7 +60,7 @@ export const teamsSettingsNav = (teamSettingsText:TeamSettingsText) => ([
   },
   { name: "Plans", href: "plans", icon: Gem, id: "plans", alpha: true },
   // { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
-]);
+];
 
 export interface AssistantSettingsText {
   playground: string;

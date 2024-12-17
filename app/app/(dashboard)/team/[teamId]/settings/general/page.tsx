@@ -15,8 +15,8 @@ import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export default function Component() {
-    const { t } = useDashboardLanguage();
-    const setting = t("app.TEAM.TEAM_ID.SETTINGS.GENERAL.PAGE");
+  const { t } = useDashboardLanguage();
+  const setting = t("app.TEAM.TEAM_ID.SETTINGS.GENERAL.PAGE");
 
   const {
     state: { user, teamSelected },

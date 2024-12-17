@@ -36,8 +36,8 @@ interface ExtendedTextHref extends TextHref {
 }
 
 export default function Component() {
-    const { t } = useDashboardLanguage();
-      const localisations = t("app.TEAM.TEAM_ID.SETTINGS.LOCALISATION.PAGE");
+  const { t } = useDashboardLanguage();
+  const localisations = t("app.TEAM.TEAM_ID.SETTINGS.LOCALISATION.PAGE");
 
   const {
     state: { teamSelected },

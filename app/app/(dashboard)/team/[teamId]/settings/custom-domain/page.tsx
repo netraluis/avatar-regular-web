@@ -14,7 +14,6 @@ import { useEffect, useState } from "react";
 import slugify from "slugify";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-
 export default function Component() {
   const { t } = useDashboardLanguage();
   const customDomain = t("app.TEAM.TEAM_ID.SETTINGS.CUSTOM_DOMAIN.PAGE");

@@ -58,8 +58,7 @@ function Layout({
 
   const { state } = useAppContext();
   const { data, setAssistantValues } = useAssistantSettingsContext();
-  const { updateAssistant } =
-    useUpdateAssistant();
+  const { updateAssistant } = useUpdateAssistant();
   const { assistantId, teamId } = useParams();
 
   const { getAssistantData, getAssistant } = useGetAssistant();
