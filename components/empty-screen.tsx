@@ -8,6 +8,7 @@ export function EmptyScreen({ children }: { children: React.ReactNode }) {
   if (!data?.welcome)
     return (
       <div className="w-full flex justify-center content-center self-center justify-items-center rounded-lg">
+        <div className="h-16"></div>
         <ChatBubbleBottomCenterIcon
           className="ml-0.5 w-9 animate-pulse mr-1 text-slate-400"
           aria-hidden="true"
@@ -57,11 +58,12 @@ export function EmptyScreen({ children }: { children: React.ReactNode }) {
     default:
       return (
         <div className=" mx-auto max-w-2xl px-4">
+          <div className="h-16"></div>
           <div className="flex flex-col gap-2 rounded-lg bg-background p-8 w-full ">
             <div className="ml-12 mt-3.5 flex mb-5 ">
               <div
                 dangerouslySetInnerHTML={{
-                  __html: data?.welcome[0]?.text[0] || "",
+                  __html: data?.welcome[0]?.text[0] || "hola",
                 }}
               />
             </div>
