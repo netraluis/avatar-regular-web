@@ -66,7 +66,7 @@ export default function Component() {
         <div className="space-y-2">
           <Label htmlFor="team-url">{customDomain.subdomain.urlTitle}</Label>
           <div className="flex items-center space-x-2">
-            {subDomainUrl ? (
+            {teamSelected ? (
               <Input
                 id="team-url"
                 value={subDomainUrl}
@@ -87,7 +87,7 @@ export default function Component() {
                   ? !useExist.data
                     ? "green"
                     : "alert"
-                  : "default"
+                  : "outline"
               }
             >
               {useExist.loading && (
