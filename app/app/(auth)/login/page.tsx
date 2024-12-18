@@ -11,12 +11,14 @@ import { useLoginUser } from "@/components/context/useAppContext/user";
 import { useAppContext } from "@/components/context/appContext";
 import ConfirmationScreen from "@/components/user-process/redirect";
 import { useUserManagmentLanguage } from "@/components/context/userManagmentLanguageContext";
+import { useFetchUserByUserId } from "@/components/context/useAppContext/userLocal";
 
 export default function Login() {
   const { t } = useUserManagmentLanguage();
   const login = t("app.(AUTH).LOGIN");
 
   const { loginUser, error, loading } = useLoginUser();
+  const { fetchUserLocalByUserId } = useFetchUserByUserId();
 
   const {
     state: { user },
@@ -26,6 +28,7 @@ export default function Login() {
 
   useEffect(() => {
     if (user?.user?.id) {
+      fetchUserLocalByUserId(user?.user?.id);  
       router.push("/");
     }
   }, [user?.user?.id]);

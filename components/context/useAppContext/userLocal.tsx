@@ -16,7 +16,7 @@ export const useFetchUserByUserId = () => {
     if (!userId) return setErrorUserLocalByUserId("No user id provided");
     try {
       setLoadingUserLocalByUserId(true);
-      const response = await fetch(`/api/protected/user`, {
+      const response = await fetch(`/api/protected/user/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

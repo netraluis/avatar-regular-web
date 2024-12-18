@@ -9,7 +9,7 @@ export const getUserById = async (userId: string) => {
     },
   });
 
-  return subdomainInfo;
+  return subdomainInfo[0];
 };
 
 export const updateUser = async ({
