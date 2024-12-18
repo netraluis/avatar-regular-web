@@ -49,7 +49,7 @@ import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 
 export default function Dashboard({ children }: { children: React.ReactNode }) {
   const { t } = useDashboardLanguage();
-  const dashboard = t("app.TEAM.LAYOUT");
+  const dashboard = t("app.LAYOUT");
   const assistantSettingsNav = t(
     "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.LAYOUT",
   );
