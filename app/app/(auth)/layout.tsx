@@ -25,8 +25,9 @@ export default async function Layout({
     <UserManagmentLanguageProvider>
       <div className="h-screen w-full flex flex-col items-center overflow-hidden border">
         <Header />
-        <div className="grow overflow-auto flex flex-col items-center"></div>
-        {children}
+        <div className="grow overflow-auto flex flex-col items-center border">
+          {children}
+        </div>
       </div>
     </UserManagmentLanguageProvider>
   );
