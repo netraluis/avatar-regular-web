@@ -5,7 +5,7 @@ import { CustomCard } from "@/components/custom-card";
 import { WelcomeMessage } from "./welcome-message";
 import { MenuSettings } from "./menu-settings";
 import { MenuHeaderFooter } from "./menu-footer";
-// import { Banner } from "./banner";
+import { Banner } from "./banner";
 import { Footer } from "./footer";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
@@ -28,7 +28,7 @@ export default function Interface() {
         />
         <MenuHeaderFooter />
       </CustomCard>
-      {/* <Banner/> */}
+      <Banner/>
       <Footer/>
     </div>
   );

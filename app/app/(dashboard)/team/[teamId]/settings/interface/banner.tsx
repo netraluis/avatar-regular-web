@@ -32,7 +32,6 @@ export const Banner = () => {
   > | null>(null);
 
   useEffect(() => {
-    console.log({teamSelected})
     if (!teamSelected) return;
     const headerButtonData = teamSelected.headerButton?.find(
       (w) => w.language === teamSelected.defaultLanguage,
@@ -43,7 +42,8 @@ export const Banner = () => {
       title: headerButtonData?.title || "",
       text: headerButtonData?.text || [""],
     };
-    if (headerButtonData) {
+
+    if (bannerObject) {
       setHeaderButton(bannerObject);
       setHeaderButtonDefault(bannerObject);
     }
@@ -100,7 +100,6 @@ export const Banner = () => {
             // className="min-h-[100px]"
             value={headerButton?.buttonText || ""}
             onChange={(e) => {
-              console.log({headerButton})
               if (!headerButton) return;
               setHeaderButton({
                 ...headerButton,
