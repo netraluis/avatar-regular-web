@@ -8,7 +8,9 @@
        "team": "equip",
        "assistant":"assistent",
         "teams": "Equips",
-        "create": "Crear"
+        "create": "Crear",
+        "myAccount": "El meu compte",
+        "logout": "Tancar sessió"
     },
     "USER": {
       "LAYOUT": {

@@ -174,8 +174,8 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           <Breadcrumb className="flex">
             <BreadcrumbList>
               {!loadingTeamsByUserIdAndTeamId &&
-              !loadingTeamsByUserId &&
-              teamSelected ? (
+                !loadingTeamsByUserId &&
+                teamSelected ? (
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Combobox
@@ -188,6 +188,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                       navItems={teamsSettingsNav(menu)}
                       fromColor={"to-[#f4f269]"}
                       toColor={"from-[#5cb270]"}
+                      subjectTitle={dashboard.teams}
                     />
                   </BreadcrumbLink>
                 </BreadcrumbItem>
@@ -215,6 +216,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                           navItems={assistantSettingsMenu(assistantSettingsNav)}
                           fromColor={"to-[#ff930f]"}
                           toColor={"from-[#fff95b]"}
+                          subjectTitle={dashboard.dashboard}
                         />
                       </BreadcrumbLink>
                     </BreadcrumbItem>
@@ -301,12 +303,17 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{dashboard.myAccount}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => router.push("/user/general")}>
-                  Settings
+                  {dashboard.settings}
                 </DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
+                <DropdownMenuItem>    <a
+                  className="text-muted-foreground"
+                  href="https://wa.me/376644253?"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >Support</a></DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={async () => {
@@ -314,7 +321,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                     router.push("/login");
                   }}
                 >
-                  Logout
+                  {dashboard.logout}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

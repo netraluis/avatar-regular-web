@@ -8,7 +8,9 @@
       "team": "team",
       "assistant": "assistant",
       "teams": "Teams",
-      "create": "Create"
+      "create": "Create",
+      "myAccount": "My Account",
+      "logout": "Logout"
     },
     "USER": {
       "LAYOUT": {
