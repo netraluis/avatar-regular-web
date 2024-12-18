@@ -33,6 +33,7 @@ export function Combobox({
   navItems,
   fromColor,
   toColor,
+  subjectTitle
 }: {
   options: Option[];
   optionSelected: Option;
@@ -43,6 +44,7 @@ export function Combobox({
   navItems: Option[];
   fromColor: string;
   toColor: string;
+  subjectTitle: string;
 }) {
   const { t } = useDashboardLanguage();
   const dashboard = t("app.LAYOUT");
@@ -81,7 +83,7 @@ export function Combobox({
           {/* <CommandInput placeholder={`Find a ${subject}`} /> */}
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup heading={dashboard.teams}>
+            <CommandGroup heading={subjectTitle}>
               {options.map((team: Option) => (
                 <CommandItem
                   className="pl-3 flex justify-between items-center"
@@ -111,7 +113,7 @@ export function Combobox({
           </CommandList>
           <Separator />
           <CommandList>
-            <CommandGroup heading="Settings">
+            <CommandGroup heading={dashboard.settings}>
               {navItems?.map((setting: Option) => (
                 <CommandItem
                   className="flex justify-between items-center"
