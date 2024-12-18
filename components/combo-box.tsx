@@ -9,7 +9,6 @@ import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
@@ -22,6 +21,7 @@ import {
 import { Option } from "@/types/types";
 import { ChevronRight } from "lucide-react";
 import { Separator } from "./ui/separator";
+import { useDashboardLanguage } from "./context/dashboardLanguageContext";
 
 export function Combobox({
   options,
@@ -44,6 +44,8 @@ export function Combobox({
   fromColor: string;
   toColor: string;
 }) {
+  const { t } = useDashboardLanguage();
+  const dashboard = t("app.LAYOUT");
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -76,10 +78,10 @@ export function Combobox({
       </PopoverTrigger>
       <PopoverContent className="w-[220px] p-0">
         <Command>
-          <CommandInput placeholder={`Find a ${subject}`} />
+          {/* <CommandInput placeholder={`Find a ${subject}`} /> */}
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup heading="Teams">
+            <CommandGroup heading={dashboard.teams}>
               {options.map((team: Option) => (
                 <CommandItem
                   className="pl-3 flex justify-between items-center"
@@ -103,7 +105,7 @@ export function Combobox({
               ))}
               <CommandItem className="flex" onSelect={createNewTeamRoute}>
                 <CirclePlus className={cn("mr-2 h-4 w-4")} />
-                Create {subject}
+                {dashboard.create} {subject}
               </CommandItem>
             </CommandGroup>
           </CommandList>

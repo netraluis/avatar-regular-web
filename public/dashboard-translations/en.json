@@ -4,7 +4,11 @@
       "dashboard": "Assistants",
       "resources": "Resources",
       "help": "Help",
-      "settings": "Settings"
+      "settings": "Settings",
+      "team": "team",
+      "assistant": "assistant",
+      "teams": "Teams",
+      "create": "Create"
     },
     "USER": {
       "LAYOUT": {

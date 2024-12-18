@@ -181,7 +181,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                     <Combobox
                       options={teams as Option[]}
                       optionSelected={teamSelected as Option}
-                      subject="team"
+                      subject={dashboard.team}
                       routerHandler={handleTeamRouteChange}
                       createNewTeamRoute={handleCreateNewTeamRoute}
                       settingsRouteHandler={handleTeamSettingsRoute}
@@ -208,7 +208,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                           optionSelected={
                             assistantSelected?.localAssistant as Option
                           }
-                          subject="assistant"
+                          subject={dashboard.assistant}
                           routerHandler={handleAssistantRouteChange}
                           createNewTeamRoute={handleCreateNewTeamRoute}
                           settingsRouteHandler={handleAssistantsSettingsRoute}
