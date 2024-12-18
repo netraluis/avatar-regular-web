@@ -1,19 +1,18 @@
 import { useAppContext } from "@/components/context/appContext";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { interfaceText } from "./locale";
 import { Textarea } from "@/components/ui/textarea";
 import { TextAreaCharging } from "@/components/loaders/loadersSkeleton";
 import { SaveButton } from "@/components/save-button";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useEffect, useState } from "react";
 import { MenuFooter } from "@prisma/client";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-export const MenuHeaderFooter = ({
-  texts,
-}: {
-  texts: typeof interfaceText.menu;
-}) => {
+export const MenuHeaderFooter = () => {
+  const { t } = useDashboardLanguage();
+  const texts = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE.menu");
+  
   const {
     state: { teamSelected, user },
   } = useAppContext();
@@ -66,14 +65,14 @@ export const MenuHeaderFooter = ({
         <div className="flex items-center justify-between">
           <div>
             <Label htmlFor="footer-header">
-              {interfaceText.menu.menuFooterTitle}
+              {texts.menuFooterTitle}
             </Label>
             <div className="ml-4 inline-flex items-center justify-center rounded-full bg-sky-500 px-3 py-1 text-sm font-medium text-white">
               Premium
             </div>
           </div>
           <Button variant="blue">
-            {interfaceText.menu.menuFooterChangePlan}
+            {texts.menuFooterChangePlan}
           </Button>
         </div>
 

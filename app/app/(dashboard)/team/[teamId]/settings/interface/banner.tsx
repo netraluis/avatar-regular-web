@@ -1,5 +1,4 @@
 import { CustomCard } from "@/components/custom-card";
-import { interfaceText } from "./locale";
 import { Label } from "@/components/ui/label";
 import { useAppContext } from "@/components/context/appContext";
 import { Input } from "@/components/ui/input";
@@ -12,8 +11,12 @@ import { useEffect, useState } from "react";
 import { HeaderButton, HeaderButtonType } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
 import { SaveButton } from "@/components/save-button";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-export const Banner = ({ texts }: { texts: typeof interfaceText.banner }) => {
+export const Banner = () => {
+  const { t } = useDashboardLanguage();
+  const interfaceText = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE.banner");
+
   const {
     state: { teamSelected, user },
   } = useAppContext();
@@ -29,7 +32,8 @@ export const Banner = ({ texts }: { texts: typeof interfaceText.banner }) => {
   > | null>(null);
 
   useEffect(() => {
-    if (!teamSelected?.headerButton) return;
+    console.log({teamSelected})
+    if (!teamSelected) return;
     const headerButtonData = teamSelected.headerButton?.find(
       (w) => w.language === teamSelected.defaultLanguage,
     );
@@ -82,20 +86,21 @@ export const Banner = ({ texts }: { texts: typeof interfaceText.banner }) => {
 
   return (
     <CustomCard
-      title={interfaceText.banner.title}
-      description={interfaceText.banner.description}
+      title={interfaceText.title}
+      description={interfaceText.description}
     >
       <div className="space-y-2">
         <Label htmlFor="banner-button-text">
-          {interfaceText.banner.buttonText}
+          {interfaceText.buttonText}
         </Label>
         {teamSelected ? (
           <Input
             id="banner-button-text"
-            placeholder={interfaceText.banner.buttonTextPlaceholder}
+            placeholder={interfaceText.buttonTextPlaceholder}
             // className="min-h-[100px]"
             value={headerButton?.buttonText || ""}
             onChange={(e) => {
+              console.log({headerButton})
               if (!headerButton) return;
               setHeaderButton({
                 ...headerButton,
@@ -108,12 +113,12 @@ export const Banner = ({ texts }: { texts: typeof interfaceText.banner }) => {
         )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="banner-title">{interfaceText.banner.titleText}</Label>
+        <Label htmlFor="banner-title">{interfaceText.titleText}</Label>
         {teamSelected ? (
           <Input
             id="banner-title"
             value={headerButton?.title || ""}
-            placeholder={interfaceText.banner.titleTextPlaceholder}
+            placeholder={interfaceText.titleTextPlaceholder}
             onChange={(e) => {
               if (!headerButton) return;
               setHeaderButton({
@@ -127,10 +132,10 @@ export const Banner = ({ texts }: { texts: typeof interfaceText.banner }) => {
         )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="banner-text">{interfaceText.banner.text}</Label>
+        <Label htmlFor="banner-text">{interfaceText.text}</Label>
         {teamSelected ? (
           <Textarea
-            placeholder={interfaceText.banner.textDescriptionPlaceholder}
+            placeholder={interfaceText.textDescriptionPlaceholder}
             id="banner-text"
             className="min-h-[100px]"
             value={headerButton?.text[0] || ""}
@@ -146,13 +151,13 @@ export const Banner = ({ texts }: { texts: typeof interfaceText.banner }) => {
           <TextAreaCharging />
         )}
         <p className="text-sm text-muted-foreground">
-          {interfaceText.banner.textDescription}
+          {interfaceText.textDescription}
         </p>
       </div>
       <SaveButton
         action={saveHandler}
         loading={updateTeam.loading}
-        actionButtonText={texts.save}
+        actionButtonText={interfaceText.save}
         valueChange={headerButton === headerButtonDefault}
       />
     </CustomCard>

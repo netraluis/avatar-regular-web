@@ -23,13 +23,13 @@ import {
   SelectCharging,
 } from "@/components/loaders/loadersSkeleton";
 import { SaveButton } from "@/components/save-button";
-import { interfaceText } from "./locale";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-export function WelcomeMessage({
-  texts,
-}: {
-  texts: typeof interfaceText.welcomeMessage;
-}) {
+export function WelcomeMessage() {
+
+  const { t } = useDashboardLanguage();
+  const texts = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE");
+
   const updateTeam = useUpdateTeam();
   const {
     state: { teamSelected, user },
@@ -104,7 +104,7 @@ export function WelcomeMessage({
   return (
     <CustomCard title={texts.title} description={texts.description}>
       <div className="space-y-2">
-        <Label htmlFor="welcome-type">{texts.linesTitle}</Label>
+        <Label htmlFor="welcome-type">{texts.welcomeType}</Label>
         {!updateTeam.loading ? (
           <Select
             onValueChange={onWelcomeTypeChange}
@@ -126,18 +126,18 @@ export function WelcomeMessage({
         )}
 
         <UploadImage
-          description={interfaceText.avatar.uploadLogo}
+          description={texts.avatar.uploadLogo}
           alt="avatar"
-          recommendedSize={interfaceText.avatar.recommendedSize}
+          recommendedSize={texts.avatar.recommendedSize}
           fileUserImageType={FileUserImageType.AVATAR}
           accept=".png,.jpg,.jpeg"
-          choose={interfaceText.avatar.choose}
+          choose={texts.avatar.choose}
         />
 
         {welcomeType === WelcomeType.PLAIN && (
           <div className="space-y-2">
             <Label htmlFor="welcome-message">
-              {interfaceText.welcomeMessage.title}
+              {texts.welcomeMessage.title}
             </Label>
             {teamSelected ? (
               <Textarea
@@ -153,7 +153,7 @@ export function WelcomeMessage({
               <TextAreaCharging />
             )}
             <p className="text-sm text-muted-foreground">
-              {interfaceText.welcomeMessage.description}
+              {texts.welcomeMessage.description}
             </p>
           </div>
         )}
@@ -161,7 +161,7 @@ export function WelcomeMessage({
         {welcomeType === WelcomeType.BUBBLE && (
           <div className="space-y-2">
             <Label htmlFor="welcome-message">
-              {interfaceText.welcomeMessage.linesTitle}
+              {texts.welcomeMessage.linesTitle}
             </Label>
             <Reorder.Group
               axis="y"
@@ -178,7 +178,7 @@ export function WelcomeMessage({
                   >
                     <GripVertical className="h-4 text-muted-foreground cursor-grab active:cursor-grabbing" />
                     <p>
-                      {interfaceText.welcomeMessage.line} {index + 1}
+                      {texts.welcomeMessage.line} {index + 1}
                     </p>
                     <Input
                       value={item}
@@ -199,10 +199,10 @@ export function WelcomeMessage({
               ))}
             </Reorder.Group>
             <Button variant="outline" size="sm" onClick={addWelcome}>
-              {interfaceText.welcomeMessage.addLine}
+              {texts.welcomeMessage.addLine}
             </Button>
             <p className="text-sm text-muted-foreground">
-              {interfaceText.welcomeMessage.lineDescription}
+              {texts.welcomeMessage.lineDescription}
             </p>
           </div>
         )}

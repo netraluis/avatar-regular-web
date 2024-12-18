@@ -1,5 +1,4 @@
 import { HrefLanguages, MenuHeaderType, TextHref } from "@prisma/client";
-import { interfaceText } from "./locale";
 import { motion, Reorder } from "framer-motion";
 import { GripVertical, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -10,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { LoaderCircle, Save } from "lucide-react";
 import { TextAreaCharging } from "@/components/loaders/loadersSkeleton";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 interface ExtendedTextHref extends TextHref {
   hrefLanguages: HrefLanguages[];
@@ -17,11 +17,12 @@ interface ExtendedTextHref extends TextHref {
 
 export function MenuSettings({
   menuType,
-  texts,
 }: {
   menuType: MenuHeaderType;
-  texts: typeof interfaceText.menu;
 }) {
+    const { t } = useDashboardLanguage();
+    const texts = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE.menu");
+
   const {
     state: { teamSelected, user },
   } = useAppContext();
@@ -46,12 +47,12 @@ export function MenuSettings({
 
   const title =
     menuType === MenuHeaderType.HEADER
-      ? interfaceText.menu.menuHeaderTitle
-      : interfaceText.menu.menuBodyTitle;
+      ? texts.menuHeaderTitle
+      : texts.menuBodyTitle;
   const description =
     menuType === MenuHeaderType.HEADER
-      ? interfaceText.menu.menuHeaderTitleDescription
-      : interfaceText.menu.menuBodyDescription;
+      ? texts.menuHeaderTitleDescription
+      : texts.menuBodyDescription;
 
   const addMenuItem = () => {
     if (!teamSelected?.defaultLanguage) return;
@@ -234,7 +235,7 @@ export function MenuSettings({
                 <Save className="h-3.5 w-3.5 mr-2" />
               )}
               <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                {interfaceText.menu.save}
+                {texts.save}
               </span>
             </Button>
           </div>

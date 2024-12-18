@@ -1,5 +1,4 @@
 import { CustomCard } from "@/components/custom-card";
-import { interfaceText } from "./locale";
 import { Label } from "@/components/ui/label";
 import { useAppContext } from "@/components/context/appContext";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
@@ -7,8 +6,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { TextAreaCharging } from "@/components/loaders/loadersSkeleton";
 import { SaveButton } from "@/components/save-button";
+import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-export const Footer = ({ texts }: { texts: typeof interfaceText.footer }) => {
+export const Footer = () => {
+  const { t } = useDashboardLanguage();
+  const interfaceText = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE");
+
   const updateTeam = useUpdateTeam();
   const {
     state: { teamSelected, user },
@@ -51,7 +54,7 @@ export const Footer = ({ texts }: { texts: typeof interfaceText.footer }) => {
   };
 
   return (
-    <CustomCard title={texts.title} description={texts.description}>
+    <CustomCard title={interfaceText.footer.title} description={interfaceText.footer.description}>
       <div className="space-y-2">
         <Label htmlFor="footer-message">{interfaceText.footer.text}</Label>
         {teamSelected ? (
@@ -72,7 +75,7 @@ export const Footer = ({ texts }: { texts: typeof interfaceText.footer }) => {
       <SaveButton
         action={saveHandler}
         loading={updateTeam.loading}
-        actionButtonText={texts.save}
+        actionButtonText={interfaceText.footer.save}
         valueChange={foot === footDefault}
       />
     </CustomCard>
