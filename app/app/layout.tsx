@@ -25,7 +25,7 @@ export default async function Layout({
 
   let userLocal = null;
   if (user.user?.id) {
-    userLocal = (await getUserById(user.user.id))[0];
+    userLocal = await getUserById(user.user.id);
   }
 
   return (
