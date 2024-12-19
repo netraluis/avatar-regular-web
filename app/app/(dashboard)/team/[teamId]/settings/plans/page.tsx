@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Environments, initializePaddle, Paddle } from '@paddle/paddle-js';
 import { useEffect, useState } from "react";
+import { useAppContext } from "@/components/context/appContext";
 
 
 // import {
@@ -65,11 +66,28 @@ const plans = {
 
 export default function Component() {
   const [paddle, setPaddle] = useState<Paddle>();
+    const {
+      state: { userLocal },
+    } = useAppContext(); 
 
   useEffect(() => {
+    console.log(process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN , process.env.NEXT_PUBLIC_PADDLE_ENV)
     if (!paddle?.Initialized && process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN && process.env.NEXT_PUBLIC_PADDLE_ENV) {
-      initializePaddle({ environment: process.env.NEXT_PUBLIC_PADDLE_ENV as Environments, token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN }).then(
+      initializePaddle({ 
+        environment: 'sandbox' as Environments, 
+        token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
+        eventCallback: function(data) {
+          console.log(data);
+          console.log(userLocal?.language.toLocaleLowerCase())
+        },
+        checkout: {
+          settings: {
+            locale: `${userLocal?.language.toLocaleLowerCase() === 'ca' ? 'es' : userLocal?.language.toLocaleLowerCase() || 'es'}`,
+          },
+        },
+      }).then(
         (paddleInstance: Paddle | undefined) => {
+          console.log({paddleInstance})
           if (paddleInstance) {
             setPaddle(paddleInstance);
           }
@@ -82,10 +100,12 @@ export default function Component() {
     console.log(paddle);
   }, [paddle]);
 
-  const openCheckout = () => {
+  const openCheckout = async() => {
     paddle?.Checkout.open({
-      items: [{ priceId: 'pro_01jff3rxysjzgm9fy8fjcr1rch', quantity: 1 }],
-    });
+      ...(userLocal?.email && { customer: { email: userLocal.email } }),
+      items: [{ priceId: 'pri_01jff3w66x4zdamqr8j1qggyp4', quantity: 1 }],
+    })
+
   };
 
   return (
