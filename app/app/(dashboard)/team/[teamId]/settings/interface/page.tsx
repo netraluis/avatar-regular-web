@@ -20,16 +20,12 @@ export default function Interface() {
         title={interfaceText.menu.headerTitle}
         description={interfaceText.menu.headerDescription}
       >
-        <MenuSettings
-          menuType={MenuHeaderType.HEADER}
-        />
-        <MenuSettings
-          menuType={MenuHeaderType.BODY}
-        />
+        <MenuSettings menuType={MenuHeaderType.HEADER} />
+        <MenuSettings menuType={MenuHeaderType.BODY} />
         <MenuHeaderFooter />
       </CustomCard>
-      <Banner/>
-      <Footer/>
+      <Banner />
+      <Footer />
     </div>
   );
 }

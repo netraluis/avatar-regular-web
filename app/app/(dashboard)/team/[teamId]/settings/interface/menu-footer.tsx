@@ -12,7 +12,7 @@ import { useDashboardLanguage } from "@/components/context/dashboardLanguageCont
 export const MenuHeaderFooter = () => {
   const { t } = useDashboardLanguage();
   const texts = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE.menu");
-  
+
   const {
     state: { teamSelected, user },
   } = useAppContext();
@@ -64,16 +64,12 @@ export const MenuHeaderFooter = () => {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div>
-            <Label htmlFor="footer-header">
-              {texts.menuFooterTitle}
-            </Label>
+            <Label htmlFor="footer-header">{texts.menuFooterTitle}</Label>
             <div className="ml-4 inline-flex items-center justify-center rounded-full bg-sky-500 px-3 py-1 text-sm font-medium text-white">
               Premium
             </div>
           </div>
-          <Button variant="blue">
-            {texts.menuFooterChangePlan}
-          </Button>
+          <Button variant="blue">{texts.menuFooterChangePlan}</Button>
         </div>
 
         {teamSelected ? (

@@ -15,13 +15,9 @@ interface ExtendedTextHref extends TextHref {
   hrefLanguages: HrefLanguages[];
 }
 
-export function MenuSettings({
-  menuType,
-}: {
-  menuType: MenuHeaderType;
-}) {
-    const { t } = useDashboardLanguage();
-    const texts = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE.menu");
+export function MenuSettings({ menuType }: { menuType: MenuHeaderType }) {
+  const { t } = useDashboardLanguage();
+  const texts = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE.menu");
 
   const {
     state: { teamSelected, user },

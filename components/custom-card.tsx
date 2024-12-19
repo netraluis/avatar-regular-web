@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter
+  CardFooter,
 } from "@/components/ui/card";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
@@ -43,7 +43,11 @@ export const CustomCard = ({
         <>
           {/* <Separator className="mb-t" /> */}
           <CardFooter className="flex justify-end items-end">
-            <Button size="sm" onClick={action} disabled={loading || !valueChange}>
+            <Button
+              size="sm"
+              onClick={action}
+              disabled={loading || !valueChange}
+            >
               {loading ? (
                 <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
               ) : (

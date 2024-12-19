@@ -28,7 +28,7 @@ export default function Login() {
 
   useEffect(() => {
     if (user?.user?.id) {
-      fetchUserLocalByUserId(user?.user?.id);  
+      fetchUserLocalByUserId(user?.user?.id);
       router.push("/");
     }
   }, [user?.user?.id]);

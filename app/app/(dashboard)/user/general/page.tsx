@@ -40,7 +40,11 @@ export default function General() {
     loading: boolean;
   } | null>(null);
 
-  const [language, setLanguage] = useState< {language: Language, saveLanguage: Language, loading: boolean}| null>(null);
+  const [language, setLanguage] = useState<{
+    language: Language;
+    saveLanguage: Language;
+    loading: boolean;
+  } | null>(null);
   const [loadingSettings, setLoadingSettings] = useState(false);
 
   useEffect(() => {
@@ -59,8 +63,8 @@ export default function General() {
 
       setLanguage({
         loading: false,
-        language: userLocal.language as Language, 
-        saveLanguage: userLocal.language as Language
+        language: userLocal.language as Language,
+        saveLanguage: userLocal.language as Language,
       });
     }
   }, [userLocal]);
@@ -75,17 +79,19 @@ export default function General() {
       });
     }
     setLoadingSettings(false);
-  }
+  };
 
   const saveHandlerLanguage = async () => {
-    if(!language) return;
-    setLanguage({...language, loading: true});
+    if (!language) return;
+    setLanguage({ ...language, loading: true });
     if (user?.user.id) {
-      await updateUserLocal(user?.user.id, {language: language?.language as LanguageType,})
+      await updateUserLocal(user?.user.id, {
+        language: language?.language as LanguageType,
+      });
     }
-    setLanguage({...language, loading: false});
+    setLanguage({ ...language, loading: false });
     changeLanguage(language.language);
-  }
+  };
 
   return (
     <div>
@@ -94,7 +100,10 @@ export default function General() {
         description={general.teamSettings.description}
         action={saveHandlerSettings}
         loading={loadingSettings}
-        valueChange={name?.name !== name?.saveName || surname?.surname !== surname?.saveSurname}
+        valueChange={
+          name?.name !== name?.saveName ||
+          surname?.surname !== surname?.saveSurname
+        }
       >
         <div className="flex space-x-4">
           <div className="space-y-2 w-1/2">
@@ -171,13 +180,12 @@ export default function General() {
             <Select
               defaultValue={language?.language}
               value={language?.language}
-              onValueChange={(value) =>{
+              onValueChange={(value) => {
                 // handleLanguageUpdate({ language: value as Language })
-                  if(language){
-                    setLanguage({ ...language, language: value as Language });
-                  }
+                if (language) {
+                  setLanguage({ ...language, language: value as Language });
                 }
-              }
+              }}
             >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select a model" />

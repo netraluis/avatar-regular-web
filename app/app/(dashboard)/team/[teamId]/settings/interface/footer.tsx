@@ -54,7 +54,10 @@ export const Footer = () => {
   };
 
   return (
-    <CustomCard title={interfaceText.footer.title} description={interfaceText.footer.description}>
+    <CustomCard
+      title={interfaceText.footer.title}
+      description={interfaceText.footer.description}
+    >
       <div className="space-y-2">
         <Label htmlFor="footer-message">{interfaceText.footer.text}</Label>
         {teamSelected ? (

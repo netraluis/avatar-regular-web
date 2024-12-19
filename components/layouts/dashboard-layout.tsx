@@ -174,8 +174,8 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           <Breadcrumb className="flex">
             <BreadcrumbList>
               {!loadingTeamsByUserIdAndTeamId &&
-                !loadingTeamsByUserId &&
-                teamSelected ? (
+              !loadingTeamsByUserId &&
+              teamSelected ? (
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Combobox
@@ -308,12 +308,17 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                 <DropdownMenuItem onClick={() => router.push("/user/general")}>
                   {dashboard.settings}
                 </DropdownMenuItem>
-                <DropdownMenuItem>    <a
-                  className="text-muted-foreground"
-                  href="https://wa.me/376644253?"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >Support</a></DropdownMenuItem>
+                <DropdownMenuItem>
+                  {" "}
+                  <a
+                    className="text-muted-foreground"
+                    href="https://wa.me/376644253?"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Support
+                  </a>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={async () => {

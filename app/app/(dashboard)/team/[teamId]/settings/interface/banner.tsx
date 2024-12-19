@@ -90,9 +90,7 @@ export const Banner = () => {
       description={interfaceText.description}
     >
       <div className="space-y-2">
-        <Label htmlFor="banner-button-text">
-          {interfaceText.buttonText}
-        </Label>
+        <Label htmlFor="banner-button-text">{interfaceText.buttonText}</Label>
         {teamSelected ? (
           <Input
             id="banner-button-text"

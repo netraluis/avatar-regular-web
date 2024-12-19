@@ -33,7 +33,7 @@ export function Combobox({
   navItems,
   fromColor,
   toColor,
-  subjectTitle
+  subjectTitle,
 }: {
   options: Option[];
   optionSelected: Option;
