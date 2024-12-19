@@ -5,12 +5,12 @@
       "resources": "Recursos",
       "help": "Ajuda",
       "settings": "Configuració",
-       "team": "equip",
-       "assistant":"assistent",
-        "teams": "Equips",
-        "create": "Crear",
-        "myAccount": "El meu compte",
-        "logout": "Tancar sessió"
+      "team": "equip",
+      "assistant": "assistent",
+      "teams": "Equips",
+      "create": "Crear",
+      "myAccount": "El meu compte",
+      "logout": "Tancar sessió"
     },
     "USER": {
       "LAYOUT": {

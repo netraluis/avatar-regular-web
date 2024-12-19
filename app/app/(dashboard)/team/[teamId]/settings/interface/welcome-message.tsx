@@ -17,16 +17,14 @@ import { UploadImage } from "@/components/upload-image";
 import { FileUserImageType } from "@/types/types";
 import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useAppContext } from "@/components/context/appContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   TextAreaCharging,
   SelectCharging,
 } from "@/components/loaders/loadersSkeleton";
-import { SaveButton } from "@/components/save-button";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export function WelcomeMessage() {
-
   const { t } = useDashboardLanguage();
   const texts = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE");
 
@@ -40,6 +38,18 @@ export function WelcomeMessage() {
     teamSelected?.welcomeType || WelcomeType.PLAIN,
   );
 
+  const welcomeSaveType = teamSelected?.welcomeType as WelcomeType || WelcomeType.PLAIN;
+
+  const [imageLogoHasChanged, setImageLogoHasChanged] = useState(false);
+
+  const uploadImageLogoRef = useRef<{ saveImage: () => void }>(null);
+  const imgLogoChange = (previewUrl: string | null) => {
+    if (!previewUrl) return;
+    setImageLogoHasChanged(true);
+  };
+
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (teamSelected) {
       const welcome = teamSelected?.welcome?.find(
@@ -52,13 +62,7 @@ export function WelcomeMessage() {
   }, [teamSelected]);
 
   const onWelcomeTypeChange = async (welcomeType: WelcomeType) => {
-    if (teamSelected && user?.user.id) {
-      await updateTeam.updateTeam(
-        teamSelected.id,
-        { welcomeType },
-        user.user.id,
-      );
-    }
+    setWelcomeType(welcomeType);
   };
 
   const updateWelcome = (index: number, value: string) => {
@@ -77,6 +81,7 @@ export function WelcomeMessage() {
   };
 
   const saveHandler = async () => {
+    setLoading(true);
     if (!teamSelected) return;
     const welcome = {
       upsert: {
@@ -97,18 +102,40 @@ export function WelcomeMessage() {
       },
     };
     if (teamSelected && user?.user.id) {
-      await updateTeam.updateTeam(teamSelected.id, { welcome }, user.user.id);
+      const updateObject: any = {}
+      if(welcomeType !== welcomeSaveType){
+        updateObject.welcomeType = welcomeType;
+      }
+      if(welcomeText !== welcomeDefaultText){
+        updateObject.welcome = welcome;
+      }
+      if(uploadImageLogoRef.current && imageLogoHasChanged){
+        await Promise.all([
+          uploadImageLogoRef.current.saveImage(),
+          updateTeam.updateTeam(teamSelected.id, updateObject , user.user.id)
+        ])
+      }else{
+        await updateTeam.updateTeam(teamSelected.id, updateObject , user.user.id);
+      }
     }
+    setImageLogoHasChanged(false);
+    setLoading(false);
   };
 
   return (
-    <CustomCard title={texts.title} description={texts.description}>
+    <CustomCard 
+      title={texts.title} 
+      description={texts.description}
+      action={saveHandler}
+      loading={loading}
+      valueChange={welcomeText !== welcomeDefaultText || imageLogoHasChanged || welcomeType !== welcomeSaveType}
+    >
       <div className="space-y-2">
         <Label htmlFor="welcome-type">{texts.welcomeType}</Label>
-        {!updateTeam.loading ? (
+        {welcomeType ? (
           <Select
             onValueChange={onWelcomeTypeChange}
-            value={teamSelected?.welcomeType}
+            value={welcomeType}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Selecciona un tipo" />
@@ -126,12 +153,14 @@ export function WelcomeMessage() {
         )}
 
         <UploadImage
+          ref={uploadImageLogoRef}
           description={texts.avatar.uploadLogo}
           alt="avatar"
           recommendedSize={texts.avatar.recommendedSize}
           fileUserImageType={FileUserImageType.AVATAR}
           accept=".png,.jpg,.jpeg"
           choose={texts.avatar.choose}
+          onPreviewChange={imgLogoChange}
         />
 
         {welcomeType === WelcomeType.PLAIN && (
@@ -139,7 +168,7 @@ export function WelcomeMessage() {
             <Label htmlFor="welcome-message">
               {texts.welcomeMessage.title}
             </Label>
-            {teamSelected ? (
+            {welcomeText ? (
               <Textarea
                 id="welcome-message"
                 placeholder="Type your message here"
@@ -206,13 +235,6 @@ export function WelcomeMessage() {
             </p>
           </div>
         )}
-
-        <SaveButton
-          action={saveHandler}
-          loading={updateTeam.loading}
-          actionButtonText={texts.save}
-          valueChange={welcomeText === welcomeDefaultText}
-        />
       </div>
     </CustomCard>
   );
