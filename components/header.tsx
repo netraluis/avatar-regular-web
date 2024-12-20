@@ -12,7 +12,6 @@ import {
 import Image from "next/image";
 import { Domain, GlobalContext } from "./context/globalContext";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Disclaimer from "./disclaimer";
 import { usePathname } from "next/navigation";
@@ -24,7 +23,6 @@ export default function Header({ domain }: { domain: Domain }) {
     actualsThreadId,
     state,
     setState,
-    setUser,
     user,
     setDomainData,
     domainData,
@@ -43,7 +41,6 @@ export default function Header({ domain }: { domain: Domain }) {
     setMobileMenuOpen(false);
     localStorage.setItem("new-talk", JSON.stringify(actualThreadId));
   };
-  const supabase = createClient();
   const router = useRouter();
 
   // Verificar si el usuario tiene sesión
