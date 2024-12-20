@@ -47,35 +47,35 @@ export default function Header({ domain }: { domain: Domain }) {
   const router = useRouter();
 
   // Verificar si el usuario tiene sesión
-  useEffect(() => {
-    const getSession = async () => {
-      const { data: sessionData, error } = await supabase.auth.getSession();
-      if (error) {
-        console.error("Error fetching session:", error);
-      } else {
-        setUser(sessionData?.session?.user || null);
-      }
-    };
+  // useEffect(() => {
+  //   const getSession = async () => {
+  //     const { data: sessionData, error } = await supabase.auth.getSession();
+  //     if (error) {
+  //       console.error("Error fetching session:", error);
+  //     } else {
+  //       setUser(sessionData?.session?.user || null);
+  //     }
+  //   };
 
-    getSession();
+  //   getSession();
 
-    // Listener para cambios de autenticación (ej: sign in/out)
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user || null);
-        if (session) {
-          getSession(); // Forzar actualización manual después del cambio de auth
-        } else {
-          router.push("/login");
-        }
-      },
-    );
+  //   // Listener para cambios de autenticación (ej: sign in/out)
+  //   // const { data: authListener } = supabase.auth.onAuthStateChange(
+  //   //   (event, session) => {
+  //   //     setUser(session?.user || null);
+  //   //     if (session) {
+  //   //       getSession(); // Forzar actualización manual después del cambio de auth
+  //   //     } else {
+  //   //       router.push("/login");
+  //   //     }
+  //   //   },
+  //   // );
 
-    // Limpia el listener al desmontar el componente
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [router]);
+  //   // Limpia el listener al desmontar el componente
+  //   // return () => {
+  //   //   authListener.subscription.unsubscribe();
+  //   // };
+  // }, [router]);
 
   const returnToInicial = () => {
     setActualsThreadId([""]);

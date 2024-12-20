@@ -37,13 +37,13 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith("/login") &&
-    !request.nextUrl.pathname.startsWith("/api/protected")
-  ) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  // if (
+  //   !user &&
+  //   !request.nextUrl.pathname.startsWith("/login") &&
+  //   !request.nextUrl.pathname.startsWith("/api/protected")
+  // ) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
 
   if (user) {
     supabaseResponse.headers.set("x-user-id", user.id);

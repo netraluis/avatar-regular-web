@@ -45,9 +45,6 @@ export default async function middleware(req: NextRequest) {
   // if (pattern.test(url.toString())&& !req.nextUrl.pathname.startsWith("/login")) {
   const response = await updateSession(req);
   // Verificar si la respuesta indica una redirección (status 3xx)
-  if (response.status >= 300 && response.status < 400) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
 
   // special case for `vercel.pub` domain
   // if (hostname === "vercel.pub") {
