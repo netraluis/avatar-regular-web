@@ -5,7 +5,6 @@ import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import { TextAreaCharging } from "@/components/loaders/loadersSkeleton";
-import { SaveButton } from "@/components/save-button";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export const Footer = () => {
@@ -57,6 +56,9 @@ export const Footer = () => {
     <CustomCard
       title={interfaceText.footer.title}
       description={interfaceText.footer.description}
+      action={saveHandler}
+      loading={updateTeam.loading}
+      valueChange={foot !== footDefault}
     >
       <div className="space-y-2">
         <Label htmlFor="footer-message">{interfaceText.footer.text}</Label>
@@ -74,13 +76,6 @@ export const Footer = () => {
           <TextAreaCharging />
         )}
       </div>
-
-      <SaveButton
-        action={saveHandler}
-        loading={updateTeam.loading}
-        actionButtonText={interfaceText.footer.save}
-        valueChange={foot === footDefault}
-      />
     </CustomCard>
   );
 };

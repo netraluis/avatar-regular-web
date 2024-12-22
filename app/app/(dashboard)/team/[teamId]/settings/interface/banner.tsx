@@ -10,7 +10,6 @@ import { useUpdateTeam } from "@/components/context/useAppContext/team";
 import { useEffect, useState } from "react";
 import { HeaderButton, HeaderButtonType } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
-import { SaveButton } from "@/components/save-button";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
 export const Banner = () => {

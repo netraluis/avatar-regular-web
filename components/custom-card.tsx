@@ -34,7 +34,6 @@ export const CustomCard = ({
 }: CustomCardProps) => {
   const { t } = useDashboardLanguage();
   const texts = t("app.COMPONENTS.CUSTOM_CARD");
-  console.log({ texts });
 
   return (
     <Card className=" gap-4 mb-4 w-full">
