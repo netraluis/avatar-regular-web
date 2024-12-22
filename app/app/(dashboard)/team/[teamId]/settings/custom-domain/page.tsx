@@ -1,5 +1,5 @@
 "use client";
-import { LoaderCircle, Badge, BadgeX, BadgeCheck } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useAppContext } from "@/components/context/appContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { CustomCard } from "@/components/custom-card";
 import { useEffect, useState } from "react";
 import slugify from "slugify";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Component() {
   const { t } = useDashboardLanguage();
@@ -78,38 +79,49 @@ export default function Component() {
               <InputCharging />
             )}
             <span className="text-muted-foreground">.chatbotfor.com</span>
-            <Button
-              size="sm"
-              onClick={handleValidation}
-              disabled={subDomainUrlSave === subDomainUrl || updateTeam.loading}
-              variant={
-                !useExist.loading && useExist.data !== null
-                  ? !useExist.data
-                    ? "green"
-                    : "alert"
-                  : "outline"
-              }
-            >
-              {useExist.loading && (
-                <LoaderCircle className="h-3.5 w-3.5 animate-spin mr-1" />
+            <AnimatePresence>
+              {subDomainUrlSave !== subDomainUrl && (
+                <motion.div
+                  key="button"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Button
+                    className="transition-transform duration-500 transform"
+                    size="sm"
+                    onClick={handleValidation}
+                    disabled={updateTeam.loading}
+                    variant="outline"
+                  >
+                    {useExist.loading && (
+                      <LoaderCircle className="h-3.5 w-3.5 animate-spin mr-1" />
+                    )}
+                    {/* {!useExist.loading && useExist.data !== null && useExist.data && (
+                      <BadgeX className="h-3.5 w-3.5 mr-1" />
+                    )}
+                    {!useExist.loading &&
+                      useExist.data !== null &&
+                      !useExist.data && <BadgeCheck className="h-3.5 w-3.5 mr-1" />}
+                    {!useExist.loading && useExist.data === null && (
+                      <Badge className="h-3.5 w-3.5 mr-1" />
+                    )} */}
+                    {customDomain.subdomain.validation}
+                  </Button>
+                </motion.div>
               )}
-              {!useExist.loading && useExist.data !== null && useExist.data && (
-                <BadgeX className="h-3.5 w-3.5 mr-1" />
-              )}
-              {!useExist.loading &&
-                useExist.data !== null &&
-                !useExist.data && <BadgeCheck className="h-3.5 w-3.5 mr-1" />}
-              {!useExist.loading && useExist.data === null && (
-                <Badge className="h-3.5 w-3.5 mr-1" />
-              )}
-              {customDomain.subdomain.validation}
-            </Button>
+            </AnimatePresence>
           </div>
-          <p className="text-sm text-muted-foreground">
-            {!useExist.loading && useExist.data !== null && useExist.data
-              ? customDomain.subdomain.teamSubdomainDuplicate
-              : customDomain.subdomain.urlDescription}
-          </p>
+          {!useExist.loading && useExist.data !== null && useExist.data ? (
+            <p className="text-sm text-muted-foreground text-destructive">
+              {customDomain.subdomain.teamSubdomainDuplicate}
+            </p>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              {customDomain.subdomain.urlDescription}
+            </p>
+          )}
         </div>
       </CustomCard>
     </div>
