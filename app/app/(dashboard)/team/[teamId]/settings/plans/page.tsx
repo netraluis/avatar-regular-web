@@ -1,10 +1,9 @@
-'use client'
+"use client";
 import { Check } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Environments, initializePaddle, Paddle } from '@paddle/paddle-js';
+import { Environments, initializePaddle, Paddle } from "@paddle/paddle-js";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/components/context/appContext";
-
 
 // import {
 //   Tooltip,
@@ -62,37 +61,42 @@ const plans = {
       ],
     },
   ],
-}
+};
 
 export default function Component() {
   const [paddle, setPaddle] = useState<Paddle>();
-    const {
-      state: { userLocal },
-    } = useAppContext(); 
+  const {
+    state: { userLocal },
+  } = useAppContext();
 
   useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN , process.env.NEXT_PUBLIC_PADDLE_ENV)
-    if (!paddle?.Initialized && process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN && process.env.NEXT_PUBLIC_PADDLE_ENV) {
-      initializePaddle({ 
-        environment: 'sandbox' as Environments, 
+    console.log(
+      process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
+      process.env.NEXT_PUBLIC_PADDLE_ENV,
+    );
+    if (
+      !paddle?.Initialized &&
+      process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN &&
+      process.env.NEXT_PUBLIC_PADDLE_ENV
+    ) {
+      initializePaddle({
+        environment: "sandbox" as Environments,
         token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
-        eventCallback: function(data) {
+        eventCallback: function (data) {
           console.log(data);
-          console.log(userLocal?.language.toLocaleLowerCase())
+          console.log(userLocal?.language.toLocaleLowerCase());
         },
         checkout: {
           settings: {
-            locale: `${userLocal?.language.toLocaleLowerCase() === 'ca' ? 'es' : userLocal?.language.toLocaleLowerCase() || 'es'}`,
+            locale: `${userLocal?.language.toLocaleLowerCase() === "ca" ? "es" : userLocal?.language.toLocaleLowerCase() || "es"}`,
           },
         },
-      }).then(
-        (paddleInstance: Paddle | undefined) => {
-          console.log({paddleInstance})
-          if (paddleInstance) {
-            setPaddle(paddleInstance);
-          }
-        },
-      )
+      }).then((paddleInstance: Paddle | undefined) => {
+        console.log({ paddleInstance });
+        if (paddleInstance) {
+          setPaddle(paddleInstance);
+        }
+      });
     }
   }, []);
 
@@ -100,12 +104,11 @@ export default function Component() {
     console.log(paddle);
   }, [paddle]);
 
-  const openCheckout = async() => {
+  const openCheckout = async () => {
     paddle?.Checkout.open({
       ...(userLocal?.email && { customer: { email: userLocal.email } }),
-      items: [{ priceId: 'pri_01jff3w66x4zdamqr8j1qggyp4', quantity: 1 }],
-    })
-
+      items: [{ priceId: "pri_01jff3w66x4zdamqr8j1qggyp4", quantity: 1 }],
+    });
   };
 
   return (
@@ -120,12 +123,12 @@ export default function Component() {
         {plans.cards.map((plan, index) => (
           <Card key={index} onClick={openCheckout} className="cursor-pointer">
             <CardHeader className="space-y-1">
-              <CardTitle>
-                {plan.title}
-              </CardTitle>
+              <CardTitle>{plan.title}</CardTitle>
               <div className="flex items-baseline justify-between">
                 <span className="text-4xl font-bold">{plan.price} €</span>
-                <span className="text-sm text-muted-foreground">{plan.monthly}</span>
+                <span className="text-sm text-muted-foreground">
+                  {plan.monthly}
+                </span>
               </div>
             </CardHeader>
             <CardContent className="h-full">

@@ -38,7 +38,8 @@ export function WelcomeMessage() {
     teamSelected?.welcomeType || WelcomeType.PLAIN,
   );
 
-  const welcomeSaveType = teamSelected?.welcomeType as WelcomeType || WelcomeType.PLAIN;
+  const welcomeSaveType =
+    (teamSelected?.welcomeType as WelcomeType) || WelcomeType.PLAIN;
 
   const [imageLogoHasChanged, setImageLogoHasChanged] = useState(false);
 
@@ -102,20 +103,24 @@ export function WelcomeMessage() {
       },
     };
     if (teamSelected && user?.user.id) {
-      const updateObject: any = {}
-      if(welcomeType !== welcomeSaveType){
+      const updateObject: any = {};
+      if (welcomeType !== welcomeSaveType) {
         updateObject.welcomeType = welcomeType;
       }
-      if(welcomeText !== welcomeDefaultText){
+      if (welcomeText !== welcomeDefaultText) {
         updateObject.welcome = welcome;
       }
-      if(uploadImageLogoRef.current && imageLogoHasChanged){
+      if (uploadImageLogoRef.current && imageLogoHasChanged) {
         await Promise.all([
           uploadImageLogoRef.current.saveImage(),
-          updateTeam.updateTeam(teamSelected.id, updateObject , user.user.id)
-        ])
-      }else{
-        await updateTeam.updateTeam(teamSelected.id, updateObject , user.user.id);
+          updateTeam.updateTeam(teamSelected.id, updateObject, user.user.id),
+        ]);
+      } else {
+        await updateTeam.updateTeam(
+          teamSelected.id,
+          updateObject,
+          user.user.id,
+        );
       }
     }
     setImageLogoHasChanged(false);
@@ -123,20 +128,21 @@ export function WelcomeMessage() {
   };
 
   return (
-    <CustomCard 
-      title={texts.title} 
+    <CustomCard
+      title={texts.title}
       description={texts.description}
       action={saveHandler}
       loading={loading}
-      valueChange={welcomeText !== welcomeDefaultText || imageLogoHasChanged || welcomeType !== welcomeSaveType}
+      valueChange={
+        welcomeText !== welcomeDefaultText ||
+        imageLogoHasChanged ||
+        welcomeType !== welcomeSaveType
+      }
     >
       <div className="space-y-2">
         <Label htmlFor="welcome-type">{texts.welcomeType}</Label>
         {welcomeType ? (
-          <Select
-            onValueChange={onWelcomeTypeChange}
-            value={welcomeType}
-          >
+          <Select onValueChange={onWelcomeTypeChange} value={welcomeType}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Selecciona un tipo" />
             </SelectTrigger>

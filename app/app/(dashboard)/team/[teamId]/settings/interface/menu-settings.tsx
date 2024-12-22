@@ -1,4 +1,8 @@
-import { HrefLanguages, MenuHeaderType, TextHref } from "@prisma/client";
+import {
+  HrefLanguages,
+  MenuHeaderType,
+  TextHref,
+} from "@prisma/client";
 import { motion, Reorder } from "framer-motion";
 import { GripVertical, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -6,35 +10,33 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/components/context/appContext";
 import { v4 as uuidv4 } from "uuid";
-import { useUpdateTeam } from "@/components/context/useAppContext/team";
-import { LoaderCircle, Save } from "lucide-react";
 import { TextAreaCharging } from "@/components/loaders/loadersSkeleton";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-interface ExtendedTextHref extends TextHref {
+export interface ExtendedTextHref extends TextHref {
   hrefLanguages: HrefLanguages[];
 }
 
-export function MenuSettings({ menuType }: { menuType: MenuHeaderType }) {
+export const MenuSettings = ({
+  menuType,
+  loading,
+  menuItems,
+  setMenuItems,
+}: {
+  menuType: MenuHeaderType;
+  loading: boolean;
+  menuItems: ExtendedTextHref[];
+  setMenuItems: (menuItems: ExtendedTextHref[]) => void;
+}) => {
   const { t } = useDashboardLanguage();
   const texts = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE.menu");
-
   const {
-    state: { teamSelected, user },
+    state: { teamSelected },
   } = useAppContext();
 
-  const [menuItems, setMenuItems] = useState<ExtendedTextHref[]>([]);
-  const [menuItemsSave, setMenuItemsSave] = useState<ExtendedTextHref[]>([]);
   const [menuHeaderId, setMenuHeaderId] = useState<string | null>(null);
 
-  const updateTeam = useUpdateTeam();
-
   useEffect(() => {
-    const menuItems =
-      teamSelected?.menuHeader?.find((menu) => menu.type === menuType)
-        ?.textHref || [];
-    setMenuItems(menuItems);
-    setMenuItemsSave(menuItems);
     const menuId =
       teamSelected?.menuHeader?.find((menu) => menu.type === menuType)?.id ||
       uuidv4();
@@ -100,81 +102,9 @@ export function MenuSettings({ menuType }: { menuType: MenuHeaderType }) {
     setMenuItems(menuItems.filter((item) => item.id !== id));
   };
 
-  const saveHandler = async () => {
-    if (!teamSelected) return;
-    const menuHeader = {
-      upsert: {
-        where: {
-          type_teamId: {
-            type: menuType, // O el tipo que corresponda
-            teamId: teamSelected?.id,
-          },
-        },
-        update: {
-          textHref: {
-            deleteMany: {
-              id: {
-                notIn: [],
-              },
-            },
-            create: menuItems.map((item) => {
-              console.log({ item });
-              return {
-                id: item.id,
-                numberOrder: menuItems.findIndex((el) => el.id === item.id) + 1,
-                hrefLanguages: {
-                  create: item.hrefLanguages.map((hrefLanguage) => {
-                    console.log({ hrefLanguage });
-                    // if(hrefLanguage.language !== teamSelected?.defaultLanguage){
-                    //   return {}
-                    // }
-                    return {
-                      text: hrefLanguage.text,
-                      href: hrefLanguage.href,
-                      language: hrefLanguage.language,
-                      // textHrefId: item.id,
-                    };
-                  }),
-                },
-              };
-            }),
-          },
-        },
-        create: {
-          type: menuType,
-          textHref: {
-            create: menuItems.map((item) => {
-              return {
-                // text: item.text,
-                // href: item.href,
-                numberOrder: menuItems.findIndex((el) => el.id === item.id) + 1,
-                hrefLanguages: {
-                  create: item.hrefLanguages.map((hrefLanguage) => ({
-                    // id: hrefLanguage.id,
-                    text: hrefLanguage.text,
-                    href: hrefLanguage.href,
-                    language: hrefLanguage.language,
-                    // textHrefId: hrefLanguage.textHrefId,
-                  })),
-                },
-              };
-            }),
-          },
-        },
-      },
-    };
-    if (teamSelected && user?.user.id) {
-      await updateTeam.updateTeam(
-        teamSelected.id,
-        { menuHeader },
-        user.user.id,
-      );
-    }
-  };
-
   return (
     <>
-      {teamSelected ? (
+      {teamSelected && !loading ? (
         <div className="space-y-2 mb-2">
           <div>
             <h3 className="text-sm font-medium mb-2">{title}</h3>
@@ -220,20 +150,6 @@ export function MenuSettings({ menuType }: { menuType: MenuHeaderType }) {
             <Button variant="outline" size="sm" onClick={addMenuItem}>
               {texts.addItem}
             </Button>
-            <Button
-              size="sm"
-              onClick={saveHandler}
-              disabled={updateTeam.loading || menuItemsSave === menuItems}
-            >
-              {updateTeam.loading ? (
-                <LoaderCircle className="h-3.5 w-3.5 animate-spin mr-2" />
-              ) : (
-                <Save className="h-3.5 w-3.5 mr-2" />
-              )}
-              <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                {texts.save}
-              </span>
-            </Button>
           </div>
         </div>
       ) : (
@@ -241,4 +157,4 @@ export function MenuSettings({ menuType }: { menuType: MenuHeaderType }) {
       )}
     </>
   );
-}
+};

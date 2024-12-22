@@ -60,14 +60,19 @@ export default function Component() {
 
   const saveImagesHandler = async () => {
     setLoadingImages(true);
-    if(uploadImageLogoRef.current && uploadFavRef.current && imageLogoHasChanged && imageFavHasChanged){
+    if (
+      uploadImageLogoRef.current &&
+      uploadFavRef.current &&
+      imageLogoHasChanged &&
+      imageFavHasChanged
+    ) {
       await Promise.all([
         uploadImageLogoRef.current.saveImage(),
         uploadFavRef.current.saveImage(),
-      ])
+      ]);
     } else if (uploadImageLogoRef.current && imageLogoHasChanged) {
       await uploadImageLogoRef.current.saveImage();
-    }else if (uploadFavRef.current && imageFavHasChanged) {
+    } else if (uploadFavRef.current && imageFavHasChanged) {
       await uploadFavRef.current.saveImage();
     }
 

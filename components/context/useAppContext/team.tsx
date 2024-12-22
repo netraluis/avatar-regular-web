@@ -203,6 +203,7 @@ export const useUpdateTeam = () => {
 
       setData(teamSelected);
     } catch (error: any) {
+      console.log({ error });
       setError({ error });
     } finally {
       setLoading(false);
