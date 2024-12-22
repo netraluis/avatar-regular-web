@@ -88,6 +88,9 @@ export const Banner = () => {
     <CustomCard
       title={interfaceText.title}
       description={interfaceText.description}
+      action={saveHandler}
+      loading={updateTeam.loading}
+      valueChange={headerButton !== headerButtonDefault}
     >
       <div className="space-y-2">
         <Label htmlFor="banner-button-text">{interfaceText.buttonText}</Label>
@@ -151,12 +154,6 @@ export const Banner = () => {
           {interfaceText.textDescription}
         </p>
       </div>
-      <SaveButton
-        action={saveHandler}
-        loading={updateTeam.loading}
-        actionButtonText={interfaceText.save}
-        valueChange={headerButton === headerButtonDefault}
-      />
     </CustomCard>
   );
 };
