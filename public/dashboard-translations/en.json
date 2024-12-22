@@ -1,5 +1,11 @@
 {
   "app": {
+    "COMPONENTS": {
+      "CUSTOM_CARD": {
+        "saving": "Saving...",
+        "save": "Save"
+      }
+    },
     "LAYOUT": {
       "dashboard": "Assistants",
       "resources": "Resources",

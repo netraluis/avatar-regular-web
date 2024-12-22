@@ -9,6 +9,7 @@ import {
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import { LoaderCircle, Save } from "lucide-react";
+import { useDashboardLanguage } from "./context/dashboardLanguageContext";
 
 export interface CustomCardProps {
   children: React.ReactNode;
@@ -31,8 +32,12 @@ export const CustomCard = ({
   // actionButtonText,
   valueChange,
 }: CustomCardProps) => {
+  const { t } = useDashboardLanguage();
+  const texts = t("app.COMPONENTS.CUSTOM_CARD");
+  console.log({ texts });
+
   return (
-    <Card className="p-2 gap-4 mb-4 w-full">
+    <Card className=" gap-4 mb-4 w-full">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
@@ -41,17 +46,24 @@ export const CustomCard = ({
       <CardContent className="space-y-4">{children}</CardContent>
       {action && (
         <>
-          {/* <Separator className="mb-t" /> */}
-          <CardFooter className="flex justify-end items-end">
+          <Separator className="mb-4" />
+          <CardFooter className=" flex justify-end items-center">
             <Button
               size="sm"
               onClick={action}
               disabled={loading || !valueChange}
             >
               {loading ? (
-                <LoaderCircle className="h-3.5 w-3.5 animate-spin" />
+                <>
+                  {" "}
+                  <LoaderCircle className="h-3.5 w-3.5 animate-spin mr-2" />{" "}
+                  <span>{texts.saving}</span>
+                </>
               ) : (
-                <Save className="h-3.5 w-3.5" />
+                <>
+                  <Save className="h-3.5 w-3.5 mr-2" />
+                  <span>{texts.save}</span>
+                </>
               )}
               {/* <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                 {actionButtonText}

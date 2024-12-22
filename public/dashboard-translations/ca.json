@@ -1,5 +1,11 @@
 {
   "app": {
+    "COMPONENTS": {
+      "CUSTOM_CARD": {
+        "saving": "Desant...",
+        "save": "Desar"
+      }
+    },
     "LAYOUT": {
       "dashboard": "Assistents",
       "resources": "Recursos",

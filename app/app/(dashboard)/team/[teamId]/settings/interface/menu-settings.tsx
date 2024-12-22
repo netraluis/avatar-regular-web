@@ -1,8 +1,4 @@
-import {
-  HrefLanguages,
-  MenuHeaderType,
-  TextHref,
-} from "@prisma/client";
+import { HrefLanguages, MenuHeaderType, TextHref } from "@prisma/client";
 import { motion, Reorder } from "framer-motion";
 import { GripVertical, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
