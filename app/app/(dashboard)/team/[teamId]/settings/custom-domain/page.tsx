@@ -78,7 +78,7 @@ export default function Component() {
             ) : (
               <InputCharging />
             )}
-            <span className="text-muted-foreground">.chatbotfor.com</span>
+            <span className="text-muted-foreground">.chatbotfor.ai</span>
             <AnimatePresence>
               {subDomainUrlSave !== subDomainUrl && (
                 <motion.div

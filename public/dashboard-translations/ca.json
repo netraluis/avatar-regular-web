@@ -4,6 +4,12 @@
       "CUSTOM_CARD": {
         "saving": "Desant...",
         "save": "Desar"
+      },
+      "TEXT_AREA_FORM": {
+        "sendMessage": "Enviar",
+        "voiceRecordStop": "Parar micròfon",
+        "voiceRecordStart": "Activar micròfon",
+        "placeholder": "Envia la teva pregunta..."
       }
     },
     "LAYOUT": {

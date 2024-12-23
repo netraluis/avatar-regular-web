@@ -13,6 +13,7 @@ import { FooterText } from "../footer";
 import { TextAreaFormProps } from "@/types/types";
 import Recorder from "recorder-js";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
+import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 
 // ** Step 1: Extend the Window interface **
 declare global {
@@ -21,12 +22,6 @@ declare global {
   }
 }
 
-const iconText = {
-  sendMessage: "Enviar",
-  voiceRecordStop: "Parar micròfon",
-  voiceRecordStart: "Activar micròfon",
-};
-
 export const TextAreaForm = ({
   handleInputChange,
   handleKeyDown,
@@ -34,7 +29,10 @@ export const TextAreaForm = ({
   submitMessage,
   loading,
   status,
+  showFooter = true,
 }: TextAreaFormProps) => {
+  const { t } = useDashboardLanguage();
+  const iconText = t("app.COMPONENTS.TEXT_AREA_FORM");
   const textAreaRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
@@ -156,7 +154,7 @@ export const TextAreaForm = ({
                   if (status !== "thread.run.completed") return;
                   handleKeyDown(e);
                 }}
-                placeholder="Envia la teva pregunta..."
+                placeholder={iconText.placeholder}
                 className="w-full resize-none bg-transparent focus-within:outline-none sm:text-sm "
                 autoFocus
                 spellCheck={false}
@@ -261,7 +259,7 @@ export const TextAreaForm = ({
               </audio>
             )} */}
           </form>
-          <FooterText className="hidden sm:block" />
+          {showFooter && <FooterText className="hidden sm:block" />}
         </div>
       </div>
     </div>

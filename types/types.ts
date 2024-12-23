@@ -8,6 +8,7 @@ export interface TextAreaFormProps {
   submitMessage: () => void;
   loading: boolean;
   status: string;
+  showFooter?: boolean;
 }
 
 export interface Option {

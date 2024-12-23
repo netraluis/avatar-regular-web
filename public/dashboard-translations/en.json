@@ -4,6 +4,12 @@
       "CUSTOM_CARD": {
         "saving": "Saving...",
         "save": "Save"
+      },
+      "TEXT_AREA_FORM": {
+        "sendMessage": "Send",
+        "voiceRecordStop": "Stop microphone",
+        "voiceRecordStart": "Activate microphone",
+        "placeholder": "Send your question..."
       }
     },
     "LAYOUT": {

@@ -29,8 +29,8 @@ import {
 import { TitleLayout } from "@/components/layouts/title-layout";
 import { AssistantUpdateParams } from "openai/resources/beta/assistants.mjs";
 import { SaveButton } from "@/components/save-button";
-import { SimpleTextAreaForm } from "@/components/text-area-forms/simple-text-area-form";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
+import { TextAreaForm } from "@/components/text-area-forms/textAreaForm";
 
 export default function Playground() {
   const { t } = useDashboardLanguage();
@@ -325,13 +325,14 @@ export default function Playground() {
               </Button> */}
               {assistantValues ? (
                 // <Button onClick={handleSendMessage}>{playground.send}</Button>
-                <SimpleTextAreaForm
+                <TextAreaForm
                   handleInputChange={handleTextareaChange}
                   handleKeyDown={handleKeyDown}
                   input={message}
                   loading={loading}
                   submitMessage={handleSendMessage}
                   status={status}
+                  showFooter={false}
                 />
               ) : (
                 <SelectCharging />
