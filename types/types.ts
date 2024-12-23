@@ -56,13 +56,13 @@ export interface Option {
 //   | 'gpt-3.5-turbo-16k-0613';
 
 export enum ChatModel {
-  O1PREVIEW = "o1-preview",
-  O1MINI = "o1-mini",
+  // O1PREVIEW = "o1-preview",
+  // O1MINI = "o1-mini",
   GPT4O = "gpt-4o",
   GPT4OMINI = "gpt-4o-mini",
   GPT4TURBO = "gpt-4-turbo",
   GPT3 = "gpt-3.5-turbo",
-  GPT4 = "gpt-4",
+  // GPT4 = "gpt-4",
   // DAVINCI = "davinci",
 }
 
