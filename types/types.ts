@@ -9,6 +9,12 @@ export interface TextAreaFormProps {
   loading: boolean;
   status: string;
   showFooter?: boolean;
+  text: {
+    sendMessage: string;
+    voiceRecordStop: string;
+    voiceRecordStart: string;
+    placeholder: string;
+  };
 }
 
 export interface Option {

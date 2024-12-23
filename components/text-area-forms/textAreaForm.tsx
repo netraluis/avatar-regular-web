@@ -13,7 +13,6 @@ import { FooterText } from "../footer";
 import { TextAreaFormProps } from "@/types/types";
 import Recorder from "recorder-js";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
-import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 
 // ** Step 1: Extend the Window interface **
 declare global {
@@ -30,9 +29,8 @@ export const TextAreaForm = ({
   loading,
   status,
   showFooter = true,
+  text
 }: TextAreaFormProps) => {
-  const { t } = useDashboardLanguage();
-  const iconText = t("app.COMPONENTS.TEXT_AREA_FORM");
   const textAreaRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const [transcribing, setTranscribing] = useState(false);
@@ -154,7 +152,7 @@ export const TextAreaForm = ({
                   if (status !== "thread.run.completed") return;
                   handleKeyDown(e);
                 }}
-                placeholder={iconText.placeholder}
+                placeholder={text.placeholder}
                 className="w-full resize-none bg-transparent focus-within:outline-none sm:text-sm "
                 autoFocus
                 spellCheck={false}
@@ -203,7 +201,7 @@ export const TextAreaForm = ({
                     className="ml-0.5 h-5 w-5 mr-1"
                     aria-hidden="true"
                   />
-                  {iconText.voiceRecordStop}
+                  {text.voiceRecordStop}
                 </Button>
               </div>
             )}
@@ -218,7 +216,7 @@ export const TextAreaForm = ({
                           className="ml-0.5 h-5 w-5 mr-1"
                           aria-hidden="true"
                         />
-                        {iconText.voiceRecordStart}
+                        {text.voiceRecordStart}
                       </>
                     ) : (
                       <ArrowPathIcon
@@ -238,7 +236,7 @@ export const TextAreaForm = ({
                           className="ml-0.5 h-5 w-5 mr-1"
                           aria-hidden="true"
                         />
-                        {iconText.sendMessage}
+                        {text.sendMessage}
                       </>
                     ) : (
                       <ArrowPathIcon
