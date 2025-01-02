@@ -51,7 +51,7 @@ export default function Dashboard() {
       return router.push(`/login`);
     }
     fetchAssistantsByTeamId(teamId as string, user.user.id);
-  }, []);
+  }, [teamId]);
 
   const handleCreateNewAssistantRoute = () => {
     router.push(`/team/${teamId}/assistant/new`);

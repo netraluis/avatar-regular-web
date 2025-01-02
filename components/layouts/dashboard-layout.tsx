@@ -148,6 +148,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     router.push("/team/new");
   };
 
+  const handleCreateNewAssistantRoute = () => {
+    router.push(`/team/${teamId}/assistant/new`);
+  }
+
   const handleTeamSettingsRoute = (subMenu: string) => {
     const newPath = `/team/${teamSelected?.id}/settings/${subMenu}`;
     router.push(newPath);
@@ -211,7 +215,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                           }
                           subject={dashboard.assistant}
                           routerHandler={handleAssistantRouteChange}
-                          createNewTeamRoute={handleCreateNewTeamRoute}
+                          createNewTeamRoute={handleCreateNewAssistantRoute}
                           settingsRouteHandler={handleAssistantsSettingsRoute}
                           navItems={assistantSettingsMenu(assistantSettingsNav)}
                           fromColor={"to-[#ff930f]"}
