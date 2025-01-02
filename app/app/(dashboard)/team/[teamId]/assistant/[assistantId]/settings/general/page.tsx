@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import slugify from "slugify";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
+import { useFetchTeamsByUserIdAndTeamId } from "@/components/context/useAppContext/team";
 
 export default function Component() {
   const { t } = useDashboardLanguage();
@@ -40,12 +41,14 @@ export default function Component() {
   });
 
   const {
-    state: { user, assistantSelected },
+    state: { user, teamSelected, assistantSelected },
   } = useAppContext();
 
   const pathname = usePathname();
   const router = useRouter();
   const updateAssistant = useUpdateAssistant();
+
+  const fetchTeamsByUserIdAndTeamId = useFetchTeamsByUserIdAndTeamId()
 
   useEffect(() => {
     setUrl({ ...url, url: assistantSelected?.localAssistant?.url || "" });
@@ -61,11 +64,11 @@ export default function Component() {
     });
     const urlToCheck = slugify(url.url, { lower: true, strict: true });
     // console.log(teamSelected?.assistants);
-    // const exists = teamSelected?.assistants.some(
-    //   (assistant) => assistant.url === urlToCheck,
-    // );
+    const exists = teamSelected?.assistants.some(
+      (assistant) => assistant.url === urlToCheck,
+    );
 
-    const exists = assistantSelected?.localAssistant?.url === urlToCheck;
+    // const exists = assistantSelected?.localAssistant?.url === urlToCheck;
     if (exists) {
       return setUrl({
         ...url,
@@ -81,6 +84,8 @@ export default function Component() {
         localAssistantUpdateParams: { url: urlToCheck },
       });
 
+      await fetchTeamsByUserIdAndTeamId.fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id);
+      
       console.log({ resUpdateAss });
 
       if (updateAssistant.errorUpdateAssistant) {
