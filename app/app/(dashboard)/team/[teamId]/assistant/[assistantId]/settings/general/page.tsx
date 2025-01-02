@@ -60,6 +60,7 @@ export default function Component() {
       valid: false,
     });
     const urlToCheck = slugify(url.url, { lower: true, strict: true });
+    console.log(teamSelected?.assistants);
     const exists = teamSelected?.assistants.some(
       (assistant) => assistant.url === urlToCheck,
     );
