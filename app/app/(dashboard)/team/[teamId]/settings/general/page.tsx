@@ -122,7 +122,7 @@ export default function Component() {
           alt="logo"
           recommendedSize={setting.logo.recommendedSize}
           fileUserImageType={FileUserImageType.LOGO}
-          accept=".png,.jpg,.jpeg"
+          accept=".svg,.png,.jpg,.jpeg"
           choose={setting.logo.choose}
           onPreviewChange={imgLogoChange}
         />
@@ -132,7 +132,7 @@ export default function Component() {
           alt="favicon"
           recommendedSize={setting.favicon.recommendedSize}
           fileUserImageType={FileUserImageType.SYMBOL}
-          accept=".svg"
+          accept=".svg,.png,.jpg,.jpeg"
           choose={setting.favicon.choose}
           onPreviewChange={imgFavChange}
         />

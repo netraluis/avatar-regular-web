@@ -75,7 +75,7 @@ export default function Component() {
         teamId: teamId as string,
         assistantId: assistantId as string,
         userId: user.user.id,
-        localAssistantUpdateParams: { url: url.url },
+        localAssistantUpdateParams: { url: urlToCheck },
       });
     }
     setUrl({
