@@ -65,15 +65,31 @@ const plans = {
 
 export default function Component() {
   const [paddle, setPaddle] = useState<Paddle>();
+  const [products, setProducts] = useState<any>();
   const {
-    state: { userLocal },
+    state: { userLocal, teamSelected },
   } = useAppContext();
 
+  console.log({ teamSelected });
+
   useEffect(() => {
-    console.log(
-      process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
-      process.env.NEXT_PUBLIC_PADDLE_ENV,
-    );
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`/api/protected/paddle/products`, {
+          method: "GET",
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        const responseData = await response.json();
+        // setProducts(await response.json())
+        console.log(responseData);
+        setProducts(responseData);
+      } catch (e: any) {
+        console.log({ e });
+      }
+    };
     if (
       !paddle?.Initialized &&
       process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN &&
@@ -98,17 +114,55 @@ export default function Component() {
         }
       });
     }
+
+    fetchProduct();
   }, []);
 
   useEffect(() => {
-    console.log(paddle);
-  }, [paddle]);
+    console.log(products);
+  }, [products]);
 
-  const openCheckout = async () => {
-    paddle?.Checkout.open({
-      ...(userLocal?.email && { customer: { email: userLocal.email } }),
-      items: [{ priceId: "pri_01jff3w66x4zdamqr8j1qggyp4", quantity: 1 }],
-    });
+  const openCheckout = async (index: number) => {
+    if (index === 0) {
+      console.log({ products });
+      const id = products.find((product: any) => product.name === "hobby").id;
+      console.log({ id });
+      paddle?.Checkout.open({
+        ...(userLocal?.email && { customer: { email: userLocal.email } }),
+        items: [{ priceId: id, quantity: 1 }],
+        customData: {
+          userId: userLocal?.id, // Datos personalizados
+          teamId: teamSelected?.id, // Otra información relevante
+        },
+        settings: {
+          successUrl: "https://tu-dominio.com/success", // URL de éxito
+        },
+      });
+    } else if (index === 1) {
+      const id = products.find(
+        (product: any) => product.name === "standard",
+      ).id;
+      paddle?.Checkout.open({
+        ...(userLocal?.email && { customer: { email: userLocal.email } }),
+        items: [{ priceId: id, quantity: 1 }],
+        customData: {
+          userId: userLocal?.id, // Datos personalizados
+          teamId: teamSelected?.id, // Otra información relevante
+        },
+      });
+    } else if (index === 2) {
+      const id = products.find(
+        (product: any) => product.name === "unlimited",
+      ).id;
+      paddle?.Checkout.open({
+        ...(userLocal?.email && { customer: { email: userLocal.email } }),
+        items: [{ priceId: id, quantity: 1 }],
+        customData: {
+          userId: userLocal?.id, // Datos personalizados
+          teamId: teamSelected?.id, // Otra información relevante
+        },
+      });
+    }
   };
 
   return (
@@ -121,7 +175,11 @@ export default function Component() {
       </div>
       <div className="grid md:grid-cols-3 gap-8">
         {plans.cards.map((plan, index) => (
-          <Card key={index} onClick={openCheckout} className="cursor-pointer">
+          <Card
+            key={index}
+            onClick={() => openCheckout(index)}
+            className="cursor-pointer"
+          >
             <CardHeader className="space-y-1">
               <CardTitle>{plan.title}</CardTitle>
               <div className="flex items-baseline justify-between">

@@ -29,7 +29,7 @@ export const TextAreaForm = ({
   loading,
   status,
   showFooter = true,
-  text
+  text,
 }: TextAreaFormProps) => {
   const textAreaRef = useRef(null);
   const [recording, setRecording] = useState(false);

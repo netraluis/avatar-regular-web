@@ -82,6 +82,7 @@ model User {
   surname     String?
   imageUrl    String?
   language    LanguageType @default(CA)
+  paddleCustomerId String?
   
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -109,6 +110,7 @@ model Team {
   menuFooter      MenuFooter[]
   welcomeType     WelcomeType
   isActive        Boolean   @default(true) 
+  paddleSubscriptionId String?
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())

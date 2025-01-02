@@ -9,11 +9,11 @@ import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
 
 const textAreaForm = {
-  "sendMessage": "Send",
-  "voiceRecordStop": "Stop microphone",
-  "voiceRecordStart": "Activate microphone",
-  "placeholder": "Send your question..."
-}
+  sendMessage: "Send",
+  voiceRecordStop: "Stop microphone",
+  voiceRecordStart: "Activate microphone",
+  placeholder: "Send your question...",
+};
 
 export default function AssistantUrl() {
   const { assistantUrl } = useParams();
