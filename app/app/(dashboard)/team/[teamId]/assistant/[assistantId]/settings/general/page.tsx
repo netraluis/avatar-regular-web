@@ -87,12 +87,14 @@ export default function Component() {
           ...url,
           valid: false,
           loading: false,
+          urlExist: false,
         });
       } else {
         setUrl({
           ...url,
           valid: true,
           loading: false,
+          urlExist: false,
         });
       }
     }

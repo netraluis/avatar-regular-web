@@ -216,7 +216,7 @@ model Assistant {
   openAIVectorStoreFileId   String
   notionAccessToken         String?
   avatarId                  String?
-  url                       String    @unique 
+  url                       String
   message                   Message[]
   assistantCard             AssistantCard[]
   emoji                     String?     
@@ -229,8 +229,8 @@ model Assistant {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
 
-  @@unique([name, teamId])  // Clave compuesta única en name y para cada assistant
   @@unique([openAIId])
+  @@unique([url,teamId])
 }
 
 model AssistantCard {

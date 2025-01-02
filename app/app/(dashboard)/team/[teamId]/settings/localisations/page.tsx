@@ -109,7 +109,7 @@ export default function Component() {
   useEffect(() => {
     if (languageToTranslate) {
       const assByLang = teamSelected?.assistants
-        .find((ass) => ass.name === showArea)
+        .find((ass) => ass.url === showArea)
         ?.assistantCard?.find((lang) => lang.language === languageToTranslate);
       setAssValues(assByLang);
     }
@@ -133,7 +133,7 @@ export default function Component() {
                 <SelectItem value="welcome">welcome</SelectItem>
                 {teamSelected?.assistants.map((assistant, index) => {
                   return (
-                    <SelectItem key={index} value={assistant.name}>
+                    <SelectItem key={index} value={assistant.url}>
                       {assistant.name}
                     </SelectItem>
                   );
@@ -548,7 +548,7 @@ export default function Component() {
             </TableBody>
           )}
           {teamSelected?.assistants
-            ?.find((ass) => ass.name === showArea)
+            ?.find((ass) => ass.url === showArea)
             ?.assistantCard?.filter(
               (ass) => ass.language === teamSelected?.defaultLanguage,
             )
@@ -579,8 +579,8 @@ export default function Component() {
                             assistants: {
                               update: {
                                 where: {
-                                  name_teamId: {
-                                    name: showArea,
+                                  url_teamId: {
+                                    url: showArea,
                                     teamId: teamSelected?.id,
                                   },
                                 },
@@ -594,7 +594,7 @@ export default function Component() {
                                             LanguageType.ES,
                                           assistantId:
                                             teamSelected?.assistants?.find(
-                                              (ass) => ass.name === showArea,
+                                              (ass) => ass.url === showArea,
                                             )?.id || "",
                                         },
                                       },
@@ -640,8 +640,8 @@ export default function Component() {
                             assistants: {
                               update: {
                                 where: {
-                                  name_teamId: {
-                                    name: showArea,
+                                  url_teamId: {
+                                    url: showArea,
                                     teamId: teamSelected?.id,
                                   },
                                 },
@@ -655,7 +655,7 @@ export default function Component() {
                                             LanguageType.ES,
                                           assistantId:
                                             teamSelected?.assistants?.find(
-                                              (ass) => ass.name === showArea,
+                                              (ass) => ass.url === showArea,
                                             )?.id || "",
                                         },
                                       },
