@@ -40,7 +40,7 @@ export default function Component() {
   });
 
   const {
-    state: { user, teamSelected, assistantSelected },
+    state: { user, assistantSelected },
   } = useAppContext();
 
   const pathname = usePathname();
@@ -60,10 +60,12 @@ export default function Component() {
       valid: false,
     });
     const urlToCheck = slugify(url.url, { lower: true, strict: true });
-    console.log(teamSelected?.assistants);
-    const exists = teamSelected?.assistants.some(
-      (assistant) => assistant.url === urlToCheck,
-    );
+    // console.log(teamSelected?.assistants);
+    // const exists = teamSelected?.assistants.some(
+    //   (assistant) => assistant.url === urlToCheck,
+    // );
+
+    const exists = assistantSelected?.localAssistant?.url === urlToCheck;
     if (exists) {
       return setUrl({
         ...url,
@@ -109,7 +111,7 @@ export default function Component() {
           <Label htmlFor="team-name">
             {assistantGeneral.assistantName.title}
           </Label>
-          {teamSelected ? (
+          {assistantSelected ? (
             <div className="flex items-center space-x-2">
               <Input
                 id="team-name"
@@ -152,7 +154,7 @@ export default function Component() {
             {assistantGeneral.assistantUrl.title}
           </Label>
 
-          {teamSelected ? (
+          {assistantSelected ? (
             <div className="flex items-center space-x-2">
               <Input
                 id="team-url"
