@@ -71,27 +71,30 @@ export default function Component() {
       });
     }
     if (user?.user.id) {
-      try{
-        const resUpdateAss = await updateAssistant.updateAssistant({
-          teamId: teamId as string,
-          assistantId: assistantId as string,
-          userId: user.user.id,
-          localAssistantUpdateParams: { url: urlToCheck },
-        });
-        
-        console.log({resUpdateAss})
+      const resUpdateAss = await updateAssistant.updateAssistant({
+        teamId: teamId as string,
+        assistantId: assistantId as string,
+        userId: user.user.id,
+        localAssistantUpdateParams: { url: urlToCheck },
+      });
 
-      }catch(e){
-        console.log({e});
+      console.log({ resUpdateAss });
+
+      if (updateAssistant.errorUpdateAssistant) {
+        console.log("error", updateAssistant.errorUpdateAssistant);
         setUrl({
           ...url,
           valid: false,
           loading: false,
         });
+      } else {
+        setUrl({
+          ...url,
+          valid: true,
+          loading: false,
+        });
       }
-
     }
-
   };
   return (
     <div>

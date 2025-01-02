@@ -7,10 +7,9 @@ import { NextResponse } from "next/server";
 //   SubscriptionStatus,
 // } from "@paddle/paddle-node-sdk";
 
-export async function GET(
-  // request: NextRequest,
-  // { params }: { params: { teamId: string } },
-) {
+export async function GET() {
+// request: NextRequest,
+// { params }: { params: { teamId: string } },
   if (!process.env.PADDLE_API_KEY) {
     return new NextResponse("Paddle API Key is required", {
       status: 400,

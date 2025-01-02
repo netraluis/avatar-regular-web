@@ -35,18 +35,20 @@ export function EmptyScreen({ children }: { children: React.ReactNode }) {
               <div className="flex flex-col">
                 {data?.welcome[0]?.text &&
                   data?.welcome[0]?.text.map((wel, index) => (
-                    <div
-                      className="mt-3 bg-green-100 p-3 rounded-xl p-4"
-                      key={index}
-                    >
-                      <p className="text-base">
-                        {" "}
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: wel,
-                          }}
-                        />
-                      </p>
+                    <div className="mt-3 flex" key={index}>
+                      <span
+                        className="mt-3 bg-green-100 p-3 rounded-xl p-4 flex"
+                        key={index}
+                      >
+                        <span className="text-base">
+                          {" "}
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: wel,
+                            }}
+                          />
+                        </span>
+                      </span>
                     </div>
                   ))}
               </div>
