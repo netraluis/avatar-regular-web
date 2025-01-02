@@ -71,18 +71,27 @@ export default function Component() {
       });
     }
     if (user?.user.id) {
-      await updateAssistant.updateAssistant({
-        teamId: teamId as string,
-        assistantId: assistantId as string,
-        userId: user.user.id,
-        localAssistantUpdateParams: { url: urlToCheck },
-      });
+      try{
+        const resUpdateAss = await updateAssistant.updateAssistant({
+          teamId: teamId as string,
+          assistantId: assistantId as string,
+          userId: user.user.id,
+          localAssistantUpdateParams: { url: urlToCheck },
+        });
+        
+        console.log({resUpdateAss})
+
+      }catch(e){
+        console.log({e});
+        setUrl({
+          ...url,
+          valid: false,
+          loading: false,
+        });
+      }
+
     }
-    setUrl({
-      ...url,
-      valid: true,
-      loading: false,
-    });
+
   };
   return (
     <div>
@@ -167,7 +176,7 @@ export default function Component() {
 
           {url.urlExist && (
             <p className="text-sm text-muted-foreground text-red-500">
-              {assistantGeneral.assistantUrl.description}
+              {assistantGeneral.assistantUrl.errorExist}
             </p>
           )}
         </div>
