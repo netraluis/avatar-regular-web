@@ -37,6 +37,7 @@ export default function Playground() {
   const playground = t(
     "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.PLAYGROUND.PAGE",
   );
+  const textAreaForm = t("app.COMPONENTS.TEXT_AREA_FORM");
 
   const { state } = useAppContext();
   const { assistantId, teamId } = useParams();
