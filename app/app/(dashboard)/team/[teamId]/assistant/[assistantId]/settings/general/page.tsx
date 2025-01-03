@@ -23,6 +23,7 @@ import { InputCharging } from "@/components/loaders/loadersSkeleton";
 import slugify from "slugify";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 import { useFetchTeamsByUserIdAndTeamId } from "@/components/context/useAppContext/team";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function Component() {
   const { t } = useDashboardLanguage();
@@ -32,12 +33,13 @@ export default function Component() {
 
   const { teamId, assistantId } = useParams();
   const { loadingDeleteAssistant, deleteAssistant } = useDeleteAssistant();
-  const [name, setName] = useState({ name: "", loading: false });
+  const [name, setName] = useState({ name: "", loading: false, saveName: "" });
   const [url, setUrl] = useState({
     url: "",
     loading: false,
     urlExist: false,
     valid: false,
+    urlSave: "",
   });
 
   const {
@@ -51,9 +53,49 @@ export default function Component() {
   const fetchTeamsByUserIdAndTeamId = useFetchTeamsByUserIdAndTeamId();
 
   useEffect(() => {
-    setUrl({ ...url, url: assistantSelected?.localAssistant?.url || "" });
-    setName({ ...name, name: assistantSelected?.localAssistant?.name || "" });
-  }, [assistantSelected?.localAssistant]);
+    if (assistantSelected?.localAssistant?.url) {
+      setUrl({
+        ...url,
+        url: assistantSelected?.localAssistant?.url || "",
+        urlSave: assistantSelected?.localAssistant?.url || "",
+      });
+    }
+    if (assistantSelected?.localAssistant?.name) {
+      setName({
+        ...name,
+        name: assistantSelected?.localAssistant?.name || "",
+        saveName: assistantSelected?.localAssistant?.name || "",
+      });
+    }
+  }, [assistantSelected]);
+
+  useEffect(() => {
+    if (updateAssistant?.updateAssistantData?.localAssistant) {
+      setUrl({
+        ...url,
+        valid: true,
+        loading: false,
+        urlSave: updateAssistant.updateAssistantData.localAssistant.url,
+      });
+      setName({
+        ...name,
+        loading: false,
+        saveName: updateAssistant.updateAssistantData.localAssistant.name,
+      });
+    }
+  }, [updateAssistant.updateAssistantData]);
+
+
+  useEffect(() => {
+    if(updateAssistant.errorUpdateAssistant){
+      setUrl({
+        ...url,
+        valid: false,
+        loading: false,
+        urlExist: false,
+      });
+    }
+  }, [updateAssistant.errorUpdateAssistant]);
 
   const handleUrl = async () => {
     setUrl({
@@ -63,7 +105,6 @@ export default function Component() {
       valid: false,
     });
     const urlToCheck = slugify(url.url, { lower: true, strict: true });
-    // console.log(teamSelected?.assistants);
     const exists = teamSelected?.assistants.some(
       (assistant) => assistant.url === urlToCheck,
     );
@@ -77,7 +118,7 @@ export default function Component() {
       });
     }
     if (user?.user.id) {
-      const resUpdateAss = await updateAssistant.updateAssistant({
+      await updateAssistant.updateAssistant({
         teamId: teamId as string,
         assistantId: assistantId as string,
         userId: user.user.id,
@@ -88,25 +129,18 @@ export default function Component() {
         teamId as string,
         user.user.id,
       );
+    }
+  };
 
-      console.log({ resUpdateAss });
-
-      if (updateAssistant.errorUpdateAssistant) {
-        console.log("error", updateAssistant.errorUpdateAssistant);
-        setUrl({
-          ...url,
-          valid: false,
-          loading: false,
-          urlExist: false,
-        });
-      } else {
-        setUrl({
-          ...url,
-          valid: true,
-          loading: false,
-          urlExist: false,
-        });
-      }
+  const saveName = async () => {
+    if (user?.user.id && assistantSelected?.localAssistant?.name) {
+      setName({ ...name, loading: true });
+      await updateAssistant.updateAssistant({
+        teamId: teamId as string,
+        assistantId: assistantId as string,
+        userId: user.user.id,
+        localAssistantUpdateParams: { name: name.name },
+      });
     }
   };
   return (
@@ -114,6 +148,9 @@ export default function Component() {
       <CustomCard
         title={assistantGeneral.title}
         description={assistantGeneral.desription}
+        action={saveName}
+        loading={name.loading}
+        valueChange={name.name !== name.saveName}
       >
         <div className="space-y-2">
           <Label htmlFor="team-name">
@@ -128,30 +165,6 @@ export default function Component() {
                   setName({ ...name, name: e.target.value || "" });
                 }}
               />
-              <Button
-                onClick={async () => {
-                  if (
-                    user?.user.id &&
-                    assistantSelected?.localAssistant?.name
-                  ) {
-                    setName({ ...name, loading: true });
-                    await updateAssistant.updateAssistant({
-                      teamId: teamId as string,
-                      assistantId: assistantId as string,
-                      userId: user.user.id,
-                      localAssistantUpdateParams: { name: name.name },
-                    });
-                    setName({ ...name, loading: false });
-                  }
-                }}
-                variant="outline"
-                disabled={
-                  name.loading ||
-                  name.name === assistantSelected?.localAssistant?.name
-                }
-              >
-                {assistantGeneral.assistantName.save}
-              </Button>
             </div>
           ) : (
             <InputCharging />
@@ -171,7 +184,31 @@ export default function Component() {
                   setUrl({ ...url, valid: false, url: e.target.value });
                 }}
               />
-              <Button
+              <AnimatePresence>
+                {url.url !== url.urlSave && (
+                  <motion.div
+                    key="button"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Button
+                      className="transition-transform duration-500 transform"
+                      size="sm"
+                      onClick={handleUrl}
+                      disabled={url.loading}
+                      variant="outline"
+                    >
+                      {url.loading && (
+                        <LoaderCircle className="h-3.5 w-3.5 animate-spin mr-1" />
+                      )}
+                      {assistantGeneral.assistantUrl.prove}
+                    </Button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              {/* <Button
                 size="sm"
                 onClick={handleUrl}
                 variant={url.valid ? "green" : "outline"}
@@ -180,11 +217,10 @@ export default function Component() {
                   url.url === assistantSelected?.localAssistant?.url
                 }
               >
-                {/* <Copy className="h-4 w-4" /> */}
                 {url.valid
                   ? assistantGeneral.assistantUrl.approve
                   : assistantGeneral.assistantUrl.prove}
-              </Button>
+              </Button> */}
             </div>
           ) : (
             <InputCharging />

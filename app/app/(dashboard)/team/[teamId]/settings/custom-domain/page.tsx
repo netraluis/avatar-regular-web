@@ -98,15 +98,6 @@ export default function Component() {
                     {useExist.loading && (
                       <LoaderCircle className="h-3.5 w-3.5 animate-spin mr-1" />
                     )}
-                    {/* {!useExist.loading && useExist.data !== null && useExist.data && (
-                      <BadgeX className="h-3.5 w-3.5 mr-1" />
-                    )}
-                    {!useExist.loading &&
-                      useExist.data !== null &&
-                      !useExist.data && <BadgeCheck className="h-3.5 w-3.5 mr-1" />}
-                    {!useExist.loading && useExist.data === null && (
-                      <Badge className="h-3.5 w-3.5 mr-1" />
-                    )} */}
                     {customDomain.subdomain.validation}
                   </Button>
                 </motion.div>

@@ -82,8 +82,6 @@ export const useFetchAssistantSelected = () => {
         payload: responseData,
       });
 
-      console.log({ responseData });
-
       setData(responseData);
     } catch (error: any) {
       setError({ error });
@@ -264,8 +262,8 @@ export const useUpdateAssistant = () => {
   const [loadingUpdateAssistant, setLoadingUpdateAssistant] = useState(false);
   const [errorUpdateAssistant, setErrorUpdateAssistant] = useState<any>(null);
   const [updateAssistantData, setUpdateAssistantData] = useState<{
-    openAIassistantUpdateParams: OpenAI.Beta.Assistants.Assistant;
-    localAssistantUpdateParams: Assistant;
+    openAIassistant: OpenAI.Beta.Assistants.Assistant;
+    localAssistant: Assistant;
   } | null>(null);
 
   async function updateAssistant({
@@ -307,6 +305,7 @@ export const useUpdateAssistant = () => {
         type: "SET_ASSISTANT",
         payload: responseData,
       });
+
       setUpdateAssistantData(responseData);
     } catch (error: any) {
       setErrorUpdateAssistant({ error });
@@ -368,7 +367,6 @@ export const useAssistant = ({
     ]);
     setLoading(true);
     try {
-      console.log({ internatlThreadId, message, assistantId });
       if (!internatlThreadId) {
         const response = await fetch(
           `/api/protected/team/${teamId}/assistant/${assistantId}/thread/`,
