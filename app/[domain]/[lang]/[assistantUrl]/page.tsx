@@ -7,8 +7,12 @@ import { TextAreaForm } from "@/components/text-area-forms/textAreaForm";
 import { ChatList } from "@/components/chat-list";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
+import { useClientLanguage } from "@/components/context/clientLanguageContext";
 
 export default function AssistantUrl() {
+  const { t } = useClientLanguage();
+  const textAreaForm = t("app.COMPONENTS.TEXT_AREA_FORM");
+
   const { assistantUrl } = useParams();
   const [message, setMessage] = React.useState("");
   const [card, setCard] = React.useState<any>(null);
@@ -101,12 +105,7 @@ export default function AssistantUrl() {
         loading={loading}
         submitMessage={handleSendMessage}
         status={status}
-        text={{
-          "sendMessage": "Enviar",
-          "voiceRecordStop": "Parar micròfon",
-          "voiceRecordStart": "Activar micròfon",
-          "placeholder": "Envia la teva pregunta..."
-        }}
+        text={textAreaForm}
       />
     </div>
   );

@@ -8,8 +8,8 @@ import { NextResponse } from "next/server";
 // } from "@paddle/paddle-node-sdk";
 
 export async function GET() {
-// request: NextRequest,
-// { params }: { params: { teamId: string } },
+  // request: NextRequest,
+  // { params }: { params: { teamId: string } },
   if (!process.env.PADDLE_API_KEY) {
     return new NextResponse("Paddle API Key is required", {
       status: 400,

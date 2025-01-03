@@ -48,7 +48,7 @@ export default function Component() {
   const router = useRouter();
   const updateAssistant = useUpdateAssistant();
 
-  const fetchTeamsByUserIdAndTeamId = useFetchTeamsByUserIdAndTeamId()
+  const fetchTeamsByUserIdAndTeamId = useFetchTeamsByUserIdAndTeamId();
 
   useEffect(() => {
     setUrl({ ...url, url: assistantSelected?.localAssistant?.url || "" });
@@ -84,8 +84,11 @@ export default function Component() {
         localAssistantUpdateParams: { url: urlToCheck },
       });
 
-      await fetchTeamsByUserIdAndTeamId.fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id);
-      
+      await fetchTeamsByUserIdAndTeamId.fetchTeamsByUserIdAndTeamId(
+        teamId as string,
+        user.user.id,
+      );
+
       console.log({ resUpdateAss });
 
       if (updateAssistant.errorUpdateAssistant) {

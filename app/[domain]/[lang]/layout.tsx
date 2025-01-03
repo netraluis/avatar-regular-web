@@ -8,6 +8,10 @@ import { basePublicUrl } from "@/lib/helper/images";
 import { ReactNode } from "react";
 import Header from "@/components/headerNew";
 import { TeamAssistantProvider } from "@/components/context/teamAssistantContext";
+import {
+  ClientLanguageProvider,
+  Language,
+} from "@/components/context/clientLanguageContext";
 
 export const generateMetadata = async ({
   params,
@@ -70,7 +74,7 @@ export default async function DomainLayout({
     language: params.lang.toLocaleUpperCase() as LanguageType,
   });
 
-  if (!data) {
+  if (!data || !params.lang) {
     notFound();
   }
 
@@ -88,10 +92,14 @@ export default async function DomainLayout({
         />
       </head>
       <body>
-        <TeamAssistantProvider initialData={data}>
-          <Header />
-          <main>{children}</main>
-        </TeamAssistantProvider>
+        <ClientLanguageProvider
+          userLanguage={params.lang.toLocaleUpperCase() as Language}
+        >
+          <TeamAssistantProvider initialData={data}>
+            <Header />
+            <main>{children}</main>
+          </TeamAssistantProvider>
+        </ClientLanguageProvider>
       </body>
     </html>
   );

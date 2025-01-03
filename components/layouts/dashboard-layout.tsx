@@ -150,7 +150,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
 
   const handleCreateNewAssistantRoute = () => {
     router.push(`/team/${teamId}/assistant/new`);
-  }
+  };
 
   const handleTeamSettingsRoute = (subMenu: string) => {
     const newPath = `/team/${teamSelected?.id}/settings/${subMenu}`;
