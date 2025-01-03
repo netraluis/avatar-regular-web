@@ -8,13 +8,6 @@ import { ChatList } from "@/components/chat-list";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
 
-const textAreaForm = {
-  sendMessage: "Send",
-  voiceRecordStop: "Stop microphone",
-  voiceRecordStart: "Activate microphone",
-  placeholder: "Send your question...",
-};
-
 export default function AssistantUrl() {
   const { assistantUrl } = useParams();
   const [message, setMessage] = React.useState("");
@@ -108,7 +101,12 @@ export default function AssistantUrl() {
         loading={loading}
         submitMessage={handleSendMessage}
         status={status}
-        text={textAreaForm}
+        text={{
+          "sendMessage": "Enviar",
+          "voiceRecordStop": "Parar micròfon",
+          "voiceRecordStart": "Activar micròfon",
+          "placeholder": "Envia la teva pregunta..."
+        }}
       />
     </div>
   );
