@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import EmojiPicker from "@/components/ui/emoji-picker";
 import { useAppContext } from "@/components/context/appContext";
-import { AssistantCardType, LanguageType } from "@prisma/client";
+import { AssistantCardType, LanguageType, Prisma } from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
 import { CustomCard } from "@/components/custom-card";
 import {
@@ -15,8 +15,8 @@ import {
 import { useUpdateAssistant } from "@/components/context/useAppContext/assistant";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { SaveButton } from "@/components/save-button";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
+import { Trash2 } from "lucide-react";
 
 export default function Interface() {
   const { t } = useDashboardLanguage();
@@ -30,7 +30,11 @@ export default function Interface() {
   } = useAppContext();
 
   const [cardId, setCardId] = useState<string | undefined>(undefined);
-  const [selectedEmoji, setSelectedEmoji] = useState<string>("");
+  const [selectedEmoji, setSelectedEmoji] = useState<{
+    emoji: string | null;
+    loading: boolean;
+    saveEmoji: string;
+  } | null>(null);
   const [title, setTitle] = useState<{
     title: string;
     loading: boolean;
@@ -46,58 +50,54 @@ export default function Interface() {
   const updateAssistant = useUpdateAssistant();
 
   useEffect(() => {
-    console.log({ assistantSelected });
-    setSelectedEmoji(assistantSelected?.localAssistant?.emoji || "");
-    const card = assistantSelected?.localAssistant?.assistantCard?.find(
-      (ass) => ass.language === teamSelected?.defaultLanguage,
-    );
-    setTitle({
-      loading: false,
-      title: card?.title || "",
-      saveTitle: card?.title || "",
-    });
-    setDescription({
-      loading: false,
-      description: card?.description[0] || "",
-      saveDescription: card?.description[0] || "",
-    });
-    setCardId(card?.id);
-  }, [assistantSelected?.localAssistant]);
-
-  const titleHandler = async () => {
-    if (!title || !cardId) return;
-    const assistantCard = {
-      upsert: {
-        where: {
-          id: cardId,
-        },
-        update: {
-          title: title.title,
-          type: AssistantCardType.REGULAR,
-        },
-        create: {
-          title: title.title,
-          type: AssistantCardType.REGULAR,
-          language: teamSelected?.defaultLanguage || LanguageType.ES,
-        },
-      },
-    };
-
-    if (user?.user.id && assistantSelected?.localAssistant?.name) {
-      setTitle({ ...title, loading: true });
-      await updateAssistant.updateAssistant({
-        teamId: teamId as string,
-        assistantId: assistantId as string,
-        userId: user.user.id,
-        localAssistantUpdateParams: { assistantCard },
+    if (assistantSelected && teamSelected) {
+      setSelectedEmoji({
+        emoji: assistantSelected?.localAssistant?.emoji || "",
+        loading: false,
+        saveEmoji: assistantSelected?.localAssistant?.emoji || "",
       });
-      setTitle({ ...title, loading: false });
-    }
-  };
+      const card = assistantSelected?.localAssistant?.assistantCard?.find(
+        (ass) => ass.language === teamSelected?.defaultLanguage,
+      );
 
-  const descriptionHandler = async () => {
-    if (!description) return;
-    if (user?.user.id && assistantSelected?.localAssistant?.name) {
+      setTitle({
+        loading: false,
+        title: card?.title || "",
+        saveTitle: card?.title || "",
+      });
+      setDescription({
+        loading: false,
+        description: card?.description[0] || "",
+        saveDescription: card?.description[0] || "",
+      });
+      setCardId(card?.id);
+    }
+  }, [assistantSelected]);
+
+  const updateHandler = async () => {
+    const localAssistantUpdateParams: Prisma.AssistantUpdateInput = {};
+    if (selectedEmoji?.emoji !== selectedEmoji?.saveEmoji) {
+      localAssistantUpdateParams.emoji = selectedEmoji?.emoji;
+    }
+
+    if (
+      (title?.title !== title?.saveTitle ||
+        description?.description !== description?.saveDescription) &&
+      assistantSelected?.localAssistant?.id
+    ) {
+      const update: {
+        title?: string;
+        description?: [string];
+      } = {};
+
+      if (title?.title !== title?.saveTitle && cardId) {
+        update.title = title?.title || "";
+      }
+
+      if (description?.description !== description?.saveDescription) {
+        update.description = [description?.description || ""];
+      }
+
       const assistantCard = {
         upsert: {
           where: {
@@ -107,25 +107,26 @@ export default function Interface() {
             },
           },
           update: {
-            description: [description.description],
+            ...update,
             type: AssistantCardType.REGULAR,
           },
           create: {
-            description: [description.description],
+            ...update,
             type: AssistantCardType.REGULAR,
             language: teamSelected?.defaultLanguage || LanguageType.ES,
           },
         },
       };
+      localAssistantUpdateParams.assistantCard = assistantCard;
+    }
 
-      setDescription({ ...description, loading: true });
-      await updateAssistant.updateAssistant({
+    if (user?.user.id) {
+      updateAssistant.updateAssistant({
         teamId: teamId as string,
         assistantId: assistantId as string,
         userId: user.user.id,
-        localAssistantUpdateParams: { assistantCard },
+        localAssistantUpdateParams,
       });
-      setDescription({ ...description, loading: false });
     }
   };
 
@@ -134,24 +135,39 @@ export default function Interface() {
       <CustomCard
         title={assistantInterface.title}
         description={assistantInterface.desription}
+        action={updateHandler}
+        loading={updateAssistant.loadingUpdateAssistant}
+        valueChange={
+          selectedEmoji?.emoji !== selectedEmoji?.saveEmoji ||
+          title?.title !== title?.saveTitle ||
+          description?.description !== description?.saveDescription
+        }
       >
-        <div className="space-y-2">
-          <EmojiPicker
-            onEmojiSelect={(emoji) => {
-              setSelectedEmoji(emoji);
-              // setData({ ...data, emoji: emoji });
-              if (user?.user.id) {
-                updateAssistant.updateAssistant({
-                  teamId: teamId as string,
-                  assistantId: assistantId as string,
-                  userId: user.user.id,
-                  localAssistantUpdateParams: { emoji },
-                });
-              }
-            }}
-            selectedEmoji={selectedEmoji}
-          />
-        </div>
+        {selectedEmoji ? (
+          <div className="flex">
+            <EmojiPicker
+              onEmojiSelect={(emoji) => {
+                setSelectedEmoji({ ...selectedEmoji, emoji: emoji || "" });
+              }}
+              selectedEmoji={selectedEmoji.emoji || ""}
+            />
+            {selectedEmoji.emoji && (
+              <Button
+                onClick={() =>
+                  setSelectedEmoji({ ...selectedEmoji, emoji: null })
+                }
+                variant="outline"
+                className="ml-4"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
+
+            {/* <Button className='border' onClick={()=>setSelectedEmoji({ ...selectedEmoji, emoji: null })}>Delete</Button> */}
+          </div>
+        ) : (
+          <InputCharging />
+        )}
         <div className="space-y-2">
           <Label htmlFor="title-message">
             {assistantInterface.emoji.title}
@@ -167,13 +183,6 @@ export default function Interface() {
                   setTitle({ ...title, title: e.target.value });
                 }}
               />
-              <Button
-                onClick={titleHandler}
-                variant="outline"
-                disabled={title?.loading || title?.title === title?.saveTitle}
-              >
-                {assistantInterface.emoji.saveTitle}
-              </Button>
             </div>
           ) : (
             <InputCharging />
@@ -186,7 +195,7 @@ export default function Interface() {
           <Label htmlFor="description-message">
             {assistantInterface.emoji.description}
           </Label>
-          {teamSelected ? (
+          {description ? (
             <Textarea
               id="description-message"
               placeholder={assistantInterface.emoji.descriptionPlaceholder}
@@ -200,14 +209,6 @@ export default function Interface() {
           ) : (
             <TextAreaCharging />
           )}
-          <SaveButton
-            action={descriptionHandler}
-            loading={description?.loading || false}
-            actionButtonText={assistantInterface.emoji.saveButton}
-            valueChange={
-              description?.description === description?.saveDescription
-            }
-          />
           <p className="text-sm text-muted-foreground">
             {assistantInterface.emoji.descriptionDescription}
           </p>

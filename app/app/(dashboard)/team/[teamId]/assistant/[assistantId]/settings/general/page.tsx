@@ -85,9 +85,8 @@ export default function Component() {
     }
   }, [updateAssistant.updateAssistantData]);
 
-
   useEffect(() => {
-    if(updateAssistant.errorUpdateAssistant){
+    if (updateAssistant.errorUpdateAssistant) {
       setUrl({
         ...url,
         valid: false,
