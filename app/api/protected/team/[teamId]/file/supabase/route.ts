@@ -139,3 +139,52 @@ export async function POST(req: NextRequest) {
     return handleError(500, `File upload error: ${e.message}`, "SERVER_ERROR");
   }
 }
+
+export async function DELETE(req: NextRequest) {
+  const supabase = createClient();
+  const userId = req.headers.get("x-user-id");
+
+  if (!userId) {
+    return handleError(400, "User needs to be logged in", "USER_NOT_LOGGED_IN");
+  }
+
+  try {
+    const formData = await req.formData();
+    // const files = formData.getAll("files") as File[];
+    const teamId = formData.get("teamId") as string;
+    const fileUserImageType = formData.get(
+      "fileUserImageType",
+    ) as FileUserImageType;
+    const oldNameDoc = formData.get("oldNameDoc");
+
+    if (!teamId || !fileUserImageType) {
+      return handleError(400, "Missing required fields", "MISSING_FIELDS");
+    }
+
+    const urlDelete = `${teamId}/${fileUserImageType}/${oldNameDoc}`;
+
+    if (oldNameDoc) {
+      const { error: deleteError } = await supabase.storage
+        .from("user-images")
+        .remove([urlDelete]);
+
+      if (deleteError) {
+        return handleError(
+          500,
+          `Failed to delete old file: ${deleteError.message}`,
+          "DELETE_OLD_FILE_ERROR",
+        );
+      }
+    }
+
+    const response = await updateTeamByField({
+      teamId,
+      field: field(fileUserImageType as FileUserImageType) as string,
+      value: null,
+    });
+
+    return NextResponse.json({ status: 200, data: response });
+  } catch (e: any) {
+    return handleError(500, `File upload error: ${e.message}`, "SERVER_ERROR");
+  }
+}

@@ -44,8 +44,7 @@ export function WelcomeMessage() {
   const [imageLogoHasChanged, setImageLogoHasChanged] = useState(false);
 
   const uploadImageLogoRef = useRef<{ saveImage: () => void }>(null);
-  const imgLogoChange = (previewUrl: string | null) => {
-    if (!previewUrl) return;
+  const imgLogoChange = () => {
     setImageLogoHasChanged(true);
   };
 

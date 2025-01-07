@@ -22,7 +22,7 @@ export default function Component() {
   } = useAppContext();
   const updateTeam = useUpdateTeam();
 
-  const [name, setName] = useState<string | undefined>(undefined);
+  const [name, setName] = useState<string>('');
 
   const router = useRouter();
 
@@ -44,17 +44,15 @@ export default function Component() {
 
   useEffect(() => {
     if (teamSelected) {
-      setName(teamSelected.name);
+      setName(teamSelected.name || '');
     }
   }, [teamSelected]);
 
-  const imgLogoChange = (previewUrl: string | null) => {
-    if (!previewUrl) return;
+  const imgLogoChange = () => {
     setImageLogoHasChanged(true);
   };
 
-  const imgFavChange = (previewUrl: string | null) => {
-    if (!previewUrl) return;
+  const imgFavChange = () => {
     setImageFavHasChanged(true);
   };
 

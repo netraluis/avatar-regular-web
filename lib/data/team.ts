@@ -394,7 +394,7 @@ export const updateTeamByField = async ({
 }: {
   teamId: string;
   field: string;
-  value: string;
+  value: string | null;
 }) => {
   try {
     const team = await prisma.team.update({

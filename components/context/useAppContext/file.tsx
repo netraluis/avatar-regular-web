@@ -74,11 +74,11 @@ export const useFileVectorStoreAssistant = () => {
             prev.map((f) =>
               f.id === file.name
                 ? {
-                    ...f,
-                    isCharging: false,
-                    status: "success",
-                    ...responseData.data,
-                  }
+                  ...f,
+                  isCharging: false,
+                  status: "success",
+                  ...responseData.data,
+                }
                 : f,
             ),
           );
@@ -231,18 +231,34 @@ export const useSupabaseFile = () => {
     // fileType: FileType;
   }) {
     const name = oldUrl.split("/")[oldUrl.split("/").length - 1];
-    if (!fileInput || fileInput.length === 0) return;
+
     try {
       setUpLoadSupabaseFileloading(true);
 
       const formData = new FormData();
+      formData.append("teamId", teamId);
+      formData.append("fileUserImageType", fileUserImageType);
+      formData.append("oldNameDoc", name);
+
+      if (!fileInput || fileInput.length === 0) {
+        const requestOptions = {
+          method: "DELETE",
+          body: formData,
+          headers: {
+            // "Content-Type": "application/json",
+            "x-user-id": userId,
+          },
+        };
+
+        return await fetch(
+          `/api/protected/team/${teamId}/file/supabase`,
+          requestOptions,
+        );
+      }
       Array.from(fileInput).forEach((file) => {
         formData.append("files", file); // Usa el mismo nombre "files" para todos los archivos
       });
 
-      formData.append("teamId", teamId);
-      formData.append("fileUserImageType", fileUserImageType);
-      formData.append("oldNameDoc", name);
 
       // formData.append("purpose", "assistants");
 
