@@ -1,4 +1,5 @@
-import { createTeam, getTeamByTeamId, getTeamsByUser } from "@/lib/data/team";
+import { createTeam, getTeamByTeamId, getTeamsByUser, getAllTeams } from "@/lib/data/team";
+import { getUserById } from "@/lib/data/user";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -11,7 +12,10 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const teams = await getTeamsByUser(userId);
+    const {isSuperAdmin} = await getUserById(userId)
+    
+
+    const teams = isSuperAdmin ? await getAllTeams() : await getTeamsByUser(userId);
 
     const response = {
       teams,

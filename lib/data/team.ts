@@ -94,6 +94,25 @@ export const getTeamsByUser = async (userId: string) => {
   return subdomainInfo.filter((team) => team.isActive);
 };
 
+export const getAllTeams = async () => {
+  const subdomainInfo = await prisma.userTeam
+  .findMany({
+    select: {
+      team: {
+        select: {
+          id: true,
+          name: true,
+          subDomain: true,
+          isActive: true,
+        },
+      },
+    },
+  })
+  .then((data) => data.map((team) => team.team));
+
+return subdomainInfo.filter((team) => team.isActive);
+}
+
 export const getTeamByTeamId = async (
   teamId: string,
   userId: string,
