@@ -48,6 +48,7 @@ enum LanguageType {
 enum RoleUserType {
   ASSISTANT
   USER
+  OBSERVER
 }
 
 enum ModeMessageType {
@@ -57,6 +58,11 @@ enum ModeMessageType {
 
 enum HeaderButtonType {
   PLAIN
+}
+
+enum UserType {
+  OWNER
+  ADMIN
 }
 
 model Message {
@@ -255,6 +261,7 @@ model Avatar {
 model UserTeam {
   userId      String 
   teamId      String  
+  type        UserType
 
   user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   team        Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)

@@ -1,5 +1,5 @@
 import prisma from "../prisma";
-import { Prisma } from "@prisma/client";
+import { Prisma, UserType } from "@prisma/client";
 
 export type GetTeamByTeamId = Prisma.TeamGetPayload<{
   select: {
@@ -12,6 +12,7 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
     logoUrl: true;
     symbolUrl: true;
     avatarUrl: true;
+    paddleSubscriptionId: true;
     id: true;
     footer: {
       select: {
@@ -120,6 +121,7 @@ export const getTeamByTeamId = async (
       logoUrl: true,
       symbolUrl: true,
       avatarUrl: true,
+      paddleSubscriptionId: true,
       footer: {
         select: {
           text: true,
@@ -224,6 +226,7 @@ export const createTeam = async ({
         data: {
           userId: userId, // Id del usuario
           teamId: newTeam.id, // Id del equipo creado
+          type: UserType.OWNER,
         },
       });
 
@@ -265,6 +268,7 @@ export const updateTeam = async ({
         logoUrl: true,
         symbolUrl: true,
         avatarUrl: true,
+        paddleSubscriptionId: true,
         footer: {
           select: {
             text: true,
@@ -415,6 +419,7 @@ export const updateTeamByField = async ({
         logoUrl: true,
         symbolUrl: true,
         avatarUrl: true,
+        paddleSubscriptionId: true,
         footer: {
           select: {
             text: true,

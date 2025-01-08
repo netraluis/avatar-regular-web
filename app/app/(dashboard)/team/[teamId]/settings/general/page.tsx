@@ -22,7 +22,7 @@ export default function Component() {
   } = useAppContext();
   const updateTeam = useUpdateTeam();
 
-  const [name, setName] = useState<string>('');
+  const [name, setName] = useState<string>("");
 
   const router = useRouter();
 
@@ -44,7 +44,7 @@ export default function Component() {
 
   useEffect(() => {
     if (teamSelected) {
-      setName(teamSelected.name || '');
+      setName(teamSelected.name || "");
     }
   }, [teamSelected]);
 

@@ -32,7 +32,7 @@ export async function GET() {
 
     const res = await response.json();
 
-    console.log({ res: res.data });
+    // console.log({ res: res.data });
     return new NextResponse(JSON.stringify(res.data), {
       status: 200,
     });

@@ -221,6 +221,61 @@
               "headerFooter": "Footer del header",
               "assistantTitle": "Títol"
             }
+          },
+          "PLANS": {
+            "PAGE": {
+              "title": "Plans",
+              "description": "Gestiona el teu pla i les opcions de facturació.",
+              "currentPlan": "Pla actual",
+              "changePlan": "Canvia de pla",
+              "billingPortal": "Portal de facturació",
+              "plans": [
+                {
+                  "title": "Hobby",
+                  "price": 19,
+                  "monthly": "al mes",
+                  "includedPlus": "Tot el que inclou el pla gratuït, a més…",
+                  "allIncluded": "All features from the free plan included",
+                  "features": [
+                    "Accés a models avançats",
+                    "2.000 crèdits de missatges/mes",
+                    "2 xatbots",
+                    "11.000.000 caràcters per xatbot",
+                    "Enllaços il·limitats per entrenar",
+                    "Accés a l’API",
+                    "Integracions",
+                    "Analítiques bàsiques"
+                  ]
+                },
+                {
+                  "title": "Estàndard",
+                  "price": 99,
+                  "monthly": "al mes",
+                  "includedPlus": "Tot el que inclou el pla Hobby, a més…",
+                  "allIncluded": "All features from the free plan included",
+                  "features": [
+                    "10.000 crèdits de missatges/mes",
+                    "5 xatbots",
+                    "3 team members"
+                  ]
+                },
+                {
+                  "title": "Il·limitat",
+                  "price": 399,
+                  "monthly": "al mes",
+                  "includedPlus": "Tot el que inclou el pla gratuït, a més…",
+                  "allIncluded": "All features from the free plan included",
+                  "features": [
+                    "40.000 crèdits de missatges/mes (els missatges que superin aquest límit utilitzaran la teva clau d’API d’OpenAI)",
+                    "10 xatbots",
+                    "5 membres de l’equip",
+                    "Elimina “Powered by Chatbotfor",
+                    "Usa els teus propis dominis personalitzats",
+                    "Analítiques avançades"
+                  ]
+                }
+              ]
+            }
           }
         },
         "ASSISTANT": {

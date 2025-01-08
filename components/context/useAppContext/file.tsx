@@ -74,11 +74,11 @@ export const useFileVectorStoreAssistant = () => {
             prev.map((f) =>
               f.id === file.name
                 ? {
-                  ...f,
-                  isCharging: false,
-                  status: "success",
-                  ...responseData.data,
-                }
+                    ...f,
+                    isCharging: false,
+                    status: "success",
+                    ...responseData.data,
+                  }
                 : f,
             ),
           );
@@ -258,7 +258,6 @@ export const useSupabaseFile = () => {
       Array.from(fileInput).forEach((file) => {
         formData.append("files", file); // Usa el mismo nombre "files" para todos los archivos
       });
-
 
       // formData.append("purpose", "assistants");
 

@@ -221,6 +221,61 @@
               "headerFooter": "Header footer",
               "assistantTitle": "Title"
             }
+          },
+          "PLANS": {
+            "PAGE": {
+              "title": "Plans",
+              "description": "Manage your plan and billing options.",
+              "currentPlan": "Current plan",
+              "changePlan": "Change plan",
+              "billingPortal": "Billing portal",
+              "plans": [
+                {
+                  "title": "Hobby",
+                  "price": 19,
+                  "monthly": "per month",
+                  "includedPlus": "Everything included in the free plan, plus...",
+                  "allIncluded": "All features from the free plan included",
+                  "features": [
+                    "Access to advanced models",
+                    "2,000 message credits/month",
+                    "2 chatbots",
+                    "11,000,000 characters per chatbot",
+                    "Unlimited links for training",
+                    "API access",
+                    "Integrations",
+                    "Basic analytics"
+                  ]
+                },
+                {
+                  "title": "Standard",
+                  "price": 99,
+                  "monthly": "per month",
+                  "includedPlus": "Everything included in the Hobby plan, plus...",
+                  "allIncluded": "All features from the free plan included",
+                  "features": [
+                    "10,000 message credits/month",
+                    "5 chatbots",
+                    "3 team members"
+                  ]
+                },
+                {
+                  "title": "Unlimited",
+                  "price": 399,
+                  "monthly": "per month",
+                  "includedPlus": "Everything included in the free plan, plus...",
+                  "allIncluded": "All features from the free plan included",
+                  "features": [
+                    "40,000 message credits/month (messages exceeding this limit will use your OpenAI API key)",
+                    "10 chatbots",
+                    "5 team members",
+                    "Remove “Powered by Chatbotfor”",
+                    "Use your own custom domains",
+                    "Advanced analytics"
+                  ]
+                }
+              ]
+            }
           }
         },
         "ASSISTANT": {

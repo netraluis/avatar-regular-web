@@ -72,8 +72,7 @@ export const UploadImage = forwardRef(
       setLogoLoading(false);
     };
 
-    const handleImageDelete = async (
-    ) => {
+    const handleImageDelete = async () => {
       setLogoLoading(true);
       setImageHasChanged(true);
       setFile(null);
@@ -87,7 +86,7 @@ export const UploadImage = forwardRef(
       if (!imageHasChanged) return;
       setLogoLoading(true);
 
-      if(!teamSelected) return;
+      if (!teamSelected) return;
       if (teamSelected?.id && user?.user.id && fileUserImageType) {
         await uploadSupaseFile({
           fileInput: file as unknown as FileList,
@@ -111,36 +110,37 @@ export const UploadImage = forwardRef(
         <div className="flex items-center space-x-2">
           {logoLoading || !teamSelected ? (
             <LogoCharging />
-          ) : !imageHasChanged ?
-            (teamSelected && imageField && teamSelected[imageField]) ?
-              (
-                <div className="w-10 h-10 rounded-full flex items-center justify-center relative">
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${teamSelected[imageField]}`}
-                    alt={alt}
-                    width={30}
-                    height={30}
-                    unoptimized
-                  />
-                </div>
-              ) : (
-                <div className="w-10 h-10 border rounded-full  flex items-center justify-center bg-muted">
-                  CN
-                </div>
-              ) : previewImage ? (
-                <div className="w-10 h-10 rounded-full flex items-center justify-center relative">
-                  <Image
-                    src={previewImage}
-                    alt={alt}
-                    width={30}
-                    height={30}
-                    unoptimized
-                  />
-                </div>
-              ) : (
+          ) : !imageHasChanged ? (
+            teamSelected && imageField && teamSelected[imageField] ? (
+              <div className="w-10 h-10 rounded-full flex items-center justify-center relative">
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${teamSelected[imageField]}`}
+                  alt={alt}
+                  width={30}
+                  height={30}
+                  unoptimized
+                />
+              </div>
+            ) : (
               <div className="w-10 h-10 border rounded-full  flex items-center justify-center bg-muted">
                 CN
-              </div>)}
+              </div>
+            )
+          ) : previewImage ? (
+            <div className="w-10 h-10 rounded-full flex items-center justify-center relative">
+              <Image
+                src={previewImage}
+                alt={alt}
+                width={30}
+                height={30}
+                unoptimized
+              />
+            </div>
+          ) : (
+            <div className="w-10 h-10 border rounded-full  flex items-center justify-center bg-muted">
+              CN
+            </div>
+          )}
 
           <Button
             variant="outline"
