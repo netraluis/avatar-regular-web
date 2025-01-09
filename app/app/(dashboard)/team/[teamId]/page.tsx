@@ -200,7 +200,7 @@ export default function Dashboard() {
               title={teamIdText.createYourAssistant}
               description={teamIdText.createYourAssistantDescription}
               loading={false}
-              backAction={() => { }}
+              backAction={() => {}}
               nextAction={handleCreateNewAssistantRoute}
               backActionText=""
               nextActionText={teamIdText.textActionCreateYourAssistant}

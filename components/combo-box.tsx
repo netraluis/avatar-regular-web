@@ -1,7 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, CirclePlus } from "lucide-react";
+import {
+  Check,
+  ChevronsUpDown,
+  CirclePlus,
+  LoaderCircle,
+  MoreHorizontal,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -34,6 +40,9 @@ export function Combobox({
   fromColor,
   toColor,
   subjectTitle,
+  seeMoreFuncion,
+  hasMoreItems,
+  isChargingMoreItems,
 }: {
   options: Option[];
   optionSelected: Option;
@@ -45,6 +54,9 @@ export function Combobox({
   fromColor: string;
   toColor: string;
   subjectTitle: string;
+  seeMoreFuncion?: () => void;
+  hasMoreItems?: boolean;
+  isChargingMoreItems?: boolean;
 }) {
   const { t } = useDashboardLanguage();
   const dashboard = t("app.LAYOUT");
@@ -94,7 +106,9 @@ export function Combobox({
                     routerHandler(currentValue);
                   }}
                 >
-                  <span className="truncate w-full">{team.name}</span>
+                  <span className="truncate w-full">
+                    {team.name}
+                  </span>
                   <Check
                     className={cn(
                       "ml-2 h-4 w-4",
@@ -105,6 +119,21 @@ export function Combobox({
                   />
                 </CommandItem>
               ))}
+              {hasMoreItems && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full mt-1 text-muted-foreground hover:text-primary flex items-center justify-center gap-2"
+                  onClick={seeMoreFuncion}
+                >
+                  {!isChargingMoreItems ? (
+                    <MoreHorizontal className="h-4 w-4" />
+                  ) : (
+                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                  )}
+                  {/* <span className="text-sm">Cargar más equipos</span> */}
+                </Button>
+              )}
               <CommandItem className="flex" onSelect={createNewTeamRoute}>
                 <CirclePlus className={cn("mr-2 h-4 w-4")} />
                 {dashboard.create} {subject}

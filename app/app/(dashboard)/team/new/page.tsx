@@ -24,8 +24,6 @@ export default function Page() {
   const { t } = useDashboardLanguage();
   const newTeam = t("app.TEAM.NEW.PAGE");
 
-  console.log({ newTeam });
-
   const languages = {
     CA: newTeam.languages.CA,
     ES: newTeam.languages.ES,
@@ -63,7 +61,7 @@ export default function Page() {
         },
         userId: user!.user.id,
       });
-      await fetchTeamsByUserId(user.user.id);
+      await fetchTeamsByUserId({userId: user.user.id, page: 1, pageSize:4});
     }
   };
 
@@ -86,7 +84,7 @@ export default function Page() {
       backActionText={newTeam.backActionText}
       nextActionText={newTeam.nextActionText}
       loading={loadingCreateTeam}
-      backActionActive={teams.length > 0}
+      backActionActive={teams.teams.length > 0}
       nextActionActive={!!teamName}
       error={errorCreateTeam}
       errorText={newTeam.errorText}

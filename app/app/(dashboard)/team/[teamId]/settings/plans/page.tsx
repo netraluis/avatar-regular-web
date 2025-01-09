@@ -21,7 +21,7 @@ export default function Component() {
   const [loadingHandlingCheckout, setLoadingHandlingCheckout] =
     useState<boolean>(false);
 
-  const [cancelData, setCancelData] = useState<string>('');
+  const [cancelData, setCancelData] = useState<string>("");
 
   const fetchSubs = async () => {
     if (!teamSelected?.paddleSubscriptionId) return;
@@ -39,9 +39,13 @@ export default function Component() {
         throw new Error(`Error: ${response.statusText}`);
       }
       const responseData = await response.json();
-      if (responseData.canceledAt) return
-      if (responseData.scheduledChange.action === 'cancel') {
-        setCancelData(new Date(responseData.scheduledChange.effectiveAt).toLocaleDateString());
+      if (responseData.canceledAt) return;
+      if (responseData.scheduledChange.action === "cancel") {
+        setCancelData(
+          new Date(
+            responseData.scheduledChange.effectiveAt,
+          ).toLocaleDateString(),
+        );
       }
       setSubId(responseData.items[0].price.id);
     } catch (e: any) {
@@ -145,7 +149,9 @@ export default function Component() {
   const handleProductId = (index: number, newCustomer?: boolean) => {
     switch (index) {
       case 0:
-        return newCustomer ? products.find((product: any) => product.name === "hobbyTrial").id : products.find((product: any) => product.name === "hobby").id;
+        return newCustomer
+          ? products.find((product: any) => product.name === "hobbyTrial").id
+          : products.find((product: any) => product.name === "hobby").id;
       case 1:
         return products.find((product: any) => product.name === "standard").id;
       case 2:
@@ -156,7 +162,7 @@ export default function Component() {
   };
 
   const openCheckout = async (index: number) => {
-    if (cancelData || !userLocal) return
+    if (cancelData || !userLocal) return;
     setLoadingHandlingCheckout(true);
     let userLocalIdCreated = undefined;
     if (!userLocal?.paddleCustomerId) {
@@ -174,7 +180,10 @@ export default function Component() {
       }
       const responseData = await response.json();
       userLocalIdCreated = responseData.data.id;
-      updateUser({ userId: userLocal?.id, data: { paddleCustomerId: responseData.data.id } });
+      updateUser({
+        userId: userLocal?.id,
+        data: { paddleCustomerId: responseData.data.id },
+      });
     }
 
     const id = handleProductId(index, !userLocalIdCreated);
@@ -215,7 +224,6 @@ export default function Component() {
   };
 
   const handleBillingPortal = async () => {
-
     const response = await fetch(
       `/api/protected/paddle/customers/${userLocal?.paddleCustomerId}/portal-sessions`,
       {
@@ -259,7 +267,11 @@ export default function Component() {
                 className={`${indexActiveProd === index ? "border bg-gray-100" : !cancelData && "cursor-pointer"}`}
               >
                 <CardHeader className="space-y-1">
-                  {cancelData && indexActiveProd === index && <span className='text-red-500'>Se cancelara en {cancelData}</span>}
+                  {cancelData && indexActiveProd === index && (
+                    <span className="text-red-500">
+                      Se cancelara en {cancelData}
+                    </span>
+                  )}
                   <div className="flex">
                     <CardTitle>{plan.title}</CardTitle>
                     <span>

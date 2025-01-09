@@ -16,7 +16,11 @@ const RedirectComponent = () => {
     const fetchData = async () => {
       try {
         if (user?.user.id) {
-          const response = await fetchTeamsByUserId(user?.user.id);
+          const response = await fetchTeamsByUserId({
+            userId: user?.user.id,
+            page: 1,
+            pageSize: 4,
+          });
           if (response && response?.teamSelected?.id) {
             router.push(`/team/${response.teamSelected.id}`);
           } else {

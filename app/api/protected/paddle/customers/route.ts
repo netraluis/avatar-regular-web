@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  Environment,
-  LogLevel,
-  Paddle
-} from "@paddle/paddle-node-sdk";
+import { Environment, LogLevel, Paddle } from "@paddle/paddle-node-sdk";
 
 export async function POST(request: NextRequest) {
   // { params }: { params: { teamId: string } },

@@ -1,5 +1,7 @@
 import prisma from "../prisma";
 import { Prisma, UserType } from "@prisma/client";
+import { getUserById } from "./user";
+import { createClient } from "../supabase/server";
 
 export type GetTeamByTeamId = Prisma.TeamGetPayload<{
   select: {
@@ -72,12 +74,44 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
   };
 }> | null;
 
-export const getTeamsByUser = async (userId: string) => {
-  const subdomainInfo = await prisma.userTeam
+export const getTeamsByUser = async ({
+  page,
+  pageSize,
+}: {
+  page: number;
+  pageSize: number;
+}) => {
+  const supabase = createClient();
+
+  // Obtener el usuario autenticado
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (!user || error) {
+    throw new Error("Unauthorized");
+  }
+
+  const { isSuperAdmin } = await getUserById(user.id);
+
+  const where: { team: { isActive: boolean }; userId?: string } = {
+    team: {
+      isActive: true,
+    },
+    userId: user.id,
+  };
+
+  if (isSuperAdmin) {
+    delete where.userId;
+  }
+
+  const teams = await prisma.userTeam
     .findMany({
-      where: {
-        userId: userId,
-      },
+      where,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      orderBy: { user: { createdAt: "desc" } },
       select: {
         team: {
           select: {
@@ -91,44 +125,63 @@ export const getTeamsByUser = async (userId: string) => {
     })
     .then((data) => data.map((team) => team.team));
 
-  return subdomainInfo.filter((team) => team.isActive);
+  const total = await prisma.userTeam.count({
+    where,
+  });
+
+  const totalPages = Math.ceil(total / pageSize);
+
+  return {
+    data: teams,
+    meta: {
+      total,
+      page,
+      pageSize,
+      totalPages,
+    },
+  };
 };
 
-export const getAllTeams = async () => {
-  const subdomainInfo = await prisma.userTeam
-  .findMany({
-    select: {
-      team: {
-        select: {
-          id: true,
-          name: true,
-          subDomain: true,
-          isActive: true,
-        },
+export const getTeamByTeamId = async ({
+  teamId,
+}: {
+  teamId: string;
+}): Promise<GetTeamByTeamId> => {
+  const supabase = createClient();
+
+  // Obtener el usuario autenticado
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (!user || error) {
+    throw new Error("Unauthorized");
+  }
+
+  const { isSuperAdmin } = await getUserById(user.id);
+
+  const where: {
+    id: string;
+    isActive: boolean;
+    users?: { some: { userId: string } };
+  } = {
+    id: teamId,
+    isActive: true,
+    users: {
+      some: {
+        userId: user.id,
       },
     },
-  })
-  .then((data) => data.map((team) => team.team));
+  };
+  if (isSuperAdmin) {
+    delete where.users;
+  }
 
-return subdomainInfo.filter((team) => team.isActive);
-}
-
-export const getTeamByTeamId = async (
-  teamId: string,
-  userId: string,
-): Promise<GetTeamByTeamId> => {
   //   const response = await fetch(`/api/teams/${id}`);
   //   return response.json();
   const subdomainInfo = await prisma.team.findFirst({
-    where: {
-      id: teamId,
-      isActive: true,
-      users: {
-        some: {
-          userId: userId, // Verificar que el usuario está relacionado con el equipo
-        },
-      },
-    },
+    where,
     select: {
       selectedLanguages: true,
       headerButton: true,

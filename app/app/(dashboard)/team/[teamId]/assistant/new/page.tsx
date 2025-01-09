@@ -70,7 +70,7 @@ export default function Page() {
       backActionText={newAssistant.backActionText}
       nextActionText={newAssistant.nextActionText}
       loading={loadingCreateAssistant}
-      backActionActive={teams.length > 0}
+      backActionActive={teams.teams.length > 0}
       nextActionActive={!!assistantName}
       error={errorCreateAssistant}
       errorText={newAssistant.errorText}

@@ -1,29 +1,33 @@
-import { createTeam, getTeamByTeamId, getTeamsByUser, getAllTeams } from "@/lib/data/team";
-import { getUserById } from "@/lib/data/user";
+import {
+  createTeam,
+  getTeamByTeamId,
+  getTeamsByUser,
+} from "@/lib/data/team";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
     const userId = request.headers.get("x-user-id");
+    const { searchParams } = new URL(request.url);
 
     if (!userId) {
       return new NextResponse("user need to be log in", {
         status: 400,
       });
     }
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const pageSize = parseInt(searchParams.get("pageSize") || "4", 10);
 
-    const {isSuperAdmin} = await getUserById(userId)
-    
-
-    const teams = isSuperAdmin ? await getAllTeams() : await getTeamsByUser(userId);
+    const teams = await getTeamsByUser({ page, pageSize });
 
     const response = {
-      teams,
+      teams: teams.data,
+      meta: teams.meta,
       teamSelected: {},
     };
 
-    if (teams.length > 0 && teams[0].id) {
-      const teamSelected = await getTeamByTeamId(teams[0].id, userId);
+    if (teams.data.length > 0 && teams.data[0].id) {
+      const teamSelected = await getTeamByTeamId({teamId: teams.data[0].id});
       if (teamSelected) {
         response.teamSelected = teamSelected;
       }

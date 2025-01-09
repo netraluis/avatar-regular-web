@@ -1,13 +1,7 @@
 import { NextResponse } from "next/server";
-import {
-  Environment,
-  LogLevel,
-  Paddle,
-} from "@paddle/paddle-node-sdk";
+import { Environment, LogLevel, Paddle } from "@paddle/paddle-node-sdk";
 
-export async function GET(
-) {
-
+export async function GET() {
   if (!process.env.PADDLE_API_KEY) {
     return new NextResponse("Paddle API Key is required", {
       status: 400,

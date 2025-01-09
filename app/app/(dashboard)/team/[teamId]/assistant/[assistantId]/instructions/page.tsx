@@ -97,7 +97,7 @@ export default function Page() {
       backActionText={newInstructions.backActionText}
       nextActionText={newInstructions.nextActionText}
       loading={loadingUpdateAssistant}
-      backActionActive={teams.length > 0}
+      backActionActive={teams.teams.length > 0}
       nextActionActive={!!assistantValues?.instructions}
       error={errorUpdateAssistant}
       errorText={newInstructions.errorText}

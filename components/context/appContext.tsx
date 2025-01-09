@@ -9,7 +9,10 @@ import OpenAI from "openai";
 import { GetAssistantType } from "@/lib/data/assistant";
 
 type AppState = {
-  teams: Team[];
+  teams: {
+    teams: Team[];
+    meta: { total: number; page: number; pageSize: number; totalPages: number };
+  };
   teamSelected: GetTeamByTeamId | null;
   assistantsByTeam: Assistant[];
   assistantSelected: {
@@ -26,6 +29,12 @@ type Action =
       type: "SET_TEAMS";
       payload: {
         teams: Team[];
+        meta: {
+          total: number;
+          page: number;
+          pageSize: number;
+          totalPages: number;
+        };
       };
     }
   | { type: "SET_TEAM_SELECTED"; payload: GetTeamByTeamId | null }
@@ -68,7 +77,7 @@ const appReducer = (state: AppState, action: Action): AppState => {
     case "SET_TEAMS":
       return {
         ...state,
-        teams: action.payload.teams,
+        teams: { teams: action.payload.teams, meta: action.payload.meta },
       };
     case "SET_TEAM_SELECTED":
       return { ...state, teamSelected: action.payload };
@@ -83,11 +92,11 @@ const appReducer = (state: AppState, action: Action): AppState => {
         assistantSelected: action.payload,
       };
     case "SET_TEAM_CREATION":
-      return { ...state, teams: [...state.teams, action.payload.newTeam] };
+      return { ...state };
     case "SET_TEAM_DELETE":
       return {
         ...state,
-        teams: state.teams.filter((team) => team.id !== action.payload.teamId),
+        // teams: state.teams.filter((team) => team.id !== action.payload.teamId),
       };
     case "SET_USER":
       return { ...state, user: action.payload };
@@ -109,7 +118,10 @@ const appReducer = (state: AppState, action: Action): AppState => {
     case "SET_USER_LOGOUT":
       return {
         ...state,
-        teams: [],
+        teams: {
+          teams: [],
+          meta: { total: 0, page: 0, pageSize: 0, totalPages: 0 },
+        },
         teamSelected: null,
         assistantsByTeam: [],
         user: null,
@@ -144,7 +156,10 @@ export const AppProvider = ({
   userLocal: User | null;
 }) => {
   const initialState: AppState = {
-    teams: [],
+    teams: {
+      teams: [],
+      meta: { total: 0, page: 0, pageSize: 0, totalPages: 0 },
+    },
     teamSelected: null,
     assistantsByTeam: [],
     assistantSelected: null,

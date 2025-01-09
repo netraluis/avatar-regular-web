@@ -63,7 +63,10 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   } = useAppContext();
   const { teamId, assistantId } = useParams();
 
-  const { fetchTeamsByUserId, loadingTeamsByUserId } = useFetchTeamsByUserId();
+  const [chargingMoreTeamsLoading, setChargingMoreTeamsLoading] =
+    React.useState(false);
+
+  const { fetchTeamsByUserId } = useFetchTeamsByUserId();
   const { fetchTeamsByUserIdAndTeamId, loadingTeamsByUserIdAndTeamId } =
     useFetchTeamsByUserIdAndTeamId();
   const { fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
@@ -82,18 +85,30 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const fetchData = async () => {
       if (assistantId && teamId && user?.user?.id) {
-        await fetchTeamsByUserId(user.user.id);
+        await fetchTeamsByUserId({
+          userId: user.user.id,
+          page: 1,
+          pageSize: 4,
+        });
         await fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id);
-        // await fetchAssistantSelected.fetchAssistantsByAssistantSelected(
-        //   teamId as string,
-        //   assistantId as string,
-        //   user.user.id,
-        // );
+        await fetchAssistantSelected.fetchAssistantsByAssistantSelected(
+          teamId as string,
+          assistantId as string,
+          user.user.id,
+        );
       } else if (user?.user?.id && teamId) {
-        await fetchTeamsByUserId(user.user.id);
-        // await fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id);
+        await fetchTeamsByUserId({
+          userId: user.user.id,
+          page: 1,
+          pageSize: 4,
+        });
+        await fetchTeamsByUserIdAndTeamId(teamId as string, user.user.id);
       } else if (user?.user?.id) {
-        const res = await fetchTeamsByUserId(user.user.id);
+        const res = await fetchTeamsByUserId({
+          userId: user.user.id,
+          page: 1,
+          pageSize: 4,
+        });
         if (res && res.teamSelected) {
           await fetchTeamsByUserIdAndTeamId(
             res.teamSelected.id as string,
@@ -162,6 +177,17 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
     router.push(newPath);
   };
 
+  const seeMoreTeams = async () => {
+    if (!user?.user?.id) return;
+    setChargingMoreTeamsLoading(true);
+    await fetchTeamsByUserId({
+      userId: user.user.id,
+      page: teams.meta.page + 1,
+      pageSize: 4,
+    });
+    setChargingMoreTeamsLoading(false);
+  };
+
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6 p-4">
@@ -178,12 +204,12 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
           <Breadcrumb className="flex">
             <BreadcrumbList>
               {!loadingTeamsByUserIdAndTeamId &&
-              !loadingTeamsByUserId &&
+              // !loadingTeamsByUserId &&
               teamSelected ? (
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Combobox
-                      options={teams as Option[]}
+                      options={teams.teams as Option[]}
                       optionSelected={teamSelected as Option}
                       subject={dashboard.team}
                       routerHandler={handleTeamRouteChange}
@@ -193,6 +219,9 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
                       fromColor={"to-[#f4f269]"}
                       toColor={"from-[#5cb270]"}
                       subjectTitle={dashboard.teams}
+                      seeMoreFuncion={seeMoreTeams}
+                      hasMoreItems={teams.meta.totalPages > teams.meta.page}
+                      isChargingMoreItems={chargingMoreTeamsLoading}
                     />
                   </BreadcrumbLink>
                 </BreadcrumbItem>

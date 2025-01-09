@@ -34,7 +34,7 @@ export async function GET(
       });
     }
 
-    const teams = await getTeamByTeamId(teamId, userId);
+    const teams = await getTeamByTeamId({teamId});
 
     return new NextResponse(JSON.stringify(teams), {
       status: 200,

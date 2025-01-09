@@ -3,40 +3,57 @@ import { useAppContext } from "../appContext";
 import { Prisma, Team } from "@prisma/client";
 
 export const useFetchTeamsByUserId = () => {
-  const { dispatch } = useAppContext();
+  const {
+    dispatch,
+    state: { teams },
+  } = useAppContext();
 
   const [loadingTeamsByUserId, setLoadingTeamsByUserId] = useState(false);
   const [errorTeamsByUserId, setErrorTeamsByUserId] = useState<any>(null);
   const [dataTeamsByUserId, setDataTeamsByUserId] = useState<Team[]>([]);
 
-  async function fetchTeamsByUserId(userId: string) {
+  async function fetchTeamsByUserId({
+    userId,
+    page = 1,
+    pageSize = 4,
+  }: {
+    userId: string;
+    page: number;
+    pageSize: number;
+  }) {
     if (!userId) return setErrorTeamsByUserId("No user id provided");
     try {
       setLoadingTeamsByUserId(true);
-      const response = await fetch(`/api/protected/team`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "x-user-id": userId, // Aquí enviamos el userId en los headers
+      const response = await fetch(
+        `/api/protected/team?page=${page}&pageSize=${pageSize}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-id": userId, // Aquí enviamos el userId en los headers
+          },
         },
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
       const responseData = await response.json();
 
-      // const teamSelected = responseData.length > 0 ? responseData[0] : {};
+      const newTeams = responseData.teams.filter(
+        (newTeam: any) =>
+          !teams.teams.some((existingTeam) => existingTeam.id === newTeam.id), // Evita duplicados por ID
+      );
       dispatch({
         type: "SET_TEAMS",
         payload: {
-          teams: responseData.teams,
-          // teamSelected: responseData.teamSelected,
+          teams: [...teams.teams, ...newTeams],
+          meta: responseData.meta,
         },
       });
       setDataTeamsByUserId(responseData);
       return {
-        teams: responseData.teams,
+        teams: { teams: responseData.teams, meta: responseData.meta },
         teamSelected: responseData.teamSelected,
       };
     } catch (error: any) {
