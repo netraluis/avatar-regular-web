@@ -6,25 +6,55 @@ import { updateTeamByField } from "@/lib/data/team";
 import { field } from "@/lib/helper/images";
 import { handleError } from "@/lib/helper/errorHandler";
 
-async function compressImage(fileBuffer: Buffer, fileType: string) {
-  if (fileType === "image/jpeg") {
-    return (
-      sharp(fileBuffer)
-        // .resize(1024)
-        .jpeg({ quality: 80 })
-        .toBuffer()
-    );
-  } else if (fileType === "image/png") {
-    return (
-      sharp(fileBuffer)
-        // .resize(1024)
-        .png({ compressionLevel: 9 })
-        .toBuffer()
-    );
-  } else if (fileType === "image/svg+xml") {
-    return fileBuffer; // No modificar SVG
-  } else {
-    throw new Error("Unsupported image format");
+// async function compressImage(fileBuffer: Buffer, fileType: string) {
+//   if (fileType === "image/jpeg") {
+//     return (
+//       sharp(fileBuffer)
+//         // .resize(1024)
+//         .jpeg({ quality: 80 })
+//         .toBuffer()
+//     );
+//   } else if (fileType === "image/png") {
+//     return (
+//       sharp(fileBuffer)
+//         // .resize(1024)
+//         .png({ compressionLevel: 9 })
+//         .toBuffer()
+//     );
+//   } else if (fileType === "image/svg+xml") {
+//     return fileBuffer; // No modificar SVG
+//   } else {
+//     throw new Error("Unsupported image format");
+//   }
+// }
+
+async function compressImage(
+  fileBuffer: Buffer,
+  fileUserImageType: FileUserImageType,
+) {
+  let dimensions: { width: number; height: number; fit: "cover" };
+  switch (fileUserImageType) {
+    case FileUserImageType.LOGO:
+      dimensions = { width: 1024, height: 768, fit: "cover" };
+      break;
+    case FileUserImageType.SYMBOL:
+      dimensions = { width: 16, height: 16, fit: "cover" };
+      break;
+    case FileUserImageType.AVATAR:
+      dimensions = { width: 16, height: 16, fit: "cover" };
+      break;
+    default:
+      dimensions = { width: 1024, height: 768, fit: "cover" };
+  }
+  try {
+    return sharp(fileBuffer)
+      .resize(dimensions) // Redimensiona si es grande
+      .toFormat("png") // Convierte a PNG
+      .png({ compressionLevel: 9 }) // Comprime PNG
+      .toBuffer();
+  } catch (error) {
+    console.error("Error compressing image:", error);
+    throw new Error("Image compression failed");
   }
 }
 
@@ -75,7 +105,7 @@ export async function POST(req: NextRequest) {
     let compressedBuffer;
 
     try {
-      compressedBuffer = await compressImage(fileBuffer, file.type);
+      compressedBuffer = await compressImage(fileBuffer, fileUserImageType);
     } catch (e: any) {
       return handleError(400, e.message, "COMPRESSION_ERROR");
     }
@@ -92,7 +122,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { name } = file;
     const urlDelete = `${teamId}/${fileUserImageType}/${oldNameDoc}`;
 
     if (oldNameDoc) {
@@ -109,9 +138,13 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const urlUpload = `${teamId}/${fileUserImageType}/${name}`;
-    const mimeType =
-      file.type === "image/svg+xml" ? "image/svg+xml" : file.type;
+    // const urlUpload = `${teamId}/${fileUserImageType}/${name}`;
+
+    const originalName = file.name.replace(/\.[^/.]+$/, ""); // Quita la extensión original
+    const urlUpload = `${teamId}/${fileUserImageType}/${originalName}.png`;
+    // const mimeType =
+    //   file.type === "image/svg+xml" ? "image/svg+xml" : file.type;
+    const mimeType = "image/png";
 
     const { data, error } = await supabase.storage
       .from("user-images")

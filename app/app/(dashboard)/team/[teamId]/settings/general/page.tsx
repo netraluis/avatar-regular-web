@@ -130,7 +130,7 @@ export default function Component() {
           alt="favicon"
           recommendedSize={setting.favicon.recommendedSize}
           fileUserImageType={FileUserImageType.SYMBOL}
-          accept=".svg,.png,.jpg,.jpeg"
+          accept=".svg,.png,.ico,.jpg,.jpeg"
           choose={setting.favicon.choose}
           onPreviewChange={imgFavChange}
         />

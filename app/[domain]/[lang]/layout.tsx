@@ -25,6 +25,10 @@ export const generateMetadata = async ({
     return null;
   }
 
+  const iconUrl = data?.symbolUrl
+    ? `${basePublicUrl}/${typeof data?.symbolUrl === "string" && data?.symbolUrl}`
+    : "/favicon-16x16.png";
+
   return {
     title: `${data.name}`,
     description: data.name || "",
@@ -41,9 +45,9 @@ export const generateMetadata = async ({
     icons: {
       icon: [
         {
-          url: data?.symbolUrl
-            ? `${basePublicUrl}/${typeof data?.symbolUrl === "string" && data?.symbolUrl}`
-            : "/chatbotforSymbol.svg",
+          url: iconUrl,
+          type: "image/png",
+          sizes: "16x16",
         },
       ],
     },
@@ -80,17 +84,6 @@ export default async function DomainLayout({
 
   return (
     <html lang="en">
-      <head>
-        <title>{data.name}</title>
-        <meta name="description" content="Descripción genérica" />
-        <link
-          rel="icon"
-          href={
-            `${basePublicUrl}${typeof data?.symbolUrl === "string" && data?.symbolUrl}` ||
-            "/chatbotforSymbol.svg"
-          }
-        />
-      </head>
       <body>
         <ClientLanguageProvider
           userLanguage={params.lang.toLocaleUpperCase() as Language}

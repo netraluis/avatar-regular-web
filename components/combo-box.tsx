@@ -106,9 +106,7 @@ export function Combobox({
                     routerHandler(currentValue);
                   }}
                 >
-                  <span className="truncate w-full">
-                    {team.name}
-                  </span>
+                  <span className="truncate w-full">{team.name}</span>
                   <Check
                     className={cn(
                       "ml-2 h-4 w-4",

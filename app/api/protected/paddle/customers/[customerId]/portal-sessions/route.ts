@@ -35,7 +35,6 @@ export async function POST(
     return new NextResponse(JSON.stringify(responseData), {
       status: 200,
     });
-
   } catch (error) {
     console.error("Error creating customer:", error);
 

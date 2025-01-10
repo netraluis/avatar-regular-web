@@ -61,7 +61,7 @@ export default function Page() {
         },
         userId: user!.user.id,
       });
-      await fetchTeamsByUserId({userId: user.user.id, page: 1, pageSize:4});
+      await fetchTeamsByUserId({ userId: user.user.id, page: 1, pageSize: 4 });
     }
   };
 
