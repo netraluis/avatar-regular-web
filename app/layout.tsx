@@ -26,8 +26,8 @@ export async function generateMetadata() {
     },
     icons: {
       icon: [
-        { url: "/favicon-16x16.png", type: "image/png", size: "16x16" }, 
-        { url: "/favicon-32x32.png", type: "image/png", size: "32x32" }
+        { url: "/favicon-16x16.png", type: "image/png", size: "16x16" },
+        { url: "/favicon-32x32.png", type: "image/png", size: "32x32" },
       ], // Añade el tipo de imagen],
     },
   };
