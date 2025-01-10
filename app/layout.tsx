@@ -31,55 +31,25 @@ import "./globals.css";
 //   },
 // }
 
-// export const metadata = {
-//   title: "Chatbotfor",
-//   description: "Creamos asistentes virtuales para tu negocio",
-//   icons: {
-//     icon: [
-//       { url: "/favicon.ico", sizes: "any" },
-//       { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
-//       { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
-//       { url: "/favicon-192x192.png", type: "image/png", sizes: "192x192" },
-//     ],
-//     apple: "/apple-touch-icon.png",
-//   },
-// };
-
-// export default async function RootLayout({
-//   children,
-// }: Readonly<{
-//   children: React.ReactNode;
-// }>) {
-//   return (
-//     <html lang="en">
-//       <head>
-//         <link rel="icon" href="/favicon.ico" sizes="any" />
-//         {/* <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" /> */}
-//         {/* <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
-//         <link rel="icon" href="/favicon-192x192.png" sizes="192x192" type="image/png" />
-//         <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" /> */}
-//       </head>
-//       <body>{children}</body>
-//     </html>
-//   );
-// }
+export const metadata = {
+  title: "Chatbotfor",
+  description: "Creamos asistentes virtuales para tu negocio",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      // { url: "/favicon-192x192.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+};
 
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <head>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Chatbotfor</title>
-
-        <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
-        <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
-        <link rel="icon" href="/android-chrome-192x192.png" sizes="192x192" type="image/png" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-      </head>
       <body>{children}</body>
     </html>
   );
