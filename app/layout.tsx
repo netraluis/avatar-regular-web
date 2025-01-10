@@ -25,7 +25,10 @@ export async function generateMetadata() {
       images: ["/chatbotforLogo.svg"],
     },
     icons: {
-      icon: [{ url: "/favicon-16x16.png", type: "image/png", size: "16x16" }], // Añade el tipo de imagen
+      icon: [
+        { url: "/favicon-16x16.png", type: "image/png", size: "16x16" }, 
+        { url: "/favicon-32x32.png", type: "image/png", size: "32x32" }
+      ], // Añade el tipo de imagen],
     },
   };
 }
