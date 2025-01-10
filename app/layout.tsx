@@ -1,4 +1,4 @@
-"use server";
+// "use server";
 import "./globals.css";
 
 // export const metadata = {
@@ -30,6 +30,20 @@ import "./globals.css";
 //     ], // Añade el tipo de imagen],
 //   },
 // }
+
+export const metadata = {
+  title: "Chatbotfor",
+  description: "Creamos asistentes virtuales para tu negocio",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-192x192.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+};
 
 export default async function RootLayout({
   children,
