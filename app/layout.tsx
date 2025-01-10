@@ -37,9 +37,9 @@ export const metadata = {
   description: "Creamos asistentes virtuales para tu negocio",
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
+      // { url: "/favicon.ico", sizes: "any" },
       { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
-      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      // { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
       // { url: "/favicon-192x192.png", type: "image/png", sizes: "192x192" },
     ],
     apple: "/apple-touch-icon.png",
