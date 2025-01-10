@@ -1,4 +1,4 @@
-// "use server";
+"use server";
 import "./globals.css";
 import Script from "next/script";
 
@@ -16,51 +16,36 @@ import Script from "next/script";
 //   },
 // };
 
-// export const metadata = {
-//   title: "Chatbotfor",
-//   description: "Creamos asistentes virtuales para tu negocio",
-//   openGraph: {
-//     title: "Chatbotfor",
-//     description: "Creamos asistentes virtuales para tu negocio",
-//     images: ["/chatbotforLogo.svg"],
-//   },
-//   icons: {
-//     icon: [
-//       { url: "/favicon-16x16.png", type: "image/png", size: "16x16" },
-//       { url: "/favicon-32x32.png", type: "image/png", size: "32x32" },
-//     ], // Añade el tipo de imagen],
-//   },
-// }
+export const generateMetadata = () => {
 
-export const metadata = {
-  title: "Chatbotfor",
-  description: "Creamos asistentes virtuales para tu negocio",
-  icons: {
-    icon: [
-      // { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
-      // { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
-      // { url: "/favicon-192x192.png", type: "image/png", sizes: "192x192" },
-    ],
-    apple: "/apple-touch-icon.png",
-  },
-};
+  return {
+    title: "Chatbotfor",
+    description: "Creamos asistentes virtuales para tu negocio",
+    openGraph: {
+      title: "Chatbotfor",
+      description: "Creamos asistentes virtuales para tu negocio",
+      images: ["/chatbotforLogo.svg"],
+    },
+    icons: {
+      icon: [
+        { url: "/favicon-16x16.png", type: "image/png", size: "16x16" },
+        { url: "/favicon-32x32.png", type: "image/png", size: "32x32" },
+      ], // Añade el tipo de imagen],
+    },
+  }
+}
+
 
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+
   return (
     <html lang="en">
-      <head>
-        <link rel="icon" href="/chatbotfor-favicon.ico" sizes="any" />
-        <link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png" />
-        <link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png" />
-        <link rel="mask-icon" href="/chatbotforLogo.svg" color="#5bbad5" />
-      </head>
       <body>
         {children}
         {/* Script de inicialización de GetFernand */}
-        <Script id="fernand-init" strategy="afterInteractive">
+        {/* <Script id="fernand-init" strategy="afterInteractive">
           {`
             (function (w) {
               if (typeof w.Fernand !== "function") {
@@ -80,7 +65,7 @@ export default async function RootLayout({
             });
 
           `}
-        </Script>
+        </Script> */}
 
         {/* Script externo de GetFernand */}
         <Script
