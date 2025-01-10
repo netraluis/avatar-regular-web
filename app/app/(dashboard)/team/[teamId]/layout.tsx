@@ -5,7 +5,6 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   // const router = useRouter();
   // const params = useParams()
   // const {teamId} = params
