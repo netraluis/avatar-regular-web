@@ -45,7 +45,7 @@ export default async function RootLayout({
       <body>
         {children}
         {/* Script de inicialización de GetFernand */}
-        {/* <Script id="fernand-init" strategy="afterInteractive">
+        <Script id="fernand-init" strategy="afterInteractive">
           {`
             (function (w) {
               if (typeof w.Fernand !== "function") {
@@ -65,7 +65,7 @@ export default async function RootLayout({
             });
 
           `}
-        </Script> */}
+        </Script>
 
         {/* Script externo de GetFernand */}
         <Script
