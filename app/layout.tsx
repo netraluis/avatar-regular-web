@@ -1,4 +1,4 @@
-// "use server";
+"use server";
 import "./globals.css";
 
 // export const metadata = {
@@ -15,21 +15,21 @@ import "./globals.css";
 //   },
 // };
 
-export const metadata = {
-  title: "Chatbotfor",
-  description: "Creamos asistentes virtuales para tu negocio",
-  openGraph: {
-    title: "Chatbotfor",
-    description: "Creamos asistentes virtuales para tu negocio",
-    images: ["/chatbotforLogo.svg"],
-  },
-  icons: {
-    icon: [
-      { url: "/favicon-16x16.png", type: "image/png", size: "16x16" },
-      { url: "/favicon-32x32.png", type: "image/png", size: "32x32" },
-    ], // Añade el tipo de imagen],
-  },
-}
+// export const metadata = {
+//   title: "Chatbotfor",
+//   description: "Creamos asistentes virtuales para tu negocio",
+//   openGraph: {
+//     title: "Chatbotfor",
+//     description: "Creamos asistentes virtuales para tu negocio",
+//     images: ["/chatbotforLogo.svg"],
+//   },
+//   icons: {
+//     icon: [
+//       { url: "/favicon-16x16.png", type: "image/png", size: "16x16" },
+//       { url: "/favicon-32x32.png", type: "image/png", size: "32x32" },
+//     ], // Añade el tipo de imagen],
+//   },
+// }
 
 export default async function RootLayout({
   children,
