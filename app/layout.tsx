@@ -38,6 +38,9 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon-16x16.png" sizes="32x32" type="image/png" />
+      </head>
       <body>{children}</body>
     </html>
   );
