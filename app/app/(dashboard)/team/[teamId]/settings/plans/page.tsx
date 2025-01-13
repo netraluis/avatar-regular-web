@@ -165,6 +165,7 @@ export default function Component() {
     if (cancelData || !userLocal) return;
     setLoadingHandlingCheckout(true);
     let userLocalIdCreated = undefined;
+    console.log({ userLocal });
     if (!userLocal?.paddleCustomerId) {
       const response = await fetch(`/api/protected/paddle/customers`, {
         method: "POST",
@@ -189,7 +190,8 @@ export default function Component() {
     const id = handleProductId(index, !userLocalIdCreated);
     if (!id) return;
     if (!teamSelected?.paddleSubscriptionId) {
-      paddle?.Checkout.open({
+      console.log({teamSelectedPaddleSubscriptionId: teamSelected})
+      const res = paddle?.Checkout.open({
         // ...(userLocal?.email && { customer: { email: userLocal.email } }),
         items: [{ priceId: id, quantity: 1 }],
         customData: {
@@ -202,6 +204,8 @@ export default function Component() {
             : userLocal?.paddleCustomerId,
         },
       });
+      console.log('wwww',{res})
+
     } else {
       const response = await fetch(
         `/api/protected/paddle/subscriptions/${teamSelected?.paddleSubscriptionId}`,

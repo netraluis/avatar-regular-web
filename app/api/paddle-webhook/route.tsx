@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateTeamByField } from "@/lib/data/team";
+// import { updateTeamByField } from "@/lib/data/team";
 // import { Environment, LogLevel, Paddle } from "@paddle/paddle-node-sdk";
 
 export async function POST(
   request: NextRequest,
   // { params }: { params: { teamId: string } },
 ) {
+
+  
+  console.log("Paddle webhook");
   if (!process.env.PADDLE_API_KEY) {
     return new NextResponse("Paddle API Key is required", {
       status: 400,
@@ -24,7 +27,7 @@ export async function POST(
     console.log(body?.event_type);
 
     if (body?.event_type === "customer.created") {
-      console.log(body?.data?.id);
+      console.log("customer.created",body?.data?.id);
       // const response = await fetch(
       //   `https://api.paddle.com/customers/${'ctm_01jffznkzzryrwemvee75kdrp1'}/portal-sessions`,
       //   {
@@ -74,13 +77,17 @@ export async function POST(
       });
       if (!body?.data?.custom_data?.teamId) return;
 
-      const updateTeam = await updateTeamByField({
-        teamId: body?.data?.custom_data?.teamId,
-        field: "paddleSubscriptionId",
-        value: null,
-      });
+      // const updateTeam = await updateTeamByField({
+      //   teamId: body?.data?.custom_data?.teamId,
+      //   field: "paddleSubscriptionId",
+      //   value: null,
+      // });
 
-      console.log({ updateTeam });
+      // console.log({ updateTeam });
+    }
+
+    if(body?.event_type === "subscription.created"){
+      console.log("subscription.created", body?.data.id);
     }
 
     // console.log({event_type: body })
