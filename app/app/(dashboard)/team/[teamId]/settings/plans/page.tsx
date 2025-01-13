@@ -40,7 +40,7 @@ export default function Component() {
       }
       const responseData = await response.json();
       if (responseData.canceledAt) return;
-      if (responseData.scheduledChange.action === "cancel") {
+      if (responseData?.scheduledChange?.action === "cancel") {
         setCancelData(
           new Date(
             responseData.scheduledChange.effectiveAt,
@@ -191,7 +191,7 @@ export default function Component() {
     if (!id) return;
     if (!teamSelected?.paddleSubscriptionId) {
       console.log({teamSelectedPaddleSubscriptionId: teamSelected})
-      const res = paddle?.Checkout.open({
+      paddle?.Checkout.open({
         // ...(userLocal?.email && { customer: { email: userLocal.email } }),
         items: [{ priceId: id, quantity: 1 }],
         customData: {
@@ -204,7 +204,6 @@ export default function Component() {
             : userLocal?.paddleCustomerId,
         },
       });
-      console.log('wwww',{res})
 
     } else {
       const response = await fetch(
