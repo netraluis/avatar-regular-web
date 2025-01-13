@@ -19,7 +19,6 @@ import { getUserById } from "@/lib/data/user";
 // };
 
 export const generateMetadata = () => {
-
   return {
     title: "Chatbotfor",
     description: "Creamos asistentes virtuales para tu negocio",
@@ -34,26 +33,24 @@ export const generateMetadata = () => {
         { url: "/favicon-32x32.png", type: "image/png", size: "32x32" },
       ], // Añade el tipo de imagen],
     },
-  }
-}
-
+  };
+};
 
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-
   const supabase = createClient();
 
-  let userData : {name: string, email: string} = {name: '', email: ''};
+  let userData: { name: string; email: string } = { name: "", email: "" };
 
   const {
     data: { user },
     error,
   } = await supabase.auth.getUser();
 
-  if(!error && user ) {
+  if (!error && user) {
     const userLocal = await getUserById(user.id);
-    userData = {name: userLocal.name || '', email: userLocal.email || ''};
+    userData = { name: userLocal.name || "", email: userLocal.email || "" };
   }
 
   return (
@@ -75,8 +72,8 @@ export default async function RootLayout({
             Fernand('init', { appId: 'chatbotfor' });
             Fernand('set', {
               user: {
-                  name: '${userData.name || ''}',
-                  email: '${userData.email || ''}'
+                  name: '${userData.name || ""}',
+                  email: '${userData.email || ""}'
                 }
             });
 

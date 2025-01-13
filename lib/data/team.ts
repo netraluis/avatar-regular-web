@@ -142,11 +142,7 @@ export const getTeamsByUser = async ({
   };
 };
 
-export const getTeamByTeamId = async ({
-  teamId,
-}: {
-  teamId: string;
-}): Promise<GetTeamByTeamId> => {
+export const getTeamByTeamId = async ({ teamId }: { teamId: string }) => {
   const supabase = createClient();
 
   // Obtener el usuario autenticado
@@ -178,78 +174,81 @@ export const getTeamByTeamId = async ({
     delete where.users;
   }
 
-  //   const response = await fetch(`/api/teams/${id}`);
-  //   return response.json();
-  const subdomainInfo = await prisma.team.findFirst({
-    where,
-    select: {
-      selectedLanguages: true,
-      headerButton: true,
-      subDomain: true,
-      defaultLanguage: true,
-      id: true,
-      welcomeType: true,
-      name: true,
-      logoUrl: true,
-      symbolUrl: true,
-      avatarUrl: true,
-      paddleSubscriptionId: true,
-      footer: {
-        select: {
-          text: true,
-          language: true,
-        },
+  const selectTeam: Prisma.TeamSelect = {
+    selectedLanguages: true,
+    headerButton: true,
+    subDomain: true,
+    defaultLanguage: true,
+    id: true,
+    welcomeType: true,
+    name: true,
+    logoUrl: true,
+    symbolUrl: true,
+    avatarUrl: true,
+    paddleSubscriptionId: true,
+    footer: {
+      select: {
+        text: true,
+        language: true,
       },
-      welcome: {
-        select: {
-          text: true,
-          description: true,
-          language: true,
-        },
+    },
+    welcome: {
+      select: {
+        text: true,
+        description: true,
+        language: true,
       },
-      menuHeader: {
-        select: {
-          id: true,
-          type: true,
-          textHref: {
-            select: {
-              id: true,
-              numberOrder: true,
-              menuHeaderId: true,
-              hrefLanguages: {
-                select: {
-                  text: true,
-                  href: true,
-                  language: true,
-                  id: true,
-                  textHrefId: true,
-                },
+    },
+    menuHeader: {
+      select: {
+        id: true,
+        type: true,
+        textHref: {
+          select: {
+            id: true,
+            numberOrder: true,
+            menuHeaderId: true,
+            hrefLanguages: {
+              select: {
+                text: true,
+                href: true,
+                language: true,
+                id: true,
+                textHrefId: true,
               },
             },
           },
         },
       },
-      menuFooter: true,
-      customDomain: true,
-      assistants: {
-        where: {
-          isActive: true,
-        },
-        select: {
-          id: true,
-          name: true,
-          emoji: true,
-          url: true,
-          assistantCard: {
-            select: {
-              title: true,
-              description: true,
-              language: true,
-            },
+    },
+    menuFooter: true,
+    customDomain: true,
+    assistants: {
+      where: {
+        isActive: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        emoji: true,
+        url: true,
+        assistantCard: {
+          select: {
+            title: true,
+            description: true,
+            language: true,
           },
         },
       },
     },
+  };
+  //   const response = await fetch(`/api/teams/${id}`);
+  //   return response.json();
+  const subdomainInfo: Prisma.TeamGetPayload<{
+    select: typeof selectTeam;
+  }> | null = await prisma.team.findFirst({
+    where,
+    select: selectTeam,
   });
 
   return subdomainInfo;

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
+import { Empty } from "./lib/data/domain";
 
 const pattern =
   /\/((?!_next\/static|_next\/image|favicon\.ico|.*\.(?:svg|png|jpg|jpeg|gif|webp)$).*)/;
@@ -62,14 +63,16 @@ export default async function middleware(req: NextRequest) {
     return rewrittenResponse;
   }
 
-  // if (pattern.test(url.toString())&& !req.nextUrl.pathname.startsWith("/login")) {
-
-  // special case for `vercel.pub` domain
-  // if (hostname === "vercel.pub") {
-  //   return NextResponse.redirect(
-  //     "https://vercel.com/blog/platforms-starter-kit",
-  //   );
-  // }
+  if (pattern.test(url.toString()) && !hostname.startsWith("app.")) {
+    console.log("entro", { hostname, url });
+    const { pathname } = url;
+    console.log({ pathname });
+    const pathSegments = pathname.split("/").filter((segment) => segment);
+    if (!pathSegments[0]) {
+      const newUrl = new URL(`/${hostname}/${Empty.EMPTY}`, req.url);
+      return NextResponse.rewrite(newUrl);
+    }
+  }
 
   return NextResponse.rewrite(newUrl);
 }

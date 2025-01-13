@@ -119,7 +119,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
       avatarUrl: true,
       footer: {
         where: {
-          language: language, // Filtra por el idioma específico
+          language, // Filtra por el idioma específico
         },
         select: {
           text: true,
@@ -127,7 +127,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
       },
       welcome: {
         where: {
-          language: language,
+          language,
         },
         select: {
           text: true,
@@ -142,7 +142,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
               numberOrder: true,
               hrefLanguages: {
                 where: {
-                  language: language,
+                  language,
                 },
               },
             },
@@ -152,7 +152,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
       headerButton: true,
       menuFooter: {
         where: {
-          language: language,
+          language,
         },
       },
       customDomain: true,
@@ -167,7 +167,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
           url: true,
           assistantCard: {
             where: {
-              language: language,
+              language,
             },
             select: {
               title: true,
@@ -180,4 +180,53 @@ export async function getTeamDataByDomainOrCustomDomainPage({
   });
 
   return team;
+}
+
+export enum Empty {
+  EMPTY = "EMPTY",
+}
+
+export async function getLangValidByDomainOrCustomDomainPage({
+  domain,
+  language,
+}: {
+  domain: string;
+  language: LanguageType | Empty;
+}) {
+  const rootDomain = `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`;
+
+  const subdomain = domain.endsWith(rootDomain)
+    ? domain.replace(rootDomain, "")
+    : null;
+
+  const languageInclude = await prisma.team.findFirst({
+    where: subdomain
+      ? { subDomain: subdomain, isActive: true } // If subdomain is true, filter by subdomain
+      : { customDomain: domain, isActive: true }, // Otherwise, filter by customDomain
+    select: {
+      selectedLanguages: true,
+      defaultLanguage: true,
+    },
+  });
+
+  console.log({ languageInclude, language });
+  if (!languageInclude) return null;
+
+  if (language === Empty.EMPTY) {
+    return languageInclude.defaultLanguage;
+  }
+
+  // manipulateLanguage = language && languageInclude?.selectedLanguages.includes(language) ?
+
+  if (languageInclude.selectedLanguages.includes(language)) {
+    return language;
+  }
+
+  // console.log('holaa',{languageInclude})
+
+  // if (!languageInclude) {
+  //   return null;
+  // }
+
+  return null;
 }

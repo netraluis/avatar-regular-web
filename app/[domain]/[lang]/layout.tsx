@@ -1,9 +1,11 @@
 import { LanguageType } from "@prisma/client";
 import {
+  getLangValidByDomainOrCustomDomainPage,
   getTeamDataByDomainOrCustomDomainMetadata,
   getTeamDataByDomainOrCustomDomainPage,
+  Empty,
 } from "@/lib/data/domain";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { basePublicUrl } from "@/lib/helper/images";
 import { ReactNode } from "react";
 import Header from "@/components/headerNew";
@@ -73,12 +75,28 @@ export default async function DomainLayout({
   params: { domain: string; lang: string };
   children: ReactNode;
 }) {
+  const language = await getLangValidByDomainOrCustomDomainPage({
+    domain: decodeURIComponent(params.domain),
+    language:
+      (params.lang.toLocaleUpperCase() as LanguageType) ||
+      (params.lang as Empty),
+  });
+
+  if (!language) {
+    notFound();
+  }
+
+  if (params.lang === "EMPTY") {
+    const defaultLanguage = language || "en";
+    redirect(`/${defaultLanguage.toLocaleLowerCase()}`);
+  }
+
   const data = await getTeamDataByDomainOrCustomDomainPage({
     domain: decodeURIComponent(params.domain),
     language: params.lang.toLocaleUpperCase() as LanguageType,
   });
 
-  if (!data || !params.lang) {
+  if (!data) {
     notFound();
   }
 
