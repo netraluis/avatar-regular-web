@@ -1,4 +1,4 @@
-import { Eye } from "lucide-react";
+import { Eye, Plus } from "lucide-react";
 
 import Link from "next/link";
 
@@ -6,6 +6,7 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
+import { useParams } from "next/navigation";
 
 export interface TitleLayoutProps {
   children: React.ReactNode;
@@ -33,7 +34,10 @@ export const TitleLayout = ({
   // actionError,
 }: TitleLayoutProps) => {
   const { t } = useDashboardLanguage();
-  const { preview } = t("app.TEAM.TEAM_ID.SETTINGS.LAYOUT");
+  const { preview, createAssistant } = t("app.COMPONENTS.TITLE_LAYOUT");
+  const { assistantId, teamId } = useParams();
+  const createNewAssUrl = `/team/${teamId}/assistant/new`;
+
   return (
     <div className="flex flex-col overflow-auto p-2 w-full h-full">
       <div className="flex items-center gap-4 py-1.5 px-1.5">
@@ -47,6 +51,19 @@ export const TitleLayout = ({
               {actionErrorText}
             </Button>
           )} */}
+          {!assistantId && teamId && (
+            <Button size="sm">
+              <Link
+                href={createNewAssUrl}
+                // target="_blank"
+                // rel="noopener noreferrer"
+                className="flex items-center"
+              >
+                <Plus className="w-3.5 h-3.5 mr-2" />
+                {createAssistant}
+              </Link>
+            </Button>
+          )}
           <Button variant="secondary" size="sm">
             <Link
               href={urlPreview}
@@ -58,6 +75,7 @@ export const TitleLayout = ({
               {preview}
             </Link>
           </Button>
+
           {/* <Button
             size="sm"
             className="h-8 py-2 px-4 gap-2"

@@ -10,6 +10,10 @@
         "voiceRecordStop": "Stop microphone",
         "voiceRecordStart": "Activate microphone",
         "placeholder": "Send your question..."
+      },
+      "TITLE_LAYOUT": {
+        "preview": "Preview",
+        "createAssistant": "Create Assistant"
       }
     },
     "LAYOUT": {
