@@ -63,7 +63,7 @@ export default function Component() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      if (!teamSelected?.paddleSubscriptionId) return;
+      // if (!teamSelected?.paddleSubscriptionId) return;
       setLoadingProducts(true);
       try {
         const response = await fetch(`/api/protected/paddle/products`, {
