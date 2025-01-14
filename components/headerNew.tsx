@@ -127,7 +127,7 @@ export default function Header() {
                     >
                       <div className="flex-auto">
                         <Link
-                          href={`${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ""}`}
+                          href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ""}`}
                           className="block font-semibold text-gray-900"
                           target="_blank"
                           rel="noopener noreferrer"
@@ -141,7 +141,7 @@ export default function Header() {
                   <div className="mt-5">
                     {menuBody?.map((item) => (
                       <Link
-                        href={`${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ""}`}
+                        href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ""}`}
                         key={item.numberOrder}
                         className="group relative flex items-center gap-x-4 rounded-lg px-4 py-2 text-xs leading-3 hover:bg-gray-50"
                         target="_blank"
@@ -204,7 +204,7 @@ export default function Header() {
               {menuHeader?.map((item, index) => (
                 <Link
                   key={index}
-                  href={`${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ""}`}
+                  href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ""}`}
                   className="font-semibold text-gray-900"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -247,7 +247,7 @@ export default function Header() {
             <div className="mt-7 pt-6 ">
               {menuBody?.map((item) => (
                 <Link
-                  href={`${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ""}`}
+                  href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}${item.hrefLanguages[0]?.href || ""}`}
                   key={item.numberOrder}
                   className="group relative flex items-center gap-x-4 rounded-lg text-xs leading-4 hover:bg-gray-50 my-3"
                   target="_blank"

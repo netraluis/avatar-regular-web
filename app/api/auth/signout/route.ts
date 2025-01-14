@@ -31,7 +31,7 @@ export async function POST() {
   // revalidatePath("/", "layout");
 
   // const subdomainUrl = new URL(
-  //   `${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}${req.headers.get("host")}/login`,
+  //   `${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}${req.headers.get("host")}/login`,
   // );
   // return NextResponse.redirect(new URL(subdomainUrl, req.url), {
   //   status: 302,

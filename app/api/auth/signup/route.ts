@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     email,
     password,
     options: {
-      emailRedirectTo: `${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/confirm`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/confirm`,
     },
   });
 

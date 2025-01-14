@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await supabase.auth.resetPasswordForEmail(
       decodedEmail,
       {
-        redirectTo: `${process.env.PROTOCOL ? process.env.PROTOCOL : "https://"}app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/reset-password`,
+        redirectTo: `${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/reset-password`,
       },
     );
 
