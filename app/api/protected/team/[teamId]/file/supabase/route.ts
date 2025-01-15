@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import sharp from "sharp";
+import sharp, { FitEnum, ResizeOptions } from "sharp";
 import { createClient } from "@/lib/supabase/server";
 import { FileUserImageType } from "@/types/types";
 import { updateTeamByField } from "@/lib/data/team";
@@ -32,25 +32,25 @@ async function compressImage(
   fileBuffer: Buffer,
   fileUserImageType: FileUserImageType,
 ) {
-  let dimensions: { width: number; height: number; fit: "cover" };
+  let dimensions: ResizeOptions;
   switch (fileUserImageType) {
     case FileUserImageType.LOGO:
-      dimensions = { width: 1024, height: 768, fit: "cover" };
+      dimensions = { height: 100, fit: "contain" };
       break;
     case FileUserImageType.SYMBOL:
-      dimensions = { width: 16, height: 16, fit: "cover" };
+      dimensions = { width: 16, height: 16, fit: "contain" };
       break;
     case FileUserImageType.AVATAR:
-      dimensions = { width: 16, height: 16, fit: "cover" };
+      dimensions = { width: 16, height: 16, fit: "contain" };
       break;
     default:
-      dimensions = { width: 1024, height: 768, fit: "cover" };
+      dimensions = { height: 400, fit: "contain" };
   }
   try {
     return sharp(fileBuffer)
       .resize(dimensions) // Redimensiona si es grande
       .toFormat("png") // Convierte a PNG
-      .png({ compressionLevel: 9 }) // Comprime PNG
+      .png({ compressionLevel: 6 }) // Comprime PNG
       .toBuffer();
   } catch (error) {
     console.error("Error compressing image:", error);

@@ -1,7 +1,7 @@
 import {
   Settings,
   Paintbrush,
-  User,
+  // User,
   // Gem,
   Languages,
   Link2,
@@ -51,13 +51,13 @@ export const teamsSettingsNav = (teamSettingsText: TeamSettingsText) => [
     icon: Link2,
     id: "custom-domain",
   },
-  {
-    name: `${teamSettingsText.members}`,
-    href: "members",
-    icon: User,
-    id: "members",
-    alpha: true,
-  },
+  // {
+  //   name: `${teamSettingsText.members}`,
+  //   href: "members",
+  //   icon: User,
+  //   id: "members",
+  //   alpha: true,
+  // },
   // { name: "Plans", href: "plans", icon: Gem, id: "plans", alpha: true },
   // { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
 ];
