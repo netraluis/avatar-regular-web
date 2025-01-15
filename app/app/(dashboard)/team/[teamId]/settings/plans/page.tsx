@@ -7,7 +7,7 @@ import { useAppContext } from "@/components/context/appContext";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { updateUser } from "@/lib/data/user";
+import { CustomPopup } from "@/components/custom-popup";
 
 export default function Component() {
   const { t } = useDashboardLanguage();
@@ -22,6 +22,9 @@ export default function Component() {
     useState<boolean>(false);
 
   const [cancelData, setCancelData] = useState<string>("");
+
+  const [changeSubModal, setChangeSubModal] = useState<boolean>(false);
+  const [modalPriceId, setModalPriceId] = useState<string | null>("");
 
   const fetchSubs = async () => {
     if (!teamSelected?.paddleSubscriptionId) return;
@@ -90,7 +93,7 @@ export default function Component() {
         environment: "sandbox" as Environments,
         token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
         eventCallback: function (data) {
-          console.log(data);
+          console.log("soy un callback", { data });
           console.log(userLocal?.language.toLocaleLowerCase());
         },
         checkout: {
@@ -147,11 +150,13 @@ export default function Component() {
   }, [products, priceSubId]);
 
   const handleProductId = (index: number, newCustomer?: boolean) => {
+    console.log({ newCustomer });
     switch (index) {
       case 0:
-        return newCustomer
-          ? products.find((product: any) => product.name === "hobbyTrial").id
-          : products.find((product: any) => product.name === "hobby").id;
+        // return newCustomer
+        //   ? products.find((product: any) => product.name === "hobbyTrial").id
+        //   : products.find((product: any) => product.name === "hobby").id;
+        return products.find((product: any) => product.name === "hobby").id;
       case 1:
         return products.find((product: any) => product.name === "standard").id;
       case 2:
@@ -162,68 +167,87 @@ export default function Component() {
   };
 
   const openCheckout = async (index: number) => {
-    if (cancelData || !userLocal) return;
-    setLoadingHandlingCheckout(true);
-    let userLocalIdCreated = undefined;
-    console.log({ userLocal });
-    if (!userLocal?.paddleCustomerId) {
-      const response = await fetch(`/api/protected/paddle/customers`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: userLocal?.email,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
-      const responseData = await response.json();
-      userLocalIdCreated = responseData.data.id;
-      updateUser({
-        userId: userLocal?.id,
-        data: { paddleCustomerId: responseData.data.id },
-      });
-    }
+    try {
+      if (cancelData || !userLocal) return;
+      setLoadingHandlingCheckout(true);
+      let userLocalIdCreated = undefined;
+      console.log({ userLocal });
+      if (!userLocal?.paddleCustomerId) {
+        const response = await fetch(`/api/protected/paddle/customers`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: userLocal?.email,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        const responseData = await response.json();
+        console.log({ "responseData.id": responseData.id });
+        userLocalIdCreated = responseData.id;
 
-    const id = handleProductId(index, !userLocalIdCreated);
-    if (!id) return;
-    if (!teamSelected?.paddleSubscriptionId) {
-      console.log({teamSelectedPaddleSubscriptionId: teamSelected})
-      paddle?.Checkout.open({
-        // ...(userLocal?.email && { customer: { email: userLocal.email } }),
-        items: [{ priceId: id, quantity: 1 }],
-        customData: {
-          userId: userLocal?.id, // Datos personalizados
-          teamId: teamSelected?.id, // Otra información relevante
-        },
-        customer: {
-          id: userLocalIdCreated
-            ? userLocalIdCreated
-            : userLocal?.paddleCustomerId,
-        },
-      });
-
-    } else {
-      const response = await fetch(
-        `/api/protected/paddle/subscriptions/${teamSelected?.paddleSubscriptionId}`,
-        {
+        await fetch(`/api/protected/user/${userLocal?.id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            priceId: id,
+            data: { paddleCustomerId: responseData.id },
           }),
-        },
-      );
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
+        });
       }
-      await fetchSubs();
+
+      const id = handleProductId(index, !userLocalIdCreated);
+      if (!id) return;
+      if (!teamSelected?.paddleSubscriptionId) {
+        console.log({ teamSelectedPaddleSubscriptionId: teamSelected });
+        paddle?.Checkout.open({
+          // ...(userLocal?.email && { customer: { email: userLocal.email } }),
+          items: [{ priceId: id, quantity: 1 }],
+          customData: {
+            userId: userLocal?.id, // Datos personalizados
+            teamId: teamSelected?.id, // Otra información relevante
+          },
+          customer: {
+            id: userLocalIdCreated
+              ? userLocalIdCreated
+              : userLocal?.paddleCustomerId,
+          },
+          settings: {
+            allowLogout: false,
+            // successUrl:
+          },
+        });
+      } else {
+        setChangeSubModal(true);
+        setModalPriceId(id);
+      }
+      setLoadingHandlingCheckout(false);
+    } catch (e) {
+      console.log({ e });
     }
-    setLoadingHandlingCheckout(false);
+  };
+
+  const changeSubscription = async (priceId: string) => {
+    const response = await fetch(
+      `/api/protected/paddle/subscriptions/${teamSelected?.paddleSubscriptionId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          priceId,
+        }),
+      },
+    );
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+    await fetchSubs();
   };
 
   const handleBillingPortal = async () => {
@@ -250,6 +274,21 @@ export default function Component() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
+      <CustomPopup
+        title="Confirmación"
+        description="¿Estás seguro de que quieres realizar esta acción?"
+        open={changeSubModal}
+        onOpenChange={setChangeSubModal}
+        onAccept={() => {
+          if (!modalPriceId) return;
+          changeSubscription(modalPriceId);
+        }}
+        onCancel={() => {
+          setModalPriceId(null);
+        }}
+      >
+        {/* <p>Este es el contenido adicional del pop-up.</p> */}
+      </CustomPopup>
       <div className="text-center mb-10">
         <div className="flex justify-center w-full space-x-3">
           <h1 className="text-3xl font-bold mb-2">{texts.title}</h1>

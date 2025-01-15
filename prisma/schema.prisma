@@ -118,6 +118,7 @@ model Team {
   welcomeType     WelcomeType
   isActive        Boolean   @default(true) 
   paddleSubscriptionId String?
+  tokenLedgerId   TokenLedger[]
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
@@ -282,4 +283,15 @@ model File {
   assistant           Assistant   @relation(fields: [assistantId], references: [id])
 
   @@unique([openAIFileId])
+}
+
+model TokenLedger {
+  id                   String     @id @default(uuid())
+  teamId               String
+  runId                String?
+  paddleSubscriptionId String?
+  tokenCost            Int
+  totalToken           Int
+
+  team                 Team   @relation(fields: [teamId], references: [id], onDelete: Cascade) 
 }

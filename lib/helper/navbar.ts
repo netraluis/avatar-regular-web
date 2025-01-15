@@ -2,7 +2,7 @@ import {
   Settings,
   Paintbrush,
   User,
-  Gem,
+  // Gem,
   Languages,
   Link2,
 } from "lucide-react";
@@ -58,7 +58,7 @@ export const teamsSettingsNav = (teamSettingsText: TeamSettingsText) => [
     id: "members",
     alpha: true,
   },
-  { name: "Plans", href: "plans", icon: Gem, id: "plans", alpha: true },
+  // { name: "Plans", href: "plans", icon: Gem, id: "plans", alpha: true },
   // { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
 ];
 

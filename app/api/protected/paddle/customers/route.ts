@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const cust = await paddle.customers.create({
       email: body.email,
     });
-    return new NextResponse(JSON.stringify(cust.id), {
+    return new NextResponse(JSON.stringify(cust), {
       status: 200,
     });
 

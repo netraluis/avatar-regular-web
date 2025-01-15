@@ -27,6 +27,10 @@ export const commonOnEvent = async (
   const eventText = JSON.stringify(event);
   controller.enqueue(new TextEncoder().encode(eventText + "\n"));
 
+  if (event.event === "thread.run.completed") {
+    console.log(event.data.usage?.total_tokens);
+    console.log(event.data);
+  }
   if (event.event === "thread.message.completed") {
     if (event.data.content[0].type === "text") {
       const { value, annotations } = event.data.content[0].text;

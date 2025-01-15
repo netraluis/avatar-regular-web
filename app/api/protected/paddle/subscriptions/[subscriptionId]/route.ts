@@ -5,8 +5,6 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { subscriptionId: string } },
 ) {
-  console.log("llego a la ruta");
-
   if (!process.env.PADDLE_API_KEY) {
     return new NextResponse("Paddle API Key is required", {
       status: 400,
@@ -36,8 +34,6 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { subscriptionId: string } },
 ) {
-  console.log("llego a la ruta");
-
   if (!process.env.PADDLE_API_KEY) {
     return new NextResponse("Paddle API Key is required", {
       status: 400,

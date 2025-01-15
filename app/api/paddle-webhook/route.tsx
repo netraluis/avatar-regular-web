@@ -6,8 +6,6 @@ export async function POST(
   request: NextRequest,
   // { params }: { params: { teamId: string } },
 ) {
-
-
   console.log("Paddle webhook");
   if (!process.env.PADDLE_API_KEY) {
     return new NextResponse("Paddle API Key is required", {
@@ -87,12 +85,24 @@ export async function POST(
     }
 
     if (body?.event_type === "subscription.created") {
-      console.log("subscription.created", body?.data.id, body?.data?.custom_data);
+      console.log(
+        "subscription.created",
+        body?.data.id,
+        body?.data?.custom_data,
+      );
       await updateTeamByField({
         teamId: body?.data?.custom_data?.teamId,
         field: "paddleSubscriptionId",
         value: body?.data.id,
       });
+    }
+
+    if (body?.event_type === "transaction.completed") {
+      console.log(
+        "transaction.completed",
+        body,
+        JSON.stringify(body?.data?.items, null, 2),
+      );
     }
 
     // console.log({event_type: body })
