@@ -7,12 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 import { useParams } from "next/navigation";
+import { useAppContext } from "../context/appContext";
 
 export interface TitleLayoutProps {
   children: React.ReactNode;
   cardTitle: string;
   cardDescription: string;
-  urlPreview: string;
+  // urlPreview: string;
   // actionButtonText: string;
   // ActionButtonLogo: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   // actionButtonOnClick: () => void;
@@ -25,7 +26,7 @@ export const TitleLayout = ({
   children,
   cardTitle,
   cardDescription,
-  urlPreview,
+  // urlPreview,
   // actionButtonText,
   // ActionButtonLogo,
   // actionButtonOnClick,
@@ -35,8 +36,13 @@ export const TitleLayout = ({
 }: TitleLayoutProps) => {
   const { t } = useDashboardLanguage();
   const { preview, createAssistant } = t("app.COMPONENTS.TITLE_LAYOUT");
+    const {
+      state: { teamSelected, assistantSelected },
+    } = useAppContext();
   const { assistantId, teamId } = useParams();
   const createNewAssUrl = `/team/${teamId}/assistant/new`;
+  const assistantUrl = assistantId && assistantSelected?.localAssistant?.url ? assistantSelected?.localAssistant?.url : "";
+  const urlPreview=`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantUrl}`
 
   return (
     <div className="flex flex-col overflow-auto p-2 w-full h-full">
@@ -51,6 +57,18 @@ export const TitleLayout = ({
               {actionErrorText}
             </Button>
           )} */}
+          
+          <Button variant="secondary" size="sm">
+            <Link
+              href={urlPreview}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center"
+            >
+              <Eye className="w-3.5 h-3.5 mr-2" />
+              {preview}
+            </Link>
+          </Button>
           {!assistantId && teamId && (
             <Button size="sm">
               <Link
@@ -64,17 +82,6 @@ export const TitleLayout = ({
               </Link>
             </Button>
           )}
-          <Button variant="secondary" size="sm">
-            <Link
-              href={urlPreview}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center"
-            >
-              <Eye className="w-3.5 h-3.5 mr-2" />
-              {preview}
-            </Link>
-          </Button>
 
           {/* <Button
             size="sm"

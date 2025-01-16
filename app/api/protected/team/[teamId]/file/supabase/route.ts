@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import sharp, { FitEnum, ResizeOptions } from "sharp";
+import sharp, { ResizeOptions } from "sharp";
 import { createClient } from "@/lib/supabase/server";
 import { FileUserImageType } from "@/types/types";
 import { updateTeamByField } from "@/lib/data/team";

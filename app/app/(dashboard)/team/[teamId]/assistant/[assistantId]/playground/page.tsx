@@ -50,7 +50,7 @@ export default function Playground() {
   const [loadingInstructions, setLoadingInstructions] = React.useState(false);
 
   const {
-    state: { teamSelected, assistantSelected },
+    state: { assistantSelected },
   } = useAppContext();
 
   const [assistantValues, setAssistantValues] = React.useState<{
@@ -160,7 +160,6 @@ export default function Playground() {
     <TitleLayout
       cardTitle={playground.title}
       cardDescription={playground.description}
-      urlPreview={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden w-full">
         <Card className="p-6 w-full h-full border overflow-auto">

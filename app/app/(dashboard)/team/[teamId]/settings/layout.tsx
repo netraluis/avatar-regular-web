@@ -3,7 +3,6 @@
 import * as React from "react";
 import { usePathname } from "next/navigation";
 import { TeamSettingsProvider } from "@/components/context/teamSettingsContext";
-import { useAppContext } from "@/components/context/appContext";
 import { SideDashboardLayout } from "@/components/layouts/side-dashboard-layout";
 import { TitleLayout } from "@/components/layouts/title-layout";
 import { teamsSettingsNav } from "@/lib/helper/navbar";
@@ -22,13 +21,10 @@ function Layout({
   const comparatePathName = pathname.split("/").slice(1)[3];
   const absolutePath = pathname.split("/").slice(1, 4).join("/");
 
-  const { state } = useAppContext();
-
   return (
     <TitleLayout
       cardTitle={teamSettings.cardTitle}
       cardDescription={teamSettings.cardDescription}
-      urlPreview={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${state.teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${state.teamSelected?.defaultLanguage?.toLocaleLowerCase()}`}
     >
       <>
         <SideDashboardLayout
