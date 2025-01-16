@@ -36,16 +36,16 @@ export const CustomCard = ({
   const texts = t("app.COMPONENTS.CUSTOM_CARD");
 
   return (
-    <Card className=" gap-4 mb-4 w-full">
+    <Card className="mb-4 w-full h-full flex flex-col overflow-hidden">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       {separator && <Separator className="mb-4" />}
-      <CardContent className="space-y-4">{children}</CardContent>
+      <CardContent className="space-y-4 overflow-auto">{children}</CardContent>
       {action && (
         <>
-          <Separator className="mb-4" />
+          <Separator className="mb-4 mt-2" />
           <CardFooter className=" flex justify-end items-center">
             <Button
               size="sm"

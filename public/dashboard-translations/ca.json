@@ -365,17 +365,34 @@
                 "title": "Zona de proves",
                 "description": "El Playground et permet experimentar amb diferents configuracions sense afectar el chatbot en viu.",
                 "adjustments": {
+                  "title": "Configuracions",
+                  "description": "Ajusta el teu assistent",
                   "model": "Model",
                   "instructions": "Instruccions",
-                  "temperature": "Temperatura",
-                  "temperatureDescription": "Controla la creativitat de les respostes. Valors més alts generen respostes més creatives, mentre que valors més baixos són més directes.",
-                  "topP": "Top P",
-                  "topPDescription": "Ajusta la probabilitat acumulativa per limitar les opcions del model. Mantén-lo baix per respostes més previsibles.",
+                  "instructionNotEmpty": "Les instruccions no poden estar buides",
+                  "temperature": "Creativitat",
+                  "temperatureDescription": "Quina creativitat ha de tenir l'assistent?",
+                  "topP": "Varietat",
+                  "topPDescription": "Quina varietat ha de tenir l'assistent?",
                   "output": "Sortida",
                   "typeYourMessageHere": "Escriu el teu missatge aquí...",
                   "send": "Enviar",
                   "save": "Desar canvis",
-                  "error": "Hi ha hagut un error en desar els canvis"
+                  "error": "Hi ha hagut un error en desar els canvis",
+                  "temperatureOptions" : [
+                    "Molt baixa (Precís i seriós)",
+                    "Baixa (Conservador)",
+                    "Mitjana (Equilibrat)",
+                    "Alta (Creatiu)",
+                    "Molt alta (Explorador)"
+                  ],
+                  "topPOptions" : [
+                    "Molt baix (Directe)",
+                    "Baix (Conservador)",
+                    "Mitjà (Equilibrat)",
+                    "Alt (Divers)",
+                    "Molt alt (Obert)"
+                  ]
                 },
                 "playground": {
                   "placeholder": "Envia la teva pregunta...",

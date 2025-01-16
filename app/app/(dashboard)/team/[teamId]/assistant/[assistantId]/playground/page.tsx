@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { useParams, useRouter } from "next/navigation";
 import { useAppContext } from "@/components/context/appContext";
@@ -28,9 +27,9 @@ import {
 } from "@/components/loaders/loadersSkeleton";
 import { TitleLayout } from "@/components/layouts/title-layout";
 import { AssistantUpdateParams } from "openai/resources/beta/assistants.mjs";
-import { SaveButton } from "@/components/save-button";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 import { TextAreaForm } from "@/components/text-area-forms/textAreaForm";
+import { CustomCard } from "@/components/custom-card";
 
 export default function Playground() {
   const { t } = useDashboardLanguage();
@@ -46,19 +45,14 @@ export default function Playground() {
   const [message, setMessage] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [localError, setLocalError] = React.useState<any>(undefined);
-  const [instructions, setInstructions] = React.useState("");
-  const [loadingInstructions, setLoadingInstructions] = React.useState(false);
 
   const {
     state: { assistantSelected },
   } = useAppContext();
 
-  const [assistantValues, setAssistantValues] = React.useState<{
-    model: ChatModel;
-    instructions: string;
-    temperature: number;
-    top_p: number;
-  } | null>(null);
+  const [assistantValues, setAssistantValues] = React.useState<AssistantUpdateParams | null>(null);
+
+  const [assistantValuesDefault, setAssistantValuesDefault] = React.useState<AssistantUpdateParams | null>(null);
 
   const { getAssistant } = useGetAssistant();
   const { updateAssistant } = useUpdateAssistant();
@@ -80,15 +74,25 @@ export default function Playground() {
   React.useEffect(() => {
     if (!assistantSelected?.openAIassistant) return;
 
-    setAssistantValues({
+    const assistantValues: AssistantUpdateParams = {
       model:
         (assistantSelected?.openAIassistant.model as ChatModel) ||
         ChatModel.GPT3,
       instructions: assistantSelected?.openAIassistant.instructions || "",
       temperature: assistantSelected?.openAIassistant.temperature || 0.5,
       top_p: assistantSelected?.openAIassistant.top_p || 0.5,
-    });
-    setInstructions(assistantSelected?.openAIassistant.instructions || "");
+    }
+
+    setAssistantValues(assistantValues);
+
+    setAssistantValuesDefault(assistantValues)
+
+    console.log({ assistantValues, assistantValuesDefault },
+      assistantValues?.model === assistantValuesDefault?.model,
+      assistantValues?.instructions === assistantValuesDefault?.instructions,
+      assistantValues?.temperature === assistantValuesDefault?.temperature,
+      assistantValues?.top_p === assistantValuesDefault?.top_p,
+      assistantValues === assistantValuesDefault);
   }, [assistantSelected]);
 
   const handleSendMessage = () => {
@@ -98,8 +102,8 @@ export default function Playground() {
     }
   };
 
-  const handleUpdate = async (assistantValues: AssistantUpdateParams) => {
-    if (assistantValues.instructions === "")
+  const handleUpdate = async () => {
+    if (assistantValues?.instructions === "")
       return setLocalError("Instructions are required");
     setLoading(true);
     try {
@@ -117,6 +121,7 @@ export default function Playground() {
       setLoading(false);
     }
   };
+
 
   const { submitMessage, messages, status } = useAssistant({
     assistantId: assistantId as string,
@@ -156,21 +161,85 @@ export default function Playground() {
     handleSendMessage();
   };
 
+  const temperatureOptions = [
+    {
+      value: 0.2,
+      label: playground.adjustments.temperatureOptions[0]
+    },
+    {
+      value: 0.6,
+      label: playground.adjustments.temperatureOptions[1],
+    },
+    {
+      value: 1,
+      label: playground.adjustments.temperatureOptions[2],
+    },
+    {
+      value: 1.4,
+      label: playground.adjustments.temperatureOptions[3],
+    },
+    {
+      value: 1.8,
+      label: playground.adjustments.temperatureOptions[4],
+    },
+  ]
+
+  const topPOptions = [
+    {
+      value: 0.1,
+      label: playground.adjustments.topPOptions[0],
+    },
+    {
+      value: 0.3,
+      label: playground.adjustments.topPOptions[1],
+    },
+    {
+      value: 0.5,
+      label: playground.adjustments.topPOptions[2],
+    },
+    {
+      value: 0.7,
+      label: playground.adjustments.topPOptions[3],
+    },
+    {
+      value: 0.9,
+      label: playground.adjustments.topPOptions[4],
+    },
+  ]
+
+  const hasChange = assistantValues?.model !== assistantValuesDefault?.model ||
+  (assistantValues?.instructions !== assistantValuesDefault?.instructions && assistantValues?.instructions !== "") ||
+  assistantValues?.temperature !== assistantValuesDefault?.temperature ||
+  assistantValues?.top_p !== assistantValuesDefault?.top_p;
+
   return (
     <TitleLayout
       cardTitle={playground.title}
       cardDescription={playground.description}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden w-full">
-        <Card className="p-6 w-full h-full border overflow-auto">
-          <form className="space-y-6">
-            <div>
+        {/* <Card className="p-6 w-full h-full border overflow-auto"> */}
+        <CustomCard
+          title={playground.adjustments.title}
+          description={playground.adjustments.description}
+          action={handleUpdate}
+          loading={loading}
+          valueChange={hasChange}
+        // className="flex-grow"
+        >
+          <form className="space-y-6 h-full overflow-auto scrollbar-hidden mx-2">
+            <div className='m-2 space-y-2'>
               <Label htmlFor="model">{playground.adjustments.model}</Label>
               {assistantValues?.model ? (
                 <Select
                   defaultValue={assistantValues.model}
                   value={assistantValues.model}
-                  onValueChange={(value) => handleUpdate({ model: value })}
+                  onValueChange={(value) => {
+                    setAssistantValues({
+                      ...assistantValues,
+                      model: value as ChatModel,
+                    });
+                  }}
                 >
                   <SelectTrigger id="model">
                     <SelectValue placeholder="Select a model" />
@@ -187,19 +256,85 @@ export default function Playground() {
                 <InputCharging />
               )}
             </div>
-            <div>
+            <div className='m-2 space-y-2'>
+              <Label htmlFor="model">{playground.adjustments.temperature}</Label>
+              <p className="text-sm text-gray-500 my-1">
+                {playground.adjustments.temperatureDescription}
+              </p>
+              {assistantValues?.model ? (
+                <Select
+                  defaultValue={`${assistantValues.temperature}`}
+                  value={`${assistantValues.temperature}`}
+                  onValueChange={(value) => {
+                    setAssistantValues({
+                      ...assistantValues,
+                      temperature: parseFloat(value),
+                    })
+                  }}
+                >
+                  <SelectTrigger id="model">
+                    <SelectValue placeholder="Select a model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {temperatureOptions.map((model) => (
+                      <SelectItem key={model.value} value={`${model.value}`}>
+                        {model.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <InputCharging />
+              )}
+            </div>
+            <div className='m-2 space-y-2'>
+              <Label htmlFor="model">{playground.adjustments.topP}</Label>
+              <p className="text-sm text-gray-500 mt-1">
+                {playground.adjustments.topPDescription}
+              </p>
+              {assistantValues?.model ? (
+                <Select
+                  defaultValue={`${assistantValues.top_p}`}
+                  value={`${assistantValues.top_p}`}
+                  onValueChange={(value) => {
+                    setAssistantValues({
+                      ...assistantValues,
+                      top_p: parseFloat(value),
+                    })
+                  }}
+                >
+                  <SelectTrigger id="model">
+                    <SelectValue placeholder="Select a model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {topPOptions.map((model) => (
+                      <SelectItem key={model.value} value={`${model.value}`}>
+                        {model.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              ) : (
+                <InputCharging />
+              )}
+            </div>
+            <div className='m-2 space-y-2'>
               <Label htmlFor="instructions">
                 {playground.adjustments.instructions}
               </Label>
-              <div className="mb-3">
+              {assistantValues && !assistantValues.instructions && <p className="text-xs text-red-500 mt-1">{playground.adjustments.instructionNotEmpty}</p>}
+              <div className="mb-4 p-2">
                 {assistantValues ? (
                   <Textarea
                     id="instructions"
                     placeholder="Type your instructions here"
-                    className="h-[100px] "
-                    value={instructions || ""}
+                    className="h-[400px] "
+                    value={assistantValues.instructions || ""}
                     onChange={(e) => {
-                      setInstructions(e.target.value);
+                      setAssistantValues({
+                        ...assistantValues,
+                        instructions: e.target.value,
+                      })
                     }}
                   />
                 ) : (
@@ -209,103 +344,27 @@ export default function Playground() {
               {localError && (
                 <p className="text-xs text-red-500 mt-1">{localError}</p>
               )}
-              <SaveButton
-                action={async (e: any) => {
-                  e.preventDefault();
-                  setLoadingInstructions(true);
-                  await handleUpdate({ instructions });
-                  setLoadingInstructions(false);
-                }}
-                loading={loadingInstructions}
-                actionButtonText={"desa"}
-                valueChange={
-                  !assistantValues?.instructions ||
-                  assistantValues?.instructions === instructions
-                }
-              />
-            </div>
-            <div>
-              <Label htmlFor="temperature">
-                {playground.adjustments.temperature}:{" "}
-                {assistantValues?.temperature
-                  ? assistantValues.temperature.toFixed(2)
-                  : ""}
-              </Label>
-              {assistantValues?.temperature ? (
-                <Slider
-                  className="mt-3"
-                  id="temperature"
-                  min={0}
-                  max={2}
-                  step={0.01}
-                  value={[assistantValues.temperature]}
-                  onValueChange={(value) =>
-                    setAssistantValues({
-                      ...assistantValues,
-                      temperature: value[0],
-                    })
-                  }
-                  onValueCommit={(value) => {
-                    handleUpdate({ temperature: value[0] });
-                  }}
-                />
-              ) : (
-                <InputCharging />
-              )}
-              <p className="text-xs text-gray-500 mt-1">
-                {playground.adjustments.temperatureDescription}
-              </p>
-            </div>
-            <div>
-              <></>
-              <Label htmlFor="top-p">
-                {playground.adjustments.topP}:{" "}
-                {assistantValues?.top_p
-                  ? assistantValues?.top_p.toFixed(2)
-                  : ""}
-              </Label>
-              {assistantValues?.top_p ? (
-                <Slider
-                  className="mt-3"
-                  id="top-p"
-                  min={0.01}
-                  max={1}
-                  step={0.01}
-                  value={[assistantValues.top_p]}
-                  onValueChange={(value) => {
-                    setAssistantValues({ ...assistantValues, top_p: value[0] });
-                  }}
-                  onValueCommit={(value) => {
-                    handleUpdate({ top_p: value[0] });
-                  }}
-                />
-              ) : (
-                <InputCharging />
-              )}
-              <p className="text-xs text-gray-500 mt-1">
-                {playground.adjustments.topPDescription}
-              </p>
             </div>
           </form>
-        </Card>
+        </CustomCard>
+        {/* </Card> */}
         <Card className="flex flex-col relative overflow-hidden w-full grow overflow-auto">
           <CardHeader>
             <CardTitle>{playground.adjustments.output}</CardTitle>
           </CardHeader>
           <div
-            className="overflow-y-auto grow scrollbar-hidden h-full"
+            className="overflow-y-auto grow scrollbar-hidden h-full mt-4"
             ref={scrollRef}
           >
-            <CardContent className=" space-y-4 border-t" ref={messagesRef}>
+            <CardContent className="space-y-4 border-t pt-4 pb-9" ref={messagesRef}>
               {messages &&
                 messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`p-2 rounded-lg ${
-                      msg.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted"
-                    }`}
+                    className={`p-2 rounded-lg ${msg.role === "user"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
+                      }`}
                   >
                     {msg.message}
                   </div>
@@ -313,7 +372,7 @@ export default function Playground() {
               <div className="w-full h-px" ref={visibilityRef} />
             </CardContent>
           </div>
-          <div className="w-full h-24">
+          {!hasChange && <div className="w-full h-24">
             <div className=" flex items-center space-x-2 static">
               {/* <Input
                 placeholder={playground.typeYourMessageHere}
@@ -340,7 +399,7 @@ export default function Playground() {
                 <SelectCharging />
               )}
             </div>
-          </div>
+          </div>}
         </Card>
       </div>
     </TitleLayout>

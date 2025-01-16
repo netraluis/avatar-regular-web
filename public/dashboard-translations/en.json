@@ -365,17 +365,34 @@
                 "title": "Testing Zone",
                 "description": "The Playground allows you to experiment with different configurations without affecting the live chatbot.",
                 "adjustments": {
+                  "title": "Settings",
+                  "description": "Adjust your assistant",
                   "model": "Model",
                   "instructions": "Instructions",
-                  "temperature": "Temperature",
-                  "temperatureDescription": "Controls the creativity of the responses. Higher values generate more creative responses, while lower values are more direct.",
-                  "topP": "Top P",
-                  "topPDescription": "Adjusts cumulative probability to limit the model's options. Keep it low for more predictable responses.",
+                  "instructionNotEmpty": "Instructions cannot be empty",
+                  "temperature": "Creativity",
+                  "temperatureDescription": "How creative should the assistant be?",
+                  "topP": "Variety",
+                  "topPDescription": "How varied should the assistant be?",
                   "output": "Output",
                   "typeYourMessageHere": "Type your message here...",
                   "send": "Send",
                   "save": "Save changes",
-                  "error": "There was an error saving the changes"
+                  "error": "There was an error saving the changes",
+                  "temperatureOptions": [
+                    "Very low (Precise and serious)",
+                    "Low (Conservative)",
+                    "Medium (Balanced)",
+                    "High (Creative)",
+                    "Very high (Explorer)"
+                  ],
+                  "topPOptions" : [
+                    "Very low (Direct)",
+                    "Low (Conservative)",
+                    "Medium (Balanced)",
+                    "High (Diverse)",
+                    "Very high (Open)"
+                  ]
                 },
                 "playground": {
                   "placeholder": "Send your question...",
