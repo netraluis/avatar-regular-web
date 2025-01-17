@@ -41,6 +41,8 @@ export default function Page() {
     const assistantCreateParams: AssistantCreateParams = {
       name: assistantName,
       model: ChatModel.GPT3,
+      temperature: 1,
+      top_p: 0.5,
     };
 
     const slug = slugify(assistantName, { lower: true, strict: true });

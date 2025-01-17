@@ -26,10 +26,7 @@ export const createAssistantByTeam = async (
   if (!assistantCreateParams.name) {
     throw new Error("name is required");
   }
-  const newAssistantOpenAi = await createAssistant({
-    name: assistantCreateParams.name,
-    model: assistantCreateParams.model,
-  });
+  const newAssistantOpenAi = await createAssistant(assistantCreateParams);
 
   const newVectorStoreFile = await createVectorStore({
     name: newAssistantOpenAi.id,

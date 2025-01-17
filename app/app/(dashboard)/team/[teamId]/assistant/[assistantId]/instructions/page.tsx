@@ -59,7 +59,7 @@ export default function Page() {
     setAssistantValues({
       model: getAssistantData.openAIassistant.model || "gpt-4",
       instructions: getAssistantData.openAIassistant.instructions || "",
-      temperature: getAssistantData.openAIassistant.temperature || 0.5,
+      temperature: getAssistantData.openAIassistant.temperature || 1,
       top_p: getAssistantData.openAIassistant.top_p || 0.5,
     });
   }, [getAssistantData]);
