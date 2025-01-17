@@ -79,7 +79,7 @@ export default function Playground() {
         (assistantSelected?.openAIassistant.model as ChatModel) ||
         ChatModel.GPT3,
       instructions: assistantSelected?.openAIassistant.instructions || "",
-      temperature: assistantSelected?.openAIassistant.temperature || 0.5,
+      temperature: assistantSelected?.openAIassistant.temperature || 1,
       top_p: assistantSelected?.openAIassistant.top_p || 0.5,
     }
 
@@ -228,6 +228,7 @@ export default function Playground() {
         // className="flex-grow"
         >
           <form className="space-y-6 h-full overflow-auto scrollbar-hidden mx-2">
+          
             <div className='m-2 space-y-2'>
               <Label htmlFor="model">{playground.adjustments.model}</Label>
               {assistantValues?.model ? (
@@ -257,13 +258,40 @@ export default function Playground() {
               )}
             </div>
             <div className='m-2 space-y-2'>
+              <Label htmlFor="instructions">
+                {playground.adjustments.instructions}
+              </Label>
+              {assistantValues && !assistantValues.instructions && <p className="text-xs text-red-500 mt-1">{playground.adjustments.instructionNotEmpty}</p>}
+              <div className="mb-4 p-2">
+                {assistantValues ? (
+                  <Textarea
+                    id="instructions"
+                    placeholder="Type your instructions here"
+                    className="h-[300px] "
+                    value={assistantValues.instructions || ""}
+                    onChange={(e) => {
+                      setAssistantValues({
+                        ...assistantValues,
+                        instructions: e.target.value,
+                      })
+                    }}
+                  />
+                ) : (
+                  <TextAreaCharging />
+                )}
+              </div>
+              {localError && (
+                <p className="text-xs text-red-500 mt-1">{localError}</p>
+              )}
+            </div>
+            <div className='m-2 space-y-2'>
               <Label htmlFor="model">{playground.adjustments.temperature}</Label>
               <p className="text-sm text-gray-500 my-1">
                 {playground.adjustments.temperatureDescription}
               </p>
               {assistantValues?.model ? (
                 <Select
-                  defaultValue={`${assistantValues.temperature}`}
+                  defaultValue={`${1}`}
                   value={`${assistantValues.temperature}`}
                   onValueChange={(value) => {
                     setAssistantValues({
@@ -294,7 +322,7 @@ export default function Playground() {
               </p>
               {assistantValues?.model ? (
                 <Select
-                  defaultValue={`${assistantValues.top_p}`}
+                  defaultValue={`${0.5}`}
                   value={`${assistantValues.top_p}`}
                   onValueChange={(value) => {
                     setAssistantValues({
@@ -318,33 +346,7 @@ export default function Playground() {
                 <InputCharging />
               )}
             </div>
-            <div className='m-2 space-y-2'>
-              <Label htmlFor="instructions">
-                {playground.adjustments.instructions}
-              </Label>
-              {assistantValues && !assistantValues.instructions && <p className="text-xs text-red-500 mt-1">{playground.adjustments.instructionNotEmpty}</p>}
-              <div className="mb-4 p-2">
-                {assistantValues ? (
-                  <Textarea
-                    id="instructions"
-                    placeholder="Type your instructions here"
-                    className="h-[400px] "
-                    value={assistantValues.instructions || ""}
-                    onChange={(e) => {
-                      setAssistantValues({
-                        ...assistantValues,
-                        instructions: e.target.value,
-                      })
-                    }}
-                  />
-                ) : (
-                  <TextAreaCharging />
-                )}
-              </div>
-              {localError && (
-                <p className="text-xs text-red-500 mt-1">{localError}</p>
-              )}
-            </div>
+            
           </form>
         </CustomCard>
         {/* </Card> */}
