@@ -10,6 +10,10 @@
         "voiceRecordStop": "Stop microphone",
         "voiceRecordStart": "Activate microphone",
         "placeholder": "Send your question..."
+      },
+      "CHAT_LIST": {
+        "showAnalizeInfo": "Analyzing all sources of information",
+        "you": "You"
       }
     },
     "LAYOUT": {

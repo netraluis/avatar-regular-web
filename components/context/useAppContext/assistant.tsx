@@ -365,6 +365,7 @@ export const useAssistant = ({
       ...prevMessages,
       { id: crypto.randomUUID(), role: "user", message },
     ]);
+    setStatus("thread.run.step.created");
     setLoading(true);
     try {
       if (!internatlThreadId) {

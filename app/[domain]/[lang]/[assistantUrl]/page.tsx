@@ -12,6 +12,7 @@ import { useClientLanguage } from "@/components/context/clientLanguageContext";
 export default function AssistantUrl() {
   const { t } = useClientLanguage();
   const textAreaForm = t("app.COMPONENTS.TEXT_AREA_FORM");
+  const chatList = t("app.COMPONENTS.CHAT_LIST");
 
   const { assistantUrl } = useParams();
   const [message, setMessage] = React.useState("");
@@ -81,8 +82,10 @@ export default function AssistantUrl() {
           <ChatList
             messages={messages}
             showAnalizeInfo={
-              status === "thread.run.queued" ||
-              status === "thread.run.in_progress"
+              status !== "thread.message.delta" &&
+              status !== "thread.message.completed" &&
+              status !== "thread.run.step.completed" &&
+              status !== "thread.run.completed"
             }
             avatarUrl={
               data?.avatarUrl
@@ -90,6 +93,7 @@ export default function AssistantUrl() {
                 : undefined
             }
             assistantName={card?.title || ""}
+            text={chatList}
           />
         }
         {error && (

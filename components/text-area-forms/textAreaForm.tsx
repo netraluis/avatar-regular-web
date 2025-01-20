@@ -209,7 +209,10 @@ export const TextAreaForm = ({
             {!recording && (
               <div className="flex-shrink-0 self-end">
                 {!input && status === "thread.run.completed" ? (
-                  <Button onClick={(e) => startRecordingF(e)}>
+                  <Button
+                    disabled={transcribing}
+                    onClick={(e) => startRecordingF(e)}
+                  >
                     {!transcribing ? (
                       <>
                         <MicrophoneIcon

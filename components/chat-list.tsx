@@ -12,6 +12,10 @@ export interface ChatList {
   showAnalizeInfo: boolean;
   avatarUrl?: string;
   assistantName: string;
+  text: {
+    showAnalizeInfo: string;
+    you: string;
+  };
 }
 
 export function ChatList({
@@ -19,6 +23,7 @@ export function ChatList({
   showAnalizeInfo,
   avatarUrl,
   assistantName,
+  text,
 }: ChatList) {
   return (
     <div className="relative mx-auto max-w-2xl px-4">
@@ -34,7 +39,7 @@ export function ChatList({
                       : "/avatar.png"
                     : "/start.png"
                 }
-                roleName={message.role === "assistant" ? assistantName : "Tu"}
+                roleName={message.role === "assistant" ? assistantName : text.you}
               />
               {<MarkdownDisplay markdownText={message.message} />}
             </div>
@@ -46,7 +51,7 @@ export function ChatList({
             className="ml-0.5 h-5 w-5 animate-spin mr-1"
             aria-hidden="true"
           />
-          <span>Analitzant totes les fonts d’informació</span>
+          <span>{text.showAnalizeInfo}</span>
         </div>
       )}
     </div>

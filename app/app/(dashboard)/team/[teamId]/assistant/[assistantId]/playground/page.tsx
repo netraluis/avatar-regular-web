@@ -88,7 +88,6 @@ export default function Playground() {
     setAssistantValues(assistantValues);
 
     setAssistantValuesDefault(assistantValues);
-
   }, [assistantSelected]);
 
   const handleSendMessage = () => {

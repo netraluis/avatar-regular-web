@@ -8,9 +8,7 @@ import { useDashboardLanguage } from "@/components/context/dashboardLanguageCont
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CustomPopup } from "@/components/custom-popup";
-import {
-  useUpdateTeam,
-} from "@/components/context/useAppContext/team";
+import { useUpdateTeam } from "@/components/context/useAppContext/team";
 
 export default function Component() {
   // const { fetchTeamsByUserIdAndTeamId } = useFetchTeamsByUserIdAndTeamId()

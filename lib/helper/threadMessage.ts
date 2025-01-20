@@ -19,6 +19,7 @@ export const commonOnEvent = async (
         event.data.delta.content[0].text?.annotations &&
         event.data.delta.content[0].text?.annotations.length > 0
       ) {
+        console.log(JSON.stringify(event, null, 2));
         return;
       }
     }
@@ -28,8 +29,8 @@ export const commonOnEvent = async (
   controller.enqueue(new TextEncoder().encode(eventText + "\n"));
 
   if (event.event === "thread.run.completed") {
-    console.log(event.data.usage?.total_tokens);
-    console.log(event.data);
+    // console.log(event.data.usage?.total_tokens);
+    // console.log(event.data);
   }
   if (event.event === "thread.message.completed") {
     if (event.data.content[0].type === "text") {
