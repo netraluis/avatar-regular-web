@@ -13,6 +13,7 @@ export default function AssistantUrl() {
   const { t } = useClientLanguage();
   const textAreaForm = t("app.COMPONENTS.TEXT_AREA_FORM");
   const chatList = t("app.COMPONENTS.CHAT_LIST");
+  const page = t("app.DOMAIN.LANG.ASSISTANT_URL.PAGE");
 
   const { assistantUrl } = useParams();
   const [message, setMessage] = React.useState("");
@@ -78,26 +79,27 @@ export default function AssistantUrl() {
       ref={scrollRef}
     >
       <div className={cn("pb-[200px] pt-[100px]")} ref={messagesRef}>
-        {
-          <ChatList
-            messages={messages}
-            showAnalizeInfo={
-              status !== "thread.message.delta" &&
-              status !== "thread.message.completed" &&
-              status !== "thread.run.step.completed" &&
-              status !== "thread.run.completed"
-            }
-            avatarUrl={
-              data?.avatarUrl
-                ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.avatarUrl}`
-                : undefined
-            }
-            assistantName={card?.title || ""}
-            text={chatList}
-          />
-        }
+        <ChatList
+          messages={messages}
+          showAnalizeInfo={
+            status !== "thread.message.delta" &&
+            status !== "thread.message.completed" &&
+            status !== "thread.run.step.completed" &&
+            status !== "thread.run.completed"
+          }
+          avatarUrl={
+            data?.avatarUrl
+              ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.avatarUrl}`
+              : undefined
+          }
+          assistantName={card?.title || ""}
+          text={chatList}
+        />
+
         {error && (
-          <div>Estem treballant en l’error… Disculpa les molèsties.</div>
+          <div className="relative mx-auto max-w-2xl px-4 border text-red-500">
+            {page.error}
+          </div>
         )}
         <div className="w-full h-px" ref={visibilityRef} />
       </div>

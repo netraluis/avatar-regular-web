@@ -16,6 +16,15 @@
         "you": "You"
       }
     },
+    "DOMAIN": {
+      "LANG": {
+        "ASSISTANT_URL": {
+          "PAGE": {
+            "error": "We are working on the error… Sorry for the inconvenience."
+          }
+        }
+      }
+    },
     "LAYOUT": {
       "dashboard": "Assistants",
       "resources": "Resources",

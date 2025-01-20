@@ -39,7 +39,9 @@ export function ChatList({
                       : "/avatar.png"
                     : "/start.png"
                 }
-                roleName={message.role === "assistant" ? assistantName : text.you}
+                roleName={
+                  message.role === "assistant" ? assistantName : text.you
+                }
               />
               {<MarkdownDisplay markdownText={message.message} />}
             </div>

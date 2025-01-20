@@ -16,6 +16,15 @@
         "you": "Tu"
       }
     },
+    "DOMAIN": {
+      "LANG": {
+        "ASSISTANT_URL": {
+          "PAGE": {
+            "error": "Estem treballant en l’error… Disculpa les molèsties."
+          }
+        }
+      }
+    },
     "LAYOUT": {
       "dashboard": "Assistents",
       "resources": "Recursos",

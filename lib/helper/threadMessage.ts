@@ -10,21 +10,6 @@ export const commonOnEvent = async (
   mode: ModeMessageType,
   message?: string,
 ) => {
-  if (event.event === "thread.message.delta") {
-    if (
-      event.data.delta.content &&
-      event.data.delta.content[0].type === "text"
-    ) {
-      if (
-        event.data.delta.content[0].text?.annotations &&
-        event.data.delta.content[0].text?.annotations.length > 0
-      ) {
-        console.log(JSON.stringify(event, null, 2));
-        return;
-      }
-    }
-  }
-
   const eventText = JSON.stringify(event);
   controller.enqueue(new TextEncoder().encode(eventText + "\n"));
 

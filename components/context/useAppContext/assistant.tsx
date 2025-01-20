@@ -356,6 +356,82 @@ export const useAssistant = ({
     };
   }
 
+  const handleMessages = async (response: Response) => {
+    if (!response.body) {
+      throw new Error("No response stream found");
+    }
+
+    let prevMessageAcc = "";
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = ""; // Buffer para acumular los fragmentos
+    let done = false;
+    while (!done) {
+      const { value, done: readerDone } = await reader.read();
+      done = readerDone;
+      // Decodificamos el fragmento recibido
+      buffer += decoder.decode(value, { stream: true });
+      console.log({ buffer });
+
+      // Dividimos el buffer en líneas por el delimitador \n
+      const lines = buffer.split("\n");
+
+      console.log({ lines });
+      // Guardamos la última parte que puede estar incompleta en el buffer
+      buffer = lines.pop() || "";
+
+      // Procesamos cada línea que contiene un JSON completo
+      for (const line of lines) {
+        if (line.trim()) {
+          try {
+            const parsedEvent = JSON.parse(line); // Parseamos solo líneas completas
+            setStatus(parsedEvent.event);
+            setData((prevData) => [...prevData, parsedEvent]); // Actualizamos el estado con el evento
+            if (parsedEvent.event === "thread.created") {
+              setInternalThreadId(parsedEvent.data.id);
+            }
+            if (
+              parsedEvent?.data?.delta?.content &&
+              parsedEvent?.data?.delta?.content[0]?.text?.value
+            ) {
+              const message = parsedEvent?.data?.delta?.content[0]?.text?.value;
+              const id = parsedEvent?.data?.id;
+
+              setMessages((prevMessages) => {
+                const existingMessageIndex = prevMessages.findIndex(
+                  (msg) => msg.id === id,
+                );
+
+                if (existingMessageIndex !== -1) {
+                  // Sobrescribir el mensaje acumulado
+                  const updatedMessages = [...prevMessages];
+                  const newMessage = (prevMessageAcc + message).replace(
+                    /【[^】]*?】|【.*$/g,
+                    "",
+                  );
+
+                  updatedMessages[existingMessageIndex] = {
+                    message: newMessage,
+                    role: updatedMessages[existingMessageIndex].role,
+                    id: updatedMessages[existingMessageIndex].id,
+                  };
+                  return updatedMessages;
+                } else {
+                  // Si es un nuevo mensaje, añadirlo a la lista
+                  // if(lastMessage.role === "user") return prevMessages
+                  return [...prevMessages, { id, role: "assistant", message }];
+                }
+              });
+              prevMessageAcc = prevMessageAcc + message;
+            }
+          } catch (e) {
+            console.error("Error parsing JSON:", e);
+          }
+        }
+      }
+    }
+  };
+
   const headers: HeadersInit = userId
     ? { "Content-Type": "application/json", "x-user-id": userId }
     : { "Content-Type": "application/json" };
@@ -377,77 +453,7 @@ export const useAssistant = ({
             body: JSON.stringify({ message, assistantId }),
           },
         );
-
-        if (!response.body) {
-          throw new Error("No response stream found");
-        }
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = ""; // Buffer para acumular los fragmentos
-        let done = false;
-
-        while (!done) {
-          const { value, done: readerDone } = await reader.read();
-          done = readerDone;
-          // Decodificamos el fragmento recibido
-          buffer += decoder.decode(value, { stream: true });
-
-          // Dividimos el buffer en líneas por el delimitador \n
-          const lines = buffer.split("\n");
-          // Guardamos la última parte que puede estar incompleta en el buffer
-          buffer = lines.pop() || "";
-
-          // Procesamos cada línea que contiene un JSON completo
-          for (const line of lines) {
-            if (line.trim()) {
-              try {
-                const parsedEvent = JSON.parse(line); // Parseamos solo líneas completas
-                setStatus(parsedEvent.event);
-                setData((prevData) => [...prevData, parsedEvent]); // Actualizamos el estado con el evento
-                if (parsedEvent.event === "thread.created") {
-                  setInternalThreadId(parsedEvent.data.id);
-                }
-                if (
-                  parsedEvent?.data?.delta?.content &&
-                  parsedEvent?.data?.delta?.content[0]?.text?.value
-                ) {
-                  const message =
-                    parsedEvent?.data?.delta?.content[0]?.text?.value;
-                  const id = parsedEvent?.data?.id;
-
-                  setMessages((prevMessages) => {
-                    const existingMessageIndex = prevMessages.findIndex(
-                      (msg) => msg.id === id,
-                    );
-
-                    if (existingMessageIndex !== -1) {
-                      // Sobrescribir el mensaje acumulado
-                      const updatedMessages = [...prevMessages];
-                      updatedMessages[existingMessageIndex] = {
-                        message:
-                          updatedMessages[existingMessageIndex].message +
-                          message,
-                        role: updatedMessages[existingMessageIndex].role,
-                        id: updatedMessages[existingMessageIndex].id,
-                      };
-                      return updatedMessages;
-                    } else {
-                      // Si es un nuevo mensaje, añadirlo a la lista
-                      // if(lastMessage.role === "user") return prevMessages
-                      return [
-                        ...prevMessages,
-                        { id, role: "assistant", message },
-                      ];
-                    }
-                  });
-                }
-              } catch (e) {
-                console.error("Error parsing JSON:", e);
-              }
-            }
-          }
-        }
+        await handleMessages(response);
       } else {
         await fetch(
           `/api/protected/team/${teamId}/assistant/${assistantId}/thread/${internatlThreadId}/message`,
@@ -465,74 +471,7 @@ export const useAssistant = ({
             headers,
           },
         );
-
-        if (!response.body) {
-          throw new Error("No response stream found");
-        }
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = ""; // Buffer para acumular los fragmentos
-        let done = false;
-
-        while (!done) {
-          const { value, done: readerDone } = await reader.read();
-          done = readerDone;
-          // Decodificamos el fragmento recibido
-          buffer += decoder.decode(value, { stream: true });
-
-          // Dividimos el buffer en líneas por el delimitador \n
-          const lines = buffer.split("\n");
-          // Guardamos la última parte que puede estar incompleta en el buffer
-          buffer = lines.pop() || "";
-
-          // Procesamos cada línea que contiene un JSON completo
-          for (const line of lines) {
-            if (line.trim()) {
-              try {
-                const parsedEvent = JSON.parse(line); // Parseamos solo líneas completas
-                setStatus(parsedEvent.event);
-                setData((prevData) => [...prevData, parsedEvent]); // Actualizamos el estado con el evento
-                if (
-                  parsedEvent?.data?.delta?.content &&
-                  parsedEvent?.data?.delta?.content[0]?.text?.value
-                ) {
-                  const message =
-                    parsedEvent?.data?.delta?.content[0]?.text?.value;
-                  const id = parsedEvent?.data?.id;
-
-                  setMessages((prevMessages) => {
-                    const existingMessageIndex = prevMessages.findIndex(
-                      (msg) => msg.id === id,
-                    );
-
-                    if (existingMessageIndex !== -1) {
-                      // Sobrescribir el mensaje acumulado
-                      const updatedMessages = [...prevMessages];
-                      updatedMessages[existingMessageIndex] = {
-                        message:
-                          updatedMessages[existingMessageIndex].message +
-                          message,
-                        role: updatedMessages[existingMessageIndex].role,
-                        id: updatedMessages[existingMessageIndex].id,
-                      };
-                      return updatedMessages;
-                    } else {
-                      // Si es un nuevo mensaje, añadirlo a la lista
-                      // if(lastMessage.role === "user") return prevMessages
-                      return [
-                        ...prevMessages,
-                        { id, role: "assistant", message },
-                      ];
-                    }
-                  });
-                }
-              } catch (e) {
-                console.error("Error parsing JSON:", e);
-              }
-            }
-          }
-        }
+        await handleMessages(response);
       }
     } catch (error: any) {
       setError({ error });
