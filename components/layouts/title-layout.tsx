@@ -36,13 +36,16 @@ export const TitleLayout = ({
 }: TitleLayoutProps) => {
   const { t } = useDashboardLanguage();
   const { preview, createAssistant } = t("app.COMPONENTS.TITLE_LAYOUT");
-    const {
-      state: { teamSelected, assistantSelected },
-    } = useAppContext();
+  const {
+    state: { teamSelected, assistantSelected },
+  } = useAppContext();
   const { assistantId, teamId } = useParams();
   const createNewAssUrl = `/team/${teamId}/assistant/new`;
-  const assistantUrl = assistantId && assistantSelected?.localAssistant?.url ? assistantSelected?.localAssistant?.url : "";
-  const urlPreview=`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantUrl}`
+  const assistantUrl =
+    assistantId && assistantSelected?.localAssistant?.url
+      ? assistantSelected?.localAssistant?.url
+      : "";
+  const urlPreview = `${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantUrl}`;
 
   return (
     <div className="flex flex-col overflow-auto p-2 w-full h-full">
@@ -57,7 +60,7 @@ export const TitleLayout = ({
               {actionErrorText}
             </Button>
           )} */}
-          
+
           <Button variant="secondary" size="sm">
             <Link
               href={urlPreview}

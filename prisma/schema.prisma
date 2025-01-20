@@ -292,6 +292,8 @@ model TokenLedger {
   paddleSubscriptionId String?
   tokenCost            Int
   totalToken           Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
 
   team                 Team   @relation(fields: [teamId], references: [id], onDelete: Cascade) 
 }

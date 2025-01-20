@@ -18,7 +18,7 @@ import { HeaderDisclaimer } from "./context/globalContext";
 import Link from "next/link";
 
 const ensureProtocol = (url: string) => {
-  if (!url.startsWith('https://')) {
+  if (!url.startsWith("https://")) {
     return `https://${url}`;
   }
   return url;
@@ -134,7 +134,9 @@ export default function Header() {
                     >
                       <div className="flex-auto">
                         <Link
-                          href={ensureProtocol(item.hrefLanguages[0]?.href || "")}
+                          href={ensureProtocol(
+                            item.hrefLanguages[0]?.href || "",
+                          )}
                           className="block font-semibold text-gray-900"
                           target="_blank"
                           rel="noopener noreferrer"

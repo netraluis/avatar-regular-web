@@ -386,7 +386,7 @@
                     "High (Creative)",
                     "Very high (Explorer)"
                   ],
-                  "topPOptions" : [
+                  "topPOptions": [
                     "Very low (Direct)",
                     "Low (Conservative)",
                     "Medium (Balanced)",

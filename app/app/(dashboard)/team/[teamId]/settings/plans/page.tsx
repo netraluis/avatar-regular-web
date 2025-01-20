@@ -8,14 +8,36 @@ import { useDashboardLanguage } from "@/components/context/dashboardLanguageCont
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CustomPopup } from "@/components/custom-popup";
+import {
+  useUpdateTeam,
+} from "@/components/context/useAppContext/team";
 
 export default function Component() {
+  // const { fetchTeamsByUserIdAndTeamId } = useFetchTeamsByUserIdAndTeamId()
+  const { updateTeam } = useUpdateTeam();
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     // const res = await fetch('/api/mi-endpoint-verificacion');
+  //     // const data = await res.json();
+  //     console.log('hola')
+  //     if(!teamSelected?.id || !userLocal?.id) return
+  //     fetchTeamsByUserIdAndTeamId(teamSelected?.id, userLocal?.id)
+  //     // if (data.suscripcionActiva) {
+  //     //   // Actualizas tu estado global / context / setState
+  //     //   // Rediriges a la UI de "suscripción activa"
+  //     //   clearInterval(interval);
+  //     // }
+  //   }, 3000);
+
+  //   return () => clearInterval(interval);
+  // }, []);
+
   const { t } = useDashboardLanguage();
   const texts = t("app.TEAM.TEAM_ID.SETTINGS.PLANS.PAGE");
 
   const [paddle, setPaddle] = useState<Paddle>();
   const [products, setProducts] = useState<any>();
-  const [priceSubId, setSubId] = useState<string>("");
+  const [priceSubId, setPriceSubId] = useState<string>("");
   const [loadingProducts, setLoadingProducts] = useState<boolean>(false);
   const [loadingSubs, setLoadingSubs] = useState<boolean>(false);
   const [loadingHandlingCheckout, setLoadingHandlingCheckout] =
@@ -28,6 +50,9 @@ export default function Component() {
 
   const fetchSubs = async () => {
     if (!teamSelected?.paddleSubscriptionId) return;
+    if (teamSelected?.paddleSubscriptionId.startsWith("pri_")) {
+      return setPriceSubId(teamSelected?.paddleSubscriptionId);
+    }
     setLoadingSubs(true);
 
     try {
@@ -50,7 +75,7 @@ export default function Component() {
           ).toLocaleDateString(),
         );
       }
-      setSubId(responseData.items[0].price.id);
+      setPriceSubId(responseData.items[0].price.id);
     } catch (e: any) {
       console.log({ e });
     } finally {
@@ -85,6 +110,8 @@ export default function Component() {
       }
     };
     if (
+      userLocal?.id &&
+      teamSelected?.id &&
       !paddle?.Initialized &&
       process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN &&
       process.env.NEXT_PUBLIC_PADDLE_ENV
@@ -92,9 +119,18 @@ export default function Component() {
       initializePaddle({
         environment: "sandbox" as Environments,
         token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
-        eventCallback: function (data) {
+        eventCallback: function async(data) {
           console.log("soy un callback", { data });
           console.log(userLocal?.language.toLocaleLowerCase());
+          if (data && data.data && data.name === "checkout.completed") {
+            //   updateTeam({ teamId: teamSelected?.id, data: { paddleSubscriptionId: data.data.items[0].price_id } });
+            updateTeam(
+              teamSelected?.id,
+              { paddleSubscriptionId: data.data.items[0].price_id },
+              userLocal?.id,
+            );
+            setPriceSubId(data.data.items[0].price_id);
+          }
         },
         checkout: {
           settings: {
@@ -118,9 +154,9 @@ export default function Component() {
   useEffect(() => {
     if (!products || !priceSubId) return;
 
-    const hobbyTrialId = products.find(
-      (product: any) => product.name === "hobbyTrial",
-    ).id;
+    // const hobbyTrialId = products.find(
+    //   (product: any) => product.name === "hobbyTrial",
+    // ).id;
     const hobbyPriceId = products.find(
       (product: any) => product.name === "hobby",
     ).id;
@@ -132,9 +168,9 @@ export default function Component() {
     ).id;
 
     switch (priceSubId) {
-      case hobbyTrialId:
-        setIndexActiveProd(0);
-        break;
+      // case hobbyTrialId:
+      //   setIndexActiveProd(0);
+      //   break;
       case hobbyPriceId:
         setIndexActiveProd(0);
         break;
@@ -171,7 +207,8 @@ export default function Component() {
       if (cancelData || !userLocal) return;
       setLoadingHandlingCheckout(true);
       let userLocalIdCreated = undefined;
-      console.log({ userLocal });
+
+      // if userLocal (our user) doesn't have a paddleCustomerId we create one
       if (!userLocal?.paddleCustomerId) {
         const response = await fetch(`/api/protected/paddle/customers`, {
           method: "POST",
@@ -186,7 +223,7 @@ export default function Component() {
           throw new Error(`Error: ${response.statusText}`);
         }
         const responseData = await response.json();
-        console.log({ "responseData.id": responseData.id });
+        // console.log({ "responseData.id": responseData.id });
         userLocalIdCreated = responseData.id;
 
         await fetch(`/api/protected/user/${userLocal?.id}`, {
@@ -200,16 +237,19 @@ export default function Component() {
         });
       }
 
+      // we get the product by name that corresponds to the index
       const id = handleProductId(index, !userLocalIdCreated);
-      if (!id) return;
+      if (!id) {
+        throw new Error("Error: No product id");
+      }
+
+      // if the team doesn't have a subscription we open the checkout to create one
       if (!teamSelected?.paddleSubscriptionId) {
-        console.log({ teamSelectedPaddleSubscriptionId: teamSelected });
         paddle?.Checkout.open({
-          // ...(userLocal?.email && { customer: { email: userLocal.email } }),
           items: [{ priceId: id, quantity: 1 }],
           customData: {
-            userId: userLocal?.id, // Datos personalizados
-            teamId: teamSelected?.id, // Otra información relevante
+            userId: userLocal?.id,
+            teamId: teamSelected?.id,
           },
           customer: {
             id: userLocalIdCreated
@@ -218,10 +258,10 @@ export default function Component() {
           },
           settings: {
             allowLogout: false,
-            // successUrl:
           },
         });
       } else {
+        // this is to activate the change subscription modal
         setChangeSubModal(true);
         setModalPriceId(id);
       }
@@ -232,6 +272,7 @@ export default function Component() {
   };
 
   const changeSubscription = async (priceId: string) => {
+    if (!teamSelected?.id) return;
     const response = await fetch(
       `/api/protected/paddle/subscriptions/${teamSelected?.paddleSubscriptionId}`,
       {
@@ -241,6 +282,7 @@ export default function Component() {
         },
         body: JSON.stringify({
           priceId,
+          teamId: teamSelected.id,
         }),
       },
     );
@@ -292,10 +334,22 @@ export default function Component() {
       <div className="text-center mb-10">
         <div className="flex justify-center w-full space-x-3">
           <h1 className="text-3xl font-bold mb-2">{texts.title}</h1>
-          <Button onClick={handleBillingPortal} className="text-lg space-x-2">
-            <div>{texts.billingPortal}</div>
-            <ExternalLink className="w-5 h-5" />
-          </Button>
+
+          {teamSelected?.paddleSubscriptionId && (
+            <Button
+              onClick={handleBillingPortal}
+              className="text-lg space-x-2"
+              disabled={!teamSelected?.paddleSubscriptionId?.startsWith("sub_")}
+            >
+              {teamSelected?.paddleSubscriptionId?.startsWith("sub_") && (
+                <div>{texts.billingPortal}</div>
+              )}
+              {teamSelected?.paddleSubscriptionId?.startsWith("pri_") && (
+                <div>Estamos procesando tu subscripciuon</div>
+              )}
+              <ExternalLink className="w-5 h-5" />
+            </Button>
+          )}
         </div>
         <p className="text-muted-foreground">{texts.description}</p>
       </div>

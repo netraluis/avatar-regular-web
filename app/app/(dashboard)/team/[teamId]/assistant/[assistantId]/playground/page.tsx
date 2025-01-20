@@ -50,9 +50,11 @@ export default function Playground() {
     state: { assistantSelected },
   } = useAppContext();
 
-  const [assistantValues, setAssistantValues] = React.useState<AssistantUpdateParams | null>(null);
+  const [assistantValues, setAssistantValues] =
+    React.useState<AssistantUpdateParams | null>(null);
 
-  const [assistantValuesDefault, setAssistantValuesDefault] = React.useState<AssistantUpdateParams | null>(null);
+  const [assistantValuesDefault, setAssistantValuesDefault] =
+    React.useState<AssistantUpdateParams | null>(null);
 
   const { getAssistant } = useGetAssistant();
   const { updateAssistant } = useUpdateAssistant();
@@ -81,18 +83,12 @@ export default function Playground() {
       instructions: assistantSelected?.openAIassistant.instructions || "",
       temperature: assistantSelected?.openAIassistant.temperature || 1,
       top_p: assistantSelected?.openAIassistant.top_p || 0.5,
-    }
+    };
 
     setAssistantValues(assistantValues);
 
-    setAssistantValuesDefault(assistantValues)
+    setAssistantValuesDefault(assistantValues);
 
-    console.log({ assistantValues, assistantValuesDefault },
-      assistantValues?.model === assistantValuesDefault?.model,
-      assistantValues?.instructions === assistantValuesDefault?.instructions,
-      assistantValues?.temperature === assistantValuesDefault?.temperature,
-      assistantValues?.top_p === assistantValuesDefault?.top_p,
-      assistantValues === assistantValuesDefault);
   }, [assistantSelected]);
 
   const handleSendMessage = () => {
@@ -121,7 +117,6 @@ export default function Playground() {
       setLoading(false);
     }
   };
-
 
   const { submitMessage, messages, status } = useAssistant({
     assistantId: assistantId as string,
@@ -164,7 +159,7 @@ export default function Playground() {
   const temperatureOptions = [
     {
       value: 0.2,
-      label: playground.adjustments.temperatureOptions[0]
+      label: playground.adjustments.temperatureOptions[0],
     },
     {
       value: 0.6,
@@ -182,7 +177,7 @@ export default function Playground() {
       value: 1.8,
       label: playground.adjustments.temperatureOptions[4],
     },
-  ]
+  ];
 
   const topPOptions = [
     {
@@ -205,12 +200,14 @@ export default function Playground() {
       value: 0.9,
       label: playground.adjustments.topPOptions[4],
     },
-  ]
+  ];
 
-  const hasChange = assistantValues?.model !== assistantValuesDefault?.model ||
-  (assistantValues?.instructions !== assistantValuesDefault?.instructions && assistantValues?.instructions !== "") ||
-  assistantValues?.temperature !== assistantValuesDefault?.temperature ||
-  assistantValues?.top_p !== assistantValuesDefault?.top_p;
+  const hasChange =
+    assistantValues?.model !== assistantValuesDefault?.model ||
+    (assistantValues?.instructions !== assistantValuesDefault?.instructions &&
+      assistantValues?.instructions !== "") ||
+    assistantValues?.temperature !== assistantValuesDefault?.temperature ||
+    assistantValues?.top_p !== assistantValuesDefault?.top_p;
 
   return (
     <TitleLayout
@@ -225,11 +222,10 @@ export default function Playground() {
           action={handleUpdate}
           loading={loading}
           valueChange={hasChange}
-        // className="flex-grow"
+          // className="flex-grow"
         >
           <form className="space-y-6 h-full overflow-auto scrollbar-hidden mx-2">
-          
-            <div className='m-2 space-y-2'>
+            <div className="m-2 space-y-2">
               <Label htmlFor="model">{playground.adjustments.model}</Label>
               {assistantValues?.model ? (
                 <Select
@@ -257,11 +253,15 @@ export default function Playground() {
                 <InputCharging />
               )}
             </div>
-            <div className='m-2 space-y-2'>
+            <div className="m-2 space-y-2">
               <Label htmlFor="instructions">
                 {playground.adjustments.instructions}
               </Label>
-              {assistantValues && !assistantValues.instructions && <p className="text-xs text-red-500 mt-1">{playground.adjustments.instructionNotEmpty}</p>}
+              {assistantValues && !assistantValues.instructions && (
+                <p className="text-xs text-red-500 mt-1">
+                  {playground.adjustments.instructionNotEmpty}
+                </p>
+              )}
               <div className="mb-4 p-2">
                 {assistantValues ? (
                   <Textarea
@@ -273,7 +273,7 @@ export default function Playground() {
                       setAssistantValues({
                         ...assistantValues,
                         instructions: e.target.value,
-                      })
+                      });
                     }}
                   />
                 ) : (
@@ -284,8 +284,10 @@ export default function Playground() {
                 <p className="text-xs text-red-500 mt-1">{localError}</p>
               )}
             </div>
-            <div className='m-2 space-y-2'>
-              <Label htmlFor="model">{playground.adjustments.temperature}</Label>
+            <div className="m-2 space-y-2">
+              <Label htmlFor="model">
+                {playground.adjustments.temperature}
+              </Label>
               <p className="text-sm text-gray-500 my-1">
                 {playground.adjustments.temperatureDescription}
               </p>
@@ -297,7 +299,7 @@ export default function Playground() {
                     setAssistantValues({
                       ...assistantValues,
                       temperature: parseFloat(value),
-                    })
+                    });
                   }}
                 >
                   <SelectTrigger id="model">
@@ -315,7 +317,7 @@ export default function Playground() {
                 <InputCharging />
               )}
             </div>
-            <div className='m-2 space-y-2'>
+            <div className="m-2 space-y-2">
               <Label htmlFor="model">{playground.adjustments.topP}</Label>
               <p className="text-sm text-gray-500 mt-1">
                 {playground.adjustments.topPDescription}
@@ -328,7 +330,7 @@ export default function Playground() {
                     setAssistantValues({
                       ...assistantValues,
                       top_p: parseFloat(value),
-                    })
+                    });
                   }}
                 >
                   <SelectTrigger id="model">
@@ -346,7 +348,6 @@ export default function Playground() {
                 <InputCharging />
               )}
             </div>
-            
           </form>
         </CustomCard>
         {/* </Card> */}
@@ -358,15 +359,19 @@ export default function Playground() {
             className="overflow-y-auto grow scrollbar-hidden h-full mt-4"
             ref={scrollRef}
           >
-            <CardContent className="space-y-4 border-t pt-4 pb-9" ref={messagesRef}>
+            <CardContent
+              className="space-y-4 border-t pt-4 pb-9"
+              ref={messagesRef}
+            >
               {messages &&
                 messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`p-2 rounded-lg ${msg.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                      }`}
+                    className={`p-2 rounded-lg ${
+                      msg.role === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted"
+                    }`}
                   >
                     {msg.message}
                   </div>
@@ -374,34 +379,36 @@ export default function Playground() {
               <div className="w-full h-px" ref={visibilityRef} />
             </CardContent>
           </div>
-          {!hasChange && <div className="w-full h-24">
-            <div className=" flex items-center space-x-2 static">
-              {/* <Input
+          {!hasChange && (
+            <div className="w-full h-24">
+              <div className=" flex items-center space-x-2 static">
+                {/* <Input
                 placeholder={playground.typeYourMessageHere}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               /> */}
-              {/* <Button size="icon" variant="ghost">
+                {/* <Button size="icon" variant="ghost">
                 <Mic className="h-4 w-4" />
               </Button> */}
-              {assistantValues ? (
-                // <Button onClick={handleSendMessage}>{playground.send}</Button>
-                <TextAreaForm
-                  handleInputChange={handleTextareaChange}
-                  handleKeyDown={handleKeyDown}
-                  input={message}
-                  loading={loading}
-                  submitMessage={handleSendMessage}
-                  status={status}
-                  showFooter={false}
-                  text={textAreaForm}
-                />
-              ) : (
-                <SelectCharging />
-              )}
+                {assistantValues ? (
+                  // <Button onClick={handleSendMessage}>{playground.send}</Button>
+                  <TextAreaForm
+                    handleInputChange={handleTextareaChange}
+                    handleKeyDown={handleKeyDown}
+                    input={message}
+                    loading={loading}
+                    submitMessage={handleSendMessage}
+                    status={status}
+                    showFooter={false}
+                    text={textAreaForm}
+                  />
+                ) : (
+                  <SelectCharging />
+                )}
+              </div>
             </div>
-          </div>}
+          )}
         </Card>
       </div>
     </TitleLayout>

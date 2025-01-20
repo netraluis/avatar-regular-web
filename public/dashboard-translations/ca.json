@@ -379,14 +379,14 @@
                   "send": "Enviar",
                   "save": "Desar canvis",
                   "error": "Hi ha hagut un error en desar els canvis",
-                  "temperatureOptions" : [
+                  "temperatureOptions": [
                     "Molt baixa (Precís i seriós)",
                     "Baixa (Conservador)",
                     "Mitjana (Equilibrat)",
                     "Alta (Creatiu)",
                     "Molt alta (Explorador)"
                   ],
-                  "topPOptions" : [
+                  "topPOptions": [
                     "Molt baix (Directe)",
                     "Baix (Conservador)",
                     "Mitjà (Equilibrat)",

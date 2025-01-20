@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Environment, LogLevel, Paddle } from "@paddle/paddle-node-sdk";
+import {
+  Environment,
+  LogLevel,
+  Paddle,
+  ProrationBillingMode,
+} from "@paddle/paddle-node-sdk";
+import { changeTokenLedgerMovementSubscription } from "@/lib/data/tokenLedger";
 
 export async function GET(
   request: NextRequest,
@@ -47,6 +53,66 @@ export async function PATCH(
     logLevel: LogLevel.verbose, // or 'error' for less verbose logging
   });
 
+  const oldSub = await paddle.subscriptions.get(params.subscriptionId);
+  let prorationBillingMode: ProrationBillingMode | null = null;
+  if (oldSub.items[0].price.id === process.env.HOBBY_PRICE_ID) {
+    if (
+      body.priceId === process.env.STANDARD_PRICE_ID ||
+      body.priceId === process.env.UNLIMITED_PRICE_ID
+    ) {
+      prorationBillingMode = "prorated_immediately";
+    }
+  }
+
+  if (oldSub.items[0].price.id === process.env.STANDARD_PRICE_ID) {
+    if (body.priceId === process.env.HOBBY_PRICE_ID) {
+      prorationBillingMode = "full_next_billing_period";
+    }
+    if (body.priceId === process.env.UNLIMITED_PRICE_ID) {
+      prorationBillingMode = "prorated_immediately";
+    }
+  }
+
+  if (oldSub.items[0].price.id === process.env.UNLIMITED_PRICE_ID) {
+    if (body.priceId === process.env.HOBBY_PRICE_ID) {
+      prorationBillingMode = "full_next_billing_period";
+    }
+    if (body.priceId === process.env.STANDARD_PRICE_ID) {
+      prorationBillingMode = "full_next_billing_period";
+    }
+  }
+
+  if (prorationBillingMode === null) {
+    return new NextResponse("Invalid subscription change", {
+      status: 400,
+    });
+  }
+
+  if (prorationBillingMode === "prorated_immediately") {
+    if (
+      !process.env.TOKEN_ADDS_HOBBY ||
+      !process.env.TOKEN_ADDS_STANDARD ||
+      !process.env.TOKEN_ADDS_UNLIMITED
+    ) {
+      throw "Environment variables not defined";
+    }
+    if (body.priceId === process.env.TOKEN_ADDS_STANDARD) {
+      await changeTokenLedgerMovementSubscription({
+        teamId: body.teamId,
+        tokenAdds: parseInt(process.env.TOKEN_ADDS_STANDARD),
+        paddleSubscriptionId: params.subscriptionId,
+      });
+    }
+
+    if (body.priceId === process.env.TOKEN_ADDS_UNLIMITED) {
+      await changeTokenLedgerMovementSubscription({
+        teamId: body.teamId,
+        tokenAdds: parseInt(process.env.TOKEN_ADDS_UNLIMITED),
+        paddleSubscriptionId: params.subscriptionId,
+      });
+    }
+  }
+
   try {
     const subs = await paddle.subscriptions.update(params.subscriptionId, {
       items: [
@@ -55,7 +121,7 @@ export async function PATCH(
           quantity: 1,
         },
       ],
-      prorationBillingMode: "prorated_immediately",
+      prorationBillingMode,
     });
 
     return new NextResponse(JSON.stringify(subs), {

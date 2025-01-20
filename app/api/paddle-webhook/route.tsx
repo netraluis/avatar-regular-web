@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updateTeamByField } from "@/lib/data/team";
+import { addTokenLedgerMovement } from "@/lib/data/tokenLedger";
 // import { Environment, LogLevel, Paddle } from "@paddle/paddle-node-sdk";
 
 export async function POST(
@@ -95,6 +96,23 @@ export async function POST(
         field: "paddleSubscriptionId",
         value: body?.data.id,
       });
+
+      if (!process.env.SLACK_URL) {
+        console.log("SLACK_URL is not defined");
+        throw "SLACK_URL is not defined";
+      }
+      await fetch(process.env.SLACK_URL as string, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          event: "subscription.created",
+          teamId: body?.data?.custom_data?.teamId,
+          subscriptionId: body?.data.id,
+          userId: body?.data?.custom_data?.userId,
+        }),
+      });
     }
 
     if (body?.event_type === "transaction.completed") {
@@ -103,6 +121,70 @@ export async function POST(
         body,
         JSON.stringify(body?.data?.items, null, 2),
       );
+
+      const priceId = body.data.items[0].price_id;
+      let bodyData: {
+        teamId: string;
+        tokenAdds: number;
+        paddleSubscriptionId?: string;
+        runId?: string;
+      } = {
+        teamId: "",
+        tokenAdds: 0,
+      };
+
+      if (
+        !process.env.HOBBY_PRICE_ID ||
+        !process.env.STANDARD_PRICE_ID ||
+        !process.env.UNLIMITED_PRICE_ID ||
+        !process.env.TOKEN_ADDS_HOBBY ||
+        !process.env.TOKEN_ADDS_STANDARD ||
+        !process.env.TOKEN_ADDS_UNLIMITED
+      ) {
+        throw "Environment variables not defined";
+      }
+      switch (priceId) {
+        case process.env.HOBBY_PRICE_ID:
+          console.log("Hobby Plan");
+          bodyData = {
+            teamId: body?.data?.custom_data?.teamId,
+            tokenAdds: parseInt(process.env.TOKEN_ADDS_HOBBY),
+            paddleSubscriptionId: body?.data?.subscription_id,
+          };
+          break;
+        case process.env.STANDARD_PRICE_ID:
+          console.log("Standard Plan");
+          bodyData = {
+            teamId: body?.data?.custom_data?.teamId,
+            tokenAdds: parseInt(process.env.TOKEN_ADDS_STANDARD),
+            paddleSubscriptionId: body?.data?.subscription_id,
+          };
+          break;
+        case process.env.UNLIMITED_PRICE_ID:
+          console.log("Unlimited Plan");
+          bodyData = {
+            teamId: body?.data?.custom_data?.teamId,
+            tokenAdds: parseInt(process.env.TOKEN_ADDS_UNLIMITED),
+            paddleSubscriptionId: body?.data?.subscription_id,
+          };
+          break;
+        default:
+          console.log("Unknown Plan");
+          break;
+      }
+      await addTokenLedgerMovement(bodyData);
+      await fetch(process.env.SLACK_URL as string, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          event: "subscription.created",
+          teamId: body?.data?.custom_data?.teamId,
+          subscriptionId: body?.data.id,
+          userId: body?.data?.custom_data?.userId,
+        }),
+      });
     }
 
     // console.log({event_type: body })
