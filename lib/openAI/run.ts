@@ -34,8 +34,8 @@ const runHandler = async ({
         break; // Salir del loop si el timeout se alcanzó
       }
 
-      // BORRAR: Simular un delay de 500ms
-      await sleep(500);
+      // // BORRAR: Simular un delay de 500ms
+      // await sleep(500);
       if (onEvent) {
         onEvent(event);
       }
