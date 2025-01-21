@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { useAppContext } from "../appContext";
 import { Assistant, Prisma } from "@prisma/client";
 import {
@@ -340,8 +340,8 @@ export const useAssistant = ({
   const [internatlThreadId, setInternalThreadId] = useState<string | undefined>(
     undefined,
   );
-
   const [status, setStatus] = useState<string>("thread.run.completed");
+  const messageAccRef = useRef<string>("");
 
   if (!assistantId) {
     return {
@@ -361,7 +361,6 @@ export const useAssistant = ({
       throw new Error("No response stream found");
     }
 
-    let prevMessageAcc = "";
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
     let buffer = ""; // Buffer para acumular los fragmentos
@@ -371,12 +370,10 @@ export const useAssistant = ({
       done = readerDone;
       // Decodificamos el fragmento recibido
       buffer += decoder.decode(value, { stream: true });
-      console.log({ buffer });
 
       // Dividimos el buffer en líneas por el delimitador \n
       const lines = buffer.split("\n");
 
-      console.log({ lines });
       // Guardamos la última parte que puede estar incompleta en el buffer
       buffer = lines.pop() || "";
 
@@ -397,6 +394,12 @@ export const useAssistant = ({
               const message = parsedEvent?.data?.delta?.content[0]?.text?.value;
               const id = parsedEvent?.data?.id;
 
+              messageAccRef.current += message;
+              const newMessage = messageAccRef.current.replace(
+                /【[^】]*?】|【.*$/g,
+                "",
+              );
+              // setMessageAcc((prevAcc) => {
               setMessages((prevMessages) => {
                 const existingMessageIndex = prevMessages.findIndex(
                   (msg) => msg.id === id,
@@ -405,10 +408,6 @@ export const useAssistant = ({
                 if (existingMessageIndex !== -1) {
                   // Sobrescribir el mensaje acumulado
                   const updatedMessages = [...prevMessages];
-                  const newMessage = (prevMessageAcc + message).replace(
-                    /【[^】]*?】|【.*$/g,
-                    "",
-                  );
 
                   updatedMessages[existingMessageIndex] = {
                     message: newMessage,
@@ -419,10 +418,13 @@ export const useAssistant = ({
                 } else {
                   // Si es un nuevo mensaje, añadirlo a la lista
                   // if(lastMessage.role === "user") return prevMessages
-                  return [...prevMessages, { id, role: "assistant", message }];
+
+                  return [
+                    ...prevMessages,
+                    { id, role: "assistant", message: newMessage },
+                  ];
                 }
               });
-              prevMessageAcc = prevMessageAcc + message;
             }
           } catch (e) {
             console.error("Error parsing JSON:", e);
@@ -474,6 +476,7 @@ export const useAssistant = ({
         await handleMessages(response);
       }
     } catch (error: any) {
+      console.error("Error sending message:", error);
       setError({ error });
     } finally {
       setLoading(false);
