@@ -20,7 +20,8 @@
       "LANG": {
         "ASSISTANT_URL": {
           "PAGE": {
-            "error": "Estem treballant en l’error… Disculpa les molèsties."
+            "error": "Estem treballant en l’error… Disculpa les molèsties.",
+            "timeout": "El temps d’espera s’ha exhaurit. Si us plau, torna-ho a intentar."
           }
         }
       }

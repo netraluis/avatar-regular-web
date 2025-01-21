@@ -20,7 +20,8 @@
       "LANG": {
         "ASSISTANT_URL": {
           "PAGE": {
-            "error": "We are working on the error… Sorry for the inconvenience."
+            "error": "We are working on the error… Sorry for the inconvenience.",
+            "timeout": "The request has timed out. Please try again later."
           }
         }
       }

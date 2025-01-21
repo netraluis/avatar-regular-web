@@ -1,9 +1,8 @@
 import { getAssistant } from "@/lib/data/assistant";
-import { commonOnEvent } from "@/lib/helper/threadMessage";
+import { AssistantEventType, commonOnEvent } from "@/lib/helper/threadMessage";
 import { createRun } from "@/lib/openAI/run";
 import { ModeMessageType } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
-import OpenAI from "openai";
 
 export const maxDuration = 60;
 
@@ -29,7 +28,7 @@ export async function POST(
       async start(controller) {
         // Definir el callback para manejar cada evento
         const onEvent = async (
-          event: OpenAI.Beta.Assistants.AssistantStreamEvent,
+          event: AssistantEventType,
         ) => {
           await commonOnEvent(
             event,

@@ -3,8 +3,10 @@ import { FileCitationAnnotation } from "openai/resources/beta/threads/messages.m
 import { createMessage } from "../data/message";
 import { ModeMessageType, RoleUserType } from "@prisma/client";
 
+export type AssistantEventType = OpenAI.Beta.Assistants.AssistantStreamEvent | { event: 'timeout' } | { event: 'error_streaming' };
+
 export const commonOnEvent = async (
-  event: OpenAI.Beta.Assistants.AssistantStreamEvent,
+  event: AssistantEventType,
   controller: ReadableStreamDefaultController<any>,
   assistantId: string,
   mode: ModeMessageType,

@@ -365,6 +365,7 @@ export const useAssistant = ({
     const decoder = new TextDecoder();
     let buffer = ""; // Buffer para acumular los fragmentos
     let done = false;
+    messageAccRef.current = "";
     while (!done) {
       const { value, done: readerDone } = await reader.read();
       done = readerDone;
@@ -382,6 +383,10 @@ export const useAssistant = ({
         if (line.trim()) {
           try {
             const parsedEvent = JSON.parse(line); // Parseamos solo líneas completas
+            if(parsedEvent.event === "timeout") {
+               setError({ type:'timeout', error: parsedEvent });
+              return setStatus("thread.run.completed");
+            }
             setStatus(parsedEvent.event);
             setData((prevData) => [...prevData, parsedEvent]); // Actualizamos el estado con el evento
             if (parsedEvent.event === "thread.created") {
@@ -428,6 +433,7 @@ export const useAssistant = ({
             }
           } catch (e) {
             console.error("Error parsing JSON:", e);
+            setError({ type:'UNKNOWN', error: e });
           }
         }
       }
@@ -444,6 +450,7 @@ export const useAssistant = ({
       { id: crypto.randomUUID(), role: "user", message },
     ]);
     setStatus("thread.run.step.created");
+    setError(null);
     setLoading(true);
     try {
       if (!internatlThreadId) {
