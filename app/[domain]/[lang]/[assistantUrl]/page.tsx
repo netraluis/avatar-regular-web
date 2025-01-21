@@ -85,7 +85,7 @@ export default function AssistantUrl() {
             status !== "thread.message.delta" &&
             status !== "thread.message.completed" &&
             status !== "thread.run.step.completed" &&
-            status !== "thread.run.completed" && 
+            status !== "thread.run.completed" &&
             status !== "timeout"
           }
           avatarUrl={
@@ -97,17 +97,16 @@ export default function AssistantUrl() {
           text={chatList}
         />
 
-        {error?.type === 'UNKNOWN' && (
+        {error?.type === "UNKNOWN" && (
           <div className="relative mx-auto max-w-2xl px-4 text-red-500">
             {page.error}
           </div>
         )}
-        {
-          error?.type === "timeout" && (
+        {error?.type === "timeout" && (
           <div className="relative mx-auto max-w-2xl px-4 text-red-500">
             {page.timeout}
           </div>
-          )}
+        )}
         <div className="w-full h-px" ref={visibilityRef} />
       </div>
 

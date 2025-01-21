@@ -27,9 +27,7 @@ export async function POST(
     const stream = new ReadableStream({
       async start(controller) {
         // Definir el callback para manejar cada evento
-        const onEvent = async (
-          event: AssistantEventType,
-        ) => {
+        const onEvent = async (event: AssistantEventType) => {
           await commonOnEvent(
             event,
             controller,

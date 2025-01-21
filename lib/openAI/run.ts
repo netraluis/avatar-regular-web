@@ -21,8 +21,8 @@ const runHandler = async ({
   }, TIMEOUT);
 
   // Función para simular retardos
-  const sleep = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  // const sleep = (ms: number) =>
+  //   new Promise((resolve) => setTimeout(resolve, ms));
   // const events: OpenAI.Beta.Assistants.AssistantStreamEvent[] = [];
   try {
     for await (const event of stream) {
@@ -65,7 +65,6 @@ export const createRun = async ({
   });
 
   await runHandler({ stream, onEvent });
-
 };
 
 export const createThreadAndRun = async ({

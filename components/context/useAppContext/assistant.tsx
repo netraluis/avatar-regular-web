@@ -383,8 +383,8 @@ export const useAssistant = ({
         if (line.trim()) {
           try {
             const parsedEvent = JSON.parse(line); // Parseamos solo líneas completas
-            if(parsedEvent.event === "timeout") {
-               setError({ type:'timeout', error: parsedEvent });
+            if (parsedEvent.event === "timeout") {
+              setError({ type: "timeout", error: parsedEvent });
               return setStatus("thread.run.completed");
             }
             setStatus(parsedEvent.event);
@@ -433,7 +433,7 @@ export const useAssistant = ({
             }
           } catch (e) {
             console.error("Error parsing JSON:", e);
-            setError({ type:'UNKNOWN', error: e });
+            setError({ type: "UNKNOWN", error: e });
           }
         }
       }
