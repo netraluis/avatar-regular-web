@@ -1,6 +1,9 @@
 // widget-embed/widget-entry.tsx
 import { createRoot } from "react-dom/client";
 import { Widget } from "./widget";
+// widget-embed/widget-entry.tsx
+import "./tailwind-widget.css";
+
 
 declare global {
   interface Window {

@@ -5,6 +5,9 @@ import * as path from "path";
 
 export default defineConfig({
   plugins: [react()],
+  css: {
+    postcss: "./postcss.config.js", // Asegúrate de que TailwindCSS esté configurado en PostCSS
+  },
   build: {
     outDir: path.resolve(__dirname, "../dist"),  // Compila a /public
     emptyOutDir: true,                            // No borra todo /public

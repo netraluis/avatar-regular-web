@@ -1,0 +1,8 @@
+{
+  "chatTitle": "Chat",
+  "inputPlaceholder": "Type your message...",
+  "sendButtonLabel": "Send message",
+  "openChatLabel": "Open chat",
+  "closeChatLabel": "Close chat",
+  "aiThinkingLabel": "AI is thinking..."
+}

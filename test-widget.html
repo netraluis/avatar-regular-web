@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Widget</title>
+</head>
+<body>
+  <h1>Prueba del Widget</h1>
+
+  <script>
+    window.__WIDGET_CONFIG__ = {
+      appId: "localApp",
+      user: {
+        name: "Juan Local",
+        email: "juan.local@example.com"
+      }
+    };
+  </script>
+
+  <script src="http://localhost:3000/widget-bundle.js"></script>
+</body>
+</html>
