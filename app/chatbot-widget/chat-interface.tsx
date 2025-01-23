@@ -99,10 +99,11 @@ export default function ChatInterface({
                 className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[80%] p-2 rounded-lg ${message.role === "user"
+                  className={`max-w-[80%] p-2 rounded-lg ${
+                    message.role === "user"
                       ? "bg-blue-500 text-white"
                       : "bg-gray-200 text-black"
-                    }`}
+                  }`}
                 >
                   <MarkdownDisplay markdownText={message.message} />
                 </div>

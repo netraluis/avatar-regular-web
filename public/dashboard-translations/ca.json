@@ -316,11 +316,21 @@
               },
               "SHARE": {
                 "PAGE": {
-                  "title": "Comparteix l’enllaç",
-                  "desription": "Comparteix l’enllaç de la teva pàgina d’equip perquè altres usuaris puguin accedir al teu assistent.",
-                  "chat": {
-                    "title": "URL de l’equip",
-                    "description": "Aquest enllaç permet accedir directament al teu assistent."
+                  "url": {
+                    "title": "Comparteix l’enllaç",
+                    "desription": "Comparteix l’enllaç de la teva pàgina d’equip perquè altres usuaris puguin accedir al teu assistent.",
+                    "chat": {
+                      "title": "URL de l’equip",
+                      "description": "Aquest enllaç permet accedir directament al teu assistent."
+                    }
+                  },
+                  "script": {
+                    "title": "Comparteix el teu assistent a la teva web",
+                    "desription": "Copia el següent codi per integrar l'assistent a la teva pàgina web i permetre que els usuaris hi interactuïn directament",
+                    "chat": {
+                      "title": "Codi per integrar l'assistent",
+                      "description": "Enganxa aquest codi al teu lloc web per mostrar el bubble del teu assistent."
+                    }
                   }
                 }
               }

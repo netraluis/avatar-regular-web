@@ -316,11 +316,21 @@
               },
               "SHARE": {
                 "PAGE": {
-                  "title": "Share link",
-                  "desription": "Share the link to your team page so other users can access your assistant.",
-                  "chat": {
-                    "title": "Team URL",
-                    "description": "This link provides direct access to your assistant."
+                  "url": {
+                    "title": "Share link",
+                    "desription": "Share the link to your team page so other users can access your assistant.",
+                    "chat": {
+                      "title": "Team URL",
+                      "description": "This link provides direct access to your assistant."
+                    }
+                  },
+                  "script": {
+                    "title": "Share your assistant on your website",
+                    "description": "Copy the following code to integrate the assistant into your website and allow users to interact with it directly",
+                    "chat": {
+                      "title": "Code to integrate the assistant",
+                      "description": "Paste this code on your website to display the assistant bubble."
+                    }
                   }
                 }
               }

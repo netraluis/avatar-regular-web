@@ -224,129 +224,127 @@ export default function Playground() {
           // className="flex-grow"
         >
           {/* <form className="space-y-6  scrollbar-hidden mx-2"> */}
-            <div className="m-2 space-y-2">
-              <Label htmlFor="model">{playground.adjustments.model}</Label>
-              {assistantValues?.model ? (
-                <Select
-                  defaultValue={assistantValues.model}
-                  value={assistantValues.model}
-                  onValueChange={(value) => {
-                    setAssistantValues({
-                      ...assistantValues,
-                      model: value as ChatModel,
-                    });
-                  }}
-                >
-                  <SelectTrigger id="model">
-                    <SelectValue placeholder="Select a model" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.values(ChatModel).map((model) => (
-                      <SelectItem key={model} value={model}>
-                        {model}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              ) : (
-                <InputCharging />
-              )}
-            </div>
-            <div className="m-2 space-y-2">
-              <Label htmlFor="instructions">
-                {playground.adjustments.instructions}
-              </Label>
-              {assistantValues && !assistantValues.instructions && (
-                <p className="text-xs text-red-500 mt-1">
-                  {playground.adjustments.instructionNotEmpty}
-                </p>
-              )}
-              <div className="mb-4 p-2">
-                {assistantValues ? (
-                  <Textarea
-                    id="instructions"
-                    placeholder="Type your instructions here"
-                    className="h-[300px] "
-                    value={assistantValues.instructions || ""}
-                    onChange={(e) => {
-                      setAssistantValues({
-                        ...assistantValues,
-                        instructions: e.target.value,
-                      });
-                    }}
-                  />
-                ) : (
-                  <TextAreaCharging />
-                )}
-              </div>
-              {localError && (
-                <p className="text-xs text-red-500 mt-1">{localError}</p>
-              )}
-            </div>
-            <div className="m-2 space-y-2">
-              <Label htmlFor="model">
-                {playground.adjustments.temperature}
-              </Label>
-              <p className="text-sm text-gray-500 my-1">
-                {playground.adjustments.temperatureDescription}
+          <div className="m-2 space-y-2">
+            <Label htmlFor="model">{playground.adjustments.model}</Label>
+            {assistantValues?.model ? (
+              <Select
+                defaultValue={assistantValues.model}
+                value={assistantValues.model}
+                onValueChange={(value) => {
+                  setAssistantValues({
+                    ...assistantValues,
+                    model: value as ChatModel,
+                  });
+                }}
+              >
+                <SelectTrigger id="model">
+                  <SelectValue placeholder="Select a model" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.values(ChatModel).map((model) => (
+                    <SelectItem key={model} value={model}>
+                      {model}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <InputCharging />
+            )}
+          </div>
+          <div className="m-2 space-y-2">
+            <Label htmlFor="instructions">
+              {playground.adjustments.instructions}
+            </Label>
+            {assistantValues && !assistantValues.instructions && (
+              <p className="text-xs text-red-500 mt-1">
+                {playground.adjustments.instructionNotEmpty}
               </p>
-              {assistantValues?.model ? (
-                <Select
-                  defaultValue={`${1}`}
-                  value={`${assistantValues.temperature}`}
-                  onValueChange={(value) => {
+            )}
+            <div className="mb-4 p-2">
+              {assistantValues ? (
+                <Textarea
+                  id="instructions"
+                  placeholder="Type your instructions here"
+                  className="h-[300px] "
+                  value={assistantValues.instructions || ""}
+                  onChange={(e) => {
                     setAssistantValues({
                       ...assistantValues,
-                      temperature: parseFloat(value),
+                      instructions: e.target.value,
                     });
                   }}
-                >
-                  <SelectTrigger id="model">
-                    <SelectValue placeholder="Select a model" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {temperatureOptions.map((model) => (
-                      <SelectItem key={model.value} value={`${model.value}`}>
-                        {model.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                />
               ) : (
-                <InputCharging />
+                <TextAreaCharging />
               )}
             </div>
-            <div className="m-2 space-y-2">
-              <Label htmlFor="model">{playground.adjustments.topP}</Label>
-              <p className="text-sm text-gray-500 mt-1">
-                {playground.adjustments.topPDescription}
-              </p>
-              {assistantValues?.model ? (
-                <Select
-                  defaultValue={`${0.5}`}
-                  value={`${assistantValues.top_p}`}
-                  onValueChange={(value) => {
-                    setAssistantValues({
-                      ...assistantValues,
-                      top_p: parseFloat(value),
-                    });
-                  }}
-                >
-                  <SelectTrigger id="model">
-                    <SelectValue placeholder="Select a model" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {topPOptions.map((model) => (
-                      <SelectItem key={model.value} value={`${model.value}`}>
-                        {model.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              ) : (
-                <InputCharging />
-              )}
-            </div>
+            {localError && (
+              <p className="text-xs text-red-500 mt-1">{localError}</p>
+            )}
+          </div>
+          <div className="m-2 space-y-2">
+            <Label htmlFor="model">{playground.adjustments.temperature}</Label>
+            <p className="text-sm text-gray-500 my-1">
+              {playground.adjustments.temperatureDescription}
+            </p>
+            {assistantValues?.model ? (
+              <Select
+                defaultValue={`${1}`}
+                value={`${assistantValues.temperature}`}
+                onValueChange={(value) => {
+                  setAssistantValues({
+                    ...assistantValues,
+                    temperature: parseFloat(value),
+                  });
+                }}
+              >
+                <SelectTrigger id="model">
+                  <SelectValue placeholder="Select a model" />
+                </SelectTrigger>
+                <SelectContent>
+                  {temperatureOptions.map((model) => (
+                    <SelectItem key={model.value} value={`${model.value}`}>
+                      {model.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <InputCharging />
+            )}
+          </div>
+          <div className="m-2 space-y-2">
+            <Label htmlFor="model">{playground.adjustments.topP}</Label>
+            <p className="text-sm text-gray-500 mt-1">
+              {playground.adjustments.topPDescription}
+            </p>
+            {assistantValues?.model ? (
+              <Select
+                defaultValue={`${0.5}`}
+                value={`${assistantValues.top_p}`}
+                onValueChange={(value) => {
+                  setAssistantValues({
+                    ...assistantValues,
+                    top_p: parseFloat(value),
+                  });
+                }}
+              >
+                <SelectTrigger id="model">
+                  <SelectValue placeholder="Select a model" />
+                </SelectTrigger>
+                <SelectContent>
+                  {topPOptions.map((model) => (
+                    <SelectItem key={model.value} value={`${model.value}`}>
+                      {model.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <InputCharging />
+            )}
+          </div>
           {/* </form> */}
         </CustomCard>
         {/* </Card> */}
@@ -366,10 +364,11 @@ export default function Playground() {
                 messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`p-2 rounded-lg ${msg.role === "user"
+                    className={`p-2 rounded-lg ${
+                      msg.role === "user"
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted"
-                      }`}
+                    }`}
                   >
                     {msg.message}
                   </div>
