@@ -32,6 +32,10 @@ export default async function middleware(req: NextRequest) {
     }`;
   }
 
+  if (hostname === `chatbotfor-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+    return;
+  }
+
   const searchParams = req.nextUrl.searchParams.toString();
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = `${url.pathname}${
@@ -64,7 +68,6 @@ export default async function middleware(req: NextRequest) {
   }
 
   if (pattern.test(url.toString()) && !hostname.startsWith("app.")) {
-    console.log("entro", { hostname, url });
     const { pathname } = url;
     console.log({ pathname });
     const pathSegments = pathname.split("/").filter((segment) => segment);

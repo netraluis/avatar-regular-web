@@ -1,8 +1,8 @@
 "use server";
 import { AppProvider } from "@/components/context/appContext";
-
 import { getUserById } from "@/lib/data/user";
 import { headers } from "next/headers";
+import Script from "next/script";
 
 export default async function Layout({
   children,
@@ -31,6 +31,34 @@ export default async function Layout({
   return (
     <AppProvider user={user} userLocal={userLocal}>
       {children}
+      <Script id="fernand-init" strategy="afterInteractive">
+        {`
+            (function (w) {
+              if (typeof w.Fernand !== "function") {
+                var f = function () {
+                  f.q[arguments[0] == 'set' ? 'unshift' : 'push'](arguments);
+                };
+                f.q = [];
+                w.Fernand = f;
+              }
+            })(window);
+            Fernand('init', { appId: 'chatbotfor' });
+            Fernand('set', {
+              user: {
+                  name: '${userLocal?.name || ""}',
+                  email: '${userLocal?.email || ""}'
+                }
+            });
+
+          `}
+      </Script>
+
+      {/* Script externo de GetFernand */}
+      <Script
+        src="https://messenger.getfernand.com/client.js"
+        strategy="afterInteractive"
+        async
+      />
     </AppProvider>
   );
 }

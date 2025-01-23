@@ -353,6 +353,7 @@ export const useAssistant = ({
       status: "",
       setInternalThreadId,
       setMessages,
+      internatlThreadId,
     };
   }
 
@@ -499,6 +500,7 @@ export const useAssistant = ({
     status,
     setInternalThreadId,
     setMessages,
+    internatlThreadId,
   };
 };
 
@@ -510,6 +512,7 @@ export interface UseAssistantResponse {
   messages: { role: string; message: string; id: string }[];
   status: string;
   setInternalThreadId: Dispatch<SetStateAction<string | undefined>>;
+  internatlThreadId: string | undefined;
   setMessages: Dispatch<
     SetStateAction<
       {

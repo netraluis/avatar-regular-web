@@ -1,8 +1,5 @@
 "use server";
 import "./globals.css";
-import Script from "next/script";
-import { createClient } from "@/lib/supabase/server";
-import { getUserById } from "@/lib/data/user";
 
 // export const metadata = {
 //   title: "Chatbotfor",
@@ -39,53 +36,12 @@ export const generateMetadata = () => {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const supabase = createClient();
-
-  let userData: { name: string; email: string } = { name: "", email: "" };
-
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (!error && user) {
-    const userLocal = await getUserById(user.id);
-    userData = { name: userLocal.name || "", email: userLocal.email || "" };
-  }
 
   return (
     <html lang="en">
       <body>
         {children}
         {/* Script de inicialización de GetFernand */}
-        <Script id="fernand-init" strategy="afterInteractive">
-          {`
-            (function (w) {
-              if (typeof w.Fernand !== "function") {
-                var f = function () {
-                  f.q[arguments[0] == 'set' ? 'unshift' : 'push'](arguments);
-                };
-                f.q = [];
-                w.Fernand = f;
-              }
-            })(window);
-            Fernand('init', { appId: 'chatbotfor' });
-            Fernand('set', {
-              user: {
-                  name: '${userData.name || ""}',
-                  email: '${userData.email || ""}'
-                }
-            });
-
-          `}
-        </Script>
-
-        {/* Script externo de GetFernand */}
-        <Script
-          src="https://messenger.getfernand.com/client.js"
-          strategy="afterInteractive"
-          async
-        />
       </body>
     </html>
   );

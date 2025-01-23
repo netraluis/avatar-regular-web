@@ -1,0 +1,11 @@
+{
+  "chatTitle": "Chat",
+  "inputPlaceholder": "Type your message...",
+  "sendButtonLabel": "Send message",
+  "openChatLabel": "Open chat",
+  "closeChatLabel": "Close chat",
+  "aiThinkingLabel": "AI is thinking...",
+  "newChatLabel": "New Chat",
+  "error": "We are working on the error… Sorry for the inconvenience.",
+  "timeout": "The request has timed out. Please try again later."
+}

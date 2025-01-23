@@ -1,0 +1,11 @@
+{
+  "chatTitle": "Xat",
+  "inputPlaceholder": "Escriu el teu missatge...",
+  "sendButtonLabel": "Enviar missatge",
+  "openChatLabel": "Obrir xat",
+  "closeChatLabel": "Tancar xat",
+  "aiThinkingLabel": "La IA està pensant...",
+  "newChatLabel": "Nou Xat",
+  "error": "Estem treballant en l’error… Disculpa les molèsties.",
+  "timeout": "El temps d’espera s’ha exhaurit. Si us plau, torna-ho a intentar."
+}
