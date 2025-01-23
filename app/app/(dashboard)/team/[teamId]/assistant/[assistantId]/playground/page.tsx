@@ -223,7 +223,7 @@ export default function Playground() {
           valueChange={hasChange}
           // className="flex-grow"
         >
-          <form className="space-y-6 h-full overflow-auto scrollbar-hidden mx-2">
+          {/* <form className="space-y-6  scrollbar-hidden mx-2"> */}
             <div className="m-2 space-y-2">
               <Label htmlFor="model">{playground.adjustments.model}</Label>
               {assistantValues?.model ? (
@@ -347,7 +347,7 @@ export default function Playground() {
                 <InputCharging />
               )}
             </div>
-          </form>
+          {/* </form> */}
         </CustomCard>
         {/* </Card> */}
         <Card className="flex flex-col relative overflow-hidden w-full grow overflow-auto">
@@ -366,11 +366,10 @@ export default function Playground() {
                 messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`p-2 rounded-lg ${
-                      msg.role === "user"
+                    className={`p-2 rounded-lg ${msg.role === "user"
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted"
-                    }`}
+                      }`}
                   >
                     {msg.message}
                   </div>

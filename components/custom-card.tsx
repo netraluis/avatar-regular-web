@@ -42,7 +42,7 @@ export const CustomCard = ({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       {separator && <Separator className="mb-4" />}
-      <CardContent className="space-y-4 overflow-auto">{children}</CardContent>
+      <CardContent className="overflow-auto h-full scrollbar-hidden">{children}</CardContent>
       {action && (
         <>
           <Separator className="mb-4 mt-2" />
