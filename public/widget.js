@@ -2,18 +2,23 @@
   // Encuentra la etiqueta <script> que cargó este archivo
   const scriptTag = document.currentScript;
 
-  const domain = window.location.origin; // Ejemplo: "https://example.com"
-  const path = window.location.pathname;
+  // const domain = window.location.origin; // Ejemplo: "https://example.com"
+  // const path = window.location.pathname;
 
-  console.log(domain, path);
+  // console.log(domain, path);
 
   // Lee los atributos personalizados
   const teamId = scriptTag.getAttribute("data-team-id") || "";
   const assistantId = scriptTag.getAttribute("data-assistant-id") || "";
-  const language = scriptTag.getAttribute("data-language") || "en";
+  let language = scriptTag.getAttribute("data-language") || "en";
+  const src = scriptTag.getAttribute("data-src") || "";
+
+  if (language !== "ca" && language !== "en") {
+    language = "en";
+  }
 
   const iframe = document.createElement("iframe");
-  iframe.src = `${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}chatbotfor-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/chatbot-widget?teamId=${teamId}&assistantId=${assistantId}&language=${language}`; // Cambia esto por tu dominio real
+  iframe.src = `${src}?teamId=${teamId}&assistantId=${assistantId}&language=${language}`; // Cambia esto por tu dominio real
   iframe.style.position = "fixed";
   iframe.style.bottom = "20px";
   iframe.style.right = "20px";

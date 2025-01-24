@@ -1,5 +1,5 @@
 "use client";
-import { Copy } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 import { useAppContext } from "@/components/context/appContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,21 +26,31 @@ export default function Component() {
     state: { teamSelected, assistantSelected },
   } = useAppContext();
 
+  const [urlCopied, setUrlCopied] = useState(false);
+  const [scriptCopied, setScriptCopied] = useState(false);
+
   useEffect(() => {
     setUrl(
-      `https://${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantSelected?.localAssistant?.url}`,
+      `${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantSelected?.localAssistant?.url}`,
     );
+    // setScript(
+    //   `<script src=${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}chatbotfor-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/chatbot-widget?teamId=${teamId}&assistantId=${assistantId}&language=${teamSelected?.defaultLanguage?.toLocaleLowerCase()}></script>`,
+    // );
+
     setScript(
-      `<script src=${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}chatbotfor-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/chatbot-widget?teamId=${teamId}&assistantId=${assistantId}&language=${teamSelected?.defaultLanguage?.toLocaleLowerCase()}></script>`,
+      `<script src="${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}chatbotfor-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/widget.js" data-src="${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}chatbotfor-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/chatbot-widget" data-team-id="${teamId}" data-assistant-id="${assistantId}" data-language="${teamSelected?.defaultLanguage?.toLocaleLowerCase()}"></script>`,
     );
   }, [teamSelected, assistantSelected]);
 
-  const handleRedirect = () => {
-    window.open(url, "_blank");
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(script);
+  const handleCopy = (setCopied: (copie: boolean)=>void, copied: string) => {
+    navigator.clipboard.writeText(copied)
+    .then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000); // Ocultar mensaje después de 2 segundos
+    })
+    .catch((err) => {
+      console.error("Error al copiar al portapapeles:", err);
+    });
   };
 
   return (
@@ -56,8 +66,8 @@ export default function Component() {
                 <InputCharging />
               )}
 
-              <Button size="sm" onClick={handleRedirect} variant="outline">
-                <Copy className="h-4 w-4" />
+              <Button size="sm" onClick={()=>handleCopy(setUrlCopied, url)}  variant="outline">
+              {!urlCopied ? <Copy className="h-4 w-4" /> : <Check className="h-4 w-4" />}
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -88,8 +98,8 @@ export default function Component() {
                 <TextAreaCharging />
               )}
 
-              <Button size="sm" onClick={handleCopy} variant="outline">
-                <Copy className="h-4 w-4" />
+              <Button size="sm" onClick={()=>handleCopy(setScriptCopied, script)} variant="outline">
+              {!scriptCopied ? <Copy className="h-4 w-4" /> : <Check className="h-4 w-4" />}
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">
