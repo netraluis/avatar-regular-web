@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { MoreHorizontal } from "lucide-react";
+import { Eye, MoreHorizontal, EyeOff } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,18 +20,28 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAppContext } from "@/components/context/appContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Loader } from "@/components/loader";
 import {
   useDeleteAssistant,
   useFetchAssistantsByTeamId,
+  useUpdateAssistant,
 } from "@/components/context/useAppContext/assistant";
 import { TitleLayout } from "@/components/layouts/title-layout";
 import OnboardingBase from "@/components/onboarding/onboarding-base";
 import { Bot } from "lucide-react";
 import { useFetchTeamsByUserIdAndTeamId } from "@/components/context/useAppContext/team";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { AssitantStatus } from "@prisma/client";
+import { InputCharging } from "@/components/loaders/loadersSkeleton";
 
 export default function Dashboard() {
   const { t } = useDashboardLanguage();
@@ -45,6 +55,11 @@ export default function Dashboard() {
   const { teamId } = useParams();
   const { loading, fetchAssistantsByTeamId } = useFetchAssistantsByTeamId();
   const { deleteAssistant } = useDeleteAssistant();
+  const { updateAssistant, loadingUpdateAssistant } = useUpdateAssistant();
+
+  const [loadingIndexUpdate, setLoadingIndexUpdate] = useState<number | null>(
+    null,
+  );
 
   useEffect(() => {
     if (!user?.user.id) {
@@ -84,6 +99,28 @@ export default function Dashboard() {
     }
   }, [user?.user.id]);
 
+  useEffect(() => {}, [loadingUpdateAssistant]);
+
+  const handleChangeStatus = async (status: AssitantStatus, index: number) => {
+    if (!user?.user.id) return;
+    if (status === assistantsByTeam[index].status) return;
+
+    setLoadingIndexUpdate(index);
+    await updateAssistant({
+      assistantId: assistantsByTeam[index].id,
+      userId: user.user.id,
+      teamId: teamId as string,
+      openAIassistantUpdateParams: {},
+      localAssistantUpdateParams: { status },
+    });
+    setLoadingIndexUpdate(null);
+  };
+
+  const visibilityImages = {
+    PUBLIC: <Eye className="h-4 w-4 mr-2" />,
+    PRIVATE: <EyeOff className="h-4 w-4 mr-2" />,
+  };
+
   return (
     // <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
     <TitleLayout
@@ -114,7 +151,7 @@ export default function Dashboard() {
                 </TableHeader>
                 <TableBody>
                   {assistantsByTeam &&
-                    assistantsByTeam.map((assistant) => (
+                    assistantsByTeam.map((assistant, index) => (
                       <TableRow key={assistant.id}>
                         <TableCell className="font-medium">
                           <Link
@@ -140,8 +177,29 @@ export default function Dashboard() {
                           </Link>
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          {assistant.status.charAt(0).toUpperCase() +
-                            assistant.status.slice(1).toLowerCase()}
+                          {assistant?.status && loadingIndexUpdate !== index ? (
+                            <Select
+                              defaultValue={assistant.status}
+                              value={assistant.status}
+                              onValueChange={(value: AssitantStatus) => {
+                                handleChangeStatus(value, index);
+                              }}
+                            >
+                              <SelectTrigger id="model">
+                                <SelectValue placeholder="Select a state" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {Object.values(AssitantStatus).map((status) => (
+                                  <SelectItem key={status} value={status}>
+                                    {visibilityImages[status]}
+                                    {status}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          ) : (
+                            <InputCharging />
+                          )}
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>

@@ -42,15 +42,16 @@ export default function Component() {
     );
   }, [teamSelected, assistantSelected]);
 
-  const handleCopy = (setCopied: (copie: boolean)=>void, copied: string) => {
-    navigator.clipboard.writeText(copied)
-    .then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // Ocultar mensaje después de 2 segundos
-    })
-    .catch((err) => {
-      console.error("Error al copiar al portapapeles:", err);
-    });
+  const handleCopy = (setCopied: (copie: boolean) => void, copied: string) => {
+    navigator.clipboard
+      .writeText(copied)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000); // Ocultar mensaje después de 2 segundos
+      })
+      .catch((err) => {
+        console.error("Error al copiar al portapapeles:", err);
+      });
   };
 
   return (
@@ -66,8 +67,16 @@ export default function Component() {
                 <InputCharging />
               )}
 
-              <Button size="sm" onClick={()=>handleCopy(setUrlCopied, url)}  variant="outline">
-              {!urlCopied ? <Copy className="h-4 w-4" /> : <Check className="h-4 w-4" />}
+              <Button
+                size="sm"
+                onClick={() => handleCopy(setUrlCopied, url)}
+                variant="outline"
+              >
+                {!urlCopied ? (
+                  <Copy className="h-4 w-4" />
+                ) : (
+                  <Check className="h-4 w-4" />
+                )}
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -98,8 +107,16 @@ export default function Component() {
                 <TextAreaCharging />
               )}
 
-              <Button size="sm" onClick={()=>handleCopy(setScriptCopied, script)} variant="outline">
-              {!scriptCopied ? <Copy className="h-4 w-4" /> : <Check className="h-4 w-4" />}
+              <Button
+                size="sm"
+                onClick={() => handleCopy(setScriptCopied, script)}
+                variant="outline"
+              >
+                {!scriptCopied ? (
+                  <Copy className="h-4 w-4" />
+                ) : (
+                  <Check className="h-4 w-4" />
+                )}
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">

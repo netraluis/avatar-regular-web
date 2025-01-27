@@ -87,10 +87,37 @@ const appReducer = (state: AppState, action: Action): AppState => {
         assistantsByTeam: action.payload.assistants,
       };
     case "SET_ASSISTANT":
-      return {
-        ...state,
-        assistantSelected: action.payload,
-      };
+      if (action.payload && action.payload.localAssistant) {
+        return {
+          ...state,
+          assistantSelected: action.payload,
+          assistantsByTeam: state.assistantsByTeam.map((assistant) =>
+            action.payload &&
+            action.payload.localAssistant &&
+            assistant.id === action.payload.localAssistant.id
+              ? {
+                  ...assistant,
+                  id: action.payload.localAssistant.id,
+                  name: action.payload.localAssistant.name,
+                  teamId: action.payload.localAssistant.teamId,
+                  status: action.payload.localAssistant.status,
+                  openAIId: action.payload.localAssistant.openAIId,
+                  openAIVectorStoreFileId:
+                    action.payload.localAssistant.openAIVectorStoreFileId,
+                  notionAccessToken:
+                    action.payload.localAssistant.notionAccessToken,
+                  avatarId: action.payload.localAssistant.avatarId,
+                  createdAt: action.payload.localAssistant.createdAt,
+                  updatedAt: action.payload.localAssistant.updatedAt,
+                  url: action.payload.localAssistant.url,
+                  emoji: action.payload.localAssistant.emoji,
+                  isActive: action.payload.localAssistant.isActive,
+                }
+              : assistant,
+          ),
+        };
+      }
+
     case "SET_TEAM_CREATION":
       return { ...state };
     case "SET_TEAM_DELETE":

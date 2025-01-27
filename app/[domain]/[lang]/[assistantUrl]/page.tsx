@@ -8,12 +8,14 @@ import { ChatList } from "@/components/chat-list";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import { useClientLanguage } from "@/components/context/clientLanguageContext";
+import { useRouter } from "next/navigation";
 
 export default function AssistantUrl() {
   const { t } = useClientLanguage();
   const textAreaForm = t("app.COMPONENTS.TEXT_AREA_FORM");
   const chatList = t("app.COMPONENTS.CHAT_LIST");
   const page = t("app.DOMAIN.LANG.ASSISTANT_URL.PAGE");
+  const router = useRouter();
 
   const { assistantUrl } = useParams();
   const [message, setMessage] = React.useState("");
@@ -25,6 +27,7 @@ export default function AssistantUrl() {
     if (data?.assistants) {
       const card = data.assistants.find((card) => card.url === assistantUrl)
         ?.assistantCard[0];
+      if (!card) router.push("/404");
       setCard(card);
     }
   }, [data]);
@@ -72,6 +75,8 @@ export default function AssistantUrl() {
   const onClickButton = (e: any) => {
     handleSendMessage();
   };
+
+  if (!card) return <></>;
 
   return (
     <div

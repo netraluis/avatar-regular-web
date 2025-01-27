@@ -1,4 +1,4 @@
-import { LanguageType, Prisma } from "@prisma/client";
+import { AssitantStatus, LanguageType, Prisma } from "@prisma/client";
 import prisma from "../prisma";
 
 export async function getTeamDataByDomainOrCustomDomainMetadata(
@@ -159,6 +159,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
       assistants: {
         where: {
           isActive: true,
+          status: AssitantStatus.PUBLIC,
         },
         select: {
           id: true,

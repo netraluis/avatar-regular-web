@@ -219,7 +219,7 @@ model Assistant {
   id                        String   @id @default(uuid())
   name                      String   // Nombre del asistente virtual (IA)
   teamId                    String
-  status                    AssitantStatus @default(PUBLIC)
+  status                    AssitantStatus @default(PRIVATE)
   openAIId                  String
   openAIVectorStoreFileId   String
   notionAccessToken         String?
