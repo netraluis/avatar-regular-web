@@ -117,6 +117,10 @@ const appReducer = (state: AppState, action: Action): AppState => {
           ),
         };
       }
+      return {
+        ...state,
+        assistantSelected: action.payload,
+      };
 
     case "SET_TEAM_CREATION":
       return { ...state };
