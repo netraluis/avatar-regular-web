@@ -4,7 +4,8 @@ import {
   DashboardLanguageProvider,
   Language,
 } from "@/components/context/dashboardLanguageContext";
-import DashboardHeader from "@/components/layouts/dashboard-layout";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/sidebar/app-sidebar";
 
 export default function Layout({
   children,
@@ -19,7 +20,13 @@ export default function Layout({
 
   return (
     <DashboardLanguageProvider userLanguage={language}>
-      <DashboardHeader>{children}</DashboardHeader>
+      <SidebarProvider>
+        <AppSidebar />
+        <main className="h-screen w-full relative">
+          <SidebarTrigger className="absolute" />
+          {children}
+        </main>
+      </SidebarProvider>
     </DashboardLanguageProvider>
   );
 }

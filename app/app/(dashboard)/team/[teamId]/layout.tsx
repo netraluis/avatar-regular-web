@@ -42,7 +42,6 @@ export default function Layout({
         !teamSelected.paddleSubscriptionId ||
         teamSelected.paddleSubscriptionId?.startsWith("sub_")
       ) {
-        console.log("entro");
         // Actualizas tu estado global / context / setState
         // Rediriges a la UI de "suscripción activa"
         clearInterval(interval);

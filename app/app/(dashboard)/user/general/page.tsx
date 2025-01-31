@@ -94,7 +94,7 @@ export default function General() {
   };
 
   return (
-    <div>
+    <div className="space-y-8">
       <CustomCard
         title={general.teamSettings.title}
         description={general.teamSettings.description}

@@ -26,7 +26,8 @@
       "teams": "Equips",
       "create": "Crear",
       "myAccount": "El meu compte",
-      "logout": "Tancar sessió"
+      "logout": "Tancar sessió",
+      "assistants": "assistents"
     },
     "USER": {
       "LAYOUT": {
@@ -289,15 +290,21 @@
               "activity": "Activitat",
               "sources": "Fonts",
               "connect": "Connecta",
-              "settings": "Configuració"
+              "settings": "Configuració",
+              "chatLogs": "Registres de conversa",
+              "archives": "Fitxers",
+              "notion": "Notion",
+              "googleDrive": "Google Drive",
+              "oneDrive": "OneDrive",
+              "teams": "Teams",
+              "share": "Comparteix",
+              "general": "General",
+              "interface": "Interficie"
             },
             "ACTIVITY": {
               "LAYOUT": {
                 "title": "Activitat",
-                "description": "Gestiona l’activitat del teu assistent i accedeix a registres de converses i analítiques detallades.",
-                "menu": {
-                  "chatLogs": "Registres de conversa"
-                }
+                "description": "Gestiona l’activitat del teu assistent i accedeix a registres de converses i analítiques detallades."
               },
               "PAGE": {
                 "filterByData": "Filtrar per data de creació",
@@ -309,10 +316,7 @@
             "CONNECT": {
               "LAYOUT": {
                 "title": "Connecta",
-                "description": "Gestiona com compartir i integrar el teu assistent amb altres eines i plataformes.",
-                "menu": {
-                  "share": "Comparteix"
-                }
+                "description": "Gestiona com compartir i integrar el teu assistent amb altres eines i plataformes."
               },
               "SHARE": {
                 "PAGE": {
@@ -419,11 +423,7 @@
                 "cardTitle": "Configuració",
                 "cardDescription": "Gestiona la configuració del teu assistent i ajusta les preferències",
                 "actionButtonText": "Desa els canvis",
-                "actionErrorText": "Hi hagut un error al update",
-                "menu": {
-                  "general": "General",
-                  "interface": "Interficie"
-                }
+                "actionErrorText": "Hi hagut un error al update"
               },
               "GENERAL": {
                 "title": "Configuració de l’assistent",

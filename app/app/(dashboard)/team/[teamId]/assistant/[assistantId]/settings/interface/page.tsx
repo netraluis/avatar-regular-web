@@ -131,7 +131,7 @@ export default function Interface() {
   };
 
   return (
-    <div className="space-y-8 ">
+    <div className="space-y-8">
       <CustomCard
         title={assistantInterface.title}
         description={assistantInterface.desription}

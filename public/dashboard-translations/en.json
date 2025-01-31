@@ -26,7 +26,8 @@
       "teams": "Teams",
       "create": "Create",
       "myAccount": "My Account",
-      "logout": "Logout"
+      "logout": "Logout",
+      "assistants": "assistants"
     },
     "USER": {
       "LAYOUT": {
@@ -289,15 +290,21 @@
               "activity": "Activity",
               "sources": "Sources",
               "connect": "Connect",
-              "settings": "Settings"
+              "settings": "Settings",
+              "chatLogs": "Chat logs",
+              "archives": "Files",
+              "notion": "Notion",
+              "googleDrive": "Google Drive",
+              "oneDrive": "OneDrive",
+              "teams": "Teams",
+              "share": "Share",
+              "general": "General",
+              "interface": "Interface"
             },
             "ACTIVITY": {
               "LAYOUT": {
                 "title": "Activity",
-                "description": "Manage your assistant's activity and access conversation logs and detailed analytics.",
-                "menu": {
-                  "chatLogs": "Chat logs"
-                }
+                "description": "Manage your assistant's activity and access conversation logs and detailed analytics."
               },
               "PAGE": {
                 "filterByData": "Filter by creation date",
@@ -309,10 +316,7 @@
             "CONNECT": {
               "LAYOUT": {
                 "title": "Connect",
-                "description": "Manage how to share and integrate your assistant with other tools and platforms.",
-                "menu": {
-                  "share": "Share"
-                }
+                "description": "Manage how to share and integrate your assistant with other tools and platforms."
               },
               "SHARE": {
                 "PAGE": {
@@ -419,11 +423,7 @@
                 "cardTitle": "Settings",
                 "cardDescription": "Manage your assistant's settings and adjust preferences",
                 "actionButtonText": "Save changes",
-                "actionErrorText": "There was an error during the update",
-                "menu": {
-                  "general": "General",
-                  "interface": "Interface"
-                }
+                "actionErrorText": "There was an error during the update"
               },
               "GENERAL": {
                 "title": "Assistant Settings",
@@ -465,14 +465,7 @@
             "SOURCES": {
               "LAYOUT": {
                 "title": "Sources",
-                "description": "Manage the information sources that the assistant uses to respond to user queries. Uploaded sources help the assistant find the appropriate content based on requests.",
-                "menu": {
-                  "archives": "Files",
-                  "notion": "Notion",
-                  "googleDrive": "Google Drive",
-                  "oneDrive": "OneDrive",
-                  "teams": "Teams"
-                }
+                "description": "Manage the information sources that the assistant uses to respond to user queries. Uploaded sources help the assistant find the appropriate content based on requests."
               },
               "ARCHIVES": {
                 "PAGE": {

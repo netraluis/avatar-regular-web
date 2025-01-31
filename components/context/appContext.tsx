@@ -8,11 +8,18 @@ import { GetTeamByTeamId } from "@/lib/data/team";
 import OpenAI from "openai";
 import { GetAssistantType } from "@/lib/data/assistant";
 
-type AppState = {
-  teams: {
-    teams: Team[];
-    meta: { total: number; page: number; pageSize: number; totalPages: number };
+export interface Teams {
+  teams: Team[];
+  meta: {
+    total: number;
+    page: number;
+    pageSize: number;
+    totalPages: number;
   };
+}
+
+type AppState = {
+  teams: Teams;
   teamSelected: GetTeamByTeamId | null;
   assistantsByTeam: Assistant[];
   assistantSelected: {
@@ -27,15 +34,7 @@ type AppState = {
 type Action =
   | {
       type: "SET_TEAMS";
-      payload: {
-        teams: Team[];
-        meta: {
-          total: number;
-          page: number;
-          pageSize: number;
-          totalPages: number;
-        };
-      };
+      payload: Teams;
     }
   | { type: "SET_TEAM_SELECTED"; payload: GetTeamByTeamId | null }
   | {

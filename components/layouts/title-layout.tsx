@@ -104,8 +104,8 @@ export const TitleLayout = ({
         </div>
       </div>
       <Separator />
-      <div className="grow flex flex-col overflow-auto items-start mt-3 w-full px-4 items-center">
-        <div className="flex sh-full justify-start overflow-auto gap-8 w-full overflow-hidden h-full max-w-screen-xl">
+      <div className="grow flex flex-col h-full overflow-hidden mt-3 w-full px-4 items-center">
+        <div className="flex sh-full justify-center gap-8 w-full overflow-hidden h-full max-w-screen-xl">
           {children}
         </div>
       </div>
