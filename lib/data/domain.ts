@@ -60,6 +60,7 @@ export type GetTeamDataByDomainOrCustomDomainPage = Prisma.TeamGetPayload<{
     };
     menuFooter: true;
     customDomain: true;
+    paddleSubscriptionId: true;
     assistants: {
       where: {
         isActive: true;
@@ -156,6 +157,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
         },
       },
       customDomain: true,
+      paddleSubscriptionId: true,
       assistants: {
         where: {
           isActive: true,

@@ -25,7 +25,10 @@ export default function AssistantUrl() {
 
   React.useEffect(() => {
     if (data?.assistants) {
-      const card = data.assistants.find((card) => card.url === assistantUrl)
+      const card = data.assistants.find((card) => {
+        console.log(card.url, assistantUrl);
+        return card.url === assistantUrl
+      })
         ?.assistantCard[0];
       if (!card) router.push("/404");
       setCard(card);

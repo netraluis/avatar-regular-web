@@ -5,7 +5,7 @@ import {
   Paddle,
   ProrationBillingMode,
 } from "@paddle/paddle-node-sdk";
-import { changeTokenLedgerMovementSubscription } from "@/lib/data/tokenLedger";
+// import { changeTokenLedgerMovementSubscription } from "@/lib/data/tokenLedger";
 
 export async function GET(
   request: NextRequest,
@@ -88,30 +88,6 @@ export async function PATCH(
     });
   }
 
-  if (prorationBillingMode === "prorated_immediately") {
-    if (
-      !process.env.TOKEN_ADDS_HOBBY ||
-      !process.env.TOKEN_ADDS_STANDARD ||
-      !process.env.TOKEN_ADDS_UNLIMITED
-    ) {
-      throw "Environment variables not defined";
-    }
-    if (body.priceId === process.env.TOKEN_ADDS_STANDARD) {
-      await changeTokenLedgerMovementSubscription({
-        teamId: body.teamId,
-        tokenAdds: parseInt(process.env.TOKEN_ADDS_STANDARD),
-        paddleSubscriptionId: params.subscriptionId,
-      });
-    }
-
-    if (body.priceId === process.env.TOKEN_ADDS_UNLIMITED) {
-      await changeTokenLedgerMovementSubscription({
-        teamId: body.teamId,
-        tokenAdds: parseInt(process.env.TOKEN_ADDS_UNLIMITED),
-        paddleSubscriptionId: params.subscriptionId,
-      });
-    }
-  }
 
   try {
     const subs = await paddle.subscriptions.update(params.subscriptionId, {

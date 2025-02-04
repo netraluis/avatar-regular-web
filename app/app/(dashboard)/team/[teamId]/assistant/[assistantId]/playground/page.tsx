@@ -121,6 +121,7 @@ export default function Playground() {
     assistantId: assistantId as string,
     userId: state.user?.user?.id,
     teamId: teamId as string,
+    paddleSubscriptionId: state.teamSelected?.paddleSubscriptionId || undefined,
   });
 
   const {

@@ -34,10 +34,27 @@ export default function ChatInterface({
   const [message, setMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // TODO aqui
+  // const getTeam = async () => {
+  //   const response = await fetch(`/api/protected/team/${teamId}`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json", 
+  //       // Aquí enviamos el userId en los headers
+  //     },
+  //   });
+
+  //   if (!response.ok) {
+  //     throw new Error(`Error: ${response.statusText}`);
+  //   }
+  //   const responseData = await response.json();
+  // }
+
   const useAssistantResponse: UseAssistantResponse = useAssistant({
     assistantId: assistantId,
     userId: undefined,
     teamId: teamId,
+    paddleSubscriptionId: undefined
   });
 
   const {
@@ -99,11 +116,10 @@ export default function ChatInterface({
                 className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[80%] p-2 rounded-lg ${
-                    message.role === "user"
+                  className={`max-w-[80%] p-2 rounded-lg ${message.role === "user"
                       ? "bg-blue-500 text-white"
                       : "bg-gray-200 text-black"
-                  }`}
+                    }`}
                 >
                   <MarkdownDisplay markdownText={message.message} />
                 </div>

@@ -12,6 +12,7 @@ import {
   Settings2,
   Inbox,
   Archive,
+  Gem,
 } from "lucide-react";
 
 interface TeamSettingsText {
@@ -65,7 +66,7 @@ export const teamsSettingsNav = (teamSettingsText: TeamSettingsText) => [
   //   id: "members",
   //   alpha: true,
   // },
-  // { name: "Plans", href: "plans", icon: Gem, id: "plans", alpha: true },
+  { name: "Plans", href: "plans", icon: Gem, id: "plans", alpha: true },
   // { name: "Billings", href: "billings", icon: CreditCard, id: "billings" },
 ];
 

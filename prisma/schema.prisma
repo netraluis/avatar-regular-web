@@ -118,7 +118,7 @@ model Team {
   welcomeType     WelcomeType
   isActive        Boolean   @default(true) 
   paddleSubscriptionId String?
-  tokenLedgerId   TokenLedger[]
+  subscription Subscription[]
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
@@ -285,15 +285,34 @@ model File {
   @@unique([openAIFileId])
 }
 
-model TokenLedger {
+model Subscription {
   id                   String     @id @default(uuid())
-  teamId               String
-  runId                String?
-  paddleSubscriptionId String?
-  tokenCost            Int
-  totalToken           Int
+  teamId               String     @unique
+  status               String
+  priceId            String
+  scheduleChange       DateTime? 
+  endBillingData       DateTime
+  startBillingData     DateTime
+  cycles           SubscriptionCycle[]
+
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
 
   team                 Team   @relation(fields: [teamId], references: [id], onDelete: Cascade) 
+}
+
+model SubscriptionCycle {
+  id                   String     @id @default(uuid())
+  subscriptionId       String
+  status               String
+  priceId              String
+  startOfCycle         DateTime
+  endOfCycle           DateTime
+  maxCredits           Int
+  extraCredits         Int
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
+
+  subscription         Subscription   @relation(fields: [subscriptionId], references: [id], onDelete: Cascade) 
 }
