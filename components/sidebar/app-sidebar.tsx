@@ -11,10 +11,10 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { useAppContext } from "../context/appContext";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import {
   useFetchTeamsByUserId,
   useFetchTeamsByUserIdAndTeamId,
@@ -25,12 +25,17 @@ import {
 } from "../context/useAppContext/assistant";
 import { useEffect } from "react";
 import { NavResources } from "./nav-resources";
+import { UserHeader } from "./user-header";
+import { NavUserBody } from "./nav-user-body";
+import { NavUserLogout } from "./nav-user-logout";
 
-// const pathname = usePathname();
-// const comparatePathName = pathname.split("/").slice(1)[5];
-// const absolutePath = pathname.split("/").slice(1, 6).join("/");
+
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
+  const absolutePath = pathname.split("/").slice(1, 3).join("/");
+
+
   const {
     state: { teamSelected, user },
   } = useAppContext();
@@ -110,21 +115,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       fetchAssistantsByTeamId(teamId as string, user.user.id);
     }
   }, []);
+  const { setOpen } = useSidebar();
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar collapsible="icon" {...props} onClick={() => setOpen(true)}>
       <SidebarHeader>
-        <TeamSwitcher />
+        {absolutePath !== 'user/general' ? <TeamSwitcher /> : <UserHeader/>}
       </SidebarHeader>
       <SidebarContent>
         <NavResources />
         {teamId === teamSelected?.id && <NavTeam />}
         {teamId === teamSelected?.id && <NavAssistants />}
+        {absolutePath === 'user/general' && <NavUserBody/>}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser />
+        {absolutePath !== 'user/general' ? <NavUser /> : <NavUserLogout/>}
       </SidebarFooter>
-      <SidebarRail />
+      {/* <SidebarRail /> */}
     </Sidebar>
   );
 }

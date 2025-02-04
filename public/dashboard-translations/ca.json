@@ -27,7 +27,10 @@
       "create": "Crear",
       "myAccount": "El meu compte",
       "logout": "Tancar sessió",
-      "assistants": "assistents"
+      "assistants": "assistents",
+      "account": "Compte",
+      "logOut": "Tancar sessio",
+      "return": "Tornar"
     },
     "USER": {
       "LAYOUT": {

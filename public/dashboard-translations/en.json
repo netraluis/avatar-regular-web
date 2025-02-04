@@ -27,7 +27,10 @@
       "create": "Create",
       "myAccount": "My Account",
       "logout": "Logout",
-      "assistants": "assistants"
+      "assistants": "assistants",
+      "account": "Account",
+      "logOut": "Log out", 
+      "return": "Return"
     },
     "USER": {
       "LAYOUT": {
