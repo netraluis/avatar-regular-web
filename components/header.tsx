@@ -74,6 +74,8 @@ export default function Header({ domain }: { domain: Domain }) {
   //   // };
   // }, [router]);
 
+  return <></>
+
   const returnToInicial = () => {
     setActualsThreadId([""]);
     setState({ position: 1 });
