@@ -27,9 +27,8 @@ export default function AssistantUrl() {
     if (data?.assistants) {
       const card = data.assistants.find((card) => {
         console.log(card.url, assistantUrl);
-        return card.url === assistantUrl
-      })
-        ?.assistantCard[0];
+        return card.url === assistantUrl;
+      })?.assistantCard[0];
       if (!card) router.push("/404");
       setCard(card);
     }

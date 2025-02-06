@@ -1,13 +1,9 @@
 "use client";
 
 import * as React from "react";
-import {
-  ChevronLeft,
-} from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
-import {
-  DropdownMenu,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -26,19 +22,21 @@ export function UserHeader() {
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <ChevronLeft className="ml-auto" />
-              <div className="grid flex-1 text-left text-sm leading-tight" onClick={()=>{
+          <SidebarMenuButton
+            size="lg"
+            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          >
+            <ChevronLeft className="ml-auto" />
+            <div
+              className="grid flex-1 text-left text-sm leading-tight"
+              onClick={() => {
                 router.push(`/team`);
-              }}>
-                {/* <span className="truncate text-xs">{activeTeam.plan}</span> */}
-                {dashboard.return}
-              </div>
-              
-            </SidebarMenuButton>
+              }}
+            >
+              {/* <span className="truncate text-xs">{activeTeam.plan}</span> */}
+              {dashboard.return}
+            </div>
+          </SidebarMenuButton>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>

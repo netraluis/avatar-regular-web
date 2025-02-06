@@ -55,7 +55,7 @@ export default function Component() {
 
     try {
       const response = await fetch(
-        `/api/protected/paddle/subscriptions/${teamSelected?.paddleSubscriptionId}`,
+        `/api/protected/team/${teamSelected?.id}/subscription/${teamSelected?.paddleSubscriptionId}`,
         {
           method: "GET",
         },
@@ -272,7 +272,7 @@ export default function Component() {
   const changeSubscription = async (priceId: string) => {
     if (!teamSelected?.id) return;
     const response = await fetch(
-      `/api/protected/paddle/subscriptions/${teamSelected?.paddleSubscriptionId}`,
+      `/api/protected/team/${teamSelected?.id}/subscription/${teamSelected?.paddleSubscriptionId}`,
       {
         method: "PATCH",
         headers: {

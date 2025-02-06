@@ -12,13 +12,11 @@ export const AssistantProvider = ({
   assistantId,
   userId,
   teamId,
-  paddleSubscriptionId
 }: {
   children: ReactNode;
   assistantId?: string;
   teamId: string;
   userId?: string;
-  paddleSubscriptionId?: string;
 }) => {
   if (!assistantId) return {};
 
@@ -26,7 +24,6 @@ export const AssistantProvider = ({
     assistantId,
     userId,
     teamId,
-    paddleSubscriptionId
   });
 
   return (

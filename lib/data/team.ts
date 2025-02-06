@@ -559,3 +559,21 @@ export const updateTeamByField = async ({
     };
   }
 };
+
+export const getTeamForSubscription = async ({
+  teamId,
+}: {
+  teamId: string;
+}) => {
+  const team = await prisma.team.findFirst({
+    where: {
+      id: teamId,
+    },
+    select: {
+      id: true,
+      paddleSubscriptionId: true,
+    },
+  });
+
+  return team;
+};

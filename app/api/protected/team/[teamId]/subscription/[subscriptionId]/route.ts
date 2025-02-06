@@ -5,6 +5,7 @@ import {
   Paddle,
   ProrationBillingMode,
 } from "@paddle/paddle-node-sdk";
+import { getProrationBillingMode } from "@/lib/helper/subscription";
 // import { changeTokenLedgerMovementSubscription } from "@/lib/data/tokenLedger";
 
 export async function GET(
@@ -38,7 +39,7 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { subscriptionId: string } },
+  { params }: { params: { subscriptionId: string; teamId: string } },
 ) {
   if (!process.env.PADDLE_API_KEY) {
     return new NextResponse("Paddle API Key is required", {
@@ -54,40 +55,11 @@ export async function PATCH(
   });
 
   const oldSub = await paddle.subscriptions.get(params.subscriptionId);
-  let prorationBillingMode: ProrationBillingMode | null = null;
-  if (oldSub.items[0].price.id === process.env.HOBBY_PRICE_ID) {
-    if (
-      body.priceId === process.env.STANDARD_PRICE_ID ||
-      body.priceId === process.env.UNLIMITED_PRICE_ID
-    ) {
-      prorationBillingMode = "prorated_immediately";
-    }
-  }
-
-  if (oldSub.items[0].price.id === process.env.STANDARD_PRICE_ID) {
-    if (body.priceId === process.env.HOBBY_PRICE_ID) {
-      prorationBillingMode = "full_next_billing_period";
-    }
-    if (body.priceId === process.env.UNLIMITED_PRICE_ID) {
-      prorationBillingMode = "prorated_immediately";
-    }
-  }
-
-  if (oldSub.items[0].price.id === process.env.UNLIMITED_PRICE_ID) {
-    if (body.priceId === process.env.HOBBY_PRICE_ID) {
-      prorationBillingMode = "full_next_billing_period";
-    }
-    if (body.priceId === process.env.STANDARD_PRICE_ID) {
-      prorationBillingMode = "full_next_billing_period";
-    }
-  }
-
-  if (prorationBillingMode === null) {
-    return new NextResponse("Invalid subscription change", {
-      status: 400,
+  const prorationBillingMode: ProrationBillingMode | null =
+    getProrationBillingMode({
+      oldSubPriceId: oldSub.items[0].price.id,
+      newSubPriceId: body.priceId,
     });
-  }
-
 
   try {
     const subs = await paddle.subscriptions.update(params.subscriptionId, {
@@ -97,7 +69,11 @@ export async function PATCH(
           quantity: 1,
         },
       ],
-      prorationBillingMode,
+      prorationBillingMode: prorationBillingMode || undefined,
+      // customData: {
+      //   prorationBillingMode,
+      //   teamId: params.teamId
+      // }
     });
 
     return new NextResponse(JSON.stringify(subs), {

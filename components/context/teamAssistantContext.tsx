@@ -50,7 +50,6 @@ export const TeamAssistantProvider = ({
     assistantId: assistantId,
     userId: undefined,
     teamId: initialData?.id as string,
-    paddleSubscriptionId: initialData?.paddleSubscriptionId || undefined,
   });
 
   const value: TeamAssistantContextProps = {

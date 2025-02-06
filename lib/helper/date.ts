@@ -67,7 +67,9 @@ function addMonthPreservingDay(date: Date) {
     updatedAt: Date;
 }
  */
-export function getMonthlyCycles(subscription: Subscription): Prisma.SubscriptionCycleCreateManyInput[] {
+export function getMonthlyCycles(
+  subscription: Subscription,
+): Prisma.SubscriptionCycleCreateManyInput[] {
   // Aseguramos copias de las fechas para evitar mutar los objetos originales
   let currentStart = new Date(subscription.startBillingData);
   const lastDate = new Date(subscription.endBillingData);
@@ -98,7 +100,7 @@ export function getMonthlyCycles(subscription: Subscription): Prisma.Subscriptio
       case process.env.UNLIMITED_PRICE_ID:
         maxCredits = Number(process.env.TOKEN_MAX_UNLIMITED) || 0;
         break;
-      default: 
+      default:
         break;
     }
 

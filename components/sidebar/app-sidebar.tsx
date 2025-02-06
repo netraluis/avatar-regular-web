@@ -29,12 +29,9 @@ import { UserHeader } from "./user-header";
 import { NavUserBody } from "./nav-user-body";
 import { NavUserLogout } from "./nav-user-logout";
 
-
-
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const absolutePath = pathname.split("/").slice(1, 3).join("/");
-
 
   const {
     state: { teamSelected, user },
@@ -120,16 +117,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props} onClick={() => setOpen(true)}>
       <SidebarHeader>
-        {absolutePath !== 'user/general' ? <TeamSwitcher /> : <UserHeader/>}
+        {absolutePath !== "user/general" ? <TeamSwitcher /> : <UserHeader />}
       </SidebarHeader>
       <SidebarContent>
         <NavResources />
         {teamId === teamSelected?.id && <NavTeam />}
         {teamId === teamSelected?.id && <NavAssistants />}
-        {absolutePath === 'user/general' && <NavUserBody/>}
+        {absolutePath === "user/general" && <NavUserBody />}
       </SidebarContent>
       <SidebarFooter>
-        {absolutePath !== 'user/general' ? <NavUser /> : <NavUserLogout/>}
+        {absolutePath !== "user/general" ? <NavUser /> : <NavUserLogout />}
       </SidebarFooter>
       {/* <SidebarRail /> */}
     </Sidebar>

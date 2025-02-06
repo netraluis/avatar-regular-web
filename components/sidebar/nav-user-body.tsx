@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  ChevronRight,
-  Settings2,
-} from "lucide-react";
+import { ChevronRight, Settings2 } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -15,11 +12,6 @@ import {
 
 import { useRouter, useParams } from "next/navigation";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
-
-
-
-
-
 
 export function NavUserBody() {
   const { t } = useDashboardLanguage();
@@ -46,7 +38,10 @@ export function NavUserBody() {
       </SidebarGroupLabel>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton tooltip={'hola'} onClick={()=>router.push(`/user/general`)}>
+          <SidebarMenuButton
+            tooltip={"hola"}
+            onClick={() => router.push(`/user/general`)}
+          >
             <Settings2 className="h-4 w-4" />
             <span>{dashboard.settings}</span>
             <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />

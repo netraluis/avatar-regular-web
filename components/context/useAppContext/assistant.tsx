@@ -326,12 +326,10 @@ export const useAssistant = ({
   assistantId,
   userId,
   teamId,
-  paddleSubscriptionId
 }: {
   teamId: string;
   assistantId: string | undefined;
   userId: string | undefined;
-  paddleSubscriptionId: string | undefined;
 }): UseAssistantResponse => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
@@ -350,7 +348,7 @@ export const useAssistant = ({
       loading: false,
       error: false,
       data: [],
-      submitMessage: () => { },
+      submitMessage: () => {},
       messages: [],
       status: "",
       setInternalThreadId,
@@ -467,22 +465,19 @@ export const useAssistant = ({
         );
         await handleMessages(response);
 
-        fetch(
-          `/api/protected/paddle/subscriptions/${paddleSubscriptionId}/top-up`,
-          {
-            method: "POST",
-            headers,
-            body: JSON.stringify({
-              "effective_from": "immediately",
-              "items": [
-                {
-                  "price_id": "hola1",
-                  "quantity": 1
-                }
-              ]
-            }),
-          },
-        );
+        fetch(`/api/protected/team/${teamId}/subscription/top-up`, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            effective_from: "immediately",
+            items: [
+              {
+                price_id: "hola1",
+                quantity: 1,
+              },
+            ],
+          }),
+        });
       } else {
         await fetch(
           `/api/protected/team/${teamId}/assistant/${assistantId}/thread/${internatlThreadId}/message`,
@@ -501,22 +496,19 @@ export const useAssistant = ({
           },
         );
         await handleMessages(response);
-        fetch(
-          `/api/protected/paddle/subscriptions/${paddleSubscriptionId}/top-up`,
-          {
-            method: "POST",
-            headers,
-            body: JSON.stringify({
-              "effective_from": "immediately",
-              "items": [
-                {
-                  "price_id": "hola2",
-                  "quantity": 1
-                }
-              ]
-            }),
-          },
-        );
+        fetch(`/api/protected/team/${teamId}/subscription/top-up`, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            effective_from: "immediately",
+            items: [
+              {
+                price_id: "hola2",
+                quantity: 1,
+              },
+            ],
+          }),
+        });
       }
     } catch (error: any) {
       console.error("Error sending message:", error);
