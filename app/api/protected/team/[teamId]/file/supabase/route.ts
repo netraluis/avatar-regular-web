@@ -41,17 +41,21 @@ async function compressImage(
       dimensions = { width: 16, height: 16, fit: "contain" };
       break;
     case FileUserImageType.AVATAR:
-      dimensions = { width: 16, height: 16, fit: "contain" };
+      dimensions = { width: 30, height: 30, fit: "contain" };
       break;
     default:
       dimensions = { height: 400, fit: "contain" };
   }
   try {
-    return sharp(fileBuffer)
-      .resize(dimensions) // Redimensiona si es grande
-      .toFormat("png") // Convierte a PNG
-      .png({ compressionLevel: 6 }) // Comprime PNG
-      .toBuffer();
+    return (
+      sharp(fileBuffer)
+        // .toFormat("webp", { quality: 90 })
+        .resize(dimensions) // Redimensiona si es grande
+        // .sharpen()
+        .toFormat("webp") // Convierte a webh
+        // .webp({ compressionLevel: 2 }) // Comprime PNG
+        .toBuffer()
+    );
   } catch (error) {
     console.error("Error compressing image:", error);
     throw new Error("Image compression failed");
@@ -73,7 +77,7 @@ export async function POST(req: NextRequest) {
     const fileUserImageType = formData.get(
       "fileUserImageType",
     ) as FileUserImageType;
-    const oldNameDoc = formData.get("oldNameDoc");
+    const oldNameDoc = formData.get("oldUrl");
 
     if (!teamId || !fileUserImageType) {
       return handleError(400, "Missing required fields", "MISSING_FIELDS");
@@ -123,6 +127,7 @@ export async function POST(req: NextRequest) {
     }
 
     const urlDelete = `${teamId}/${fileUserImageType}/${oldNameDoc}`;
+    console.log("urlDelete", urlDelete);
 
     if (oldNameDoc) {
       const { error: deleteError } = await supabase.storage
@@ -141,10 +146,10 @@ export async function POST(req: NextRequest) {
     // const urlUpload = `${teamId}/${fileUserImageType}/${name}`;
 
     const originalName = file.name.replace(/\.[^/.]+$/, ""); // Quita la extensión original
-    const urlUpload = `${teamId}/${fileUserImageType}/${originalName}.png`;
+    const urlUpload = `${teamId}/${fileUserImageType}/${originalName}.webp`;
     // const mimeType =
     //   file.type === "image/svg+xml" ? "image/svg+xml" : file.type;
-    const mimeType = "image/png";
+    const mimeType = "image/webp";
 
     const { data, error } = await supabase.storage
       .from("user-images")
@@ -188,13 +193,15 @@ export async function DELETE(req: NextRequest) {
     const fileUserImageType = formData.get(
       "fileUserImageType",
     ) as FileUserImageType;
-    const oldNameDoc = formData.get("oldNameDoc");
+    const oldNameDoc = formData.get("oldUrl");
 
     if (!teamId || !fileUserImageType) {
       return handleError(400, "Missing required fields", "MISSING_FIELDS");
     }
 
     const urlDelete = `${teamId}/${fileUserImageType}/${oldNameDoc}`;
+
+    console.log("DELETE", urlDelete);
 
     if (oldNameDoc) {
       const { error: deleteError } = await supabase.storage

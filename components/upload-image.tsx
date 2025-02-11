@@ -11,6 +11,7 @@ import React, {
   useState,
   forwardRef,
   useRef,
+  useCallback,
 } from "react";
 import { Trash2 } from "lucide-react";
 
@@ -55,32 +56,41 @@ export const UploadImage = forwardRef(
       fileInputLogoRef.current?.click();
     };
 
-    const handleImageChange = async (
-      e: React.ChangeEvent<HTMLInputElement>,
-    ) => {
+    const handleImageChange = useCallback(
+      async (e: React.ChangeEvent<HTMLInputElement>) => {
+        setLogoLoading(true);
+        setImageHasChanged(true);
+
+        if (e.target.files && e.target.files.length > 0) {
+          const file = e.target.files[0];
+          setFile(e.target.files as unknown as FileList);
+
+          // Generar URL para la previsualización
+          const previewUrl = URL.createObjectURL(file);
+          setPreviewImage(previewUrl);
+          onPreviewChange(previewUrl);
+        }
+
+        setLogoLoading(false);
+      },
+      [onPreviewChange], // Dependencias necesarias para que se memorice correctamente
+    );
+
+    const handleImageDelete = useCallback(async () => {
+      if (logoLoading) return; // Evita múltiples ejecuciones
+
       setLogoLoading(true);
       setImageHasChanged(true);
-      if (e.target.files && e.target.files.length > 0) {
-        const file = e.target.files[0];
-        setFile(e.target.files as unknown as FileList);
-        // Generar URL para la previsualización
-        const previewUrl = URL.createObjectURL(file);
-        setPreviewImage(previewUrl);
-        onPreviewChange(previewUrl);
-      }
 
-      setLogoLoading(false);
-    };
-
-    const handleImageDelete = async () => {
-      setLogoLoading(true);
-      setImageHasChanged(true);
+      // Solo actualiza si es necesario
+      // if (file || previewImage) {
       setFile(null);
       setPreviewImage(null);
       onPreviewChange(null);
+      // }
 
       setLogoLoading(false);
-    };
+    }, [logoLoading, file, previewImage, onPreviewChange]);
 
     const saveImage = async () => {
       if (!imageHasChanged) return;
@@ -89,7 +99,7 @@ export const UploadImage = forwardRef(
       if (!teamSelected) return;
       if (teamSelected?.id && user?.user.id && fileUserImageType) {
         await uploadSupaseFile({
-          fileInput: file as unknown as FileList,
+          fileInput: file as unknown as FileList | null,
           userId: user.user.id,
           teamId: teamSelected.id as string,
           fileUserImageType,

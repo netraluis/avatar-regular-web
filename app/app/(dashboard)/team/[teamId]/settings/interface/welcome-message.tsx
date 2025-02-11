@@ -110,10 +110,12 @@ export function WelcomeMessage() {
         updateObject.welcome = welcome;
       }
       if (uploadImageLogoRef.current && imageLogoHasChanged) {
-        await Promise.all([
-          uploadImageLogoRef.current.saveImage(),
-          updateTeam.updateTeam(teamSelected.id, updateObject, user.user.id),
-        ]);
+        await uploadImageLogoRef.current.saveImage();
+        await updateTeam.updateTeam(
+          teamSelected.id,
+          updateObject,
+          user.user.id,
+        );
       } else {
         await updateTeam.updateTeam(
           teamSelected.id,

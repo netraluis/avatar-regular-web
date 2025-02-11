@@ -238,7 +238,7 @@ export const useSupabaseFile = () => {
       const formData = new FormData();
       formData.append("teamId", teamId);
       formData.append("fileUserImageType", fileUserImageType);
-      formData.append("oldNameDoc", name);
+      formData.append("oldUrl", name);
 
       if (!fileInput || fileInput.length === 0) {
         const requestOptions = {
@@ -250,10 +250,16 @@ export const useSupabaseFile = () => {
           },
         };
 
-        return await fetch(
+        const responseDel = await fetch(
           `/api/protected/team/${teamId}/file/supabase`,
           requestOptions,
         );
+
+        const responseData = await responseDel.json();
+        return dispatch({
+          type: "SET_TEAM_SELECTED",
+          payload: responseData.data,
+        });
       }
       Array.from(fileInput).forEach((file) => {
         formData.append("files", file); // Usa el mismo nombre "files" para todos los archivos
