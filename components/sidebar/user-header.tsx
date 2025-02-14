@@ -3,7 +3,6 @@
 import * as React from "react";
 import { ChevronLeft } from "lucide-react";
 
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -11,6 +10,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
+import { Collapsible } from "@/components/ui/collapsible";
 
 export function UserHeader() {
   const router = useRouter();
@@ -20,25 +20,31 @@ export function UserHeader() {
 
   return (
     <SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
+      <Collapsible
+        // key={item.title}
+        asChild
+        // defaultOpen={item.isActive}
+        className="group/collapsible"
+      >
+        <SidebarMenuItem>
           <SidebarMenuButton
-            size="lg"
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+            // asChild
+            tooltip={dashboard.return}
+            // className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
           >
-            <ChevronLeft className="ml-auto" />
-            <div
-              className="grid flex-1 text-left text-sm leading-tight"
+            <ChevronLeft
+              className="h-4 w-4"
               onClick={() => {
                 router.push(`/team`);
               }}
-            >
+            />
+            <div className="grid flex-1 text-left text-sm leading-tight group-data-[collapsible=icon]:hidden">
               {/* <span className="truncate text-xs">{activeTeam.plan}</span> */}
               {dashboard.return}
             </div>
           </SidebarMenuButton>
-        </DropdownMenu>
-      </SidebarMenuItem>
+        </SidebarMenuItem>
+      </Collapsible>
     </SidebarMenu>
   );
 }

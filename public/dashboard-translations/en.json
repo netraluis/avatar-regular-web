@@ -30,7 +30,8 @@
       "assistants": "assistants",
       "account": "Account",
       "logOut": "Log out",
-      "return": "Return"
+      "return": "Return",
+      "openDashboard": "Open dashboard"
     },
     "USER": {
       "LAYOUT": {

@@ -30,7 +30,8 @@
       "assistants": "assistents",
       "account": "Compte",
       "logOut": "Tancar sessio",
-      "return": "Tornar"
+      "return": "Tornar",
+      "openDashboard": "Obrir menu"
     },
     "USER": {
       "LAYOUT": {

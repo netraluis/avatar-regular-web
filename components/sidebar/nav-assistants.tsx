@@ -1,29 +1,13 @@
 "use client";
 
-import {
-  ChevronRight,
-  Folder,
-  MoreHorizontal,
-  Trash2,
-  LucideProps,
-} from "lucide-react";
+import { ChevronRight, LucideProps, Plus, Eye } from "lucide-react";
 
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { useAppContext } from "../context/appContext";
 import { useRouter, useParams } from "next/navigation";
@@ -36,7 +20,6 @@ import {
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 import { assistantSettingsMenu } from "@/lib/helper/navbar";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
-import { useDeleteAssistant } from "../context/useAppContext/assistant";
 
 interface TreeType {
   name: string;
@@ -45,6 +28,7 @@ interface TreeType {
   icon: ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
+  assistantUrl: string;
 }
 
 interface ItemTreeType extends TreeType {
@@ -53,41 +37,49 @@ interface ItemTreeType extends TreeType {
 
 function Tree(item: ItemTreeType) {
   const router = useRouter();
-  const { teamId, assistantId } = useParams();
-  // const [name, ...items] = Array.isArray(item) ? item : [item]
+  const { teamId } = useParams();
   if (!item.subItems?.length) {
     return (
       <SidebarMenuButton
         // isActive={name === "button.tsx"}
-        className="data-[active=true]:bg-transparent"
+        className="data-[active=true]:bg-transparent mr-0 pr-0"
         onClick={() => {
-          router.push(`/team/${teamId}/assistant/${assistantId}/${item.href}`);
+          router.push(
+            `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`,
+          );
         }}
       >
-        <item.icon />
+        {/* <item.icon /> */}
         {item.name}
       </SidebarMenuButton>
     );
   }
   return (
-    <SidebarMenuItem>
+    <SidebarMenuItem className="mr-0 pr-0">
       <Collapsible
         className="group/collapsible [&[data-state=open]>button>svg:last-child]:rotate-90 w-full"
         // defaultOpen={name === "components" || name === "ui"}
       >
-        <CollapsibleTrigger asChild>
-          <SidebarMenuButton className="flex justify-between">
-            <div className="flex">
-              <item.icon className="h-4 w-4 mr-2" />
-              {item.name}
-            </div>
+        <SidebarMenuButton className="flex justify-between">
+          <div
+            className="grow"
+            onClick={() => {
+              router.push(
+                `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`,
+              );
+            }}
+          >
+            {/* <item.icon className="h-4 w-4 mr-2" /> */}
+            {item.name}
+          </div>
+          <CollapsibleTrigger asChild>
             <ChevronRight className="transition-transform" />
-          </SidebarMenuButton>
-        </CollapsibleTrigger>
+          </CollapsibleTrigger>
+        </SidebarMenuButton>
         <CollapsibleContent>
-          <SidebarMenuSub className="px-0">
-            {item.subItems.map((subItem, index) => (
-              <Tree key={index} {...subItem} />
+          <SidebarMenuSub className="pr-0 mr-0">
+            {item.subItems?.map((subItem, index) => (
+              <Tree key={index} {...subItem} assistantUrl={item.assistantUrl} />
             ))}
           </SidebarMenuSub>
         </CollapsibleContent>
@@ -97,7 +89,10 @@ function Tree(item: ItemTreeType) {
 }
 
 export function NavAssistants() {
-  const { isMobile } = useSidebar();
+  const router = useRouter();
+  const {
+    state: { teamSelected, assistantsByTeam },
+  } = useAppContext();
   const { t } = useDashboardLanguage();
 
   const dashboard = t("app.LAYOUT");
@@ -105,94 +100,77 @@ export function NavAssistants() {
     "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.LAYOUT",
   );
 
-  const navOptions = t("app.TEAM.TEAM_ID.PAGE");
-
   const assistantNav = assistantSettingsMenu(assistantSettingsNav);
-
-  const {
-    state: { assistantsByTeam, user },
-  } = useAppContext();
-  const { teamId, assistantId } = useParams();
-  const { deleteAssistant } = useDeleteAssistant();
-
-  const router = useRouter();
-
-  const handleGetAssistants = async (teamId: string) => {
-    router.push(`/team/${teamId}`);
-  };
-
-  const handleDeleteAssistant = (assistantId: string) => {
-    if (!user?.user.id) return;
-    deleteAssistant({
-      assistantId,
-      userId: user.user.id,
-      teamId: teamId as string,
-    });
-  };
-
+  const { assistantId } = useParams();
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel
-        className="hover:bg-slate-100 cursor-pointer"
-        onClick={() => {
-          handleGetAssistants(teamId as string);
-        }}
-      >
-        {dashboard.assistant}
+    // <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <>
+      <SidebarGroupLabel className=" group-data-[collapsible=icon]:hidden flex hover:bg-slate-100 cursor-pointer mt-2">
+        <div
+          onClick={() => {
+            router.push(`/team/${teamSelected?.id}`);
+          }}
+        >
+          {dashboard.assistants.charAt(0).toUpperCase() +
+            dashboard.assistants.slice(1).toLowerCase()}
+        </div>
+        <Plus
+          className=" h-3.5 w-3.5 ml-auto cursor-pointer hover:bg-slate-200 cursor-pointer rounded"
+          onClick={() => {
+            router.push(`/team/${teamSelected?.id}/assistant/new`);
+          }}
+        />
       </SidebarGroupLabel>
-      <SidebarMenu>
+      <SidebarMenu className="group-data-[collapsible=icon]:hidden">
         {assistantsByTeam.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton isActive={item.id === assistantId} asChild>
-              <Link href={`/team/${teamId}/assistant/${item.id}`}>
-                {/* <item.icon /> */}
-                <span>{item.name}</span>
-              </Link>
-            </SidebarMenuButton>
-            {assistantId === item.id && (
-              <SidebarMenuSub>
-                {assistantNav.map((item: any, index: number) => (
-                  <Tree key={index} {...item} />
-                ))}
-              </SidebarMenuSub>
-            )}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction>
-                  <MoreHorizontal />
-                  {/* <span className="sr-only">More</span> */}
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
+          <Collapsible
+            key={item.id}
+            asChild
+            // defaultOpen={item.isActive}
+            className="group/collapsible"
+          >
+            <SidebarMenuItem key={item.name} className="pr-0 mr-0">
+              <SidebarMenuButton
+                isActive={item.id === assistantId}
+                className="flex items-center justify-between"
               >
-                <DropdownMenuItem
+                <span
+                  className="grow truncate"
                   onClick={() => {
-                    router.push(`/team/${teamId}/assistant/${item.id}`);
+                    router.push(
+                      `/team/${teamSelected?.id}/assistant/${item.id}/playground`,
+                    );
                   }}
                 >
-                  {/* <Link href= {`/team/${teamId}/assistant/${item.id}`}> */}
-                  <Folder className="text-muted-foreground mr-2" />
-                  <span>{navOptions.edit}</span>
-                  {/* </Link> */}
-                </DropdownMenuItem>
+                  {item.name}
+                </span>
 
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => {
-                    handleDeleteAssistant(item.id);
-                  }}
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${item.id}`}
+                  rel="noopener noreferrer"
+                  className="flex items-center hover:bg-slate-200 cursor-pointer rounded"
+                  target="_blank"
                 >
-                  <Trash2 className="text-muted-foreground mr-2" />
-                  <span>{navOptions.delete}</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
+                  <Eye className="w-3.5 h-3.5 m-1" />
+                </Link>
+                <CollapsibleTrigger asChild>
+                  <ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                </CollapsibleTrigger>
+              </SidebarMenuButton>
+              <CollapsibleContent>
+                <SidebarMenuSub className="mr-0 pr-0">
+                  {assistantNav.map((itemNav: any, index: number) => {
+                    return (
+                      <Tree key={index} {...itemNav} assistantUrl={item.id} />
+                    );
+                  })}
+                </SidebarMenuSub>
+              </CollapsibleContent>
+            </SidebarMenuItem>
+          </Collapsible>
         ))}
       </SidebarMenu>
-    </SidebarGroup>
+    </>
   );
 }
+

@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, Settings } from "lucide-react";
+import { ChevronRight, Settings2 } from "lucide-react";
 
 import {
   Collapsible,
@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/collapsible";
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -21,20 +20,22 @@ import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 import { teamsSettingsNav } from "@/lib/helper/navbar";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export function NavTeam() {
   const { t } = useDashboardLanguage();
   const teamSettings = t("app.TEAM.TEAM_ID.SETTINGS.LAYOUT");
   const menu = t("app.TEAM.TEAM_ID.SETTINGS.LAYOUT.menu");
-  const dashboard = t("app.LAYOUT");
 
+  const router = useRouter();
   const navItems = teamsSettingsNav(menu);
 
   const { teamId } = useParams();
 
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>{dashboard.team}</SidebarGroupLabel>
+    <SidebarGroup className="p-0 m-0">
+      {/* <SidebarGroupLabel>{dashboard.team.charAt(0).toUpperCase() + 
+           dashboard.team.slice(1).toLowerCase()}</SidebarGroupLabel> */}
       <SidebarMenu>
         {/* {items.map((item) => ( */}
         <Collapsible
@@ -44,20 +45,24 @@ export function NavTeam() {
           className="group/collapsible"
         >
           <SidebarMenuItem>
-            <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip={teamSettings.cardTitle}>
-                <Settings className="h-4 w-4" />
-                <span>{teamSettings.cardTitle}</span>
+            <SidebarMenuButton
+              tooltip={teamSettings.cardTitle}
+              onClick={() => {
+                router.push(`/team/${teamId}/settings/general`);
+              }}
+            >
+              <Settings2 className="h-4 w-4" />
+              <span>{teamSettings.cardTitle}</span>
+              <CollapsibleTrigger asChild>
                 <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-              </SidebarMenuButton>
-            </CollapsibleTrigger>
+              </CollapsibleTrigger>
+            </SidebarMenuButton>
             <CollapsibleContent>
               <SidebarMenuSub>
                 {navItems.map((subItem) => (
                   <SidebarMenuSubItem key={subItem.name}>
                     <SidebarMenuSubButton asChild>
                       <Link href={`/team/${teamId}/settings/${subItem.id}`}>
-                        {subItem.icon && <subItem.icon />}
                         <span>{subItem.name}</span>
                       </Link>
                     </SidebarMenuSubButton>

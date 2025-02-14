@@ -8,6 +8,8 @@ import { Separator } from "@/components/ui/separator";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 import { useParams } from "next/navigation";
 import { useAppContext } from "../context/appContext";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { useSidebar } from "@/components/ui/sidebar";
 
 export interface TitleLayoutProps {
   children: React.ReactNode;
@@ -47,13 +49,22 @@ export const TitleLayout = ({
       : "";
   const urlPreview = `${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantUrl}`;
 
+  const { state } = useSidebar();
+
+  // console.log({hook})
+
   return (
     <div className="flex flex-col overflow-auto p-2 w-full h-full">
       <div className="flex items-center gap-4 py-1.5 px-1.5">
-        <Card className="border-none bg-transparent shadow-none py-2 px-4">
-          <CardTitle>{cardTitle}</CardTitle>
-          <CardDescription>{cardDescription}</CardDescription>
-        </Card>
+        <div className="flex">
+          <SidebarTrigger
+            className={`${state === "expanded" ? "mt-1.5 " : "hidden"}`}
+          />
+          <Card className="border-none bg-transparent shadow-none py-2 px-4">
+            <CardTitle>{cardTitle}</CardTitle>
+            <CardDescription>{cardDescription}</CardDescription>
+          </Card>
+        </div>
         <div className="ml-auto flex items-center py-2 px-4 gap-2">
           {/* {actionError && (
             <Button variant="alert" disabled>

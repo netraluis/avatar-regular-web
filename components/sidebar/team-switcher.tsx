@@ -28,6 +28,7 @@ import { useRouter, useParams } from "next/navigation";
 import { useFetchTeamsByUserId } from "../context/useAppContext/team";
 import { Button } from "../ui/button";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
+import Image from "next/image";
 
 export function TeamSwitcher() {
   const { isMobile } = useSidebar();
@@ -69,29 +70,43 @@ export function TeamSwitcher() {
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            {/* <SidebarMenuButton asChild> */}
-
-            {/* </SidebarMenuButton> */}
-
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                {/* <activeTeam.logo className="size-4" /> */}
-              </div>
-              <div className="grid flex-1 text-left text-sm leading-tight">
+          <div className="w-full flex justify-end">
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              >
+                <div>
+                  {teamSelected?.logoUrl ? (
+                    <div className="flex aspect-square size-8 items-center justify-center border overflow-hidden rounded-md">
+                      {/* <activeTeam.logo className="size-4" /> */}
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${teamSelected?.logoUrl}`}
+                        alt={teamSelected?.name || ""}
+                        width={32}
+                        height={32}
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className={`aspect-square size-8 bg-gradient-to-r rounded-md ${"from-red-500"} ${"to-blue-500"} mr-2`}
+                    ></div>
+                  )}
+                </div>
+                {/* <div className="grid flex-1 text-left text-sm leading-tight"> */}
                 <span className="truncate font-semibold">
                   {teamId === teamSelected?.id
                     ? teamSelected?.name
                     : "Select a team"}
                 </span>
                 {/* <span className="truncate text-xs">{activeTeam.plan}</span> */}
-              </div>
-              <ChevronsUpDown className="ml-auto" />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
+                {/* </div> */}
+                <ChevronsUpDown className="ml-auto" />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            {/* <SidebarTrigger className = 'mt-2.5' onClick={()=>{setOpen(true)}}/> */}
+          </div>
 
           <DropdownMenuContent
             className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"

@@ -3,12 +3,13 @@
 import { ChevronRight, Settings2 } from "lucide-react";
 
 import {
-  SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+
+import { Collapsible } from "@/components/ui/collapsible";
 
 import { useRouter, useParams } from "next/navigation";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
@@ -27,7 +28,7 @@ export function NavUserBody() {
   };
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <>
       <SidebarGroupLabel
         className="hover:bg-slate-100 cursor-pointer"
         onClick={() => {
@@ -37,17 +38,19 @@ export function NavUserBody() {
         {dashboard.account}
       </SidebarGroupLabel>
       <SidebarMenu>
-        <SidebarMenuItem>
-          <SidebarMenuButton
-            tooltip={"hola"}
-            onClick={() => router.push(`/user/general`)}
-          >
-            <Settings2 className="h-4 w-4" />
-            <span>{dashboard.settings}</span>
-            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-          </SidebarMenuButton>
-        </SidebarMenuItem>
+        <Collapsible asChild className="group/collapsible">
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              tooltip={"hola"}
+              onClick={() => router.push(`/user/general`)}
+            >
+              <Settings2 className="h-4 w-4" />
+              <span>{dashboard.settings}</span>
+              <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </Collapsible>
       </SidebarMenu>
-    </SidebarGroup>
+    </>
   );
 }
