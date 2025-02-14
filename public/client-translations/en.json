@@ -14,6 +14,10 @@
       "CHAT_LIST": {
         "showAnalizeInfo": "Analyzing all sources of information",
         "you": "You"
+      },
+      "HEADER": {
+        "newConversation": "New Conversation",
+        "backToHome": "Back to Home"
       }
     },
     "DOMAIN": {

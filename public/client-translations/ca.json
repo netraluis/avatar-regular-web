@@ -25,6 +25,10 @@
           }
         }
       }
+    },
+    "HEADER": {
+      "newConversation": "Nova conversa",
+      "backToHome": "Tornar a l&rsquo;inici"
     }
   }
 }

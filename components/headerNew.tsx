@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 import { Dialog, Popover, Transition } from "@headlessui/react";
 import { XMarkIcon, Bars3CenterLeftIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { useTeamAssistantContext } from "./context/teamAssistantContext";
 import { basePublicUrl } from "@/lib/helper/images";
 import { MenuHeaderType } from "@prisma/client";
@@ -13,6 +13,7 @@ import Disclaimer from "./disclaimer";
 import { HeaderDisclaimer } from "./context/globalContext";
 import Link from "next/link";
 import { FooterText } from "./footer";
+import { useClientLanguage } from "./context/clientLanguageContext";
 
 const ensureProtocol = (url: string) => {
   if (!url.startsWith("https://")) {
@@ -23,6 +24,9 @@ const ensureProtocol = (url: string) => {
 
 export default function Header() {
   const { data, useAssistantResponse } = useTeamAssistantContext();
+
+  const { t } = useClientLanguage();
+  const { newConversation, backToHome }  = t("app.COMPONENTS.HEADER");
 
   const { lang, assistantUrl } = useParams();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -47,6 +51,25 @@ export default function Header() {
     ?.textHref?.sort((a, b) => a.numberOrder - b.numberOrder);
   const menuFooter = data?.menuFooter[0]?.text;
   const headerButton = data?.headerButton[0];
+
+  const searchParams = useSearchParams();
+  const hideHeader = searchParams.get("hideHeader") === "true";
+
+
+  if (hideHeader) {
+    return (
+      <div className="flex bg-white fixed top-0 z-10 w-full right-0 justify-end">
+        {assistantUrl &&
+          useAssistantResponse?.messages &&
+          useAssistantResponse?.messages?.length > 0 && (
+            <Button className="m-2" onClick={() => startNewConversation()}>
+              <MessageCircle className="h-5 w-5 mr-2" />
+              {newConversation}
+            </Button>
+          )}
+      </div>
+    )
+  };
 
   return (
     <div className="bg-white pt-4 fixed top-0 z-10 w-full">
@@ -109,7 +132,7 @@ export default function Header() {
             useAssistantResponse?.messages?.length > 0 && (
               <Button onClick={() => startNewConversation()}>
                 <MessageCircle className="h-5 w-5 mr-2" />
-                Nova conversa
+                {newConversation}
               </Button>
             )}
           {headerButton && (
@@ -117,72 +140,72 @@ export default function Header() {
           )}
           {((menuHeader && menuHeader.length > 0) ||
             (menuBody && menuBody.length > 0)) && (
-            <Popover className="relative">
-              <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-8 text-gray-900">
-                <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />
-              </Popover.Button>
+              <Popover className="relative">
+                <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-8 text-gray-900">
+                  <Bars3CenterLeftIcon className="h-6 w-6" aria-hidden="true" />
+                </Popover.Button>
 
-              <Transition
-                as={Fragment}
-                enter="transition ease-out duration-200"
-                enterFrom="opacity-0 translate-y-1"
-                enterTo="opacity-100 translate-y-0"
-                leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 translate-y-0"
-                leaveTo="opacity-0 translate-y-1"
-              >
-                <Popover.Panel className="absolute -right-8 top-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                  <div className="px-4 pt-5 pb-3">
-                    {menuHeader?.map((item) => (
-                      <div
-                        key={item.numberOrder}
-                        className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-base leading-6 hover:bg-gray-50"
-                      >
-                        <div className="flex-auto">
+                <Transition
+                  as={Fragment}
+                  enter="transition ease-out duration-200"
+                  enterFrom="opacity-0 translate-y-1"
+                  enterTo="opacity-100 translate-y-0"
+                  leave="transition ease-in duration-150"
+                  leaveFrom="opacity-100 translate-y-0"
+                  leaveTo="opacity-0 translate-y-1"
+                >
+                  <Popover.Panel className="absolute -right-8 top-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                    <div className="px-4 pt-5 pb-3">
+                      {menuHeader?.map((item) => (
+                        <div
+                          key={item.numberOrder}
+                          className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-base leading-6 hover:bg-gray-50"
+                        >
+                          <div className="flex-auto">
+                            <Link
+                              href={ensureProtocol(
+                                item.hrefLanguages[0]?.href || "",
+                              )}
+                              className="block font-semibold text-gray-900"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {item.hrefLanguages[0]?.text}
+                              <span className="absolute inset-0" />
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="mt-5">
+                        {menuBody?.map((item) => (
                           <Link
                             href={ensureProtocol(
                               item.hrefLanguages[0]?.href || "",
                             )}
-                            className="block font-semibold text-gray-900"
+                            key={item.numberOrder}
+                            className="group relative flex items-center gap-x-4 rounded-lg px-4 py-2 text-xs leading-3 hover:bg-gray-50"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            {item.hrefLanguages[0]?.text}
-                            <span className="absolute inset-0" />
+                            <div className="flex-auto">
+                              <p className=" text-gray-600">
+                                {item.hrefLanguages[0]?.text}
+                              </p>
+                            </div>
                           </Link>
-                        </div>
+                        ))}
                       </div>
-                    ))}
-                    <div className="mt-5">
-                      {menuBody?.map((item) => (
-                        <Link
-                          href={ensureProtocol(
-                            item.hrefLanguages[0]?.href || "",
-                          )}
-                          key={item.numberOrder}
-                          className="group relative flex items-center gap-x-4 rounded-lg px-4 py-2 text-xs leading-3 hover:bg-gray-50"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <div className="flex-auto">
-                            <p className=" text-gray-600">
-                              {item.hrefLanguages[0]?.text}
-                            </p>
-                          </div>
-                        </Link>
-                      ))}
+                      <div className="mt-5 pt-3 border-t-2 w-full">
+                        <FooterText
+                          className="hidden sm:block"
+                          text={menuFooter}
+                        />
+                      </div>
                     </div>
-                    <div className="mt-5 pt-3 border-t-2 w-full">
-                      <FooterText
-                        className="hidden sm:block"
-                        text={menuFooter}
-                      />
-                    </div>
-                  </div>
-                </Popover.Panel>
-              </Transition>
-            </Popover>
-          )}
+                  </Popover.Panel>
+                </Transition>
+              </Popover>
+            )}
         </div>
       </nav>
       <Dialog
@@ -237,7 +260,7 @@ export default function Header() {
                     onClick={() => startNewConversation()}
                   >
                     <MessageCircle className="h-5 w-5 mr-2" />
-                    Nova conversa
+                    {newConversation}
                   </Button>
                 )}
             </div>
@@ -250,7 +273,7 @@ export default function Header() {
                   variant="outline"
                 >
                   <House className="h-5 w-5 mr-2" />
-                  Tornar a l&rsquo;inici
+                  {backToHome}
                 </Button>
               )}
             </div>
