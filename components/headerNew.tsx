@@ -15,6 +15,7 @@ import { House, MessageCircle } from "lucide-react";
 import Disclaimer from "./disclaimer";
 import { HeaderDisclaimer } from "./context/globalContext";
 import Link from "next/link";
+import { FooterText } from "./footer";
 
 const ensureProtocol = (url: string) => {
   if (!url.startsWith("https://")) {
@@ -171,18 +172,7 @@ export default function Header() {
                     ))}
                   </div>
                   <div className="mt-5 pt-3 border-t-2 w-full">
-                    <div className="flex justify-center">
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: menuFooter || "",
-                        }}
-                      />
-                      {/* Fet amb{" "}
-                      <span>
-                        <HeartIcon className="h-5 w-6" aria-hidden="true" />
-                      </span>{" "}
-                      a Andorra i per andorra */}
-                    </div>
+                    <FooterText className="hidden sm:block" text={menuFooter} />
                   </div>
                 </div>
               </Popover.Panel>

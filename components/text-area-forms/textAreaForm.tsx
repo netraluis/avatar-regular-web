@@ -13,6 +13,7 @@ import { FooterText } from "../footer";
 import { TextAreaFormProps } from "@/types/types";
 import Recorder from "recorder-js";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
+import { useTeamAssistantContext } from "../context/teamAssistantContext";
 
 // ** Step 1: Extend the Window interface **
 declare global {
@@ -139,6 +140,8 @@ export const TextAreaForm = ({
     submitMessage();
   };
 
+  const { data } = useTeamAssistantContext();
+  const footerText = data?.footer[0]?.text;
   return (
     <div className="absolute inset-x-0 bottom-0 w-full duration-300 ease-in-out animate-in">
       <div className="mx-auto sm:max-w-2xl sm:px-4">
@@ -260,7 +263,7 @@ export const TextAreaForm = ({
               </audio>
             )} */}
           </form>
-          {showFooter && <FooterText className="hidden sm:block" />}
+          {showFooter && <FooterText className="hidden sm:block" text={footerText} />}
         </div>
       </div>
     </div>

@@ -1,16 +1,14 @@
 import React from "react";
 
 import { cn } from "@/lib/utils";
-import { useTeamAssistantContext } from "./context/teamAssistantContext";
+// import Image from "next/image";
 
 interface FooterTextProps extends React.ComponentProps<"p"> {
   className?: string;
+  text?: string;
 }
 
-export function FooterText({ className, ...props }: FooterTextProps) {
-  const { data } = useTeamAssistantContext();
-  const footerText = data?.footer[0]?.text;
-
+export function FooterText({ className, text, ...props }: FooterTextProps) {
   return (
     <p
       className={cn(
@@ -19,7 +17,19 @@ export function FooterText({ className, ...props }: FooterTextProps) {
       )}
       {...props}
     >
-      {footerText || ""}
+        <div className="flex justify-center items-center gap-x-2">
+          {/* <Image
+            src="/chatbotforSymbol.svg"
+            alt={""}
+            // fill
+            width={5}
+            height={5}
+            className="w-3 h-3"
+            unoptimized
+          /> */}
+          <span className="text-sm">Powered by Chatbotfor.ai</span>
+        </div>
+      {text || ""}
     </p>
   );
 }
