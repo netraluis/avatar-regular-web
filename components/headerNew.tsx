@@ -4,7 +4,6 @@ import { Dialog, Popover, Transition } from "@headlessui/react";
 import {
   XMarkIcon,
   Bars3CenterLeftIcon,
-  CameraIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useRouter, useParams } from "next/navigation";
@@ -70,12 +69,19 @@ export default function Header() {
               unoptimized
             />
           ) : (
-            <div className="h-[74px] aspect-video  flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">
-              <CameraIcon
-                className="ml-0.5 w-6 animate-pulse mr-1 text-slate-400"
-                aria-hidden="true"
-              />
-            </div>
+            // <div className="h-[74px] aspect-video  flex border border-slate-200 justify-center content-center self-center justify-items-center rounded-lg">
+            //   <CameraIcon
+            //     className="ml-0.5 w-6 animate-pulse mr-1 text-slate-400"
+            //     aria-hidden="true"
+            //   />
+            // </div>
+            <Image
+              src="/chatbotforLogo.svg"
+              alt={""}
+              fill
+              className="object-contain object-left"
+              unoptimized
+            />
           )}
         </div>
         <div className="flex lg:hidden my-3">
