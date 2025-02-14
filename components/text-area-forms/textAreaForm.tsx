@@ -263,7 +263,9 @@ export const TextAreaForm = ({
               </audio>
             )} */}
           </form>
-          {showFooter && <FooterText className="hidden sm:block" text={footerText} />}
+          {showFooter && (
+            <FooterText className="hidden sm:block" text={footerText} />
+          )}
         </div>
       </div>
     </div>

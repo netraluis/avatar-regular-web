@@ -145,14 +145,16 @@ export function NavAssistants() {
                   {item.name}
                 </span>
 
-                {item.status === "PUBLIC" && <Link
-                  href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${item.id}`}
-                  rel="noopener noreferrer"
-                  className="flex items-center hover:bg-slate-200 cursor-pointer rounded"
-                  target="_blank"
-                >
-                  <Eye className="w-3.5 h-3.5 m-1" />
-                </Link>}
+                {item.status === "PUBLIC" && (
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${item.id}`}
+                    rel="noopener noreferrer"
+                    className="flex items-center hover:bg-slate-200 cursor-pointer rounded"
+                    target="_blank"
+                  >
+                    <Eye className="w-3.5 h-3.5 m-1" />
+                  </Link>
+                )}
                 <CollapsibleTrigger asChild>
                   <ChevronRight className="transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                 </CollapsibleTrigger>
@@ -173,4 +175,3 @@ export function NavAssistants() {
     </>
   );
 }
-

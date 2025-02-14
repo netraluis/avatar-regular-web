@@ -10,15 +10,15 @@ interface FooterTextProps extends React.ComponentProps<"p"> {
 
 export function FooterText({ className, text, ...props }: FooterTextProps) {
   return (
-    <p
+    <div
       className={cn(
         "px-2 text-center text-xs leading-normal text-muted-foreground",
         className,
       )}
       {...props}
     >
-        <div className="flex justify-center items-center gap-x-2">
-          {/* <Image
+      <div className="flex justify-center items-center gap-x-2">
+        {/* <Image
             src="/chatbotforSymbol.svg"
             alt={""}
             // fill
@@ -27,9 +27,9 @@ export function FooterText({ className, text, ...props }: FooterTextProps) {
             className="w-3 h-3"
             unoptimized
           /> */}
-          <span className="text-sm">Powered by Chatbotfor.ai</span>
-        </div>
+        <span className="text-sm">Powered by Chatbotfor.ai</span>
+      </div>
       {text || ""}
-    </p>
+    </div>
   );
 }
