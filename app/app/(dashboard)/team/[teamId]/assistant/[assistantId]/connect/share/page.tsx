@@ -22,12 +22,14 @@ export default function Component() {
 
   const [url, setUrl] = useState("");
   const [script, setScript] = useState("");
+  const [frame, setFrame] = useState("");
   const {
     state: { teamSelected, assistantSelected },
   } = useAppContext();
 
   const [urlCopied, setUrlCopied] = useState(false);
   const [scriptCopied, setScriptCopied] = useState(false);
+  const [frameCopied, setFrameCopied] = useState(false);
 
   useEffect(() => {
     setUrl(
@@ -40,7 +42,17 @@ export default function Component() {
     setScript(
       `<script src="${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}chatbotfor-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/widget.js" data-src="${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}chatbotfor-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/chatbot-widget" data-team-id="${teamId}" data-assistant-id="${assistantId}" data-language="${teamSelected?.defaultLanguage?.toLocaleLowerCase()}"></script>`,
     );
+    setFrame(
+      `<iframe src="${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "https://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistantSelected?.localAssistant?.url}"  width="900px" height="500px" allowFullScreenallowFullScreen></iframe>`,
+    );
   }, [teamSelected, assistantSelected]);
+
+  // <iframe
+  //                  src="https://prueba-team-2b7d6cf0-d95d-43bd-bc30-c95003b81d6a.netraluis.com/ca/ass?hideHeader=true"
+  //       className="iframe"
+  //       width="900px"
+  //       height="500px"
+  //       allowFullScreenallowFullScreen></iframe>
 
   const handleCopy = (setCopied: (copie: boolean) => void, copied: string) => {
     navigator.clipboard
@@ -121,6 +133,46 @@ export default function Component() {
             </div>
             <p className="text-sm text-muted-foreground">
               {share.script.chat.description}
+            </p>
+          </div>
+        </CustomCard>
+      </div>
+      <div>
+        <CustomCard
+          title={share.frame.chat.title}
+          description={share.frame.desription}
+        >
+          <div className="space-y-2">
+            <Label htmlFor="team-url">{share.frame.title}</Label>
+            <div className="flex items-start space-x-2">
+              {teamSelected ? (
+                // <Input id="team-url" disabled read-only="true" value={url} />
+                <Textarea
+                  id="name"
+                  name="name"
+                  disabled
+                  read-only="true"
+                  value={frame}
+                  className="min-h-[100px]"
+                />
+              ) : (
+                <TextAreaCharging />
+              )}
+
+              <Button
+                size="sm"
+                onClick={() => handleCopy(setFrameCopied, frame)}
+                variant="outline"
+              >
+                {!frameCopied ? (
+                  <Copy className="h-4 w-4" />
+                ) : (
+                  <Check className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {share.frame.chat.description}
             </p>
           </div>
         </CustomCard>

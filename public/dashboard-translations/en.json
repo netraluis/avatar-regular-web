@@ -339,6 +339,14 @@
                       "title": "Code to integrate the assistant",
                       "description": "Paste this code on your website to display the assistant bubble."
                     }
+                  },
+                  "frame": {
+                    "title": "Code to integrate the assistant",
+                    "description": "Paste this code on your website to display the assistant frame.",
+                    "chat": {
+                      "title": "Team frame",
+                      "description": "This link provides direct access to your assistant."
+                    }
                   }
                 }
               }

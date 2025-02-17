@@ -339,6 +339,14 @@
                       "title": "Codi per integrar l'assistent",
                       "description": "Enganxa aquest codi al teu lloc web per mostrar el bubble del teu assistent."
                     }
+                  },
+                  "frame": {
+                    "title": "Codi per integrar l'assistent",
+                    "description": "Enganxa aquest codi al teu lloc web per mostrar el frame del teu assistent.",
+                    "chat": {
+                      "title": "Frame de l’equip",
+                      "description": "Aquest enllaç proporcion a accés directe al teu assistent."
+                    }
                   }
                 }
               }

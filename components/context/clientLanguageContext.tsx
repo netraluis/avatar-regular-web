@@ -22,7 +22,6 @@ export const ClientLanguageProvider = ({
   children: React.ReactNode;
   userLanguage?: Language;
 }) => {
-
   const [language, setLanguage] = useState<Language>(
     userLanguage === Language.CA || userLanguage === Language.EN
       ? userLanguage
