@@ -19,6 +19,28 @@ export async function POST(request: NextRequest) {
       status: 400,
     });
   }
+
+  if (!process.env.SLACK_URL_USER) {
+    throw "SLACK_URL_USER is not defined";
+  }
+
+  await fetch(process.env.SLACK_URL_USER as string, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      text: JSON.stringify(
+        {
+          event: "user_signup",
+          email: email,
+          userId: response.data.user?.id,
+        },
+        null,
+        2,
+      ), // `null, 2` para formato legible en Slack
+    }),
+  });
   return new NextResponse(JSON.stringify(response), {
     status: 200,
   });

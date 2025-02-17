@@ -36,7 +36,6 @@ export default function Layout({
 const Header = () => {
   const { t, changeLanguage, language } = useUserManagmentLanguage();
   const userAuth = t("app.(AUTH).LAYOUT");
-  console.log({ userAuth });
 
   const router = useRouter();
   const pathname = usePathname();
@@ -57,7 +56,6 @@ const Header = () => {
           // defaultValue={language}
           value={language}
           onValueChange={(value) => {
-            console.log({ value });
             changeLanguage(value as Language);
           }}
         >

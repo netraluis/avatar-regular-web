@@ -162,11 +162,11 @@ export async function POST(
         await createSubscriptionCycle(monthlyCylces);
       }
 
-      if (!process.env.SLACK_URL) {
-        throw "SLACK_URL is not defined";
+      if (!process.env.SLACK_URL_SUBSCRIPTION) {
+        throw "SLACK_URL_SUBSCRIPTION is not defined";
       }
 
-      await fetch(process.env.SLACK_URL as string, {
+      await fetch(process.env.SLACK_URL_SUBSCRIPTION as string, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -213,10 +213,10 @@ export async function POST(
 
       await createSubscriptionCycle(monthlyCylces);
 
-      if (!process.env.SLACK_URL) {
-        throw "SLACK_URL is not defined";
+      if (!process.env.SLACK_URL_SUBSCRIPTION) {
+        throw "SLACK_URL_SUBSCRIPTION is not defined";
       }
-      await fetch(process.env.SLACK_URL as string, {
+      await fetch(process.env.SLACK_URL_SUBSCRIPTION as string, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
