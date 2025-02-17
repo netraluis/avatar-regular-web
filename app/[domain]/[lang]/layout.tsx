@@ -83,6 +83,7 @@ export default async function DomainLayout({
   });
 
   if (!language) {
+    console.log("language", language);
     notFound();
   }
 
@@ -97,6 +98,7 @@ export default async function DomainLayout({
   });
 
   if (!data) {
+    console.log("data", data);
     notFound();
   }
 
