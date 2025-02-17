@@ -126,7 +126,7 @@ export function NavAssistants() {
           <Collapsible
             key={item.id}
             asChild
-            // defaultOpen={item.isActive}
+            open={item.id === assistantId}
             className="group/collapsible"
           >
             <SidebarMenuItem key={item.name} className="pr-0 mr-0">
