@@ -1,54 +1,76 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
-  CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, Loader2, PlusCircle } from "lucide-react";
 import {
-  useAssistant,
-  UseAssistantResponse,
-} from "../../components/context/useAppContext/assistant";
-import MarkdownDisplay from "../../components/MarkDownDisplay";
+  Send,
+  MoreVertical,
+  Maximize2,
+  Minimize2,
+  PlusCircle,
+} from "lucide-react";
+import Link from "next/link";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { keyframes } from "@emotion/react";
+import { useAssistant } from "@/components/context/useAppContext/assistant";
+import { UseAssistantResponse } from "@/components/context/useAppContext/assistant";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const animatedMessageStyle = {
+  animation: `${fadeIn} 0.3s ease-out forwards`,
+};
 
 interface ChatInterfaceProps {
+  setIsLoading: (isLoading: boolean) => void;
   translations: Record<string, string>;
   teamId: string;
   assistantId: string;
-  visible: boolean;
+  isLoading: boolean;
 }
 
 export default function ChatInterface({
-  translations,
+  setIsLoading,
+  // translations,
   teamId,
   assistantId,
-  visible,
+  isLoading,
 }: ChatInterfaceProps) {
-  const [message, setMessage] = useState("");
+  // const [messages, setMessages] = useState<Message[]>([
+  //   {
+  //     id: 1,
+  //     text: "Resolve issues instantly and deliver exceptional customer experiences with Fin AI Agent.",
+  //     sender: "ai",
+  //   },
+  // ])
+  const [input, setInput] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showActions, setShowActions] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // TODO aqui
-  // const getTeam = async () => {
-  //   const response = await fetch(`/api/protected/team/${teamId}`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       // Aquí enviamos el userId en los headers
-  //     },
-  //   });
-
-  //   if (!response.ok) {
-  //     throw new Error(`Error: ${response.statusText}`);
-  //   }
-  //   const responseData = await response.json();
-  // }
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [message, setMessage] = useState("");
 
   const useAssistantResponse: UseAssistantResponse = useAssistant({
     assistantId: assistantId,
@@ -59,13 +81,14 @@ export default function ChatInterface({
   const {
     submitMessage,
     messages,
-    error,
+    // error,
     loading,
     // status,
     // internatlThreadId,
     setInternalThreadId,
     setMessages,
   } = useAssistantResponse;
+  setIsLoading(loading);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -73,7 +96,11 @@ export default function ChatInterface({
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, messagesEndRef, isExpanded]);
+
+  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value);
+  };
 
   const handleSend = () => {
     if (message.trim()) {
@@ -82,90 +109,209 @@ export default function ChatInterface({
     }
   };
 
-  if (!visible) return;
-
   const handleNewChat = () => {
     setInternalThreadId(undefined);
     setMessages([]);
   };
 
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleActionClick = (action: string) => {
+    setInput(action);
+    setShowActions(false);
+  };
+
+  const adjustTextareaHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "24px";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, []);
+
+  const TypingIndicator = () => (
+    <div className="px-4">
+      <div className="bg-[#F8F9FC] p-4 rounded-3xl inline-flex items-center space-x-2">
+        <div className="w-[18px] h-[18px] rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-white text-[10px] font-bold">
+          CA
+        </div>
+        <span className="font-semibold text-[14px]">
+          Chatbotfor Agent is answering
+        </span>
+        <div className="flex space-x-1">
+          <span className="w-1 h-1 rounded-full bg-gray-400 animate-pulse" />
+          <span className="w-1 h-1 rounded-full bg-gray-400 animate-pulse delay-150" />
+          <span className="w-1 h-1 rounded-full bg-gray-400 animate-pulse delay-300" />
+        </div>
+      </div>
+    </div>
+  );
+
+  const messageAnimationClass = "animate-fade-in";
+
   return (
-    <Card className="w-80 h-96 flex flex-col mb-2">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 px-4 border-b">
-        <CardTitle className="text-lg font-semibold">
-          {translations.chatTitle}
-        </CardTitle>
-        {messages.length > 0 && (
+    <Card
+      className={`w-[400px] flex flex-col rounded-[16px] bg-white overflow-hidden transition-all duration-300 ease-in-out shadow-lg ${
+        isExpanded ? "h-[700px]" : "h-[640px]"
+      }`}
+    >
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 py-4 px-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-green-500 flex items-center justify-center text-white text-sm font-bold">
+            CA
+          </div>
+          <span className="font-semibold text-[17px]">Chatbotfor Agent</span>
+        </div>
+        <div className="flex items-center gap-1">
           <Button
-            onClick={handleNewChat}
-            className="px-3 py-1 text-sm bg-black text-white hover:bg-gray-800 transition-colors duration-200"
-            aria-label={translations.newChatLabel}
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 hover:bg-gray-100"
+            onClick={toggleExpand}
           >
-            <PlusCircle className="h-4 w-4 mr-2" />
-            {translations.newChatLabel}
+            {isExpanded ? (
+              <Minimize2 className="h-4 w-4" />
+            ) : (
+              <Maximize2 className="h-4 w-4" />
+            )}
           </Button>
-        )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 hover:bg-gray-100"
+              >
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleNewChat}>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                <span>New Chat</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </CardHeader>
       <CardContent className="flex-grow p-0 overflow-hidden">
-        <ScrollArea className="h-full w-full">
-          <div className="p-4 space-y-4">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-              >
-                <div
-                  className={`max-w-[80%] p-2 rounded-lg ${
-                    message.role === "user"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-200 text-black"
-                  }`}
-                >
-                  <MarkdownDisplay markdownText={message.message} />
-                </div>
+        <ScrollArea className="h-full">
+          <div className="space-y-6 mb-6">
+            <div className="px-4">
+              <div className="space-y-4">
+                {messages.map((message, index) => (
+                  <div
+                    key={message.id}
+                    className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} ${messageAnimationClass}`}
+                    style={animatedMessageStyle}
+                  >
+                    <div
+                      className={`p-4 rounded-[32px] max-w-[85%] ${
+                        message.role === "user"
+                          ? "bg-[#0F172A] text-white"
+                          : "bg-[#F8F9FC]"
+                      }`}
+                    >
+                      {message.role === "assistant" && index === 0 && (
+                        <div className="flex items-center space-x-2 mb-2">
+                          <div className="w-[18px] h-[18px] rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-white text-[10px] font-bold">
+                            CA
+                          </div>
+                          <span className="font-semibold text-[14px]">
+                            Chatbotfor Agent
+                          </span>
+                        </div>
+                      )}
+                      <p className="text-[16px] leading-normal">
+                        {message.message}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-            {error?.type === "UNKNOWN" && (
-              <div className="relative mx-auto max-w-2xl px-4 text-red-500">
-                {translations.error}
-              </div>
-            )}
-            {error?.type === "timeout" && (
-              <div className="relative mx-auto max-w-2xl px-4 text-red-500">
-                {translations.timeout}
-              </div>
-            )}
+            </div>
+            {isLoading && <TypingIndicator />}
             <div ref={messagesEndRef} />
           </div>
         </ScrollArea>
       </CardContent>
-      <CardFooter className="border-t p-2">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSend();
-          }}
-          className="flex w-full space-x-2"
-        >
-          <Input
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder={translations.inputPlaceholder}
-            className="flex-grow"
-          />
-          <Button
-            type="submit"
-            className="px-3 h-10"
-            disabled={loading}
-            aria-label={translations.sendButtonLabel}
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
-          </Button>
-        </form>
+      <CardFooter className="p-4">
+        <div className="w-full">
+          {showActions && (
+            <div className="grid grid-cols-2 gap-2 mb-4">
+              <Button
+                variant="outline"
+                className="justify-start h-auto py-2 px-3"
+                onClick={() => handleActionClick("How can I help you?")}
+              >
+                <span className="text-sm">Get Help</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="justify-start h-auto py-2 px-3"
+                onClick={() => handleActionClick("What are your features?")}
+              >
+                <span className="text-sm">Features</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="justify-start h-auto py-2 px-3"
+                onClick={() => handleActionClick("Can you give me an example?")}
+              >
+                <span className="text-sm">Examples</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="justify-start h-auto py-2 px-3"
+                onClick={() => handleActionClick("What's new?")}
+              >
+                <span className="text-sm">What New</span>
+              </Button>
+            </div>
+          )}
+          <div className="relative flex items-end mb-3">
+            <Textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => {
+                handleInputChange(e);
+                adjustTextareaHeight();
+              }}
+              onInput={adjustTextareaHeight}
+              placeholder="Escriu una pregunta..."
+              className="w-full pr-12 py-3 min-h-[48px] max-h-[120px] text-[15px] text-slate-600 bg-white border border-gray-100 rounded-2xl focus-visible:ring-0 focus-visible:ring-offset-0 resize-none overflow-y-auto duration-200 placeholder:text-slate-500"
+              style={{
+                paddingRight: "4rem",
+                height: "48px",
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+            />
+            <Button
+              onClick={handleSend}
+              size="icon"
+              className="absolute right-1 bottom-1 h-[40px] w-[40px] bg-[#0B0F1D] hover:bg-[#0B0F1D]/90 rounded-xl"
+              disabled={isLoading || !input.trim()}
+            >
+              <Send className="h-5 w-5 text-white" />
+            </Button>
+          </div>
+          <div className="mt-2 text-sm text-center text-gray-500">
+            Powered by{" "}
+            <Link href="https://chatbotfor.ai" className="hover:text-gray-700">
+              chatbotfor.ai
+            </Link>
+          </div>
+        </div>
       </CardFooter>
     </Card>
   );
