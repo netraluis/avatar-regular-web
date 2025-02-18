@@ -18,17 +18,21 @@ export default function AssistantUrl() {
   const { assistantUrl } = useParams();
   const [message, setMessage] = React.useState("");
   const [card, setCard] = React.useState<any>(null);
-
+  const [entryPoints, setEntryPoints] = React.useState<any>([]);
   const { useAssistantResponse, data } = useTeamAssistantContext();
 
   React.useEffect(() => {
     if (data?.assistants) {
-      const card = data.assistants.find((card) => {
-        console.log(card.url, assistantUrl);
+      const assistant = data.assistants.find((card) => {
         return card.url === assistantUrl;
-      })?.assistantCard[0];
+      });
 
-      setCard(card);
+      setCard(assistant?.assistantCard[0]);
+      setEntryPoints(
+        assistant?.entryPoints[0]?.entryPoint.map(
+          (entryPoint) => entryPoint.entryPointLanguages[0],
+        ),
+      );
     }
   }, [data]);
 
@@ -76,7 +80,6 @@ export default function AssistantUrl() {
     handleSendMessage();
   };
 
-
   return (
     <div
       className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px] h-screen scrollbar-hidden"
@@ -122,6 +125,7 @@ export default function AssistantUrl() {
         submitMessage={handleSendMessage}
         status={status}
         text={textAreaForm}
+        cards={entryPoints}
       />
     </div>
   );

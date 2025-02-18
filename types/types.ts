@@ -15,6 +15,10 @@ export interface TextAreaFormProps {
     voiceRecordStart: string;
     placeholder: string;
   };
+  cards?: {
+    text: string;
+    question: string;
+  }[];
 }
 
 export interface Option {

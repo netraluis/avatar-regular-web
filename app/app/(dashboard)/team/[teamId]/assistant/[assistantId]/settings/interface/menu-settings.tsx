@@ -1,4 +1,4 @@
-import { HrefLanguages, MenuHeaderType, TextHref } from "@prisma/client";
+import { EntryPoint, EntryPointLanguages } from "@prisma/client";
 import { motion, Reorder } from "framer-motion";
 import { GripVertical, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -9,61 +9,52 @@ import { v4 as uuidv4 } from "uuid";
 import { TextAreaCharging } from "@/components/loaders/loadersSkeleton";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 
-export interface ExtendedTextHref extends TextHref {
-  hrefLanguages: HrefLanguages[];
+export interface ExtendedEntryPoint extends EntryPoint {
+  entryPointLanguages: EntryPointLanguages[];
 }
 
 export const MenuSettings = ({
-  menuType,
   loading,
   menuItems,
   setMenuItems,
 }: {
-  menuType: MenuHeaderType;
   loading: boolean;
-  menuItems: ExtendedTextHref[];
-  setMenuItems: (menuItems: ExtendedTextHref[]) => void;
+  menuItems: ExtendedEntryPoint[];
+  setMenuItems: (menuItems: ExtendedEntryPoint[]) => void;
 }) => {
   const { t } = useDashboardLanguage();
   const texts = t("app.TEAM.TEAM_ID.SETTINGS.INTERFACE.PAGE.menu");
   const {
-    state: { teamSelected },
+    state: { teamSelected, assistantSelected },
   } = useAppContext();
 
   const [menuHeaderId, setMenuHeaderId] = useState<string | null>(null);
 
   useEffect(() => {
     const menuId =
-      teamSelected?.menuHeader?.find((menu) => menu.type === menuType)?.id ||
-      uuidv4();
+      assistantSelected?.localAssistant?.entryPoints[0]?.id || uuidv4();
     setMenuHeaderId(menuId);
-  }, [teamSelected]);
+  }, [assistantSelected]);
 
-  const title =
-    menuType === MenuHeaderType.HEADER
-      ? texts.menuHeaderTitle
-      : texts.menuBodyTitle;
-  const description =
-    menuType === MenuHeaderType.HEADER
-      ? texts.menuHeaderTitleDescription
-      : texts.menuBodyDescription;
+  const title = "titulo";
+  const description = "descripcion";
 
   const addMenuItem = () => {
     if (!teamSelected?.defaultLanguage) return;
-    const textHrefId = uuidv4();
+    const questionId = uuidv4();
     setMenuItems([
       ...menuItems,
       {
-        id: textHrefId,
+        id: questionId,
         numberOrder: 0,
-        menuHeaderId: menuHeaderId,
-        hrefLanguages: [
+        entryPointId: menuHeaderId,
+        entryPointLanguages: [
           {
             id: uuidv4(),
             text: "",
-            href: "",
+            question: "",
             language: teamSelected?.defaultLanguage,
-            textHrefId: textHrefId,
+            entryPointId: questionId,
           },
         ],
       },
@@ -72,7 +63,7 @@ export const MenuSettings = ({
 
   const updatePrimaryMenuItem = (
     id: string,
-    field: "text" | "href",
+    field: "text" | "question",
     value: string,
   ) => {
     setMenuItems(
@@ -80,11 +71,11 @@ export const MenuSettings = ({
         if (item.id === id) {
           return {
             ...item,
-            hrefLanguages: item.hrefLanguages.map((href) =>
-              href.textHrefId === id &&
-              href.language === teamSelected?.defaultLanguage
-                ? { ...href, [field]: value }
-                : href,
+            entryPointLanguages: item.entryPointLanguages.map((entryPoint) =>
+              entryPoint.entryPointId === id &&
+              entryPoint.language === teamSelected?.defaultLanguage
+                ? { ...entryPoint, [field]: value }
+                : entryPoint,
             ),
           };
         } else {
@@ -117,15 +108,15 @@ export const MenuSettings = ({
                 <motion.div className="grid grid-cols-[auto_1fr_2fr_auto] gap-2 items-center">
                   <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab" />
                   <Input
-                    value={item.hrefLanguages[0]?.text || ""}
+                    value={item.entryPointLanguages[0]?.text || ""}
                     onChange={(e) =>
                       updatePrimaryMenuItem(item.id, "text", e.target.value)
                     }
                   />
                   <Input
-                    value={item.hrefLanguages[0]?.href || ""}
+                    value={item.entryPointLanguages[0]?.question || ""}
                     onChange={(e) =>
-                      updatePrimaryMenuItem(item.id, "href", e.target.value)
+                      updatePrimaryMenuItem(item.id, "question", e.target.value)
                     }
                   />
                   <Button

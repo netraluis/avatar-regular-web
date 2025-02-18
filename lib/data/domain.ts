@@ -1,4 +1,9 @@
-import { AssitantStatus, LanguageType, Prisma } from "@prisma/client";
+import {
+  AssitantStatus,
+  EntryPointsType,
+  LanguageType,
+  Prisma,
+} from "@prisma/client";
 import prisma from "../prisma";
 
 export async function getTeamDataByDomainOrCustomDomainMetadata(
@@ -74,6 +79,21 @@ export type GetTeamDataByDomainOrCustomDomainPage = Prisma.TeamGetPayload<{
           select: {
             title: true;
             description: true;
+          };
+        };
+        entryPoints: {
+          select: {
+            entryPoint: {
+              select: {
+                entryPointLanguages: {
+                  select: {
+                    language: true;
+                    text: true;
+                    question: true;
+                  };
+                };
+              };
+            };
           };
         };
       };
@@ -177,6 +197,22 @@ export async function getTeamDataByDomainOrCustomDomainPage({
               description: true,
             },
           },
+          entryPoints: {
+            where: {
+              type: EntryPointsType.REGULAR,
+            },
+            select: {
+              entryPoint: {
+                select: {
+                  entryPointLanguages: {
+                    where: {
+                      language,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -212,7 +248,6 @@ export async function getLangValidByDomainOrCustomDomainPage({
     },
   });
 
-  console.log({ languageInclude, language });
   if (!languageInclude) return null;
 
   if (language === Empty.EMPTY) {

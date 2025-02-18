@@ -5,7 +5,12 @@ import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import EmojiPicker from "@/components/ui/emoji-picker";
 import { useAppContext } from "@/components/context/appContext";
-import { AssistantCardType, LanguageType, Prisma } from "@prisma/client";
+import {
+  AssistantCardType,
+  EntryPointsType,
+  LanguageType,
+  Prisma,
+} from "@prisma/client";
 import { Textarea } from "@/components/ui/textarea";
 import { CustomCard } from "@/components/custom-card";
 import {
@@ -17,6 +22,7 @@ import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 import { Trash2 } from "lucide-react";
+import { ExtendedEntryPoint, MenuSettings } from "./menu-settings";
 
 export default function Interface() {
   const { t } = useDashboardLanguage();
@@ -46,6 +52,12 @@ export default function Interface() {
     saveDescription: string;
   } | null>(null);
 
+  const [loadingAssistant, setLoadingAssistant] = useState(false);
+
+  const [menuItems, setMenuItems] = useState<ExtendedEntryPoint[]>([]);
+  const [menuItemsSave, setMenuItemsSave] = useState<ExtendedEntryPoint[]>([]);
+  const [loadingMenu, setLoadingMenu] = useState(false);
+
   // const { assistantValues } = useAssistantSettingsContext();
   const updateAssistant = useUpdateAssistant();
 
@@ -71,10 +83,17 @@ export default function Interface() {
         saveDescription: card?.description[0] || "",
       });
       setCardId(card?.id);
+
+      const entryPoint = assistantSelected?.localAssistant?.entryPoints.find(
+        (point) => point.type === EntryPointsType.REGULAR,
+      )?.entryPoint;
+      setMenuItems(entryPoint || []);
+      setMenuItemsSave(entryPoint || []);
     }
   }, [assistantSelected]);
 
   const updateHandler = async () => {
+    setLoadingAssistant(true);
     const localAssistantUpdateParams: Prisma.AssistantUpdateInput = {};
     if (selectedEmoji?.emoji !== selectedEmoji?.saveEmoji) {
       localAssistantUpdateParams.emoji = selectedEmoji?.emoji;
@@ -121,13 +140,105 @@ export default function Interface() {
     }
 
     if (user?.user.id) {
-      updateAssistant.updateAssistant({
+      await updateAssistant.updateAssistant({
         teamId: teamId as string,
         assistantId: assistantId as string,
         userId: user.user.id,
         localAssistantUpdateParams,
       });
     }
+    setLoadingAssistant(false);
+  };
+
+  const createMenuUpsert = (
+    menuItems: ExtendedEntryPoint[],
+    menuType: EntryPointsType,
+    assistantId: string,
+  ) => {
+    return {
+      where: {
+        assistantId_type: {
+          type: menuType,
+          assistantId: assistantId,
+        },
+      },
+      update: {
+        entryPoint: {
+          deleteMany: {
+            id: {
+              notIn: [],
+            },
+          },
+          create: menuItems.map((item) => {
+            return {
+              id: item.id,
+              numberOrder: menuItems.findIndex((el) => el.id === item.id) + 1,
+              entryPointLanguages: {
+                create: item.entryPointLanguages.map((entryPointLanguage) => {
+                  return {
+                    text: entryPointLanguage.text,
+                    question: entryPointLanguage.question,
+                    language: entryPointLanguage.language,
+                  };
+                }),
+              },
+            };
+          }),
+        },
+      },
+      create: {
+        type: menuType,
+        entryPoint: {
+          create: menuItems.map((item) => {
+            return {
+              // text: item.text,
+              // href: item.href,
+              numberOrder: menuItems.findIndex((el) => el.id === item.id) + 1,
+              entryPointLanguages: {
+                create: item.entryPointLanguages.map((entryPointLanguage) => ({
+                  // id: hrefLanguage.id,
+                  text: entryPointLanguage.text,
+                  question: entryPointLanguage.question,
+                  language: entryPointLanguage.language,
+                  // textHrefId: hrefLanguage.textHrefId,
+                })),
+              },
+            };
+          }),
+        },
+      },
+    };
+  };
+
+  const menuSaveHandler = async () => {
+    const localAssistantUpdateParams: Prisma.AssistantUpdateInput = {};
+    setLoadingMenu(true);
+    if (!assistantSelected) return;
+    const entryPoints = [];
+    if (menuItemsSave !== menuItems) {
+      entryPoints.push(
+        createMenuUpsert(
+          menuItems,
+          EntryPointsType.REGULAR,
+          assistantSelected.localAssistant?.id || "",
+        ),
+      );
+    }
+
+    localAssistantUpdateParams.entryPoints = { upsert: entryPoints };
+
+    if (assistantSelected.localAssistant?.id) {
+      await updateAssistant.updateAssistant({
+        teamId: teamId as string,
+        assistantId: assistantId as string,
+        userId: user?.user.id || "",
+        localAssistantUpdateParams: localAssistantUpdateParams,
+      });
+    }
+    // if (teamSelected && user?.user.id) {
+    //   await updateTeam.updateTeam(teamSelected.id, updateObject, user.user.id);
+    // }
+    setLoadingMenu(false);
   };
 
   return (
@@ -136,7 +247,7 @@ export default function Interface() {
         title={assistantInterface.title}
         description={assistantInterface.desription}
         action={updateHandler}
-        loading={updateAssistant.loadingUpdateAssistant}
+        loading={loadingAssistant}
         valueChange={
           selectedEmoji?.emoji !== selectedEmoji?.saveEmoji ||
           title?.title !== title?.saveTitle ||
@@ -213,6 +324,19 @@ export default function Interface() {
             {assistantInterface.emoji.descriptionDescription}
           </p>
         </div>
+      </CustomCard>
+      <CustomCard
+        title={"assistantInterface.menu.title"}
+        description={"assistantInterface.menu.description"}
+        loading={loadingMenu}
+        valueChange={menuItemsSave !== menuItems}
+        action={menuSaveHandler}
+      >
+        <MenuSettings
+          loading={loadingMenu}
+          menuItems={menuItems}
+          setMenuItems={setMenuItems}
+        />
       </CustomCard>
     </div>
   );

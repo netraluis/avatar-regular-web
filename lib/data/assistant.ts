@@ -73,8 +73,39 @@ export const deleteAssistant = async (assistantId: string) => {
 };
 
 export type GetAssistantType = Prisma.AssistantGetPayload<{
-  include: { assistantCard: true };
+  include: {
+    assistantCard: true;
+    entryPoints: {
+      include: {
+        entryPoint: {
+          include: {
+            entryPointLanguages: true;
+          };
+        };
+      };
+    };
+  };
 }> | null;
+
+export const getAssistantByField = async (
+  where: Prisma.AssistantWhereUniqueInput,
+): Promise<GetAssistantType> => {
+  return await prisma.assistant.findUnique({
+    where,
+    include: {
+      assistantCard: true,
+      entryPoints: {
+        include: {
+          entryPoint: {
+            include: {
+              entryPointLanguages: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
 
 export const getAssistant = async (
   assistantId: string,
@@ -86,6 +117,21 @@ export const getAssistant = async (
     },
     include: {
       assistantCard: true,
+      entryPoints: {
+        include: {
+          entryPoint: {
+            include: {
+              entryPointLanguages: {
+                select: {
+                  language: true,
+                  text: true,
+                  question: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 };
@@ -102,6 +148,15 @@ export const updateAssistant = async (
     data,
     include: {
       assistantCard: true,
+      entryPoints: {
+        include: {
+          entryPoint: {
+            include: {
+              entryPointLanguages: true,
+            },
+          },
+        },
+      },
     },
   });
 };

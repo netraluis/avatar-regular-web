@@ -65,6 +65,10 @@ enum UserType {
   ADMIN
 }
 
+enum EntryPointsType {
+  REGULAR
+}
+
 model Message {
   id          String   @id @default(cuid())
   role        RoleUserType
@@ -118,7 +122,7 @@ model Team {
   welcomeType     WelcomeType
   isActive        Boolean   @default(true) 
   paddleSubscriptionId String?
-  subscription Subscription[]
+  subscription  Subscription[]
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @default(now())
@@ -228,7 +232,8 @@ model Assistant {
   message                   Message[]
   assistantCard             AssistantCard[]
   emoji                     String?     
-  isActive                  Boolean   @default(true)        
+  isActive                  Boolean   @default(true)
+  entryPoints               EntryPoints[]
 
   team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   files       File[]
@@ -239,6 +244,37 @@ model Assistant {
 
   @@unique([openAIId])
   @@unique([url,teamId])
+}
+
+model EntryPoints {
+  id          String      @id @default(uuid())
+  type        EntryPointsType
+  entryPoint  EntryPoint[]
+  assistantId      String      
+  assistant        Assistant?       @relation(fields: [assistantId], references: [id], onDelete: Cascade)
+
+  @@unique([assistantId, type])
+}
+
+model EntryPoint {
+  id              String      @id @default(uuid())
+  numberOrder     Int
+  entryPointId    String?     
+  entryPointLanguages     EntryPointLanguages[]
+
+  entryPoints       EntryPoints?   @relation(fields: [entryPointId], references: [id], onDelete: Cascade)
+
+}
+
+model EntryPointLanguages {
+  id              String      @id @default(uuid())
+  text            String
+  language        LanguageType
+  entryPointId    String
+  question        String
+
+  entryPoint      EntryPoint?   @relation(fields: [entryPointId], references: [id], onDelete: Cascade)
+  @@unique([entryPointId, language])
 }
 
 model AssistantCard {
