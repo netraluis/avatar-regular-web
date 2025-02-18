@@ -72,7 +72,7 @@ export default function Dashboard() {
         >
           <CardComponent
             key={index}
-            title={card.name}
+            title={card.assistantCard[0]?.title}
             description={card.assistantCard[0]?.description[0]}
             emoji={card.emoji || ""}
           />

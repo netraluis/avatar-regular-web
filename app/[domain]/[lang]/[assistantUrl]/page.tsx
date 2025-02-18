@@ -29,7 +29,7 @@ export default function AssistantUrl() {
         console.log(card.url, assistantUrl);
         return card.url === assistantUrl;
       })?.assistantCard[0];
-      if (!card) router.push("/404");
+
       setCard(card);
     }
   }, [data]);
@@ -78,7 +78,6 @@ export default function AssistantUrl() {
     handleSendMessage();
   };
 
-  if (!card) return <></>;
 
   return (
     <div
