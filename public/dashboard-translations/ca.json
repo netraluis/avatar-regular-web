@@ -471,6 +471,10 @@
                   "descriptionPlaceholder": "Escriu una descripció detallada (p. ex.: “Et puc ajudar amb preguntes sobre productes, comandes o problemes tècnics”).",
                   "descriptionDescription": "Explica breument què fa el teu assistent i com pot ajudar als usuaris",
                   "saveButton": "Desa descripció"
+                },
+                "entryPoints": {
+                  "title": "Afegir preguntes per defecte",
+                  "description": "Afegir preguntes interessants per al teu client"
                 }
               }
             },

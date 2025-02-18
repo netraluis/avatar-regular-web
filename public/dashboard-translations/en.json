@@ -471,6 +471,10 @@
                   "descriptionPlaceholder": "Write a detailed description (e.g., 'I can help you with product questions, orders, or technical issues').",
                   "descriptionDescription": "Briefly explain what your assistant does and how it can help users.",
                   "saveButton": "Save description"
+                },
+                "entryPoints": {
+                  "title": "Add default questions",
+                  "description": "Add interesting questions for your client"
                 }
               }
             },

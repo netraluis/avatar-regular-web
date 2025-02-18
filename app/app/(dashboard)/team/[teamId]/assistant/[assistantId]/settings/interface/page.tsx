@@ -326,8 +326,8 @@ export default function Interface() {
         </div>
       </CustomCard>
       <CustomCard
-        title={"assistantInterface.menu.title"}
-        description={"assistantInterface.menu.description"}
+        title={assistantInterface.entryPoints.title}
+        description={assistantInterface.entryPoints.description}
         loading={loadingMenu}
         valueChange={menuItemsSave !== menuItems}
         action={menuSaveHandler}

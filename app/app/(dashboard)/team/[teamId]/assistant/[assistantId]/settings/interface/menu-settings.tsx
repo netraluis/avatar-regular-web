@@ -36,8 +36,8 @@ export const MenuSettings = ({
     setMenuHeaderId(menuId);
   }, [assistantSelected]);
 
-  const title = "titulo";
-  const description = "descripcion";
+  // const title = "titulo";
+  // const description = "descripcion";
 
   const addMenuItem = () => {
     if (!teamSelected?.defaultLanguage) return;
@@ -93,10 +93,10 @@ export const MenuSettings = ({
     <>
       {teamSelected && !loading ? (
         <div className="space-y-2 mb-2">
-          <div>
+          {/* <div>
             <h3 className="text-sm font-medium mb-2">{title}</h3>
             <p className="text-sm text-muted-foreground mb-4">{description}</p>
-          </div>
+          </div> */}
           <Reorder.Group
             axis="y"
             values={menuItems}
