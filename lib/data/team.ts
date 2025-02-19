@@ -74,6 +74,21 @@ export type GetTeamByTeamId = Prisma.TeamGetPayload<{
   };
 }> | null;
 
+export const getTeamForBubble = async (teamId: string) => {
+  const team = await prisma.team.findFirst({
+    where: {
+      id: teamId,
+    },
+    select: {
+      avatarUrl: true,
+      logoUrl: true,
+      name: true,
+    },
+  });
+
+  return team;
+};
+
 export const getTeamsByUser = async ({
   page,
   pageSize,

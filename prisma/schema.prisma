@@ -283,7 +283,8 @@ model AssistantCard {
   description String[]
   type        AssistantCardType
   language    LanguageType
-  assistantId String      
+  assistantId String
+  introMessage String[]
 
   assistant   Assistant   @relation(fields: [assistantId], references: [id], onDelete: Cascade) 
   @@unique([language, assistantId])

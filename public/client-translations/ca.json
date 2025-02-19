@@ -14,6 +14,10 @@
       "CHAT_LIST": {
         "showAnalizeInfo": "Analitzant totes les fonts d’informació",
         "you": "Tu"
+      },
+      "HEADER": {
+        "newConversation": "Nova conversa",
+        "backToHome": "Tornar a l&rsquo;inici"
       }
     },
     "DOMAIN": {

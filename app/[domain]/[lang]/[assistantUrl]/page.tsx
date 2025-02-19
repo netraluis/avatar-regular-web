@@ -19,6 +19,7 @@ export default function AssistantUrl() {
   const [message, setMessage] = React.useState("");
   const [card, setCard] = React.useState<any>(null);
   const [entryPoints, setEntryPoints] = React.useState<any>([]);
+  const [introMessage, setIntroMessage] = React.useState<any>([]);
   const { useAssistantResponse, data } = useTeamAssistantContext();
 
   React.useEffect(() => {
@@ -33,6 +34,7 @@ export default function AssistantUrl() {
           (entryPoint) => entryPoint.entryPointLanguages[0],
         ),
       );
+      setIntroMessage(assistant?.assistantCard[0].introMessage);
     }
   }, [data]);
 
@@ -125,7 +127,9 @@ export default function AssistantUrl() {
         submitMessage={handleSendMessage}
         status={status}
         text={textAreaForm}
-        cards={entryPoints}
+        entryPoints={entryPoints}
+        introMessage={introMessage}
+        showIntroPanel={!useAssistantResponse?.internatlThreadId}
       />
     </div>
   );

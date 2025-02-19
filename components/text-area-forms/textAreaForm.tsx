@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   PaperAirplaneIcon,
@@ -14,6 +14,7 @@ import { TextAreaFormProps } from "@/types/types";
 import Recorder from "recorder-js";
 import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
 import { useTeamAssistantContext } from "../context/teamAssistantContext";
+import Avatar from "../avatar";
 
 // ** Step 1: Extend the Window interface **
 declare global {
@@ -31,7 +32,9 @@ export const TextAreaForm = ({
   status,
   showFooter = true,
   text,
-  cards,
+  entryPoints,
+  introMessage,
+  // showIntroPanel
 }: TextAreaFormProps) => {
   const textAreaRef = useRef(null);
   const [recording, setRecording] = useState(false);
@@ -40,6 +43,15 @@ export const TextAreaForm = ({
   const { startRecording, stopRecording, clearCanvas } = recorderControls;
   // const [audioURL, setAudioURL] = useState<string | null>(null);
   // const audioRef = useRef<HTMLAudioElement>(null);
+  const [showIntroPanel, setShowIntroPanel] = useState(true);
+
+  const { useAssistantResponse } = useTeamAssistantContext();
+
+  useEffect(() => {
+    if (useAssistantResponse?.internatlThreadId) {
+      setShowIntroPanel(false);
+    }
+  }, [useAssistantResponse?.internatlThreadId]);
 
   // Refs for Recorder.js
   const audioContext = useRef<AudioContext | null>(null);
@@ -138,6 +150,7 @@ export const TextAreaForm = ({
   const sendMessage = (e: any) => {
     e.preventDefault();
     if (status !== "thread.run.completed") return;
+    setShowIntroPanel(false);
     submitMessage();
   };
 
@@ -146,40 +159,50 @@ export const TextAreaForm = ({
   return (
     <div className="fixed inset-x-0 bottom-0 w-full duration-300 ease-in-out animate-in">
       <div className="mx-auto sm:max-w-2xl sm:px-4">
-        {cards && cards.length > 0 && (
+        {showIntroPanel && (
           <div className="my-4 ">
-            {/* <div className="flex flex-col items-start space-x-2 relative my-4">
-              <Avatar name="assistant" />
+            {introMessage && introMessage.length > 0 && (
+              <div className="flex flex-col items-start space-x-2 relative my-4">
+                {/* <Avatar name="assistant" /> */}
 
-              <div className="bg-green-100 p-3 rounded-xl p-4 my-4">
-                <p className="text-base">
-                  <span>
-                    Tens alguna pregunta sobre l&apos;Acord d&apos;associació?
-                  </span>
-                </p>
+                <Avatar
+                  className="w-12 h-12"
+                  imageUrl={
+                    data?.avatarUrl
+                      ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${data?.avatarUrl}`
+                      : "/start.png"
+                  }
+                  roleName=""
+                ></Avatar>
+                {introMessage?.map((message, index) => (
+                  <div
+                    key={index}
+                    className="bg-green-100 p-3 rounded-xl p-4 my-2"
+                  >
+                    <p className="text-base">
+                      <span>{message}</span>
+                    </p>
+                  </div>
+                ))}
               </div>
-              <div className="bg-green-100 p-3 rounded-xl p-4">
-                <p className="text-base">
-                  <span>Et proposo alguns temes que et poden interessar</span>
-                </p>
+            )}
+            {entryPoints && entryPoints.length > 0 && (
+              <div className="flex justify-start flex-wrap w-full mt-3">
+                {entryPoints?.map((question, index) => (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    key={index}
+                    onClick={() => {
+                      simulateInputChange(question.text);
+                    }}
+                    className="m-1"
+                  >
+                    {question.question}
+                  </Button>
+                ))}
               </div>
-            </div> */}
-
-            <div className="flex justify-start flex-wrap w-full mt-3">
-              {cards?.map((question, index) => (
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  key={index}
-                  onClick={() => {
-                    simulateInputChange(question.text);
-                  }}
-                  className="m-1"
-                >
-                  {question.question}
-                </Button>
-              ))}
-            </div>
+            )}
           </div>
         )}
         <div className="space-y-4 border-t bg-background px-4 py-2 shadow-lg sm:rounded-t-xl sm:border md:py-4">

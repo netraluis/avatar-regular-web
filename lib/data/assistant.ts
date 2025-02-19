@@ -6,7 +6,7 @@ import {
 import { AssistantCreateParams } from "openai/resources/beta/assistants.mjs";
 import prisma from "../prisma";
 import { createVectorStore } from "../openAI/vector-store";
-import { Prisma } from "@prisma/client";
+import { LanguageType, Prisma } from "@prisma/client";
 
 export const getAssistantsByTeam = async (teamId: string) => {
   const teamInfo = await prisma.assistant.findMany({
@@ -87,18 +87,33 @@ export type GetAssistantType = Prisma.AssistantGetPayload<{
   };
 }> | null;
 
+// lo estoy usando para el widget
 export const getAssistantByField = async (
   where: Prisma.AssistantWhereUniqueInput,
+  language: LanguageType,
 ): Promise<GetAssistantType> => {
   return await prisma.assistant.findUnique({
     where,
     include: {
-      assistantCard: true,
+      assistantCard: {
+        where: {
+          language: language,
+        },
+      },
       entryPoints: {
         include: {
           entryPoint: {
             include: {
-              entryPointLanguages: true,
+              entryPointLanguages: {
+                where: {
+                  language: language,
+                },
+                select: {
+                  language: true,
+                  text: true,
+                  question: true,
+                },
+              },
             },
           },
         },

@@ -32,7 +32,7 @@ export default async function middleware(req: NextRequest) {
     }`;
   }
 
-  if (hostname === `chatbotfor-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+  if (hostname === `chatbot-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     return;
   }
 
@@ -69,7 +69,6 @@ export default async function middleware(req: NextRequest) {
 
   if (pattern.test(url.toString()) && !hostname.startsWith("app.")) {
     const { pathname } = url;
-    console.log({ pathname });
     const pathSegments = pathname.split("/").filter((segment) => segment);
     if (!pathSegments[0]) {
       const newUrl = new URL(`/${hostname}/${Empty.EMPTY}`, req.url);

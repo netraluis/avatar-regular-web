@@ -15,7 +15,9 @@ export interface TextAreaFormProps {
     voiceRecordStart: string;
     placeholder: string;
   };
-  cards?: {
+  introMessage?: string[];
+  showIntroPanel?: boolean;
+  entryPoints?: {
     text: string;
     question: string;
   }[];

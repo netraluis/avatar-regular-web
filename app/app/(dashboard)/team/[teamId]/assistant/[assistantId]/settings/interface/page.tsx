@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 import { Trash2 } from "lucide-react";
 import { ExtendedEntryPoint, MenuSettings } from "./menu-settings";
+import { IntroMessage } from "./intro-message";
 
 export default function Interface() {
   const { t } = useDashboardLanguage();
@@ -329,7 +330,9 @@ export default function Interface() {
         title={assistantInterface.entryPoints.title}
         description={assistantInterface.entryPoints.description}
         loading={loadingMenu}
-        valueChange={menuItemsSave !== menuItems}
+        valueChange={
+          JSON.stringify(menuItemsSave) !== JSON.stringify(menuItems)
+        }
         action={menuSaveHandler}
       >
         <MenuSettings
@@ -338,6 +341,7 @@ export default function Interface() {
           setMenuItems={setMenuItems}
         />
       </CustomCard>
+      <IntroMessage />
     </div>
   );
 }

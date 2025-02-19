@@ -79,6 +79,7 @@ export type GetTeamDataByDomainOrCustomDomainPage = Prisma.TeamGetPayload<{
           select: {
             title: true;
             description: true;
+            introMessage: true;
           };
         };
         entryPoints: {
@@ -195,6 +196,7 @@ export async function getTeamDataByDomainOrCustomDomainPage({
             select: {
               title: true,
               description: true,
+              introMessage: true,
             },
           },
           entryPoints: {

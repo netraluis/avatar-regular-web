@@ -33,7 +33,7 @@ export function ChatList({
             <div className="my-4" key={message.id}>
               <Avatar
                 imageUrl={
-                  message.role === "assistant"
+                  message.role !== "assistant"
                     ? avatarUrl
                       ? avatarUrl
                       : "/avatar.png"
