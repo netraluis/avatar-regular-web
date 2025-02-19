@@ -32,7 +32,7 @@ export default async function middleware(req: NextRequest) {
     }`;
   }
 
-  if (hostname === `chatbot-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+  if (hostname === `chatbotfor-widget.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     return;
   }
 
