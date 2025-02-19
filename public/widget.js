@@ -22,8 +22,8 @@
   iframe.style.position = "fixed";
   iframe.style.bottom = "20px";
   iframe.style.right = "20px";
-  iframe.style.width = "400px";
-  iframe.style.height = "600px";
+  iframe.style.width = "700px";
+  iframe.style.height = "1000px";
   iframe.style.border = "none";
   iframe.style.zIndex = "9999";
   // iframe.allow = 'clipboard-read; clipboard-write;'; // Opcional, permisos para funciones avanzadas
