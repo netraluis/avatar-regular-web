@@ -1,6 +1,8 @@
 "use server";
 import "./globals.css";
 
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 // export const metadata = {
 //   title: "Chatbotfor",
 //   description: "Creamos asistentes virtuales para tu negocio",
@@ -40,6 +42,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         {children}
+        <SpeedInsights />
         {/* Script de inicialización de GetFernand */}
       </body>
     </html>
