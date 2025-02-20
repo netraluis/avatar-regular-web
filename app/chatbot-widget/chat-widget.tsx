@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, X } from "lucide-react";
 import ChatInterface from "./chat-interface";
@@ -38,6 +38,8 @@ export default function ChatWidget({
     translations[language],
   );
 
+  const chatRef = useRef<HTMLDivElement>(null); // Referencia al contenedor del chat
+
   useEffect(() => {
     setCurrentTranslations(translations[language]);
   }, [language]);
@@ -56,8 +58,41 @@ export default function ChatWidget({
       }),
     ) || [];
 
+
+  // 🚀 **Función para calcular la altura del chat y enviarla**
+  const sendHeight = () => {
+    setTimeout(() => {
+      if (chatRef.current) {
+        const newHeight = chatRef.current.scrollHeight;
+        const newWidth = chatRef.current.scrollWidth;
+        window.parent.postMessage({ type: "resize", height: newHeight + 20, width: newWidth + 20 }, "*");
+      }
+    }, 100); // Pequeño delay para permitir que el DOM se actualice antes de calcular la altura
+  };
+
+  // 🚀 **Detectar cambios en la altura del widget**
+  useEffect(() => {
+    sendHeight(); // Ejecutar al montar el componente
+
+    // Si el chat se abre/cierra, recalculamos la altura
+    if (isOpen) {
+      sendHeight();
+    }
+
+    // Observador para detectar cambios en el DOM del chat
+    const observer = new MutationObserver(() => {
+      sendHeight();
+    });
+
+    if (chatRef.current) {
+      observer.observe(chatRef.current, { childList: true, subtree: true });
+    }
+
+    return () => observer.disconnect();
+  }, [isOpen]); // Se ejecuta cada vez que `isOpen` cambia
+
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all duration-300 ease-in-out">
+    <div ref={chatRef} className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all duration-300 ease-in-out">
       {isOpen ? (
         <div
           className={`mb-[16px] transition-all duration-300 ease-in-out ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}

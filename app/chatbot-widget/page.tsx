@@ -25,9 +25,6 @@ export default async function Widget({
   }
 
   return (
-    <div className="h-screen w-screen bg-transparent flex justify-end items-end">
-      {/* <h1 className="text-4xl font-bold mb-4">Welcome to our website</h1>
-        <p className="mb-4">This is the main content of the page.</p> */}
       <ChatWidget
         language={language as "en" | "ca"}
         teamId={teamId}
@@ -35,7 +32,6 @@ export default async function Widget({
         data={data}
         team={team}
       />
-    </div>
   );
 }
 
