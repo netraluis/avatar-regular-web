@@ -28,6 +28,7 @@ import { keyframes } from "@emotion/react";
 import { useAssistant } from "@/components/context/useAppContext/assistant";
 import { UseAssistantResponse } from "@/components/context/useAppContext/assistant";
 import Image from "next/image";
+import MarkdownDisplay from "@/components/MarkDownDisplay";
 
 const fadeIn = keyframes`
   from {
@@ -241,7 +242,7 @@ export default function ChatInterface({
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={handleNewChat}>
                 <PlusCircle className="mr-2 h-4 w-4" />
-                <span>New Chat</span>
+                <span>Nou xat</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -275,7 +276,7 @@ export default function ChatInterface({
                         </div>
                       )}
                       <p className="text-[16px] leading-normal">
-                        {message.message}
+                      <MarkdownDisplay markdownText={message.message} />
                       </p>
                     </div>
                   </div>
