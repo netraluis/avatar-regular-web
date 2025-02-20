@@ -129,7 +129,6 @@ export default function AssistantUrl() {
         text={textAreaForm}
         entryPoints={entryPoints}
         introMessage={introMessage}
-        showIntroPanel={!useAssistantResponse?.internatlThreadId}
       />
     </div>
   );

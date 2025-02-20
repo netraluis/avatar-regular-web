@@ -157,7 +157,7 @@ export const TextAreaForm = ({
   const { data } = useTeamAssistantContext();
   const footerText = data?.footer[0]?.text;
   return (
-    <div className="fixed inset-x-0 bottom-0 w-full duration-300 ease-in-out animate-in">
+    <div className="absolute inset-x-0 bottom-0 w-full duration-300 ease-in-out animate-in">
       <div className="mx-auto sm:max-w-2xl sm:px-4">
         {showIntroPanel && (
           <div className="my-4 ">

@@ -16,7 +16,6 @@ export interface TextAreaFormProps {
     placeholder: string;
   };
   introMessage?: string[];
-  showIntroPanel?: boolean;
   entryPoints?: {
     text: string;
     question: string;
