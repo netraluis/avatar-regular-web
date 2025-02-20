@@ -48,8 +48,8 @@ export const TextAreaForm = ({
   const { useAssistantResponse } = useTeamAssistantContext();
 
   useEffect(() => {
-    if (useAssistantResponse?.internatlThreadId) {
-      setShowIntroPanel(false);
+    if (!useAssistantResponse?.internatlThreadId) {
+      setShowIntroPanel(true);
     }
   }, [useAssistantResponse?.internatlThreadId]);
 
@@ -213,6 +213,9 @@ export const TextAreaForm = ({
                 tabIndex={0}
                 onKeyDown={(e: any) => {
                   if (status !== "thread.run.completed") return;
+                  if (e.key === "Enter" && !e.shiftKey){
+                    setShowIntroPanel(false)
+                  }
                   handleKeyDown(e);
                 }}
                 placeholder={text.placeholder}
