@@ -105,8 +105,9 @@ export function NavAssistants() {
   return (
     // <SidebarGroup className="group-data-[collapsible=icon]:hidden">
     <>
-      <SidebarGroupLabel className=" group-data-[collapsible=icon]:hidden flex hover:bg-slate-100 cursor-pointer mt-2">
+      <SidebarGroupLabel className="flex group-data-[collapsible=icon]:hidden flex hover:bg-slate-100 cursor-pointer mt-2">
         <div
+          className='grow'
           onClick={() => {
             router.push(`/team/${teamSelected?.id}`);
           }}
@@ -115,7 +116,7 @@ export function NavAssistants() {
             dashboard.assistants.slice(1).toLowerCase()}
         </div>
         <Plus
-          className=" h-3.5 w-3.5 ml-auto cursor-pointer hover:bg-slate-200 cursor-pointer rounded"
+          className="h-3.5 w-3.5 ml-auto cursor-pointer hover:bg-slate-200 cursor-pointer rounded"
           onClick={() => {
             router.push(`/team/${teamSelected?.id}/assistant/new`);
           }}
@@ -147,7 +148,7 @@ export function NavAssistants() {
 
                 {item.status === "PUBLIC" && (
                   <Link
-                    href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${item.id}`}
+                    href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${item.url}`}
                     rel="noopener noreferrer"
                     className="flex items-center hover:bg-slate-200 cursor-pointer rounded"
                     target="_blank"

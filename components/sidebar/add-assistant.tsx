@@ -48,16 +48,24 @@ export const AddAssistant = () => {
         <Collapsible asChild className="group/collapsible">
           <SidebarMenuItem>
             <SidebarMenuButton
+              className='flex'
               tooltip={`${
                 dashboard.assistants.charAt(0).toUpperCase() +
                 dashboard.assistants.slice(1).toLowerCase()
-              }`}
-              onClick={() => {
-                router.push(`/team/${teamId}`);
-              }}
+              }`} 
             >
-              <Bot className="h-4 w-4" />
-              <span>
+              <Bot 
+                className="h-4 w-4" 
+                onClick={() => {
+                  router.push(`/team/${teamId}`);
+                }}
+              />
+              <span
+                className='grow'
+                onClick={() => {
+                  router.push(`/team/${teamId}`);
+                }}
+              >
                 {dashboard.assistants.charAt(0).toUpperCase() +
                   dashboard.assistants.slice(1).toLowerCase()}
               </span>

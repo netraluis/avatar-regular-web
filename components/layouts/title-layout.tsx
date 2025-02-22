@@ -65,7 +65,7 @@ export const TitleLayout = ({
             <CardDescription>{cardDescription}</CardDescription>
           </Card>
         </div>
-        <div className="ml-auto flex items-center py-2 px-4 gap-2">
+        <div className="ml-auto flex items-center py-2 px-4 gap-2 flex-wrap justify-end">
           {/* {actionError && (
             <Button variant="alert" disabled>
               {actionErrorText}

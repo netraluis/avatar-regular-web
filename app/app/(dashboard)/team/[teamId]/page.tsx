@@ -164,19 +164,22 @@ export default function Dashboard() {
                         {/* <TableCell>
                           <Badge variant="outline">GPT-4</Badge>
                         </TableCell> */}
-                        <TableCell className="hidden md:table-cell truncate">
-                          <Link
-                            href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistant.url}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {teamSelected?.subDomain}.
-                            {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/
-                            {teamSelected?.defaultLanguage?.toLocaleLowerCase()}
-                            /{assistant.url}
-                          </Link>
+                        <TableCell className="hidden md:table-cell w-full max-w-0">
+                          <div className="truncate">
+                            <Link
+                              href={`${process.env.NEXT_PUBLIC_PROTOCOL ? process.env.NEXT_PUBLIC_PROTOCOL : "http://"}${teamSelected?.subDomain}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/${teamSelected?.defaultLanguage?.toLocaleLowerCase()}/${assistant.url}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="truncate hover:underline"
+                            >
+                              {teamSelected?.subDomain}.
+                              {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/
+                              {teamSelected?.defaultLanguage?.toLocaleLowerCase()}
+                                /{assistant.url}
+                            </Link>
+                          </div>
                         </TableCell>
-                        <TableCell className="hidden md:table-cell">
+                        <TableCell className="">
                           {assistant?.status && loadingIndexUpdate !== index ? (
                             <Select
                               defaultValue={assistant.status}
@@ -190,9 +193,11 @@ export default function Dashboard() {
                               </SelectTrigger>
                               <SelectContent>
                                 {Object.values(AssitantStatus).map((status) => (
-                                  <SelectItem key={status} value={status}>
+                                  <SelectItem className="flex items-center" key={status} value={status}>
+                                    <span className="flex items-center">
                                     {visibilityImages[status]}
-                                    {status}
+                                    <span className ="hidden sm:table-cell">{status}</span>
+                                    </span>
                                   </SelectItem>
                                 ))}
                               </SelectContent>

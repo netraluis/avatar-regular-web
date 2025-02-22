@@ -39,8 +39,8 @@ export const generateMetadata = async ({
       description: data.name || "",
       images: data.logoUrl
         ? [
-            `${basePublicUrl}/${typeof data.logoUrl === "string" && data.logoUrl}`,
-          ]
+          `${basePublicUrl}/${typeof data.logoUrl === "string" && data.logoUrl}`,
+        ]
         : [],
     },
 
@@ -59,8 +59,8 @@ export const generateMetadata = async ({
       description: data.name || "",
       images: data.logoUrl
         ? [
-            `${basePublicUrl}/${typeof data.logoUrl === "string" && data.logoUrl}`,
-          ]
+          `${basePublicUrl}/${typeof data.logoUrl === "string" && data.logoUrl}`,
+        ]
         : [],
       creator: "netraluis and anton odena",
     },
@@ -101,17 +101,13 @@ export default async function DomainLayout({
   }
 
   return (
-    <html lang="en">
-      <body>
-        <ClientLanguageProvider
-          userLanguage={params.lang.toLocaleUpperCase() as Language}
-        >
-          <TeamAssistantProvider initialData={data}>
-            <Header />
-            <main>{children}</main>
-          </TeamAssistantProvider>
-        </ClientLanguageProvider>
-      </body>
-    </html>
+    <ClientLanguageProvider
+      userLanguage={params.lang.toLocaleUpperCase() as Language}
+    >
+      <TeamAssistantProvider initialData={data}>
+        <Header />
+        <main>{children}</main>
+      </TeamAssistantProvider>
+    </ClientLanguageProvider>
   );
 }

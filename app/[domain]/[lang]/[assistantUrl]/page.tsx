@@ -34,7 +34,7 @@ export default function AssistantUrl() {
           (entryPoint) => entryPoint.entryPointLanguages[0],
         ),
       );
-      setIntroMessage(assistant?.assistantCard[0].introMessage);
+      setIntroMessage(assistant?.assistantCard[0]?.introMessage || []);
     }
   }, [data]);
 
