@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useDashboardLanguage } from "@/components/context/dashboardLanguageContext";
 import { useParams } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
+import ConnectWhatsApp from "@/components/integrations/connect-whatsApp";
 
 export default function Component() {
   const { teamId, assistantId } = useParams();
@@ -176,6 +177,8 @@ export default function Component() {
             </p>
           </div>
         </CustomCard>
+
+        <ConnectWhatsApp />
       </div>
     </div>
   );
