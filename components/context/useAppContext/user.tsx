@@ -170,7 +170,7 @@ export const useOtpExpired = () => {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<any>(null);
 
-  async function otpExpired({ email }: { email: string }) {
+  async function otp_expired({ email }: { email: string }) {
     try {
       setLoading(true);
       const response = await fetch(`/api/auth/otp-expired`, {
@@ -200,7 +200,7 @@ export const useOtpExpired = () => {
     loading,
     error,
     data,
-    otpExpired,
+    otp_expired,
   };
 };
 

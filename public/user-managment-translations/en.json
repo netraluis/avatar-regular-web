@@ -58,9 +58,9 @@
         "passwordRepeat": "Repeat New Password",
         "passwordUpdating": "Updating Password",
         "error": {
-          "samePassword": "Passwords must match",
-          "weakPassword": "Password must be at least 6 characters long.",
-          "otpExpired": "Your token has expired, is invalid, or has already been used",
+          "same_password": "Passwords must match",
+          "weak_password": "Password must be at least 6 characters long.",
+          "otp_expired": "Your token has expired, is invalid, or has already been used",
           "unknown_error": "Sorry, an error has occurred"
         },
 
@@ -76,7 +76,7 @@
         "password": "Password",
         "action": "Create My Account",
         "error": {
-          "weakPassword": "Password must be at least 6 characters long.",
+          "weak_password": "Password must be at least 6 characters long.",
           "unknown_error": "Sorry, an error has occurred"
         },
         "subDescription": "Use at least 6 characters and combine letters, numbers, and symbols.",

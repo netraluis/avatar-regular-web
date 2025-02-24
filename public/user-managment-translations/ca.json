@@ -58,9 +58,9 @@
         "passwordRepeat": "Repeteix la nova contrasenya",
         "passwordUpdating": "Actualitzant contrasenya",
         "error": {
-          "samePassword": "La contrasenya ha de ser la mateixa",
-          "weakPassword": "La contrasenya ha de tenir almenys 6 caràcters.",
-          "otpExpired": "El teu token ha expirat , no es vàlid, o ja has fet un intent",
+          "same_password": "La contrasenya ha de ser la mateixa",
+          "weak_password": "La contrasenya ha de tenir almenys 6 caràcters.",
+          "otp_expired": "El teu token ha expirat , no es vàlid, o ja has fet un intent",
           "unknown_error": "Ho sentim hi ha hagut un error"
         },
 
@@ -76,7 +76,7 @@
         "password": "Contrasenya",
         "action": "Crea el meu compte",
         "error": {
-          "weakPassword": "La contrasenya ha de tenir almenys 6 caràcters.",
+          "weak_password": "La contrasenya ha de tenir almenys 6 caràcters.",
           "unknown_error": "Ho sentim hi ha hagut un error"
         },
         "subDescription": "Fes servir almenys 6 caràcters i combina lletres, números i algun símbol",
