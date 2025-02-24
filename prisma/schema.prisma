@@ -87,9 +87,10 @@ model User {
   id          String    @id @default(uuid())
   email       String    // No uses @unique aquí porque vamos a crear una clave compuesta
   teams       UserTeam[]  
-  status      UserStatus
+  status      UserStatus  @default(DESACTIVE)
   name        String?
   surname     String?
+  phone       String?
   imageUrl    String?
   language    LanguageType @default(CA)
   paddleCustomerId String?

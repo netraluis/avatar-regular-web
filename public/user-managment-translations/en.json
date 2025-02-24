@@ -74,6 +74,13 @@
         "email": "Email",
         "emailPlaceholder": "name@chatbotfor.ai",
         "password": "Password",
+        "name": "Name",
+        "namePlaceholder": "John",
+        "surname": "Surname",
+        "surnamePlaceholder": "Doe",
+        "phone": "Phone",
+        "phonePlaceholder": "+376 666 666",
+        "phoneError": "Please enter a valid phone number",
         "action": "Create My Account",
         "error": {
           "weak_password": "Password must be at least 6 characters long.",

@@ -14,17 +14,34 @@ import { useUserManagmentLanguage } from "@/components/context/userManagmentLang
 export default function Signup() {
   const { t } = useUserManagmentLanguage();
   const signUp = t("app.(AUTH).SIGN_UP");
+  const { language } = useUserManagmentLanguage();
+
 
   const { signupUser, loading, data, error } = useSignupUser();
   const [message, setMesssage] = useState(false);
   const [email, setEmail] = useState("");
+  const [phoneError, setPhoneError] = useState(false);
   const handleSignup = async (formData: FormData) => {
     await signupUser({
       email: formData.get("email") as string,
       password: formData.get("password") as string,
+      name: formData.get("name") as string,
+      surname: formData.get("surname") as string,
+      phone: formData.get("phone") as string,
+      language: language,
     });
     setEmail(formData.get("email") as string);
   };
+
+  const validatePhone = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/
+
+    if (!phoneRegex.test(event.target.value)) {
+      setPhoneError(true)
+    } else {
+      setPhoneError(false)
+    }
+  }
 
   useEffect(() => {
     if (data) setMesssage(true);
@@ -55,6 +72,43 @@ export default function Signup() {
                 name="email"
                 required
               />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="name">{signUp.name}</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder={signUp.namePlaceholder}
+                name="name"
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="email">{signUp.surname}</Label>
+              <Input
+                id="surname"
+                type="text"
+                placeholder={signUp.surnamePlaceholder}
+                name="surname"
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="email">{signUp.phone}</Label>
+              <Input
+                id="phone"
+                type="tel"
+                placeholder={signUp.phonePlaceholder}
+                name="phone"
+                required
+                pattern="^\+?[1-9]\d{1,14}$"
+                onChange={validatePhone}
+              />
+              {phoneError && (
+                <p className="text-red-500">
+                  {signUp.phoneError}
+                </p>
+              )}
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">{signUp.password}</Label>

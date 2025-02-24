@@ -74,6 +74,13 @@
         "email": "Correu electrònic",
         "emailPlaceholder": "nom@chatbotfor.ai",
         "password": "Contrasenya",
+        "name": "Nom",
+        "namePlaceholder": "John",
+        "surname": "Cognom",
+        "surnamePlaceholder": "Doe",
+        "phone": "Telèfon",
+        "phonePlaceholder": "+376 666 666",
+        "phoneError": "Introdueix un número de telèfon vàlid",
         "action": "Crea el meu compte",
         "error": {
           "weak_password": "La contrasenya ha de tenir almenys 6 caràcters.",

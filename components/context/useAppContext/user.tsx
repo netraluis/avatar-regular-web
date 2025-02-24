@@ -84,9 +84,17 @@ export const useSignupUser = () => {
   async function signupUser({
     email,
     password,
+    name,
+    surname,
+    phone,
+    language,
   }: {
     email: string;
     password: string;
+    name: string;
+    surname: string;
+    phone: string;
+    language: string;
   }) {
     try {
       setLoading(true);
@@ -95,7 +103,7 @@ export const useSignupUser = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, name, surname, phone, language }),
       });
 
       const responseData = await response.json();
@@ -170,7 +178,7 @@ export const useOtpExpired = () => {
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<any>(null);
 
-  async function otp_expired({ email }: { email: string }) {
+  async function otpExpired({ email }: { email: string }) {
     try {
       setLoading(true);
       const response = await fetch(`/api/auth/otp-expired`, {
@@ -200,7 +208,7 @@ export const useOtpExpired = () => {
     loading,
     error,
     data,
-    otp_expired,
+    otpExpired,
   };
 };
 
