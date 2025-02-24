@@ -31,7 +31,14 @@
       "account": "Account",
       "logOut": "Log out",
       "return": "Return",
-      "openDashboard": "Open dashboard"
+      "openDashboard": "Open dashboard",
+      "signupDisabled": {
+        "title": "Account pending approval.",
+        "description": "A member of our team will review your request and grant you access as soon as possible. We will notify you by email as soon as it is approved.",
+        "subDescription": "Need urgent access?",
+        "linkText": " Contact us!",
+        "link": "https://wa.me/376644253?"
+      }
     },
     "USER": {
       "LAYOUT": {

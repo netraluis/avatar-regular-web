@@ -31,7 +31,14 @@
       "account": "Compte",
       "logOut": "Tancar sessio",
       "return": "Tornar",
-      "openDashboard": "Obrir menu"
+      "openDashboard": "Obrir menu",
+      "signupDisabled": {
+        "title": "Compte pendent d’aprovació.",
+        "description": "Un membre del nostre equip revisarà la teva sol·licitud i t’atorgarà l’accés el més aviat possible. T’avisarem per correu electrònic tan aviat com sigui aprovada. ",
+        "subDescription": "No has rebut el correu electrònic?",
+        "linkText": " Contacta’ns!",
+        "link": "https://wa.me/376644253?"
+      }
     },
     "USER": {
       "LAYOUT": {

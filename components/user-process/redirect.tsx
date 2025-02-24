@@ -42,7 +42,7 @@ export default function ConfirmationScreen({
           )}
           {children}
           <p className="mt-4 text-sm text-muted-foreground">
-            {linkText && <div>{linkText}</div>}
+            {linkText && <>{linkText}</>}
           </p>
         </div>
 

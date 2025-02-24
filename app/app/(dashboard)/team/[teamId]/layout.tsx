@@ -47,7 +47,6 @@ export default function Layout({
         clearInterval(interval);
         return;
       }
-      console.log("hola");
 
       fetchTeamsByUserIdAndTeamId(teamSelected?.id, userLocal?.id);
     }, 3000);
