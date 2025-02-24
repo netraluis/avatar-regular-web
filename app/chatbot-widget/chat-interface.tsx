@@ -63,7 +63,6 @@ interface ChatInterfaceProps {
   };
 }
 
-
 export default function ChatInterface({
   setIsLoading,
   // translations,
@@ -71,7 +70,7 @@ export default function ChatInterface({
   assistantId,
   isLoading,
   entryPoints,
-  team
+  team,
 }: ChatInterfaceProps) {
   // const [messages, setMessages] = useState<Message[]>([
   //   {
@@ -108,16 +107,17 @@ export default function ChatInterface({
   }, [loading, setIsLoading]);
 
   useEffect(() => {
-    setShowAnalizeInfo(status !== "thread.message.delta" &&
-      status !== "thread.message.completed" &&
-      status !== "thread.run.step.completed" &&
-      status !== "thread.run.completed" &&
-      status !== "timeout"
+    setShowAnalizeInfo(
+      status !== "thread.message.delta" &&
+        status !== "thread.message.completed" &&
+        status !== "thread.run.step.completed" &&
+        status !== "thread.run.completed" &&
+        status !== "timeout",
     );
   }, [status]);
 
   useEffect(() => {
-      setShowActions(false);
+    setShowActions(false);
   }, [internatlThreadId]);
 
   const scrollToBottom = () => {
@@ -167,53 +167,54 @@ export default function ChatInterface({
   const TypingIndicator = () => (
     <div className="px-4">
       <div className="bg-[#F8F9FC] p-4 rounded-3xl inline-flex items-center space-x-2">
-        {!team.avatarUrl ? <div className="w-[18px] h-[18px] rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-white text-[10px] font-bold">
-
-        </div>:<div className="w-10 h-10 rounded-full flex items-center justify-center relative overflow-hidden border">
+        {!team.avatarUrl ? (
+          <div className="w-[18px] h-[18px] rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center text-white text-[10px] font-bold"></div>
+        ) : (
+          <div className="w-10 h-10 rounded-full flex items-center justify-center relative overflow-hidden border">
             <Image
               src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${team.avatarUrl}`}
-              alt='avatar'
+              alt="avatar"
               width={60}
               height={60}
               unoptimized
             />
-          </div>}
-          <span className="font-semibold text-[14px]">
-            Analitzant totes les fonts d’informació
-          </span>
-          <div className="flex space-x-1">
-            <span className="w-1 h-1 rounded-full bg-gray-400 animate-pulse" />
-            <span className="w-1 h-1 rounded-full bg-gray-400 animate-pulse delay-150" />
-            <span className="w-1 h-1 rounded-full bg-gray-400 animate-pulse delay-300" />
-            </div>
- 
+          </div>
+        )}
+        <span className="font-semibold text-[14px]">
+          Analitzant totes les fonts d’informació
+        </span>
+        <div className="flex space-x-1">
+          <span className="w-1 h-1 rounded-full bg-gray-400 animate-pulse" />
+          <span className="w-1 h-1 rounded-full bg-gray-400 animate-pulse delay-150" />
+          <span className="w-1 h-1 rounded-full bg-gray-400 animate-pulse delay-300" />
+        </div>
       </div>
     </div>
   );
 
-
   const messageAnimationClass = "animate-fade-in";
-
 
   return (
     <Card
-      className={`w-[400px] flex flex-col rounded-[16px] bg-white overflow-hidden transition-all duration-300 ease-in-out shadow-lg ${isExpanded ? "h-[700px]" : "h-[640px]"
-        }`}
+      className={`w-[400px] flex flex-col rounded-[16px] bg-white overflow-hidden transition-all duration-300 ease-in-out shadow-lg ${
+        isExpanded ? "h-[700px]" : "h-[640px]"
+      }`}
     >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 py-4 px-4">
         <div className="flex items-center gap-3">
-          {!team.logoUrl ? <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-green-500 flex items-center justify-center text-white text-sm font-bold">
-            
-          </div>:
-          <div className="w-10 h-10 rounded-full flex items-center justify-center relative overflow-hidden border">
-            <Image
-              src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${team.logoUrl}`}
-              alt='logo'
-              width={60}
-              height={60}
-              unoptimized
-            />
-          </div>}
+          {!team.logoUrl ? (
+            <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-400 to-green-500 flex items-center justify-center text-white text-sm font-bold"></div>
+          ) : (
+            <div className="w-10 h-10 rounded-full flex items-center justify-center relative overflow-hidden border">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${team.logoUrl}`}
+                alt="logo"
+                width={60}
+                height={60}
+                unoptimized
+              />
+            </div>
+          )}
           <span className="font-semibold text-[17px]">{team.name}</span>
         </div>
         <div className="flex items-center gap-1">
@@ -260,10 +261,11 @@ export default function ChatInterface({
                     style={animatedMessageStyle}
                   >
                     <div
-                      className={`p-4 rounded-[32px] max-w-[85%] ${message.role === "user"
+                      className={`p-4 rounded-[32px] max-w-[85%] ${
+                        message.role === "user"
                           ? "bg-[#0F172A] text-white"
                           : "bg-[#F8F9FC]"
-                        }`}
+                      }`}
                     >
                       {message.role === "assistant" && index === 0 && (
                         <div className="flex items-center space-x-2 mb-2">
@@ -276,7 +278,7 @@ export default function ChatInterface({
                         </div>
                       )}
                       <p className="text-[16px] leading-normal">
-                      <MarkdownDisplay markdownText={message.message} />
+                        <MarkdownDisplay markdownText={message.message} />
                       </p>
                     </div>
                   </div>

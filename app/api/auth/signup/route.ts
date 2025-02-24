@@ -4,7 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 export async function POST(request: NextRequest) {
   const supabase = createClient();
 
-  const { email, password, name, surname, phone, language } = await request.json();
+  const { email, password, name, surname, phone, language } =
+    await request.json();
 
   const response = await supabase.auth.signUp({
     email,
@@ -27,9 +28,12 @@ export async function POST(request: NextRequest) {
   }
 
   if (!response.data.user?.id) {
-    return new NextResponse(JSON.stringify({ error: "User ID is not defined" }), {
-      status: 400,
-    });
+    return new NextResponse(
+      JSON.stringify({ error: "User ID is not defined" }),
+      {
+        status: 400,
+      },
+    );
   }
 
   if (!process.env.SLACK_URL_USER) {

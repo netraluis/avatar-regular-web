@@ -39,8 +39,8 @@ export const generateMetadata = async ({
       description: data.name || "",
       images: data.logoUrl
         ? [
-          `${basePublicUrl}/${typeof data.logoUrl === "string" && data.logoUrl}`,
-        ]
+            `${basePublicUrl}/${typeof data.logoUrl === "string" && data.logoUrl}`,
+          ]
         : [],
     },
 
@@ -59,8 +59,8 @@ export const generateMetadata = async ({
       description: data.name || "",
       images: data.logoUrl
         ? [
-          `${basePublicUrl}/${typeof data.logoUrl === "string" && data.logoUrl}`,
-        ]
+            `${basePublicUrl}/${typeof data.logoUrl === "string" && data.logoUrl}`,
+          ]
         : [],
       creator: "netraluis and anton odena",
     },

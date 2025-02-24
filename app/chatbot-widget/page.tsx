@@ -25,13 +25,13 @@ export default async function Widget({
   }
 
   return (
-      <ChatWidget
-        language={language as "en" | "ca"}
-        teamId={teamId}
-        assistantId={assistantId}
-        data={data}
-        team={team}
-      />
+    <ChatWidget
+      language={language as "en" | "ca"}
+      teamId={teamId}
+      assistantId={assistantId}
+      data={data}
+      team={team}
+    />
   );
 }
 

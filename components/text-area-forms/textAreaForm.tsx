@@ -213,8 +213,8 @@ export const TextAreaForm = ({
                 tabIndex={0}
                 onKeyDown={(e: any) => {
                   if (status !== "thread.run.completed") return;
-                  if (e.key === "Enter" && !e.shiftKey){
-                    setShowIntroPanel(false)
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    setShowIntroPanel(false);
                   }
                   handleKeyDown(e);
                 }}

@@ -107,7 +107,7 @@ export function NavAssistants() {
     <>
       <SidebarGroupLabel className="flex group-data-[collapsible=icon]:hidden flex hover:bg-slate-100 cursor-pointer mt-2">
         <div
-          className='grow'
+          className="grow"
           onClick={() => {
             router.push(`/team/${teamSelected?.id}`);
           }}

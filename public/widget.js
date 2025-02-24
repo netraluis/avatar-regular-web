@@ -30,7 +30,6 @@
   document.body.appendChild(iframe);
 
   window.addEventListener("message", (event) => {
-
     if (event.data.type === "resize" && event.data.height) {
       // Para detectar el cambio de altura
       // console.log("🔥 Nueva altura detectada:", event.data.height);

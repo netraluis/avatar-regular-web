@@ -100,11 +100,15 @@ export default function Confirmation() {
             )}
 
             {localError === "same_password" && (
-              <p className="text-red-500">{resetPassword.error.same_password}</p>
+              <p className="text-red-500">
+                {resetPassword.error.same_password}
+              </p>
             )}
 
             {localError === "weak_password" && (
-              <p className="text-red-500">{resetPassword.error.weak_password}</p>
+              <p className="text-red-500">
+                {resetPassword.error.weak_password}
+              </p>
             )}
 
             {error !== "otp_expired" && (

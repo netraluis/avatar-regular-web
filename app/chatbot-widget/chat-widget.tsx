@@ -58,14 +58,16 @@ export default function ChatWidget({
       }),
     ) || [];
 
-
   // 🚀 **Función para calcular la altura del chat y enviarla**
   const sendHeight = () => {
     setTimeout(() => {
       if (chatRef.current) {
         const newHeight = chatRef.current.scrollHeight;
         const newWidth = chatRef.current.scrollWidth;
-        window.parent.postMessage({ type: "resize", height: newHeight + 20, width: newWidth + 20 }, "*");
+        window.parent.postMessage(
+          { type: "resize", height: newHeight + 20, width: newWidth + 20 },
+          "*",
+        );
       }
     }, 100); // Pequeño delay para permitir que el DOM se actualice antes de calcular la altura
   };
@@ -92,7 +94,10 @@ export default function ChatWidget({
   }, [isOpen]); // Se ejecuta cada vez que `isOpen` cambia
 
   return (
-    <div ref={chatRef} className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all duration-300 ease-in-out">
+    <div
+      ref={chatRef}
+      className="fixed bottom-4 right-4 z-50 flex flex-col items-end transition-all duration-300 ease-in-out"
+    >
       {isOpen ? (
         <div
           className={`mb-[16px] transition-all duration-300 ease-in-out ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}

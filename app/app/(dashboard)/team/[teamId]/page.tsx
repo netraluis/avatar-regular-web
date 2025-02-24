@@ -175,7 +175,7 @@ export default function Dashboard() {
                               {teamSelected?.subDomain}.
                               {process.env.NEXT_PUBLIC_ROOT_DOMAIN}/
                               {teamSelected?.defaultLanguage?.toLocaleLowerCase()}
-                                /{assistant.url}
+                              /{assistant.url}
                             </Link>
                           </div>
                         </TableCell>
@@ -193,10 +193,16 @@ export default function Dashboard() {
                               </SelectTrigger>
                               <SelectContent>
                                 {Object.values(AssitantStatus).map((status) => (
-                                  <SelectItem className="flex items-center" key={status} value={status}>
+                                  <SelectItem
+                                    className="flex items-center"
+                                    key={status}
+                                    value={status}
+                                  >
                                     <span className="flex items-center">
-                                    {visibilityImages[status]}
-                                    <span className ="hidden sm:table-cell">{status}</span>
+                                      {visibilityImages[status]}
+                                      <span className="hidden sm:table-cell">
+                                        {status}
+                                      </span>
                                     </span>
                                   </SelectItem>
                                 ))}

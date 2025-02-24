@@ -16,7 +16,6 @@ export default function Signup() {
   const signUp = t("app.(AUTH).SIGN_UP");
   const { language } = useUserManagmentLanguage();
 
-
   const { signupUser, loading, data, error } = useSignupUser();
   const [message, setMesssage] = useState(false);
   const [email, setEmail] = useState("");
@@ -34,14 +33,14 @@ export default function Signup() {
   };
 
   const validatePhone = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const phoneRegex = /^\+?[1-9]\d{1,14}$/
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
 
     if (!phoneRegex.test(event.target.value)) {
-      setPhoneError(true)
+      setPhoneError(true);
     } else {
-      setPhoneError(false)
+      setPhoneError(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (data) setMesssage(true);
@@ -105,9 +104,7 @@ export default function Signup() {
                 onChange={validatePhone}
               />
               {phoneError && (
-                <p className="text-red-500">
-                  {signUp.phoneError}
-                </p>
+                <p className="text-red-500">{signUp.phoneError}</p>
               )}
             </div>
             <div className="grid gap-2">
