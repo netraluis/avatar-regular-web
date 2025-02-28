@@ -267,7 +267,7 @@ export const TextAreaForm = ({
                     className="ml-0.5 h-5 w-5 mr-1"
                     aria-hidden="true"
                   />
-                  {text.voiceRecordStop}
+                  {/* {text.voiceRecordStop} */}
                 </Button>
               </div>
             )}
@@ -285,7 +285,7 @@ export const TextAreaForm = ({
                           className="ml-0.5 h-5 w-5 mr-1"
                           aria-hidden="true"
                         />
-                        {text.voiceRecordStart}
+                        {/* {text.voiceRecordStart} */}
                       </>
                     ) : (
                       <ArrowPathIcon
@@ -305,7 +305,7 @@ export const TextAreaForm = ({
                           className="ml-0.5 h-5 w-5 mr-1"
                           aria-hidden="true"
                         />
-                        {text.sendMessage}
+                        {/* {text.sendMessage} */}
                       </>
                     ) : (
                       <ArrowPathIcon

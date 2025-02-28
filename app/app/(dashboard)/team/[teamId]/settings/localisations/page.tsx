@@ -117,8 +117,8 @@ export default function Component() {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="w-full px-4 py-2 flex items-center justify-between gap-2 border mb-2 rounded-lg">
-        <div className="flex grow items-center gap-2 flex-1">
+      <div className="w-full px-4 py-2 flex items-center justify-between gap-2 border mb-2 rounded-lg flex-wrap border">
+        <div className="flex grow items-center gap-2 flex-1 flex-wrap w-full">
           {teamSelected?.assistants ? (
             <Select
               onValueChange={(value) => {
@@ -165,10 +165,10 @@ export default function Component() {
           ) : (
             <SelectCharging />
           )}
-        </div>
+        {/* </div>
 
-        <div className="flex items-center ">
-          <div className="max-w-[500px] mx-auto p-4 space-y-4">
+        <div className="flex"> */}
+          <div className="w-[180px]">
             {teamSelected?.selectedLanguages &&
             teamSelected?.selectedLanguages ? (
               <MultiSelect

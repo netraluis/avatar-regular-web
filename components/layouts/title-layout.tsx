@@ -62,7 +62,7 @@ export const TitleLayout = ({
           />
           <Card className="border-none bg-transparent shadow-none py-2 px-4">
             <CardTitle>{cardTitle}</CardTitle>
-            <CardDescription>{cardDescription}</CardDescription>
+            <CardDescription className="hidden md:block">{cardDescription}</CardDescription>
           </Card>
         </div>
         <div className="ml-auto flex items-center py-2 px-4 gap-2 flex-wrap justify-end">
@@ -72,30 +72,33 @@ export const TitleLayout = ({
             </Button>
           )} */}
 
-          <Button variant="secondary" size="sm">
-            <Link
-              href={urlPreview}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center"
-            >
-              <Eye className="w-3.5 h-3.5 mr-2" />
-              {preview}
-            </Link>
-          </Button>
-          {!assistantId && teamId && (
-            <Button size="sm">
+          <div className="flex justify-end gap-2 flex-wrap">
+            <Button variant="secondary" size="sm">
               <Link
-                href={createNewAssUrl}
-                // target="_blank"
-                // rel="noopener noreferrer"
+                href={urlPreview}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center"
               >
-                <Plus className="w-3.5 h-3.5 mr-2" />
-                {createAssistant}
+                <Eye className="w-3.5 h-3.5" />
+                <span className="hidden ml-2 md:block">{preview}</span>
               </Link>
             </Button>
-          )}
+            {!assistantId && teamId && (
+              <Button size="sm">
+                <Link
+                  href={createNewAssUrl}
+                  // target="_blank"
+                  // rel="noopener noreferrer"
+                  className="flex items-center"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span className="hidden ml-2 sm:block">{createAssistant}</span>
+                </Link>
+              </Button>
+            )}
+
+          </div>
 
           {/* <Button
             size="sm"

@@ -1,5 +1,5 @@
 import { useAppContext } from "@/components/context/appContext";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { TextAreaCharging } from "@/components/loaders/loadersSkeleton";
@@ -25,11 +25,11 @@ export const MenuHeaderFooter = ({
       <div className="flex items-center justify-between">
         <div>
           <Label htmlFor="footer-header">{texts.menuFooterTitle}</Label>
-          <div className="ml-4 inline-flex items-center justify-center rounded-full bg-sky-500 px-3 py-1 text-sm font-medium text-white">
+          {/* <div className="ml-4 inline-flex items-center justify-center rounded-full bg-sky-500 px-3 py-1 text-sm font-medium text-white">
             Premium
-          </div>
+          </div> */}
         </div>
-        <Button variant="blue">{texts.menuFooterChangePlan}</Button>
+        {/* <Button variant="blue">{texts.menuFooterChangePlan}</Button> */}
       </div>
 
       {teamSelected && !loading ? (

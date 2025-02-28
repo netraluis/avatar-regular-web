@@ -213,8 +213,9 @@ export default function Playground() {
       cardTitle={playground.title}
       cardDescription={playground.description}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-hidden w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 grow overflow-auto w-full scrollbar-hidden">
         {/* <Card className="p-6 w-full h-full border overflow-auto"> */}
+        <div className='flex flex-col md:overflow-hidden'>
         <CustomCard
           title={playground.adjustments.title}
           description={playground.adjustments.description}
@@ -347,8 +348,10 @@ export default function Playground() {
           </div>
           {/* </form> */}
         </CustomCard>
+        </div>
         {/* </Card> */}
-        <Card className="flex flex-col relative overflow-hidden w-full grow overflow-auto">
+        <div className='hidden md:flex flex-col md:overflow-hidden'>
+        {true && <Card className="flex flex-col relative overflow-hidden w-full grow overflow-auto">
           <CardHeader>
             <CardTitle>{playground.adjustments.output}</CardTitle>
           </CardHeader>
@@ -406,7 +409,8 @@ export default function Playground() {
               </div>
             </div>
           )}
-        </Card>
+        </Card>}
+        </div>
       </div>
     </TitleLayout>
   );

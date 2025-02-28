@@ -17,7 +17,7 @@
       },
       "HEADER": {
         "newConversation": "Nova conversa",
-        "backToHome": "Tornar a l&rsquo;inici"
+        "backToHome": "Tornar a l'inici"
       }
     },
     "DOMAIN": {
@@ -32,7 +32,7 @@
     },
     "HEADER": {
       "newConversation": "Nova conversa",
-      "backToHome": "Tornar a l&rsquo;inici"
+      "backToHome": "Tornar a l'inici"
     }
   }
 }

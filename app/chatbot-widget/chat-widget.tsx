@@ -93,6 +93,7 @@ export default function ChatWidget({
     return () => observer.disconnect();
   }, [isOpen]); // Se ejecuta cada vez que `isOpen` cambia
 
+
   return (
     <div
       ref={chatRef}

@@ -145,8 +145,8 @@ export default function Component() {
 
   return (
     <div className="overflow-auto flex flex-col grow h-full">
-      <div className="w-full px-4 py-2 flex items-center justify-between gap-2 border mb-2 rounded-lg ">
-        <div className="flex grow items-center gap-2 flex-1">
+      <div className="w-full px-4 py-2 flex items-center justify-between gap-2 md:border mb-2 rounded-lg flex-wrap">
+        <div className="flex grow items-center gap-2 flex-1 flex-wrap">
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -171,7 +171,7 @@ export default function Component() {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent className="w-auto p-0" align="start">xwxw
               <Calendar
                 initialFocus
                 mode="range"
@@ -192,11 +192,12 @@ export default function Component() {
         </div>
       </div>
       <div className="flex grow rounded-lg bg-background overflow-auto ">
-        <div className="w-80 flex flex-col overflow-auto h-full">
+        <div className="w-full md:w-80 flex flex-col overflow-auto h-full">
           {!loadingFetchThreadsMessages ? (
             <div className="overflow-auto grow scrollbar-hidden grow">
               {dataFetchThreadsMessages.length > 0 ? (
                 dataFetchThreadsMessages.map((i, index) => (
+                  <>
                   <div
                     onClick={() => setThreadId(i.threadId)}
                     key={index}
@@ -225,6 +226,34 @@ export default function Component() {
                       })}
                     </div>
                   </div>
+                  {i.threadId === threadId && <div className="md:hidden flex-1 flex flex-col rounded-lg mb-2">
+                    <div className="flex-1 overflow-auto p-4 space-y-4 scrollbar-hidden">
+                      <div className="flex flex-col max-w-100% space-y-2 scrollbar-hidden overflow-auto">
+                        {!loadingFetchMessageByThread ? (
+                          threadId &&
+                          dataFetchMessageByThread &&
+                          dataFetchMessageByThread.map((message, index: number) => (
+                            <div
+                              key={index}
+                              className={`rounded-lg p-3 ${
+                                message.role === RoleUserType.USER
+                                  ? "bg-slate-300 "
+                                  : "bg-muted"
+                              } `}
+                            >
+                              <p>{message.message}</p>
+                            </div>
+                          ))
+                        ) : (
+                          <>
+                            <InputCharging />
+                            <InputCharging />
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>}
+                  </>
                 ))
               ) : (
                 <div className="h-full grow p-4 mr-2 rounded-lg border flex justify-center items-center">
@@ -238,6 +267,7 @@ export default function Component() {
             </div>
           )}
           {dataFetchThreadsMessages.length > 0 && (
+            <>
             <div className="pr-2">
               {!loadingFetchThreadsMessages ? (
                 <Pagination className="border mr-2 rounded-lg">
@@ -270,11 +300,13 @@ export default function Component() {
                 <InputCharging />
               )}
             </div>
+            </>
           )}
+
         </div>
 
         {/* Main Chat Area */}
-        <div className="flex-1 flex flex-col border rounded-lg">
+        <div className="hidden flex-1 md:flex flex-col border rounded-lg">
           <div className="flex-1 overflow-auto p-4 space-y-4 scrollbar-hidden">
             <div className="flex flex-col max-w-100% space-y-2 scrollbar-hidden overflow-auto">
               {!loadingFetchMessageByThread ? (
