@@ -8,6 +8,7 @@ import { ChatList } from "@/components/chat-list";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import { useClientLanguage } from "@/components/context/clientLanguageContext";
+import { notFound } from "next/navigation";
 
 export default function AssistantUrl() {
   const { t } = useClientLanguage();
@@ -35,6 +36,9 @@ export default function AssistantUrl() {
         ),
       );
       setIntroMessage(assistant?.assistantCard[0]?.introMessage || []);
+      if (!assistant) {
+        notFound();
+      }
     }
   }, [data]);
 

@@ -51,8 +51,6 @@ export const TitleLayout = ({
 
   const { state } = useSidebar();
 
-  // console.log({hook})
-
   return (
     <div className="flex flex-col overflow-auto p-2 w-full h-full">
       <div className="flex items-center gap-4 py-1.5 px-1.5">
@@ -75,17 +73,20 @@ export const TitleLayout = ({
           )} */}
 
           <div className="flex justify-end gap-2 flex-wrap">
-            <Button variant="secondary" size="sm">
-              <Link
-                href={urlPreview}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center"
-              >
-                <Eye className="w-3.5 h-3.5" />
-                <span className="hidden ml-2 md:block">{preview}</span>
-              </Link>
-            </Button>
+            {(!assistantSelected ||
+              assistantSelected?.localAssistant?.status === "PUBLIC") && (
+              <Button variant="secondary" size="sm">
+                <Link
+                  href={urlPreview}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span className="hidden ml-2 md:block">{preview}</span>
+                </Link>
+              </Button>
+            )}
             {!assistantId && teamId && (
               <Button size="sm">
                 <Link
