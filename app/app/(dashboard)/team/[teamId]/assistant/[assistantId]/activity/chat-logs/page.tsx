@@ -171,7 +171,8 @@ export default function Component() {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">xwxw
+            <PopoverContent className="w-auto p-0" align="start">
+              xwxw
               <Calendar
                 initialFocus
                 mode="range"
@@ -198,61 +199,65 @@ export default function Component() {
               {dataFetchThreadsMessages.length > 0 ? (
                 dataFetchThreadsMessages.map((i, index) => (
                   <>
-                  <div
-                    onClick={() => setThreadId(i.threadId)}
-                    key={index}
-                    className={cn(
-                      "p-4 mb-2 mr-2 rounded-lg border hover:bg-muted/50 cursor-pointer hover:scale",
-                      i.threadId === threadId && "bg-muted",
-                    )}
-                  >
-                    <div className="space-y-1">
-                      {i.messages.map((msg: any, index: number) => {
-                        return (
-                          <p
-                            key={index}
-                            className={`h-[40px] overflow-hidden ${
-                              msg.role === RoleUserType.USER
-                                ? "font-medium "
-                                : "text-sm text-muted-foreground"
-                            }`}
-                          >
-                            {msg.role === RoleUserType.USER
-                              ? "User"
-                              : "Assistant"}
-                            : {msg.message}
-                          </p>
-                        );
-                      })}
-                    </div>
-                  </div>
-                  {i.threadId === threadId && <div className="md:hidden flex-1 flex flex-col rounded-lg mb-2">
-                    <div className="flex-1 overflow-auto p-4 space-y-4 scrollbar-hidden">
-                      <div className="flex flex-col max-w-100% space-y-2 scrollbar-hidden overflow-auto">
-                        {!loadingFetchMessageByThread ? (
-                          threadId &&
-                          dataFetchMessageByThread &&
-                          dataFetchMessageByThread.map((message, index: number) => (
-                            <div
+                    <div
+                      onClick={() => setThreadId(i.threadId)}
+                      key={index}
+                      className={cn(
+                        "p-4 mb-2 mr-2 rounded-lg border hover:bg-muted/50 cursor-pointer hover:scale",
+                        i.threadId === threadId && "bg-muted",
+                      )}
+                    >
+                      <div className="space-y-1">
+                        {i.messages.map((msg: any, index: number) => {
+                          return (
+                            <p
                               key={index}
-                              className={`rounded-lg p-3 ${
-                                message.role === RoleUserType.USER
-                                  ? "bg-slate-300 "
-                                  : "bg-muted"
-                              } `}
+                              className={`h-[40px] overflow-hidden ${
+                                msg.role === RoleUserType.USER
+                                  ? "font-medium "
+                                  : "text-sm text-muted-foreground"
+                              }`}
                             >
-                              <p>{message.message}</p>
-                            </div>
-                          ))
-                        ) : (
-                          <>
-                            <InputCharging />
-                            <InputCharging />
-                          </>
-                        )}
+                              {msg.role === RoleUserType.USER
+                                ? "User"
+                                : "Assistant"}
+                              : {msg.message}
+                            </p>
+                          );
+                        })}
                       </div>
                     </div>
-                  </div>}
+                    {i.threadId === threadId && (
+                      <div className="md:hidden flex-1 flex flex-col rounded-lg mb-2">
+                        <div className="flex-1 overflow-auto p-4 space-y-4 scrollbar-hidden">
+                          <div className="flex flex-col max-w-100% space-y-2 scrollbar-hidden overflow-auto">
+                            {!loadingFetchMessageByThread ? (
+                              threadId &&
+                              dataFetchMessageByThread &&
+                              dataFetchMessageByThread.map(
+                                (message, index: number) => (
+                                  <div
+                                    key={index}
+                                    className={`rounded-lg p-3 ${
+                                      message.role === RoleUserType.USER
+                                        ? "bg-slate-300 "
+                                        : "bg-muted"
+                                    } `}
+                                  >
+                                    <p>{message.message}</p>
+                                  </div>
+                                ),
+                              )
+                            ) : (
+                              <>
+                                <InputCharging />
+                                <InputCharging />
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </>
                 ))
               ) : (
@@ -268,41 +273,40 @@ export default function Component() {
           )}
           {dataFetchThreadsMessages.length > 0 && (
             <>
-            <div className="pr-2">
-              {!loadingFetchThreadsMessages ? (
-                <Pagination className="border mr-2 rounded-lg">
-                  <PaginationContent>
-                    {page > 1 && (
+              <div className="pr-2">
+                {!loadingFetchThreadsMessages ? (
+                  <Pagination className="border mr-2 rounded-lg">
+                    <PaginationContent>
+                      {page > 1 && (
+                        <PaginationItem>
+                          <PaginationPrevious
+                            onClick={() => handlePageChange(page - 1)}
+                          />
+                        </PaginationItem>
+                      )}
                       <PaginationItem>
-                        <PaginationPrevious
-                          onClick={() => handlePageChange(page - 1)}
-                        />
+                        <PaginationLink onClick={() => handlePageChange(1)}>
+                          {page}
+                        </PaginationLink>
                       </PaginationItem>
-                    )}
-                    <PaginationItem>
-                      <PaginationLink onClick={() => handlePageChange(1)}>
-                        {page}
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-                    {hasMoreMessages && (
                       <PaginationItem>
-                        <PaginationNext
-                          onClick={() => handlePageChange(page + 1)}
-                        />
+                        <PaginationEllipsis />
                       </PaginationItem>
-                    )}
-                  </PaginationContent>
-                </Pagination>
-              ) : (
-                <InputCharging />
-              )}
-            </div>
+                      {hasMoreMessages && (
+                        <PaginationItem>
+                          <PaginationNext
+                            onClick={() => handlePageChange(page + 1)}
+                          />
+                        </PaginationItem>
+                      )}
+                    </PaginationContent>
+                  </Pagination>
+                ) : (
+                  <InputCharging />
+                )}
+              </div>
             </>
           )}
-
         </div>
 
         {/* Main Chat Area */}

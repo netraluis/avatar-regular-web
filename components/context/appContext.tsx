@@ -28,6 +28,7 @@ type AppState = {
   } | null;
   user: UserData | null;
   userLocal: User | null;
+  loading: boolean;
 };
 
 // Acciones que el reducer manejará
@@ -62,7 +63,13 @@ type Action =
         teamSelected: GetTeamByTeamId | null;
       };
     }
-  | { type: "SET_USER_LOCAL"; payload: User | null };
+  | { type: "SET_USER_LOCAL"; payload: User | null }
+  | {
+      type: "SET_LOADING";
+      payload: {
+        loading: boolean;
+      };
+    };
 
 // Reducer que actualizará el estado basado en las acciones
 const appReducer = (state: AppState, action: Action): AppState => {
@@ -163,6 +170,12 @@ const appReducer = (state: AppState, action: Action): AppState => {
         userLocal: action.payload,
       };
 
+    case "SET_LOADING":
+      return {
+        ...state,
+        loading: action.payload.loading,
+      };
+
     default:
       return state;
   }
@@ -195,6 +208,7 @@ export const AppProvider = ({
     assistantSelected: null,
     user,
     userLocal,
+    loading: false,
   };
 
   const [state, dispatch] = useReducer(appReducer, initialState);
