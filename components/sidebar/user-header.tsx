@@ -11,9 +11,11 @@ import {
 import { useRouter } from "next/navigation";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 import { Collapsible } from "@/components/ui/collapsible";
+import { useLoadingRouter } from "../context/useAppContext/loading";
 
 export function UserHeader() {
   const router = useRouter();
+  const { loadingRouter } = useLoadingRouter();
 
   const { t } = useDashboardLanguage();
   const dashboard = t("app.LAYOUT");
@@ -35,6 +37,7 @@ export function UserHeader() {
             <ChevronLeft
               className="h-4 w-4"
               onClick={() => {
+                loadingRouter(true);
                 router.push(`/team`);
               }}
             />

@@ -13,6 +13,7 @@ import { Collapsible } from "@/components/ui/collapsible";
 
 import { useRouter, useParams } from "next/navigation";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
+import { useLoadingRouter } from "../context/useAppContext/loading";
 
 export function NavUserBody() {
   const { t } = useDashboardLanguage();
@@ -22,8 +23,10 @@ export function NavUserBody() {
   const { teamId } = useParams();
 
   const router = useRouter();
+  const { loadingRouter } = useLoadingRouter();
 
   const handleGetAssistants = async (teamId: string) => {
+    loadingRouter(true);
     router.push(`/team/${teamId}`);
   };
 
@@ -42,7 +45,10 @@ export function NavUserBody() {
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip={"hola"}
-              onClick={() => router.push(`/user/general`)}
+              onClick={() => {
+                loadingRouter(true);
+                router.push(`/user/general`);
+              }}
             >
               <Settings2 className="h-4 w-4" />
               <span>{dashboard.settings}</span>

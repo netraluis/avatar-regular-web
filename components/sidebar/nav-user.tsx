@@ -26,6 +26,7 @@ import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 import { useAppContext } from "../context/appContext";
 import { useUserLogout } from "../context/useAppContext/user";
 import { useRouter } from "next/navigation";
+import { useLoadingRouter } from "../context/useAppContext/loading";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -37,6 +38,7 @@ export function NavUser() {
   } = useAppContext();
 
   const router = useRouter();
+  const { loadingRouter } = useLoadingRouter();
 
   const { userLogout } = useUserLogout();
 
@@ -74,7 +76,10 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="gap-2 p-2"
-              onClick={() => router.push("/user/general")}
+              onClick={() => {
+                loadingRouter(true);
+                router.push("/user/general");
+              }}
             >
               <Settings2 className="size-4" />
               {dashboard.settings}
@@ -82,7 +87,10 @@ export function NavUser() {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="gap-2 p-2"
-              onClick={() => router.push("https://wa.me/376644253?")}
+              onClick={() => {
+                loadingRouter(true);
+                router.push("https://wa.me/376644253?");
+              }}
             >
               <LifeBuoy className="size-4" />
               {dashboard.help}

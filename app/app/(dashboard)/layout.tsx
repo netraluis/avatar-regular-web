@@ -11,6 +11,9 @@ import { usePathname } from "next/navigation";
 import ConfirmationScreen from "@/components/user-process/redirect";
 import { ShieldAlert } from "lucide-react";
 import Link from "next/link";
+import FullScreenLoader from "@/components/full-screen-loader";
+import { useEffect } from "react";
+import { useLoadingRouter } from "@/components/context/useAppContext/loading";
 
 export default function Layout({
   children,
@@ -19,14 +22,20 @@ export default function Layout({
 }>) {
   const pathname = usePathname();
   const {
-    state: { userLocal },
+    state: { userLocal, loading },
   } = useAppContext();
+
+  const { loadingRouter } = useLoadingRouter();
 
   const split = pathname.split("/")[pathname.split("/").length - 1];
 
   // const absolutePath = pathname.split("/").slice(pathname.split("/").length - 2, pathname.split("/").length - 0).join("/");
 
   const language: Language = (userLocal?.language as Language) || Language.EN;
+
+  useEffect(() => {
+    loadingRouter(false); // Cuando pathname cambia, la carga termina
+  }, [pathname]);
 
   if (!userLocal) {
     return (
@@ -53,12 +62,15 @@ export default function Layout({
   }
 
   return (
-    <DashboardLanguageProvider userLanguage={language}>
-      <SidebarProvider>
-        <AppSidebar />
-        <main className="h-screen w-full relative">{children}</main>
-      </SidebarProvider>
-    </DashboardLanguageProvider>
+    <>
+      <DashboardLanguageProvider userLanguage={language}>
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="h-screen w-full relative">{children}</main>
+        </SidebarProvider>
+      </DashboardLanguageProvider>
+      <FullScreenLoader isLoading={loading} />
+    </>
   );
 }
 

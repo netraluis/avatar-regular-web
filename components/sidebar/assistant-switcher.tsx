@@ -22,6 +22,7 @@ import { Assistant } from "@prisma/client";
 import { GetAssistantType } from "@/lib/data/assistant";
 import OpenAI from "openai/index.mjs";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
+import { useLoadingRouter } from "../context/useAppContext/loading";
 
 export function AssistantSwitcher({
   assistants,
@@ -35,21 +36,22 @@ export function AssistantSwitcher({
 }) {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { loadingRouter } = useLoadingRouter();
 
   const { t } = useDashboardLanguage();
   const dashboard = t("app.LAYOUT");
 
   const handlerUpdateSelectedTeam = async (teamId: string) => {
+    loadingRouter(true);
     router.push(`/team/${teamId}`);
   };
 
   const handleCreateNewTeamRoute = () => {
+    loadingRouter(true);
     router.push("/team/new");
   };
 
   const { assistantId } = useParams();
-
-  console.log(assistantSelected);
 
   return (
     <SidebarMenu>

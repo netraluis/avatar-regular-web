@@ -29,10 +29,12 @@ import { useFetchTeamsByUserId } from "../context/useAppContext/team";
 import { Button } from "../ui/button";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 import Image from "next/image";
+import { useLoadingRouter } from "../context/useAppContext/loading";
 
 export function TeamSwitcher() {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { loadingRouter } = useLoadingRouter();
   const {
     state: { teams, teamSelected, user },
   } = useAppContext();
@@ -45,10 +47,12 @@ export function TeamSwitcher() {
   const { fetchTeamsByUserId } = useFetchTeamsByUserId();
 
   const handlerUpdateSelectedTeam = async (teamId: string) => {
+    loadingRouter(true);
     router.push(`/team/${teamId}`);
   };
 
   const handleCreateNewTeamRoute = () => {
+    loadingRouter(true);
     router.push("/team/new");
   };
 

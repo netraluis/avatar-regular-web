@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useLoadingRouter } from "../context/useAppContext/loading";
 
 export const AddAssistant = () => {
   const { t } = useDashboardLanguage();
@@ -19,9 +20,11 @@ export const AddAssistant = () => {
   const dashboard = t("app.LAYOUT");
 
   const router = useRouter();
+
   const { teamId } = useParams();
 
   const sidebarState = useSidebar();
+  const { loadingRouter } = useLoadingRouter();
 
   return (
     <SidebarGroup className="p-0 m-0">
@@ -35,6 +38,7 @@ export const AddAssistant = () => {
                   dashboard.assistant.slice(1).toLowerCase()
                 }`}
                 onClick={() => {
+                  loadingRouter(true);
                   router.push(`/team/${teamId}/assistant/new`);
                 }}
               >
@@ -57,12 +61,14 @@ export const AddAssistant = () => {
               <Bot
                 className="h-4 w-4"
                 onClick={() => {
+                  loadingRouter(true);
                   router.push(`/team/${teamId}`);
                 }}
               />
               <span
                 className="grow"
                 onClick={() => {
+                  loadingRouter(true);
                   router.push(`/team/${teamId}`);
                 }}
               >
@@ -72,6 +78,7 @@ export const AddAssistant = () => {
               <Plus
                 className="h-3.5 w-3.5 ml-auto cursor-pointer hover:bg-slate-200 cursor-pointer rounded"
                 onClick={() => {
+                  loadingRouter(true);
                   router.push(`/team/${teamId}/assistant/new`);
                 }}
               />

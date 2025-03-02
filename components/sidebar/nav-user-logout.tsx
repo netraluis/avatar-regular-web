@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
+import { useLoadingRouter } from "../context/useAppContext/loading";
 
 export function NavUserLogout() {
   const { t } = useDashboardLanguage();
@@ -18,6 +19,7 @@ export function NavUserLogout() {
   const dashboard = t("app.LAYOUT");
 
   const router = useRouter();
+  const { loadingRouter } = useLoadingRouter();
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -26,7 +28,10 @@ export function NavUserLogout() {
           <SidebarSeparator />
           <SidebarMenuButton
             className="mt-2"
-            onClick={() => router.push(`/user/general`)}
+            onClick={() => {
+              loadingRouter(true);
+              router.push(`/user/general`);
+            }}
           >
             <LogOut className="h-4 w-4" />
             <span>{dashboard.logOut}</span>

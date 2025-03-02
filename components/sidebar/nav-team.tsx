@@ -18,9 +18,8 @@ import {
 } from "@/components/ui/sidebar";
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 import { teamsSettingsNav } from "@/lib/helper/navbar";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { useLoadingRouter } from "../context/useAppContext/loading";
 
 export function NavTeam() {
   const { t } = useDashboardLanguage();
@@ -29,8 +28,10 @@ export function NavTeam() {
 
   const router = useRouter();
   const navItems = teamsSettingsNav(menu);
-
+  const { loadingRouter } = useLoadingRouter();
+  const pathname = usePathname();
   const { teamId } = useParams();
+  const absolutePath = pathname.split("/").slice(0, -1).join("/");
 
   return (
     <SidebarGroup className="p-0 m-0">
@@ -41,13 +42,17 @@ export function NavTeam() {
         <Collapsible
           // key={item.title}
           asChild
+          open={absolutePath === `/team/${teamId}/settings`}
           // defaultOpen={item.isActive}
           className="group/collapsible"
         >
           <SidebarMenuItem>
             <SidebarMenuButton
+              isActive={absolutePath === `/team/${teamId}/settings`}
               tooltip={teamSettings.cardTitle}
               onClick={() => {
+                if (absolutePath === `/team/${teamId}/settings`) return;
+                loadingRouter(true);
                 router.push(`/team/${teamId}/settings/general`);
               }}
             >
@@ -61,10 +66,26 @@ export function NavTeam() {
               <SidebarMenuSub>
                 {navItems.map((subItem) => (
                   <SidebarMenuSubItem key={subItem.name}>
-                    <SidebarMenuSubButton asChild>
-                      <Link href={`/team/${teamId}/settings/${subItem.id}`}>
+                    <SidebarMenuSubButton
+                      isActive={
+                        pathname === `/team/${teamId}/settings/${subItem.id}`
+                      }
+                      asChild
+                    >
+                      <div
+                        onClick={() => {
+                          if (
+                            pathname ===
+                            `/team/${teamId}/settings/${subItem.id}`
+                          )
+                            return;
+                          loadingRouter(true);
+                          router.push(`/team/${teamId}/settings/${subItem.id}`);
+                        }}
+                        // href={`/team/${teamId}/settings/${subItem.id}`}
+                      >
                         <span>{subItem.name}</span>
-                      </Link>
+                      </div>
                     </SidebarMenuSubButton>
                   </SidebarMenuSubItem>
                 ))}

@@ -8,6 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
+  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 import { useAppContext } from "../context/appContext";
 import { useRouter, useParams, usePathname } from "next/navigation";
@@ -20,6 +21,7 @@ import {
 import { useDashboardLanguage } from "../context/dashboardLanguageContext";
 import { assistantSettingsMenu } from "@/lib/helper/navbar";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { useLoadingRouter } from "../context/useAppContext/loading";
 
 interface TreeType {
   name: string;
@@ -37,21 +39,24 @@ interface ItemTreeType extends TreeType {
 
 function Tree(item: ItemTreeType) {
   const router = useRouter();
+  const { loadingRouter } = useLoadingRouter();
   const { teamId } = useParams();
   const pathname = usePathname();
   const absolutePath = pathname.split("/").slice(0, -1).join("/");
 
   if (!item.subItems?.length) {
     return (
-      <SidebarMenuButton
+      <SidebarMenuSubButton
         // isActive={name === "button.tsx"}
-        className="data-[active=true]:bg-transparent mr-0 pr-0"
+        // data-[active=true]:bg-transparent
+        // className=" mr-0 pr-0"
         onClick={() => {
           if (
             pathname ===
             `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`
           )
             return;
+          loadingRouter(true);
           router.push(
             `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`,
           );
@@ -63,7 +68,7 @@ function Tree(item: ItemTreeType) {
       >
         {/* <item.icon /> */}
         {item.name}
-      </SidebarMenuButton>
+      </SidebarMenuSubButton>
     );
   }
 
@@ -92,6 +97,7 @@ function Tree(item: ItemTreeType) {
                 `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`
               )
                 return;
+              loadingRouter(true);
               router.push(
                 `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`,
               );
@@ -117,6 +123,7 @@ function Tree(item: ItemTreeType) {
 }
 
 export function NavAssistants() {
+  const { loadingRouter } = useLoadingRouter();
   const router = useRouter();
   const {
     state: { teamSelected, assistantsByTeam },
@@ -137,6 +144,7 @@ export function NavAssistants() {
         <div
           className="grow"
           onClick={() => {
+            loadingRouter(true);
             router.push(`/team/${teamSelected?.id}`);
           }}
         >
@@ -146,6 +154,7 @@ export function NavAssistants() {
         <Plus
           className="h-3.5 w-3.5 ml-auto cursor-pointer hover:bg-slate-200 cursor-pointer rounded"
           onClick={() => {
+            loadingRouter(true);
             router.push(`/team/${teamSelected?.id}/assistant/new`);
           }}
         />
@@ -166,6 +175,7 @@ export function NavAssistants() {
                 <span
                   className="grow truncate"
                   onClick={() => {
+                    loadingRouter(true);
                     router.push(
                       `/team/${teamSelected?.id}/assistant/${item.id}/playground`,
                     );
