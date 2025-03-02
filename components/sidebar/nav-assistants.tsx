@@ -10,7 +10,7 @@ import {
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
 import { useAppContext } from "../context/appContext";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   Collapsible,
@@ -38,32 +38,60 @@ interface ItemTreeType extends TreeType {
 function Tree(item: ItemTreeType) {
   const router = useRouter();
   const { teamId } = useParams();
+  const pathname = usePathname();
+  const absolutePath = pathname.split("/").slice(0, -1).join("/");
+
   if (!item.subItems?.length) {
     return (
       <SidebarMenuButton
         // isActive={name === "button.tsx"}
         className="data-[active=true]:bg-transparent mr-0 pr-0"
         onClick={() => {
+          if (
+            pathname ===
+            `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`
+          )
+            return;
           router.push(
             `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`,
           );
         }}
+        isActive={
+          pathname ===
+          `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`
+        }
       >
         {/* <item.icon /> */}
         {item.name}
       </SidebarMenuButton>
     );
   }
+
   return (
     <SidebarMenuItem className="mr-0 pr-0">
       <Collapsible
         className="group/collapsible [&[data-state=open]>button>svg:last-child]:rotate-90 w-full"
         // defaultOpen={name === "components" || name === "ui"}
+        open={
+          absolutePath ===
+          `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`
+        }
       >
-        <SidebarMenuButton className="flex justify-between">
+        <SidebarMenuButton
+          className="flex justify-between"
+          isActive={
+            absolutePath ===
+            `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`
+          }
+        >
           <div
             className="grow"
             onClick={() => {
+              if (
+                absolutePath ===
+                `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`
+              )
+                return;
               router.push(
                 `/team/${teamId}/assistant/${item.assistantUrl}/${item.href}`,
               );

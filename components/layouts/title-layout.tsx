@@ -62,7 +62,9 @@ export const TitleLayout = ({
           />
           <Card className="border-none bg-transparent shadow-none py-2 px-4">
             <CardTitle>{cardTitle}</CardTitle>
-            <CardDescription className="hidden md:block">{cardDescription}</CardDescription>
+            <CardDescription className="hidden md:block">
+              {cardDescription}
+            </CardDescription>
           </Card>
         </div>
         <div className="ml-auto flex items-center py-2 px-4 gap-2 flex-wrap justify-end">
@@ -93,11 +95,12 @@ export const TitleLayout = ({
                   className="flex items-center"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span className="hidden ml-2 sm:block">{createAssistant}</span>
+                  <span className="hidden ml-2 sm:block">
+                    {createAssistant}
+                  </span>
                 </Link>
               </Button>
             )}
-
           </div>
 
           {/* <Button
