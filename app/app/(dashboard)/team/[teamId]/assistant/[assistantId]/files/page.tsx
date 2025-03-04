@@ -30,7 +30,7 @@ import { useDashboardLanguage } from "@/components/context/dashboardLanguageCont
 
 export default function Component() {
   const { t } = useDashboardLanguage();
-  const { newInstructions, archives } = t(
+  const { archives } = t(
     "app.TEAM.TEAM_ID.ASSISTANT.ASSISTANT_ID.FILES.PAGE",
   );
 
@@ -109,19 +109,19 @@ export default function Component() {
 
   return (
     <OnboardingBase
-      title={newInstructions.title}
-      description={newInstructions.description}
+      title={archives.title}
+      description={archives.description}
       backAction={backAction}
       nextAction={nextAction}
-      backActionText={newInstructions.backActionText}
-      nextActionText={newInstructions.nextActionText}
+      backActionText={archives.backActionText}
+      nextActionText={archives.nextActionText}
       loading={false}
       backActionActive={true}
       nextActionActive={
         fileData.length > 0 && fileData.every((file) => !file.isCharging)
       }
       error={false}
-      errorText={newInstructions.errorText}
+      errorText={archives.errorText}
     >
       <div className="space-y-2">
         <div className="py-1 space-y-1">

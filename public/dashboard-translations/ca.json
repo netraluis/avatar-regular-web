@@ -360,15 +360,6 @@
             },
             "FILES": {
               "PAGE": {
-                "newInstructions": {
-                  "title": "Escriu les instruccions del teu assistent",
-                  "description": "Defineix com vols que el teu assistent funcioni. Escriu les indicacions clares i específiques que guiaran les seves respostes per assegurar una experiència personalitzada i coherent.",
-                  "backActionText": "Enrere",
-                  "nextActionText": "Continuar",
-                  "subName": "Recorda: unes bones instruccions són clau per a un assistent eficaç! ",
-                  "errorText": "Error al crear les instruccions",
-                  "placeholder": "Escriu les instruccions aquí"
-                },
                 "archives": {
                   "title": "Fitxers",
                   "description": "Sel·lecciona els  arxius per entrenar l’assistent. (Tipus de fitxers compatibles: .pdf, .doc, .docx, .txt)",
@@ -378,7 +369,10 @@
                   "status": "Estat",
                   "textDragAndDrop": "Arrossega i deixa anar els fitxers aquí o",
                   "browser": "explora",
-                  "supportedFiles": "Fitxers admesos: PDF, DOC, DOCX, TXT"
+                  "supportedFiles": "Fitxers admesos: PDF, DOC, DOCX, TXT",
+                  "backActionText": "Enrere",
+                  "nextActionText": "Continuar",
+                  "errorText": "Error al crear les instruccions"
                 }
               }
             },
